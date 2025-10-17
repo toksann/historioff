@@ -1,0 +1,31 @@
+ console.log
+    [modifyParameterCorrectionCalculation] Calculating for player PLAYER1, target: consciousness, direction: decrease, amount: -90
+
+      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
+
+  console.log
+    [modifyParameterCorrectionCalculation] Calculating for player PLAYER1, target: scale, direction: decrease, amount: -90
+
+      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
+
+  console.log
+    [modifyParameterCorrectionCalculation] Calculating for player PLAYER2, target: consciousness, direction: decrease, amount: -90
+
+      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
+
+  console.log
+    [modifyParameterCorrectionCalculation] Calculating for player PLAYER2, target: scale, direction: decrease, amount: -90
+
+      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
+
+ PASS  src/tests/test_mutual_assured_destruction_effect.js
+  Mutual Assured Destruction Effects
+    √ 相互確証破壊 (Mutual Assured Destruction) should add cards to both decks (1 ms)
+    √ 確証破壊能力 (Assured Destruction Capability) - Opponent does NOT have it
+    √ 確証破壊能力 (Assured Destruction Capability) - Opponent HAS it (8 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.417 s, estimated 1 s
+Ran all test suites matching /src\\tests\\test_mutual_assured_destruction_effect.js/i.

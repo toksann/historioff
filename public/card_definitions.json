@@ -1,0 +1,3360 @@
+[
+    {
+        "name": "戦士",
+        "card_type": "財",
+        "required_scale": 1,
+        "durability": 2,
+        "description": "ターン終了ごとに正面にある相手の財にこのカードの耐久値と同じ値のダメージを与え、相手の意識を-1する。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
+                    "args": {
+                        "card_id": "front",
+                        "amount_based_on_self_durability": "minus"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "山",
+        "card_type": "財",
+        "required_scale": 70,
+        "durability": 30,
+        "description": "配置時自分の意識+5し、このカードが一番左になるよう配置しなおす。自分の場にある「山」以外の財カードはダメージを受けなくなる。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "砦",
+        "card_type": "財",
+        "required_scale": 15,
+        "durability": 5,
+        "description": "相手の意識-4。反撃1。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -4
+                    }
+                }
+            ],
+            "DAMAGE_THIS": [
+                {
+                    "effect_type": "PROCESS_COUNTER_ATTACK",
+                    "args": {
+                        "player_id": "self",
+                        "card_id": "self",
+                        "counter_damage": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "聖なる領域",
+        "card_type": "財",
+        "required_scale": 10,
+        "durability": 4,
+        "description": "自分の意識+3。ターン終了ごとに、自分の手札から事象カードを1枚選び、その必要規模を-1する（最小0）。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_piles": ["hand"],
+                        "card_type": "事象",
+                        "count": 1,
+                        "selection_method": "choice",
+                        "amount": -1,
+                        "min_value": 0
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "交易路",
+        "card_type": "財",
+        "required_scale": 6,
+        "durability": 3,
+        "description": "配置時自分の規模+3。相手の場に財は配置されるたび、自分の規模+1。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ],
+            "CARD_PLACED_OPPONENT": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "果実",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "このカードの耐久値が0になったとき互いの規模+1。",
+        "triggers": {
+            "WEALTH_DURABILITY_ZERO_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "農民",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "ターン終了時に自分の規模+1。耐久値が0になったとき「農民」を手札に加える。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ],
+            "WEALTH_DURABILITY_ZERO_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "農民",
+                        "destination_pile": "hand"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "開拓民",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "配置時、自分の規模+1、「開拓」を1枚手札に加える。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "開拓",
+                        "destination_pile": "hand"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "大嵐",
+        "card_type": "事象",
+        "required_scale": 50,
+        "description": "相手の意識-15、相手の規模-15、相手の場のすべての財に5ダメージ。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -15
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -15
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "opponent",
+                        "amount": 5
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "豊作",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の意識+3、自分の規模+3。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "予感",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "デッキからカードを2枚引く。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "覚醒",
+        "card_type": "事象",
+        "required_scale": 5,
+        "description": "デッキからランダムなイデオロギーカードを一枚引き、その必要規模を-5する。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_DRAW_RANDOM_CARD_AND_MODIFY_REQUIRED_SCALE",
+                    "args": {
+                        "player_id": "self",
+                        "card_type": "イデオロギー",
+                        "amount": 1,
+                        "scale_reduction": 5
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "内部崩壊",
+        "card_type": "事象",
+        "required_scale": 30,
+        "description": "相手の規模を半分にし（切り捨て）、相手の意識をその半減した規模の値だけ減らす。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount_percentage": -50,
+                        "round_down": true,
+                        "store_original_value_for_temp": "scale_before_reduction"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount_based_on_temp_value": "scale_before_reduction",
+                        "is_negative": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "秩序の瓦解",
+        "card_type": "事象",
+        "required_scale": 20,
+        "description": "自分か相手のイデオロギーを捨て札にする。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CHOOSE_AND_DISCARD_IDEOLOGY",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "略奪",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "相手の財カード1枚に2ダメージ。相手の規模-2、自分の規模+2。ダメージを与えたとき、その対象が「マネー」ならさらに自分の規模+3",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CHOOSE_AND_MODIFY_DURABILITY_TO_WEALTH",
+                    "args": {
+                        "player_id": "self",
+                        "target_player_id": "opponent",
+                        "amount": -2,
+                        "bonus_effect_if_money": true,
+                        "bonus_scale_amount": 3
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -2
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "物々交換",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "手札の最も必要規模の大きいカードをデッキに戻し、デッキからカードを1枚引く",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_RETURN_LARGEST_REQUIRED_SCALE_CARD_TO_DECK",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "接収",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の場の財カード1枚を手札に戻し、自分の規模+4。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CHOOSE_AND_BOUNCE_TO_WEALTH",
+                    "args": {
+                        "player_id": "self",
+                        "target_player_id": "self"
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 4
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "経済学の興り",
+        "card_type": "事象",
+        "required_scale": 3,
+        "description": "自分の手札に「重金主義」を1枚手札に加え、自分の意識+1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "重金主義",
+                        "destination_pile": "hand"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "多文化主義",
+        "card_type": "イデオロギー",
+        "required_scale": 8,
+        "description": "配置時自分の意識を-50%（切捨て）、規模を+100%。ターン終了ごとに手札を2枚引く。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -50,
+                        "round_down": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": 100
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "帝国主義",
+        "card_type": "イデオロギー",
+        "required_scale": 50,
+        "description": "配置時、「占領」を手札に1枚加える。自分のターン中、相手の財の耐久値を0にするたび自分の意識+2、自分の場のすべての財の耐久値+2。ターン終了時、相手より自分の方が場の上限が多いなら差分だけ相手の意識をマイナスし、自分の意識をプラスする。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "占領",
+                        "destination_pile": "hand"
+                    }
+                }
+            ],
+            "WEALTH_DURABILITY_ZERO_OPPONENT": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ALL_WEALTH_BOOST",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 0
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 0
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "多神教",
+        "card_type": "イデオロギー",
+        "required_scale": 10,
+        "description": "ターン終了ごとに意識を+1し、デッキからランダムな事象カードを1枚手札に加えて必要規模を-50%する。事象カード使用時、捨て札の事象カードをランダムに1枚デッキに戻す",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DRAW_RANDOM_CARD_AND_MODIFY_REQUIRED_SCALE",
+                    "args": {
+                        "player_id": "self",
+                        "card_type": "事象",
+                        "amount": 1,
+                        "scale_reduction_percentage": 50,
+                        "round_down": true
+                    }
+                }
+            ],
+            "PLAY_EVENT_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "discard_pile",
+                        "destination_pile": "deck",
+                        "card_type": "事象",
+                        "count": 1,
+                        "selection_method": "random"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "原始共産制",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "配置時、自分の場のすべての財に1ダメージ。ターン終了時、自分の手札の財カードをすべて捨ててその枚数デッキからカードを引き、相手の場のすべての財に1ダメージ。ターン開始時、自分の場の財が2枚未満なら「農民」を配置する。これが配置中、自分は場に財カードを配置できなくなる。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self",
+                        "amount": 1
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "農民",
+                        "destination_pile": "field",
+                        "condition_field_wealth_limit": 2
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_DISCARD_ALL_HAND_WEALTH_CARDS_AND_DRAW",
+                    "args": {
+                        "player_id": "self",
+                        "draw_based_on_discarded": true
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "opponent",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "物質主義",
+        "card_type": "イデオロギー",
+        "required_scale": 6,
+        "description": "ターン終了時、自分の場の財の数と同じ値だけ自分の規模をプラスする。自分の場の財が3枚以上ある場合、自分の意識+1、相手の意識-1。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1,
+                        "condition_field_wealth_count_ge_3": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_field_wealth_count": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1,
+                        "condition_field_wealth_count_ge_3": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "一神教",
+        "card_type": "イデオロギー",
+        "required_scale": 15,
+        "description": "配置時、手札とデッキのすべてのイデオロギーカードを捨て札にし、デッキの一番下に「終末」を加える。ターン終了時、場の財が上限未満なら「聖典」を1枚手札に加える。このカードが捨て札になったとき、自分の規模が-10されるがこのカードは即座に手札に戻り必要規模を0にする。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK",
+                    "args": {
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "終末",
+                        "destination_pile": "deck",
+                        "position": "bottom"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "聖典",
+                        "destination_pile": "hand",
+                        "condition_field_wealth_limit": 0
+                    }
+                }
+            ],
+            "CARD_DISCARDED_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -10
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "discard_pile",
+                        "destination_pile": "hand",
+                        "player_id": "self",
+                        "maintain": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CARD_REQUIRED_SCALE",
+                    "args": {
+                        "card_id": "self",
+                        "amount": 0,
+                        "set_value": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "悟りの道",
+        "card_type": "イデオロギー",
+        "required_scale": 30,
+        "description": "配置時、自分の規模を-10し、自分の手札の財カードをすべて捨て、捨てた枚数「輪廻転生」をデッキに加える。自分か相手が事象カードを出すたび自分の意識+2。ターン終了時、カードを1枚引く。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -10
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ADD_CARDS_BASED_ON_DISCARDED_COUNT",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "輪廻転生",
+                        "destination_pile": "deck",
+                        "card_type_to_discard": "財"
+                    }
+                }
+            ],
+            "PLAY_EVENT": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "聖典",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "ターン開始時、自分の意識+1し、自分のデッキが8以上なら「布教」を8未満なら「崇拝」を1枚手札に加える。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ADD_CARD_CONDITIONAL_ON_DECK_COUNT",
+                    "args": {
+                        "player_id": "self",
+                        "threshold": 8,
+                        "card_if_above": "布教",
+                        "card_if_below": "崇拝"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "布教",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の規模+2。自分の規模が5以上なら「受難」を手札に1枚加える。ターン終了時このカードが手札にあるなら捨て札にして自分の意識+1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ADD_CARD_CONDITIONAL",
+                    "args": {
+                        "player_id": "self",
+                        "condition_target": "scale",
+                        "threshold": 5,
+                        "card_template_name": "受難"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "受難",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分と相手の財すべてに1ダメージ。自分の規模-5。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self_and_opponent",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -5
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "崇拝",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の規模-2。自分の意識+3。自分の意識が40以上なら「救世」を手札に加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -2
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ADD_CARD_CONDITIONAL",
+                    "args": {
+                        "player_id": "self",
+                        "condition_target": "consciousness",
+                        "threshold": 40,
+                        "card_template_name": "救世"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "救世",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の意識が100以上なら相手の意識を0にする。これが成功しないとき「救世」を1枚デッキの一番下に加え、自分の意識+4。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "SET_CONSCIOUSNESS",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 0
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "救世",
+                        "destination_pile": "deck",
+                        "position": "bottom"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 4
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "終末",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "このカードを引いたとき即座に捨て札になる。このカードが捨て札になったとき、自分と相手の規模を0にし、それぞれ同じ値だけ意識をマイナスする。さらに手札の枚数だけ自分の意識をプラスする。",
+        "triggers": {
+            "CARD_DRAWN_THIS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_DISCARDED_THIS": [
+                {
+                    "effect_type": "PROCESS_SET_ALL_SCALE_TO_ZERO_AND_REDUCE_CONSCIOUSNESS",
+                    "args": {
+                        "player_ids": "self_and_opponent"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_hand_count": true
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "輪廻転生",
+        "card_type": "事象",
+        "required_scale": 30,
+        "description": "自分のデッキをすべて除外し、捨て札をデッキに加える",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "deck",
+                        "selection_method": "all",
+                        "store_count_key": "removed_deck_count"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "discard_pile",
+                        "destination_pile": "deck",
+                        "selection_method": "all"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "マネー",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "自分のターン中は場のこのカードの耐久値を追加の規模とみなす。このカードが手札に戻るとき耐久値は維持される。ターン開始時、このカードの耐久値が30以上のとき、手札から必要規模の最も少ない(同じならランダム)カード2枚を捨て札にしてから、このカードを手札に戻し「資本主義」を1枚手札に加える。このカードが場に出るとき、既に他の「マネー」が配置されているなら、このカードを捨て札にしてこのカードの耐久値と同じ値を他の「マネー」の耐久値に加算する。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "PROCESS_MONEY_CARD_PLACEMENT_EFFECT",
+                    "args": {
+                        "player_id": "self",
+                        "card_id": "self"
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_MONEY_CARD_TURN_START_EFFECT",
+                    "args": {
+                        "player_id": "self",
+                        "card_id": "self",
+                        "condition_durability_ge_30": true
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "重金主義",
+        "card_type": "イデオロギー",
+        "required_scale": 10,
+        "description": "配置時、耐久値3の「マネー」を1枚手札に加える。自分の規模を増やすたびその効果を無効にし、増加規模と同じ耐久値を持つ「マネー」を手札に1枚加える。ターン開始時、自分の場の「マネー」の耐久値が10以上なら「重商主義」か「重農主義」を任意に1枚手札に加える。ターン終了時、自分の手札のイデオロギーカードすべてを捨て札にし、枚数と同じ耐久値の「マネー」を手札に加える。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 3
+                    }
+                }
+            ],
+            "MODIFY_SCALE_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "SKIP_EFFECT",
+                    "args": {
+                        "player_id": "self",
+                        "effect_type": "MODIFY_SCALE"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_ADD_CHOICE_CARD_TO_HAND",
+                    "args": {
+                        "player_id": "self",
+                        "options": [
+                            "重商主義",
+                            "重農主義"
+                        ],
+                        "condition_money_durability_ge_10": true
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_DISCARD_ALL_HAND_IDEOLOGY_AND_ADD_MONEY",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "重商主義",
+        "card_type": "イデオロギー",
+        "required_scale": 10,
+        "description": "ターン終了時、自分の場の「マネー」の耐久値を任意に減らし、減らした値と同じだけ自分の規模をプラスする。ターン開始時、自分の場の「マネー」の耐久値をランダムに-30%か+70%する。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_REDUCE_MONEY_DURABILITY_AND_GAIN_SCALE",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_MODIFY_MONEY_DURABILITY_RANDOM",
+                    "args": {
+                        "player_id": "self",
+                        "change_type": "percent_decrease_or_percent_increase",
+                        "value1": 30,
+                        "value2": 70
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "重農主義",
+        "card_type": "イデオロギー",
+        "required_scale": 10,
+        "description": "ターン開始時、自分の場の「マネー」の耐久値を-1し、カードを1枚引く。ターン終了時、このターン中に手札から出したカードの枚数と同じ耐久値を持つ「マネー」を1枚手札に加える。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
+                    "args": {
+                        "card_id": "self_money_on_field",
+                        "amount": -1,
+                        "condition_money_on_field": true
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self",
+                        "condition_money_on_field": true
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_ADD_MONEY_TOKEN_BASED_ON_CARDS_PLAYED",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "資本主義",
+        "card_type": "イデオロギー",
+        "required_scale": 35,
+        "description": "ターン終了時、場のマネーの耐久値と同じ回数ランダムな財の耐久値を+1し、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に2ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_MONEY_DURABILITY_BASED_COUNT_MODIFY_CARD_DURABILITY",
+                    "args": {
+                        "player_id": "self",
+                        "target_player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self_money_on_field",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self",
+                        "amount": 5
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": "self_all_wealth_on_field"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "開拓",
+        "card_type": "事象",
+        "required_scale": 30,
+        "description": "自分の場を1増やす。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_FIELD_LIMIT",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "焦土",
+        "card_type": "事象",
+        "required_scale": 45,
+        "description": "相手の場を1減らす。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_FIELD_LIMIT",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "占領",
+        "card_type": "事象",
+        "required_scale": 70,
+        "description": "相手の場を1減らせたなら、自分の場を1増やす。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_FIELD_LIMIT",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MODIFY_FIELD_LIMIT",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "植民地",
+        "card_type": "財",
+        "required_scale": 50,
+        "durability": 20,
+        "description": "ターン終了時これの耐久値-1、マネーを1枚手札に加える。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
+                    "args": {
+                        "card_id": "self",
+                        "amount": -1
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "商人",
+        "card_type": "財",
+        "required_scale": 8,
+        "durability": 1,
+        "description": "ターン開始時、自分の規模+1し、「マネー」を手札に加える。耐久値が0になったとき、自分の規模が15以上なら「商人」を手札に加える。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ],
+            "WEALTH_DURABILITY_ZERO_THIS": [
+                {
+                    "effect_type": "PROCESS_ADD_CARD_CONDITIONAL",
+                    "args": {
+                        "player_id": "self",
+                        "condition_target": "scale",
+                        "threshold": 15,
+                        "card_template_name": "商人"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "移民",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の意識-1。自分の規模+1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -1
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "ディアスポラ",
+        "card_type": "事象",
+        "required_scale": 20,
+        "description": "自分の規模-5。相手のデッキに「移民」を2枚加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -5
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "移民",
+                        "destination_pile": "deck",
+                        "count": 2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "内戦",
+        "card_type": "事象",
+        "required_scale": 40,
+        "description": "相手の意識と規模-15。自分のデッキに「移民」を5枚加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -15
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -15
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "移民",
+                        "destination_pile": "deck",
+                        "count": 5
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "技術革新",
+        "card_type": "事象",
+        "required_scale": 3,
+        "description": "自分の規模+2、自分の場の財1枚の耐久値+1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "target_player_id": "self",
+                        "selection_method": "choice",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "技術提供",
+        "card_type": "事象",
+        "required_scale": 15,
+        "description": "相手のデッキに「技術革新」を2枚加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "技術革新",
+                        "destination_pile": "deck",
+                        "count": 2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "理想主義",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "ターン開始時、相手の意識が自分の意識を上回っているなら相手の意識-2。そうでないなら互いの規模+3。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -2,
+                        "condition_opponent_consciousness_higher": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3,
+                        "condition_opponent_consciousness_higher": false
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 3,
+                        "condition_opponent_consciousness_higher": false
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "職人",
+        "card_type": "財",
+        "required_scale": 1,
+        "durability": 3,
+        "description": "ターン終了時、自分の手札の財の必要規模-1。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_pile": "hand",
+                        "card_type": "財",
+                        "count": 1,
+                        "selection_method": "choice",
+                        "amount": -1,
+                        "min_value": 0
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "兵器",
+        "card_type": "財",
+        "required_scale": 30,
+        "durability": 4,
+        "description": "ターン終了時、相手の場に財がある場合は相手の場の一番左の財の耐久値を、無いなら相手の意識をこのカードの耐久値と同じ値だけマイナスする。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
+                    "args": {
+                        "card_id": "left_opponent",
+                        "amount_based_on_self_durability": "minus"
+                    }
+                }
+            ],
+            "FAILED_PROCESS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount_based_on_self_durability": "minus"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "民族自決",
+        "card_type": "事象",
+        "required_scale": 10,
+        "description": "「汎民族主義」か「分離主義」を手札に加える。自分の意識+3。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_ADD_CHOICE_CARD_TO_HAND",
+                    "args": {
+                        "player_id": "self",
+                        "options": [
+                            "汎民族主義",
+                            "分離主義"
+                        ]
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "解体",
+        "card_type": "事象",
+        "required_scale": 2,
+        "description": "自分の場の財1枚に4ダメージを与え、「マネー」を1枚手札に加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "target_player_id": "self",
+                        "selection_method": "choice",
+                        "amount": -4
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "啓蒙時代",
+        "card_type": "事象",
+        "required_scale": 15,
+        "description": "自分と相手の場のイデオロギーを捨て札にする。自分は捨て札かデッキのイデオロギー1枚を手札に加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self_ideology",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "opponent_ideology",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "player_id": "opponent",
+                        "target_player_id": "opponent"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CHOOSE_AND_MOVE_CARD_FROM_PILE",
+                    "args": {
+                        "player_id": "self",
+                        "card_type": "イデオロギー",
+                        "source_piles": [
+                            "discard_pile",
+                            "deck"
+                        ],
+                        "destination_pile": "hand"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "資源",
+        "card_type": "財",
+        "required_scale": 40,
+        "durability": 30,
+        "description": "これの耐久値が減るたび、耐久値を減らした側が減少量と同じ耐久値の「マネー」を1枚手札に加える。",
+        "triggers": {
+            "DAMAGE_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "source",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": "damage_this"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "資源の発見",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "「資源」を自分か相手の場にランダムに出す。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "random",
+                        "card_template_name": "資源",
+                        "destination_pile": "field"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "徴兵",
+        "card_type": "事象",
+        "required_scale": 5,
+        "description": "自分の場に「戦士」を1枚配置する。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "戦士",
+                        "destination_pile": "field"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "現実主義",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "ターン開始時、自分の場の財の数が相手より少ないなら、自分の規模+3。さらに、相手のデッキの枚数が、自分より少ないならカードを1枚引く。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3,
+                        "condition_fewer_wealth_than_opponent": true
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self",
+                        "condition_opponent_deck_smaller": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "共同体主義",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "配置時、捨て札の枚数だけ自分の意識をプラスする。自分のカードが捨て札になるたび、自分の意識+1。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_discard_count": true
+                    }
+                }
+            ],
+            "CARD_DISCARDED_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "コスモポリタニズム",
+        "card_type": "イデオロギー",
+        "required_scale": 40,
+        "description": "ターン終了時、相手の規模が自分の規模を上回っているなら、相手の規模-3。ターン開始時、互いの意識-3。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -3,
+                        "condition_opponent_scale_higher": true
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -3
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -3
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "思想の弾圧",
+        "card_type": "事象",
+        "required_scale": 10,
+        "description": "手札のイデオロギーをすべてデッキに戻し、自分の意識+5。手札のすべてのカードの必要規模-5。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "hand",
+                        "destination_pile": "deck",
+                        "card_type": "イデオロギー",
+                        "selection_method": "all"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_pile": "hand",
+                        "selection_method": "all",
+                        "amount": -5,
+                        "min_value": 0
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "汎民族主義",
+        "card_type": "イデオロギー",
+        "required_scale": 30,
+        "description": "自分の意識がプラスされるたび、相手の意識を-2。配置時、自分の意識+5。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -2
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "分離主義",
+        "card_type": "イデオロギー",
+        "required_scale": 30,
+        "description": "配置時、自分の意識+15、自分の規模-50%、自分の場-1。自分の規模より高い必要規模を持つカードが手札に加わるたび、それを捨て札にして自分の意識を+1、カードを1枚引く。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 15
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -50,
+                        "round_down": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_FIELD_LIMIT",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -1
+                    }
+                }
+            ],
+            "CARD_ADDED_TO_HAND_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "bottom"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "不干渉主義",
+        "card_type": "イデオロギー",
+        "required_scale": 40,
+        "description": "自分の規模が相手の規模を上回っているなら、互いが受ける意識の減少効果を0にする。",
+        "triggers": {
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "limit",
+                        "amount": 0,
+                        "condition_self_scale_higher": true
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "opponent",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "limit",
+                        "amount": 0,
+                        "condition_self_scale_higher": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "隘路",
+        "card_type": "財",
+        "required_scale": 30,
+        "durability": 7,
+        "description": "相手の場に財が配置されるたび、相手の規模-2。",
+        "triggers": {
+            "CARD_PLACED_OPPONENT": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "工作員",
+        "card_type": "財",
+        "required_scale": 0,
+        "durability": 1,
+        "description": "自分のターン開始時、自分の意識-1。相手のターン開始時、自分の手札かデッキにあるイデオロギーカードを1枚公開する。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -1
+                    }
+                }
+            ],
+            "START_TURN_OPPONENT": [
+                {
+                    "effect_type": "PROCESS_EXPOSE_CARD_BY_TYPE",
+                    "args": {
+                        "player_id": "self",
+                        "source_piles": [
+                            "hand",
+                            "deck"
+                        ],
+                        "count": 1,
+                        "card_type": "イデオロギー"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "工作活動",
+        "card_type": "事象",
+        "required_scale": 20,
+        "description": "相手の場に「工作員」を1枚出す。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "工作員",
+                        "destination_pile": "field"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "大地震",
+        "card_type": "事象",
+        "required_scale": 100,
+        "description": "このカードを引いたとき即座に捨て札になる。このカードが捨て札になったとき、自分と相手の意識と規模を-20し、自分と相手の場のすべての財に3ダメージ、2ダメージ、1ダメージを順に与える。",
+        "triggers": {
+            "CARD_DRAWN_THIS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_DISCARDED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -20
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -20
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -20
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -20
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self_and_opponent",
+                        "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self_and_opponent",
+                        "amount": 2
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
+                    "args": {
+                        "player_ids": "self_and_opponent",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "災害多発地域",
+        "card_type": "事象",
+        "required_scale": 30,
+        "description": "相手のデッキに「大地震」を2枚加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "target_player_id": "opponent",
+                        "card_template_name": "大地震",
+                        "destination_pile": "deck",
+                        "position": "random",
+                        "count": 2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "官僚主義",
+        "card_type": "事象",
+        "required_scale": 12,
+        "description": "ターン終了時、このカードが自分の手札にあるならこれを公開して自分の意識-1。このカードを出したとき、これが相手の手札に加わる。自分のイデオロギーが捨て札になったとき、自分の手札のこのカードも捨て札になる。",
+        "triggers": {
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_EXPOSE_CARD_BY_TYPE",
+                    "args": {
+                        "player_id": "self",
+                        "source_piles": [],
+                        "count": 1,
+                        "card_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -1
+                    }
+                }
+            ],
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "playing_event",
+                        "destination_pile": "hand",
+                        "player_id": "self",
+                        "target_player_id": "opponent"
+                    }
+                }
+            ],
+            "CARD_DISCARDED_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "保守主義",
+        "card_type": "イデオロギー",
+        "required_scale": 12,
+        "description": "配置時、「官僚主義」を1枚手札に加える。自分の意識の減少効果-1、自分の規模の増加効果-1。ターン終了時捨て札を1枚手札に戻す。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "官僚主義",
+                        "destination_pile": "hand"
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 1
+                    }
+                }
+            ],
+            "MODIFY_SCALE_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "scale",
+                        "correct_direction": "increase",
+                        "correct_type": "attenuation",
+                        "amount": 1
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "discard_pile",
+                        "destination_pile": "hand",
+                        "selection_method": "random",
+                        "count": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "環境主義",
+        "card_type": "イデオロギー",
+        "required_scale": 30,
+        "description": "自分の規模が増えなくなるが、自分の場の財が受けるダメージ-2。ターン開始時、場の財が3以上あれば自分の意識+3。",
+        "triggers": {
+            "MODIFY_SCALE_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "scale",
+                        "correct_direction": "increase",
+                        "correct_type": "limit",
+                        "amount": 0
+                    }
+                }
+            ],
+            "MODIFY_CARD_DURABILITY_RESERVE": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "wealth",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 2
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3,
+                        "condition_field_wealth_count_ge_3": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "リージョナリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 20,
+        "description": "配置時、相手の場の財の数と同じだけ自分の規模をプラスする。ターン開始時、互いの手札に「技術提供」を1枚加える。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_opponent_field_wealth_count": true
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "技術提供",
+                        "destination_pile": "hand"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "技術提供",
+                        "destination_pile": "hand"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "社会主義",
+        "card_type": "イデオロギー",
+        "required_scale": 30,
+        "description": "ターン開始時、「解体」を手札に加える。マネーを出すたび、自分の場の財のうち最も耐久値の低い財（同じならより右の財）1枚の耐久値+2。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "解体",
+                        "destination_pile": "hand"
+                    }
+                }
+            ],
+            "CARD_PLACED_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "target_player_id": "self",
+                        "selection_method": "lowest_durability",
+                        "amount": 2
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "アナーキズム",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "財を出すたびカードを1枚引く。事象を出すたび自分のすべての財の耐久値+1。",
+        "triggers": {
+            "CARD_PLACED_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "PLAY_EVENT_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "target_player_id": "self",
+                        "selection_method": "all",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "結束主義",
+        "card_type": "イデオロギー",
+        "required_scale": 0,
+        "description": "配置時、自分の規模を1にする。さらに捨て札すべてを除外し、除外した枚数と同じだけ意識をプラスする。ターン開始時、財が場の上限枚数未満なら「戦士」を1枚手札に加える。相手の意識が減少するたびカードを1枚引き、自分の規模+3。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "SET_SCALE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "discard_pile",
+                        "selection_method": "all",
+                        "store_count_key": "removed_discard_count"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_removed_discard_count": true
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "戦士",
+                        "destination_pile": "hand",
+                        "condition_field_wealth_limit": 0,
+                        "condition_card_name": "戦士"
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "記憶の浄化",
+        "card_type": "事象",
+        "required_scale": 15,
+        "description": "捨て札の事象カードを最大3枚まで除外し、除外した枚数×2だけ自分の意識をプラスする。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "discard_pile",
+                        "card_type": "事象",
+                        "count": 3,
+                        "selection_method": "random",
+                        "store_count_key": "purified_event_count"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_temp_value": "purified_event_count"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_temp_value": "purified_event_count"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "軍国主義",
+        "card_type": "イデオロギー",
+        "required_scale": 15,
+        "description": "配置時、手札のイデオロギーカードすべてをデッキに戻し、自分の場の財すべてに3ダメージ。自分か相手の財の耐久値が0になるたび自分の規模+3。ターン開始時、自分の場の財が上限未満なら「兵器」を1枚手札に加える。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "hand",
+                        "destination_pile": "deck",
+                        "card_type": "イデオロギー",
+                        "selection_method": "all"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "source_pile": "field",
+                        "card_type": "財",
+                        "selection_method": "all",
+                        "amount": -3
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "兵器",
+                        "destination_pile": "hand",
+                        "condition_field_wealth_limit": 0,
+                        "condition_card_name": "兵器"
+                    }
+                }
+            ],
+            "WEALTH_DURABILITY_ZERO": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "孤立主義",
+        "card_type": "イデオロギー",
+        "required_scale": 15,
+        "description": "自分が受ける意識の減少効果を-3。相手が受ける意識の減少効果を0にする。自分の場のすべての財が受けるダメージ-1。自分の意識が1以上の減少効果を受けるとき、自分の意識と規模を+10して、このカードを捨て札にする。",
+        "triggers": {
+            "MODIFY_CONSCIOUSNESS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 10
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 10
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 3
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "opponent",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "limit",
+                        "amount": 0
+                    }
+                }
+            ],
+            "MODIFY_CARD_DURABILITY_RESERVE": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "wealth",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "グローバリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 25,
+        "description": "配置時自分の意識-30%。ターン開始時、自分の規模+1し、相手のデッキに「移民」を加える。相手がカードを出すたび自分の意識+1。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -30
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "移民",
+                        "destination_pile": "deck",
+                        "position": "random"
+                    }
+                }
+            ],
+            "PLAYER_PLAY_CARD_ACTION": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "リバタリアニズム",
+        "card_type": "イデオロギー",
+        "required_scale": 25,
+        "description": "自分の意識も規模も増えなくなる。カードを出すたび「マネー」を手札に加える。ターン開始時、自分の場にある「マネー」の耐久値を-70%か+100%する。",
+        "triggers": {
+            "PLAYER_PLAY_CARD_ACTION": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_MODIFY_MONEY_DURABILITY_RANDOM",
+                    "args": {
+                        "player_id": "self",
+                        "change_type": "percent_decrease_or_percent_increase",
+                        "value1": 70,
+                        "value2": 100
+                    }
+                }
+            ],
+            "MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "consciousness",
+                        "correct_direction": "increase",
+                        "correct_type": "limit",
+                        "amount": 0
+                    }
+                }
+            ],
+            "MODIFY_SCALE_INCREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "scale",
+                        "correct_direction": "increase",
+                        "correct_type": "limit",
+                        "amount": 0
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "共産主義",
+        "card_type": "イデオロギー",
+        "required_scale": 40,
+        "description": "ターン開始時、自分の場の財をすべて手札に戻す。ターン終了時手札の財をすべてデッキに戻し、同じ枚数デッキからカードを引く。カードを引くたび、自分の場のすべての財の耐久値+1。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "field",
+                        "destination_pile": "hand",
+                        "card_type": "財",
+                        "selection_method": "all"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_MOVE_HAND_WEALTH_TO_DECK_AND_DRAW",
+                    "args": {
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_DRAWN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_durability",
+                        "target_player_id": "self",
+                        "card_type": "財",
+                        "selection_method": "all",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "覇権主義",
+        "card_type": "イデオロギー",
+        "required_scale": 70,
+        "description": "配置時、「内戦」か「隘路」を手札に加え、自分の場に「マネー」があればその耐久値と同じ値だけ自分の規模をプラスし、「マネー」を捨て札にする。ターン終了時、自分の規模が相手の規模を上回っているなら自分の意識+5。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "PROCESS_ADD_CHOICE_CARD_TO_HAND",
+                    "args": {
+                        "player_id": "self",
+                        "options": [
+                            "内戦",
+                            "隘路"
+                        ]
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_money_durability": true
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self_money_on_field",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5,
+                        "condition_self_scale_higher": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "多極主義",
+        "card_type": "イデオロギー",
+        "required_scale": 60,
+        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加える。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-5。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability_based_on_scale_percentage": 50
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -50
+                    }
+                }
+            ],
+            "CARD_ADDED_TO_HAND_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "bottom"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "ディアスポラ",
+                        "destination_pile": "deck",
+                        "position": "random"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -5,
+                        "condition_self_scale_lower": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "ニューリベラリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 25,
+        "description": "ターン開始時「解体」と「マネー」を1枚ずつ手札に加える。「マネー」を出すたびカードを1枚引き、自分の意識+1。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "解体",
+                        "destination_pile": "hand"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability": 1
+                    }
+                }
+            ],
+            "CARD_PLACED_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "ネオリベラリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 25,
+        "description": "自分の場の財が受けるダメージ-1。ターン開始時、場の財の数+1の耐久値の「マネー」を手札に加える。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability_based_on_field_wealth_count_plus_one": true
+                    }
+                }
+            ],
+            "MODIFY_CARD_DURABILITY_RESERVE": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "wealth",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "自由主義",
+        "card_type": "イデオロギー",
+        "required_scale": 15,
+        "description": "ターン開始時意識-2し、カードを1枚引く。カードを引くたび規模+2。カードを出すたび意識+1。自分の規模がプラスされたとき25を超えたなら「ニューリベラリズム」「ネオリベラリズム」「リバタリアニズム」から1枚選んで手札に加える。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -2
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_DRAWN_OWNER": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                }
+            ],
+            "PLAYER_PLAY_CARD_ACTION": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ],
+            "MODIFY_SCALE": [
+                {
+                    "effect_type": "PROCESS_ADD_CHOICE_CARD_TO_HAND",
+                    "args": {
+                        "player_id": "self",
+                        "options": [
+                            "ニューリベラリズム",
+                            "ネオリベラリズム",
+                            "リバタリアニズム"
+                        ],
+                        "condition_scale_exceeds_25": true
+                    }
+                }
+            ]
+        },
+        "is_token": false
+    },
+    {
+        "name": "ウルトラナショナリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 20,
+        "description": "配置時、自分の意識+5。カードを出すたび自分の意識と規模+3、デッキからカードを1枚引く。ターン終了時、捨て札を1枚デッキに戻す。",
+        "triggers": {
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5
+                    }
+                }
+            ],
+            "PLAYER_PLAY_CARD_ACTION": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "END_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "discard_pile",
+                        "destination_pile": "deck",
+                        "selection_method": "random",
+                        "count": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "ポピュリズム",
+        "card_type": "イデオロギー",
+        "required_scale": 70,
+        "description": "これが未配置でターン開始時、自分の意識が5以下かつイデオロギーがポピュリズムでないならこれを配置する。配置時、自分の規模と同じ耐久値（最低値1）を持つ「マネー」を手札に加え自分の規模を0にする。さらに「ウルトラナショナリズム」を捨て札に加え、捨て札にあるイデオロギーから1枚選びそれをデッキの一番上に加える。カードを出すたび意識+2、デッキからカードを1枚引く。これが捨て札になるとき自分の意識+5。",
+        "triggers": {
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "self",
+                        "source_pile": "current",
+                        "destination_pile": "field",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_PLACED_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "マネー",
+                        "destination_pile": "hand",
+                        "initial_durability_based_on_scale": true,
+                        "min_durability": 1
+                    }
+                },
+                {
+                    "effect_type": "SET_SCALE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 0
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "ウルトラナショナリズム",
+                        "destination_pile": "discard_pile"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CHOOSE_AND_MOVE_CARD_FROM_PILE",
+                    "args": {
+                        "player_id": "self",
+                        "card_type": "イデオロギー",
+                        "source_piles": [
+                            "discard_pile"
+                        ],
+                        "destination_pile": "deck",
+                        "position": "top"
+                    }
+                }
+            ],
+            "PLAYER_PLAY_CARD_ACTION": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ],
+            "CARD_DISCARDED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 5
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "確証破壊能力",
+        "card_type": "事象",
+        "required_scale": 100,
+        "description": "これを出すとき相手の手札に「確証破壊能力」が無ければ、相手の意識を0にする。相手の手札に「確証破壊能力」があるとき、それを公開させて捨て札にする。その後互いの場のすべての財とイデオロギーを捨て札にし、互いの意識と規模を-90%する。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "PROCESS_EXPOSE_CARD_BY_TYPE",
+                    "args": {
+                        "player_id": "opponent",
+                        "source_piles": ["hand"],
+                        "count": 1,
+                        "card_name": "確証破壊能力"
+                    }
+                }
+            ],
+            "FAILED_PROCESS": [
+                {
+                    "effect_type": "SET_CONSCIOUSNESS",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 0
+                    }
+                }
+            ],
+            "SUCCESS_PROCESS": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "target",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "player_id": "opponent"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "all"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "opponent",
+                        "operation": "move",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "all"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -90,
+                        "round_down": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -90,
+                        "round_down": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -90,
+                        "round_down": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -90,
+                        "round_down": true
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "相互確証破壊",
+        "card_type": "事象",
+        "required_scale": 50,
+        "description": "互いのデッキに「確証破壊能力」を1枚ずつ加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "self",
+                        "card_template_name": "確証破壊能力",
+                        "destination_pile": "deck",
+                        "position": "random"
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "確証破壊能力",
+                        "destination_pile": "deck",
+                        "position": "random"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "愛国教育",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の意識+1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "嫌国教育",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "相手の意識-1。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "教育機関",
+        "card_type": "財",
+        "required_scale": 20,
+        "durability": 3,
+        "description": "このカードが場にある限り自分への意識減少効果を1軽減する。ターン開始時「愛国教育」か「嫌国教育」を1枚手札に加える。",
+        "triggers": {
+            "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER": [
+                {
+                    "effect_type": "ADD_MODIFY_PARAMETER_CORRECTION",
+                    "args": {
+                        "player_id": "self",
+                        "correct_target": "consciousness",
+                        "correct_direction": "decrease",
+                        "correct_type": "attenuation",
+                        "amount": 1
+                    }
+                }
+            ],
+            "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_ADD_CHOICE_CARD_TO_HAND",
+                    "args": {
+                        "player_id": "self",
+                        "options": [
+                            "愛国教育",
+                            "嫌国教育"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "文化的影響",
+        "card_type": "事象",
+        "required_scale": 0,
+        "description": "自分の意識-1。カードを1枚引く。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -1
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                }
+            ]
+        },
+        "is_token": true
+    },
+    {
+        "name": "文化侵略",
+        "card_type": "事象",
+        "required_scale": 15,
+        "description": "自分の規模-3し、相手のデッキに「文化的影響」を3枚デッキに加える。",
+        "triggers": {
+            "PLAY_EVENT_THIS": [
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -3
+                    }
+                },
+                {
+                    "effect_type": "ADD_CARD_TO_GAME",
+                    "args": {
+                        "player_id": "opponent",
+                        "card_template_name": "文化的影響",
+                        "destination_pile": "deck",
+                        "position": "random",
+                        "count": 3
+                    }
+                }
+            ]
+        }
+    }
+]

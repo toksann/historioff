@@ -2,6 +2,8 @@
   "name": "historio-web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "homepage": ".",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
@@ -10,12 +12,13 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
+    "uuid": "^12.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -35,5 +38,22 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\\\.js$": "babel-jest"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/*.test.js",
+      "<rootDir>/src/**/test_*.js",
+      "<rootDir>/src/**/test*.js",
+      "<rootDir>/src/**/test_enlightenment.js"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!uuid)/"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0"
   }
 }
