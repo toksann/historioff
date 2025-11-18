@@ -79,12 +79,51 @@ export const shuffle = (array) => {
  * @param {object} player The player object.
  * @returns {number} The effective scale.
  */
-export const getEffectiveScale = (player) => {
+export const getEffectiveScale = (player, gameState) => { // Added gameState as argument
     if (!player) return 0;
+    let moneyDurability = 0;
+    // Add Money card durability to effective scale when Money cards are on the field
     const moneyOnField = player.field.filter(card => card.name === 'マネー');
-    const moneyDurability = moneyOnField.reduce((sum, card) => sum + (card.current_durability || 0), 0);
+    moneyDurability = moneyOnField.reduce((sum, card) => sum + (card.current_durability || 0), 0);
     return player.scale + moneyDurability;
 };
 
 // We need a UUID library for createCardInstance. I'll add it to dependencies.
 // I will inform the user about this new dependency.
+
+export const createInitialGameState = (player1Id, player2Id, cardDefs, presetDecks) => {
+    const createPlayerState = (id) => ({
+        id,
+        consciousness: 20,
+        scale: 0,
+        hand: [],
+        deck: [],
+        field: [],
+        discard: [],
+        ideology: null,
+        hand_capacity: 7,
+        field_limit: 4,
+        modify_parameter_corrections: [],
+        cards_played_this_turn: 0,
+    });
+
+    return {
+        players: {
+            [player1Id]: createPlayerState(player1Id),
+            [player2Id]: createPlayerState(player2Id),
+        },
+        cardDefs: cardDefs, // Renamed from card_definitions to match JS convention
+        all_card_instances: {},
+        effect_queue: [],
+        animation_queue: [],
+        game_log: [],
+        current_turn: 0,
+        active_player: player1Id,
+        game_phase: 'initial', // 'initial', 'ongoing', 'finished'
+        winner: null,
+        awaiting_input: null,
+        temp_effect_data: {},
+        effects_to_skip: {},
+        delayedEffects: [],
+    };
+};

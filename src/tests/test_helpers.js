@@ -1,4 +1,5 @@
 const { PlayerId, GamePhase, INITIAL_CONSCIOUSNESS, INITIAL_SCALE, INITIAL_FIELD_LIMIT, MAX_HAND_SIZE } = require('../gameLogic/constants');
+const { processEffects } = require('../gameLogic/effectHandler');
 
 let cardInstanceCounter = 0;
 
@@ -70,6 +71,12 @@ const createTestGameState = (cardDefs) => {
         temp_effect_data: {}, 
         all_card_instances: {},
         cardDefs: cardDefs,
+        processing_status: {
+            is_processing_turn_end: false,
+            effects_remaining: 0,
+            awaiting_input_for: null,
+            pending_turn_transition: false
+        },
     };
 
     // Helper to create and register cards within this gameState
@@ -82,4 +89,31 @@ const createTestGameState = (cardDefs) => {
     return gameState;
 }
 
-module.exports = { createCardInstance, createTestGameState };
+const simpleCard = (name, required_scale, durability, effects, triggerType, card_type = '財') => {
+    const cardTemplate = {
+        name: name,
+        card_type: card_type,
+        required_scale: required_scale,
+        durability: durability,
+        triggers: {
+            [triggerType]: effects
+        }
+    };
+    return cardTemplate;
+};
+
+const processAllEffects = (gameState) => {
+    let newState = gameState;
+    let safetyBreak = 0;
+    while ((newState.effect_queue.length > 0 || (newState.delayedEffects && newState.delayedEffects.length > 0)) && safetyBreak < 100) {
+        if (newState.delayedEffects && newState.delayedEffects.length > 0) {
+            newState.effect_queue.unshift(...newState.delayedEffects);
+            newState.delayedEffects = [];
+        }
+        newState = processEffects(newState);
+        safetyBreak++;
+    }
+    return newState;
+};
+
+module.exports = { createCardInstance, createTestGameState, simpleCard, processAllEffects };

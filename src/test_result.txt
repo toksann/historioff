@@ -1,31 +1,138 @@
- console.log
-    [modifyParameterCorrectionCalculation] Calculating for player PLAYER1, target: consciousness, direction: decrease, amount: -90
 
-      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
-
-  console.log
-    [modifyParameterCorrectionCalculation] Calculating for player PLAYER1, target: scale, direction: decrease, amount: -90
-
-      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
-
-  console.log
-    [modifyParameterCorrectionCalculation] Calculating for player PLAYER2, target: consciousness, direction: decrease, amount: -90
-
-      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
-
-  console.log
-    [modifyParameterCorrectionCalculation] Calculating for player PLAYER2, target: scale, direction: decrease, amount: -90
-
-      at modifyParameterCorrectionCalculation (src/gameLogic/effectHandler.js:6:13)
-
- PASS  src/tests/test_mutual_assured_destruction_effect.js
-  Mutual Assured Destruction Effects
-    √ 相互確証破壊 (Mutual Assured Destruction) should add cards to both decks (1 ms)
-    √ 確証破壊能力 (Assured Destruction Capability) - Opponent does NOT have it
-    √ 確証破壊能力 (Assured Destruction Capability) - Opponent HAS it (8 ms)
-
-Test Suites: 1 passed, 1 total
-Tests:       3 passed, 3 total
-Snapshots:   0 total
-Time:        0.417 s, estimated 1 s
-Ran all test suites matching /src\\tests\\test_mutual_assured_destruction_effect.js/i.
+﻿
+main.js:325 🎮GAME_ANIM [main.js] Pushing DRAW_CARD effect for player PLAYER1, Turn: 1
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:20 🎮GAME_ANIM [Hook] Memoized onGameEffectRef created.
+usePresentationController.js:32 🎮GAME_ANIM [Hook] EffectMonitor not available during initial PresentationController setup.
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:20 🎮GAME_ANIM [Hook] Memoized onGameEffectRef created.
+usePresentationController.js:32 🎮GAME_ANIM [Hook] EffectMonitor not available during initial PresentationController setup.
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:20 🎮GAME_ANIM [Hook] Memoized onGameEffectRef created.
+usePresentationController.js:24 🎮GAME_ANIM [Hook] Attempting to register PresentationController.onGameEffect with EffectMonitor.
+usePresentationController.js:27 🎮GAME_ANIM [Hook] Successfully registered PresentationController.onGameEffect with EffectMonitor. Current listeners: 1
+Game.js:96 🎮GAME_ANIM [Game.js useEffect] Processing animation queue...
+Game.js:97 🎮GAME_ANIM [Game.js useEffect] animation_queue length: 2
+Game.js:98 🎮GAME_ANIM [Game.js useEffect] handleEffectForAnimation available: true
+Game.js:99 🎮GAME_ANIM [Game.js useEffect] isAnimationLocked: false
+Game.js:100 🎮GAME_ANIM [Game.js useEffect] animationReady: false
+Game.js:119 🎮GAME_ANIM [Game.js useEffect] Animation queue not processed. Conditions:
+Game.js:120 🎮GAME_ANIM   - animation_queue length > 0: true
+Game.js:121 🎮GAME_ANIM   - handleEffectForAnimation: true
+Game.js:122 🎮GAME_ANIM   - !isAnimationLocked: true
+Game.js:123 🎮GAME_ANIM   - animationReady: false
+EffectMonitor.js:155 🎮GAME_ANIM [EffectMonitor] notifyAnimationCallbacks called.
+EffectMonitor.js:156 🎮GAME_ANIM [EffectMonitor] Effect object: 
+{effect_type: 'DRAW_CARD', args: {…}}
+EffectMonitor.js:157 🎮GAME_ANIM [EffectMonitor] Source card: null
+EffectMonitor.js:158 🎮GAME_ANIM [EffectMonitor] Current animationCallbacks array: 
+['bound onGameEffect']
+PresentationController.js:248 🎮GAME_ANIM [Presentation] onGameEffect called with: DRAW_CARD
+PresentationController.js:249 🎮GAME_ANIM [Presentation] Effect args: 
+{player_id: 'PLAYER1'}
+PresentationController.js:250 🎮GAME_ANIM [Presentation] Source card: undefined
+PresentationController.js:275 🎮GAME_ANIM [Presentation] delegateToAnimationManager called with effect: DRAW_CARD
+PresentationController.js:282 🎮GAME_ANIM [Presentation] Delegating to AnimationManager: DRAW_CARD
+EffectMonitor.js:155 🎮GAME_ANIM [EffectMonitor] notifyAnimationCallbacks called.
+EffectMonitor.js:156 🎮GAME_ANIM [EffectMonitor] Effect object: 
+{effect_type: 'MOVE_CARD', args: {…}}
+EffectMonitor.js:157 🎮GAME_ANIM [EffectMonitor] Source card: null
+EffectMonitor.js:158 🎮GAME_ANIM [EffectMonitor] Current animationCallbacks array: 
+['bound onGameEffect']
+PresentationController.js:248 🎮GAME_ANIM [Presentation] onGameEffect called with: MOVE_CARD
+PresentationController.js:249 🎮GAME_ANIM [Presentation] Effect args: 
+{player_id: 'PLAYER1', card_id: 'PLAYER1-物質主義-40686939-9d28-4387-bfd4-ceace7107670', source_pile: 'deck', destination_pile: 'hand', card_to_move: {…}}
+PresentationController.js:250 🎮GAME_ANIM [Presentation] Source card: undefined
+PresentationController.js:275 🎮GAME_ANIM [Presentation] delegateToAnimationManager called with effect: MOVE_CARD
+PresentationController.js:282 🎮GAME_ANIM [Presentation] Delegating to AnimationManager: MOVE_CARD
+AnimationManager.js:104 🎮GAME_ANIM [AnimationManager] *** ANIMATION TRIGGERED ***
+AnimationManager.js:105 🎮GAME_ANIM [AnimationManager] Effect type: CARD_DRAW
+AnimationManager.js:106 🎮GAME_ANIM [AnimationManager] Target: false
+AnimationManager.js:107 🎮GAME_ANIM [AnimationManager] Params: 
+{effect: {…}, sourceCard: null}
+AnimationManager.js:146 🎮GAME_ANIM [AnimationManager] Creating animation object: 
+{id: 1763496742795.4478, type: 'transient', effectType: 'CARD_DRAW', target: null, params: {…}, …}
+AnimationManager.js:155 🎮GAME_ANIM [AnimationManager] Animation queued: CARD_DRAW Queue length: 1
+AnimationManager.js:158 🎮GAME_ANIM [AnimationManager] About to call executeAnimation...
+AnimationManager.js:249 🎮GAME_ANIM [AnimationManager] executeAnimation method entered
+AnimationManager.js:250 🎮GAME_ANIM [AnimationManager] Animation object: 
+{id: 1763496742795.4478, type: 'transient', effectType: 'CARD_DRAW', target: null, params: {…}, …}
+AnimationManager.js:254 🎮GAME_ANIM [AnimationManager] executeAnimation called with: CARD_DRAW
+AnimationManager.js:255 🎮GAME_ANIM [AnimationManager] Animation params: 
+{effect: {…}, sourceCard: null}
+usePresentationController.js:59 🎮GAME_ANIM [Hook] Removing PresentationController.onGameEffect from EffectMonitor. Current listeners: 1
+usePresentationController.js:61 🎮GAME_ANIM [Hook] Successfully removed PresentationController.onGameEffect. Current listeners: 0
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:35 🎮GAME_ANIM [Hook] PresentationController already initialized. Checking for registration.
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:35 🎮GAME_ANIM [Hook] PresentationController already initialized. Checking for registration.
+usePresentationController.js:13 🎮GAME_ANIM [Hook] usePresentationController useEffect triggered.
+usePresentationController.js:35 🎮GAME_ANIM [Hook] PresentationController already initialized. Checking for registration.
+usePresentationController.js:44 🎮GAME_ANIM [Hook] EffectMonitor became available, registering PresentationController.onGameEffect. Current listeners: 0
+usePresentationController.js:46 🎮GAME_ANIM [Hook] Successfully registered PresentationController.onGameEffect with EffectMonitor. Current listeners: 1
+Game.js:96 🎮GAME_ANIM [Game.js useEffect] Processing animation queue...
+Game.js:97 🎮GAME_ANIM [Game.js useEffect] animation_queue length: 2
+Game.js:98 🎮GAME_ANIM [Game.js useEffect] handleEffectForAnimation available: true
+Game.js:99 🎮GAME_ANIM [Game.js useEffect] isAnimationLocked: false
+Game.js:100 🎮GAME_ANIM [Game.js useEffect] animationReady: false
+Game.js:119 🎮GAME_ANIM [Game.js useEffect] Animation queue not processed. Conditions:
+Game.js:120 🎮GAME_ANIM   - animation_queue length > 0: true
+Game.js:121 🎮GAME_ANIM   - handleEffectForAnimation: true
+Game.js:122 🎮GAME_ANIM   - !isAnimationLocked: true
+Game.js:123 🎮GAME_ANIM   - animationReady: false
+Game.js:86 🎮GAME_ANIM [Game] Updating persistent animations
+AnimationManager.js:1884 🎮GAME_ANIM [Persistent] Updating persistent animations
+AnimationManager.js:1901 🎮GAME_ANIM [Persistent] Starting insufficient scale animation for card: 物質主義
+Game.js:96 🎮GAME_ANIM [Game.js useEffect] Processing animation queue...
+Game.js:97 🎮GAME_ANIM [Game.js useEffect] animation_queue length: 3
+Game.js:98 🎮GAME_ANIM [Game.js useEffect] handleEffectForAnimation available: true
+Game.js:99 🎮GAME_ANIM [Game.js useEffect] isAnimationLocked: false
+Game.js:100 🎮GAME_ANIM [Game.js useEffect] animationReady: false
+Game.js:119 🎮GAME_ANIM [Game.js useEffect] Animation queue not processed. Conditions:
+Game.js:120 🎮GAME_ANIM   - animation_queue length > 0: true
+Game.js:121 🎮GAME_ANIM   - handleEffectForAnimation: true
+Game.js:122 🎮GAME_ANIM   - !isAnimationLocked: true
+Game.js:123 🎮GAME_ANIM   - animationReady: false
+Game.js:96 🎮GAME_ANIM [Game.js useEffect] Processing animation queue...
+Game.js:97 🎮GAME_ANIM [Game.js useEffect] animation_queue length: 3
+Game.js:98 🎮GAME_ANIM [Game.js useEffect] handleEffectForAnimation available: true
+Game.js:99 🎮GAME_ANIM [Game.js useEffect] isAnimationLocked: false
+Game.js:100 🎮GAME_ANIM [Game.js useEffect] animationReady: true
+Game.js:107 🎮GAME_ANIM [Game.js useEffect] Found animation in queue: TURN_ORDER_DECISION
+Game.js:108 🎮GAME_ANIM [Game.js useEffect] Calling handleEffectForAnimation for: TURN_ORDER_DECISION
+useAnimationManager.js:65 🎮GAME_ANIM [useAnimationManager] handleEffectForAnimation called with effect: TURN_ORDER_DECISION
+useAnimationManager.js:66 🎮GAME_ANIM [useAnimationManager] Effect object: 
+{effect_type: 'TURN_ORDER_DECISION', args: {…}}
+useAnimationManager.js:67 🎮GAME_ANIM [useAnimationManager] Source card: null
+useAnimationManager.js:74 🎮GAME_ANIM [Hook] Effect received for animation: TURN_ORDER_DECISION
+usePresentationController.js:76 🎮GAME_ANIM [usePresentationController] handleGameEffect called with effect: TURN_ORDER_DECISION
+usePresentationController.js:77 🎮GAME_ANIM [usePresentationController] Effect object: 
+{effect_type: 'TURN_ORDER_DECISION', args: {…}}
+usePresentationController.js:78 🎮GAME_ANIM [usePresentationController] Source card: null
+PresentationController.js:248 🎮GAME_ANIM [Presentation] onGameEffect called with: TURN_ORDER_DECISION
+PresentationController.js:249 🎮GAME_ANIM [Presentation] Effect args: 
+{first_player: 'あなた', second_player: 'NPC', first_player_id: 'PLAYER1', second_player_id: 'PLAYER2'}
+PresentationController.js:250 🎮GAME_ANIM [Presentation] Source card: undefined
+PresentationController.js:254 🎮GAME_ANIM [Presentation] *** GAME PROGRESSION EFFECT DETECTED ***: TURN_ORDER_DECISION
+PresentationController.js:275 🎮GAME_ANIM [Presentation] delegateToAnimationManager called with effect: TURN_ORDER_DECISION
+PresentationController.js:282 🎮GAME_ANIM [Presentation] Delegating to AnimationManager: TURN_ORDER_DECISION
+PresentationController.js:334 🎮GAME_ANIM [Presentation] Processing TURN_ORDER_DECISION effect
+PresentationController.js:800 🎮GAME_ANIM [Presentation] *** TURN ORDER DECISION DETECTED ***
+PresentationController.js:801 🎮GAME_ANIM [Presentation] First: あなた Second: NPC
+PresentationController.js:802 🎮GAME_ANIM [Presentation] AnimationManager available: true
+PresentationController.js:805 🎮GAME_ANIM [Presentation] Calling animationManager.triggerTransientEffect for TURN_ORDER_DECISION
+AnimationManager.js:104 🎮GAME_ANIM [AnimationManager] *** ANIMATION TRIGGERED ***
+AnimationManager.js:105 🎮GAME_ANIM [AnimationManager] Effect type: TURN_ORDER_DECISION
+AnimationManager.js:106 🎮GAME_ANIM [AnimationManager] Target: false
+AnimationManager.js:107 🎮GAME_ANIM [AnimationManager] Params: 
+{firstPlayer: 'あなた', secondPlayer: 'NPC'}
+AnimationManager.js:146 🎮GAME_ANIM [AnimationManager] Creating animation object: 
+{id: 1763496742842.788, type: 'transient', effectType: 'TURN_ORDER_DECISION', target: null, params: {…}, …}
+AnimationManager.js:150 🎮GAME_ANIM [AnimationManager] System animation detected: TURN_ORDER_DECISION
+AnimationManager.js:189 🎮GAME_ANIM [SystemQueue] System animation queued: TURN_ORDER_DECISION Queue length: 1
+AnimationManager.js:213 🎮GAME_ANIM [SystemQueue] Starting to process system animation queue
+AnimationManager.js:77 🎮GAME_ANIM [Lock] Game locked - operations disabled
+AnimationManager.js:220 🎮GAME_ANIM [SystemQueue] Processing system animation: TURN_ORDER_DECISION Remaining in queue: 0
+AnimationManager.js:249 🎮GAME_ANIM [AnimationManager] executeAnimation method entered
+AnimationManager.js:250 🎮GAME_ANIM [AnimationManager] Animation object: 
+{id: 1763496742842.788, type: 'transient', effectType: 'TURN_ORDER_DECISION', target: null, params: {…}, …}

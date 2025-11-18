@@ -1,5 +1,7 @@
 import { shuffle, createCardInstance, getEffectiveScale } from './gameUtils.js';
 import { processEffects } from './effectHandler.js';
+import { produce } from "immer";
+import { _updateGameOverState } from './gameOver.js';
 import {
     INITIAL_HAND_SIZE,
     INITIAL_CONSCIOUSNESS,
@@ -18,40 +20,7 @@ import {
 /**
  * Checks if the game is over and sets the winner.
  */
-const checkGameOver = (gameState) => {
-    if (gameState.game_over) return gameState; // Don't check if already over
-
-    const p1 = gameState.players[PlayerId.PLAYER1];
-    const p2 = gameState.players[PlayerId.PLAYER2];
-
-    let winner = null;
-
-    // 1. Consciousness check
-    if (p1.consciousness <= 0) {
-        winner = PlayerId.PLAYER2;
-    } else if (p2.consciousness <= 0) {
-        winner = PlayerId.PLAYER1;
-    }
-
-    // 2. Deck out check
-    if (p1.deck.length === 0 || p2.deck.length === 0) {
-        if (p1.consciousness > p2.consciousness) {
-            winner = PlayerId.PLAYER1;
-        } else if (p2.consciousness > p1.consciousness) {
-            winner = PlayerId.PLAYER2;
-        } else {
-            // If consciousness is equal, the current turn player loses
-            winner = gameState.current_turn === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
-        }
-    }
-
-    if (winner) {
-        gameState.game_over = true;
-        gameState.winner = winner;
-    }
-
-    return gameState;
-};
+export const checkGameOver = (gameState) => produce(gameState, _updateGameOverState);
 
 /**
  * Initializes the entire game state for a new game.
@@ -114,7 +83,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
                 cards_played_this_turn: 0,
             }
         },
-        current_turn: null, // Initially null, will be set randomly
+        current_turn: null,
         phase: GamePhase.START_TURN,
         log: ["Game initialized."],
         effect_queue: [],
@@ -125,14 +94,23 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         temp_effect_data: {},
         all_card_instances: {},
         cardDefs: cardDefs,
-        // 新しいターン管理システム
-        turn_number: 1, // 従来の互換性のため
-        round_number: 1, // ラウンド数（先攻後攻が一巡で+1）
-        turn_in_round: 1, // ラウンド内でのターン数（1=先攻, 2=後攻）
-        game_log: [], // プレイログ（ゲーム全体を通して保持）
+        turn_number: 1,
+        round_number: 1,
+        turn_in_round: 1,
+        game_log: [],
+        turn_end_state: 'ready_for_next_turn',
+        processing_status: {
+            is_processing_turn_end: false,
+            effects_remaining: 0,
+            awaiting_input_for: null,
+            pending_turn_transition: false
+        },
+        firstTurnStarted: false,
+        lastUpdate: null,
+        isAnimationLocked: false,
+        animation_queue: []
     };
 
-    // Populate all_card_instances after initial setup
     Object.values(gameState.players).forEach(player => {
         player.deck.forEach(card => {
             gameState.all_card_instances[card.instance_id] = card;
@@ -140,22 +118,34 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         player.hand.forEach(card => {
             gameState.all_card_instances[card.instance_id] = card;
         });
-        // Field, discard, and ideology will be populated during gameplay
     });
 
-    // --- First turn setup ---
-    // 1. Randomly determine the first player
     const playerIds = [PlayerId.PLAYER1, PlayerId.PLAYER2];
     const firstPlayerId = playerIds[Math.floor(Math.random() * playerIds.length)];
+    const secondPlayerId = firstPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
     gameState.current_turn = firstPlayerId;
-    gameState.first_player = firstPlayerId; // 先攻プレイヤーを記録
+    gameState.first_player = firstPlayerId;
 
-    // 2. Apply debuff to the first player
+    const firstPlayerName = gameState.players[firstPlayerId].name;
+    const secondPlayerName = gameState.players[secondPlayerId].name;
+    
+    gameState.animation_queue.push({
+        effect: {
+            effect_type: 'TURN_ORDER_DECISION',
+            args: {
+                first_player: firstPlayerName,
+                second_player: secondPlayerName,
+                first_player_id: firstPlayerId,
+                second_player_id: secondPlayerId
+            }
+        },
+        sourceCard: null
+    });
+    
     const firstPlayerDebuff = -3;
     gameState.players[firstPlayerId].consciousness += firstPlayerDebuff;
     gameState.log.push(`[${gameState.players[firstPlayerId].name}] が先攻です。意識に ${firstPlayerDebuff} の影響を受けます。`);
     
-    // プレイログにゲーム開始情報を記録
     gameState.game_log.push({
         id: `game_start_${Date.now()}`,
         timestamp: Date.now(),
@@ -168,275 +158,301 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         }
     });
 
-    return gameState;
+    return startTurn(gameState);
 };
-/**
- * Handles the logic for a player playing a card.
- */
+
 export const playCard = (gameState, playerId, cardInstanceId, options = {}) => {
-    let newState = gameState;
-    const player = newState.players[playerId];
-    
-    if (newState.current_turn !== playerId) {
-        return gameState;
-    }
-
-    const cardIndex = player.hand.findIndex(c => c.instance_id === cardInstanceId);
-    if (cardIndex === -1) {
-        return gameState;
-    }
-    
-    const card = player.hand[cardIndex];
-
-    if (getEffectiveScale(player) < card.required_scale) {
-        console.log('Scale not high enough!');
-        return gameState;
-    }
-
-    // Restriction for "Primitive Communism" to not play wealth cards
-    if (player.ideology && player.ideology.name === '原始共産制' && card.card_type === CardType.WEALTH) {
-        return gameState;
-    }
-
-    if (card.card_type === CardType.WEALTH && player.field.length >= player.field_limit) {
-        console.log('Field is full!');
-        return gameState;
-    }
-
-    const playerActionEffect = {
-        effect_type: EffectType.PLAYER_ACTION,
-        args: {
-            player_id: playerId,
-            action_type: 'play_card',
-            card_id: cardInstanceId,
-            ...options
+    return produce(gameState, draftState => {
+        const player = draftState.players[playerId];
+        
+        if (draftState.current_turn !== playerId) {
+            return;
         }
-    };
-    newState.effect_queue.push([playerActionEffect, card]);
 
-    return newState;
+        const cardIndex = player.hand.findIndex(c => c.instance_id === cardInstanceId);
+        if (cardIndex === -1) {
+            return;
+        }
+        
+        const card = player.hand[cardIndex];
+
+        if (getEffectiveScale(player, draftState) < card.required_scale) {
+            return;
+        }
+
+        if (player.ideology && player.ideology.name === '原始共産制' && card.card_type === CardType.WEALTH) {
+            return;
+        }
+
+        if (card.card_type === CardType.WEALTH && player.field.length >= player.field_limit) {
+            // presentationControllerへの直接参照を削除し、animation_queueにデータを追加
+            draftState.animation_queue.push({
+                effect: {
+                    effect_type: 'LIMIT_WARNING',
+                    args: {
+                        player_id: playerId,
+                        limit_type: 'field',
+                        message: '場の上限に達しているため配置できません'
+                    }
+                },
+                sourceCard: null // 特定のカードに紐づかないためnull
+            });
+            return;
+        }
+
+        const playerActionEffect = {
+            effect_type: EffectType.PLAYER_ACTION,
+            args: {
+                player_id: playerId,
+                action_type: 'play_card',
+                card_id: cardInstanceId,
+                ...options
+            }
+        };
+        draftState.effect_queue.push([playerActionEffect, card]);
+    });
 };
 
-/**
- * Handles the logic for ending a turn.
- */
 export const endTurn = (gameState) => {
+    return produce(gameState, draftState => {
+        const currentPlayerId = draftState.current_turn;
+        const currentPlayer = draftState.players[currentPlayerId];
+
+        // presentationControllerへの直接参照を削除し、animation_queueにデータを追加
+        draftState.animation_queue.push({
+            effect: {
+                effect_type: 'TURN_END',
+                args: {
+                    player_name: currentPlayer.name,
+                    player_id: currentPlayerId
+                }
+            },
+            sourceCard: null // 特定のカードに紐づかないためnull
+        });
+
+        draftState.turn_end_state = 'processing_effects';
+        draftState.processing_status.is_processing_turn_end = true;
+        draftState.processing_status.pending_turn_transition = true;
+
+        const opponentPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        const ownerEventArgs = { player_id: currentPlayerId, target_player_id: currentPlayerId };
+        const opponentEventArgs = { player_id: currentPlayerId, target_player_id: opponentPlayerId };
+        draftState.effect_queue.push([{ effect_type: TriggerType.END_TURN_OWNER, args: ownerEventArgs }, null]);
+        draftState.effect_queue.push([{ effect_type: TriggerType.END_TURN_OPPONENT, args: opponentEventArgs }, null]);
+    });
+};
+
+export const _proceedToNextTurn = (gameState) => {
     let currentGameState = gameState;
-    const currentPlayerId = currentGameState.current_turn;
 
-    const endTurnEventArgs = { player_id: currentPlayerId, target_player_id: currentPlayerId };
-    currentGameState.effect_queue.push([{ effect_type: TriggerType.END_TURN_OWNER, args: endTurnEventArgs }, null]);
+    if (currentGameState.delayedEffects && currentGameState.delayedEffects.length > 0) {
+        currentGameState = produce(currentGameState, draftState => {
+            draftState.effect_queue.push(...draftState.delayedEffects);
+            draftState.delayedEffects = [];
+        });
+    }
 
-    // Process all effects queued for the end of the turn until none are left.
-    let safetyBreak = 0;
-    while (currentGameState.effect_queue.length > 0 && safetyBreak < 100) { // Increased safety break
-        if (currentGameState.awaiting_input) {
-            break; 
+    const nextState = produce(currentGameState, draftState => {
+        const currentPlayerId = draftState.current_turn;
+        const nextPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        const currentPlayer = draftState.players[currentPlayerId];
+        currentPlayer.cards_played_this_turn = 0;
+        
+        draftState.turn_end_state = 'ready_for_next_turn';
+        draftState.processing_status.is_processing_turn_end = false;
+        draftState.processing_status.pending_turn_transition = false;
+        draftState.processing_status.awaiting_input_for = null;
+        
+        draftState.current_turn = nextPlayerId;
+        
+        if (currentPlayerId === draftState.first_player) {
+            draftState.turn_in_round = 2;
+        } else {
+            draftState.round_number += 1;
+            draftState.turn_in_round = 1;
         }
-        currentGameState = processEffects(currentGameState);
-        safetyBreak++;
-    }
-
-    // If we broke the loop due to awaiting_input or the queue is still not empty,
-    // return the current state without starting the next turn.
-    if (currentGameState.awaiting_input || currentGameState.effect_queue.length > 0) {
-        return currentGameState;
-    }
-
-    // Only if the queue is empty and no input is awaited, proceed to the next turn.
-    const nextPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
-    currentGameState.current_turn = nextPlayerId;
-    
-    // 新しいターン管理システム
-    if (currentPlayerId === currentGameState.first_player) {
-        // 先攻プレイヤーのターン終了 → 後攻プレイヤーのターンへ
-        currentGameState.turn_in_round = 2;
-    } else {
-        // 後攻プレイヤーのターン終了 → 次のラウンドの先攻プレイヤーへ
-        currentGameState.round_number += 1;
-        currentGameState.turn_in_round = 1;
-    }
-    
-    // 従来の互換性のためのturn_number更新
-    currentGameState.turn_number = (currentGameState.turn_number || 1) + 1;
-
-    return startTurn(currentGameState);
-  };
-
-/**
- * Handles the logic for starting a turn.
- */
-export const startTurn = (gameState) => {
-    let currentGameState = gameState;
-    const currentPlayerId = currentGameState.current_turn;
-    const opponentPlayerId = currentPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
-    const currentPlayer = currentGameState.players[currentPlayerId];
-
-    // 先攻後攻の判定とターン表示
-    const isFirstPlayer = currentPlayerId === currentGameState.first_player;
-    const turnOrder = isFirstPlayer ? '先攻' : '後攻';
-    const roundNum = currentGameState.round_number || 1;
-    
-    const turnStartMessage = `${turnOrder} ターン${roundNum} 開始 (${currentPlayer.name})`;
-    
-    // 従来のログに記録
-    currentGameState.log.push(`--- ${currentPlayer.name}のターン開始 (${turnOrder} ターン${roundNum}) ---`);
-    
-    // プレイログにも記録
-    if (!currentGameState.game_log) {
-        currentGameState.game_log = [];
-    }
-    currentGameState.game_log.push({
-        id: `turn_start_${Date.now()}`,
-        timestamp: Date.now(),
-        type: "turn_start",
-        message: turnStartMessage,
-        details: {
-            player_id: currentPlayerId,
-            player_name: currentPlayer.name,
-            turn_order: turnOrder,
-            round_number: roundNum,
-            is_first_player: isFirstPlayer
-        }
+        
+        draftState.turn_number = (draftState.turn_number || 1) + 1;
     });
 
-    // 1. Draw a card
-    currentGameState.effect_queue.push([{
-        effect_type: EffectType.DRAW_CARD,
-        args: { player_id: currentPlayerId }
-    }, null]);
-
-    // 2. Issue START_TURN triggers
-    const ownerEventArgs = { player_id: currentPlayerId, target_player_id: currentPlayerId };
-    const opponentEventArgs = { player_id: currentPlayerId, target_player_id: opponentPlayerId };
-    currentGameState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OWNER, args: ownerEventArgs }, null]);
-    currentGameState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OPPONENT, args: opponentEventArgs }, null]);
-
-    // Process all effects queued for the start of the turn until none are left.
-    let safetyBreak = 0;
-    while (currentGameState.effect_queue.length > 0 && !currentGameState.awaiting_input && safetyBreak < 100) {
-        currentGameState = processEffects(currentGameState);
-        safetyBreak++;
-    }
-
-    // If we broke the loop due to awaiting_input or the queue is still not empty,
-    // return the current state. The caller (App.js) will continue processing.
-    if (currentGameState.awaiting_input || currentGameState.effect_queue.length > 0) {
-        return currentGameState;
-    }
-
-    return checkGameOver(currentGameState);
+    return startTurn(nextState);
 };
-/**
- * Resolves a pending user input and continues the effect chain.
- */
-export const resolveInput = (gameState, chosenItems) => {
-    let newState = gameState;
-    const { type, player_id, source_card_instance_id, destination_pile, source_piles, source_effect } = newState.awaiting_input;
 
-    newState.awaiting_input = null;
+export const startTurn = (gameState) => {
+    return produce(gameState, draftState => {
+        const currentPlayerId = draftState.current_turn;
+        const opponentPlayerId = currentPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        const currentPlayer = draftState.players[currentPlayerId];
 
-    let sourceCard = null;
-    
-    // まずall_card_instancesから検索
-    sourceCard = newState.all_card_instances[source_card_instance_id];
-    
-    // 見つからない場合は各プレイヤーの領域から検索
-    if (!sourceCard) {
-        for (const p of Object.values(newState.players)) {
-            sourceCard = [...p.field, p.ideology, ...p.hand, ...p.discard].find(c => c && c.instance_id === source_card_instance_id);
-            if (sourceCard) break;
-        }
-    }
-
-    if (!sourceCard) {
-        console.error("Could not find the source card for the pending effect. Source ID:", source_card_instance_id);
-        console.error("Available card instances:", Object.keys(newState.all_card_instances));
-        return newState;
-    }
-    
-    console.log('[resolveInput] Found source card:', sourceCard.name);
-
-    switch (type) {
-        case 'CHOICE_CARD_TO_ADD': {
-            const card_template_name = chosenItems; // chosenItem is a string (card name)
-            const addEffect = {
-                effect_type: EffectType.ADD_CARD_TO_GAME,
+        const isFirstPlayer = currentPlayerId === draftState.first_player;
+        const turnOrder = isFirstPlayer ? '先攻' : '後攻';
+        const roundNum = draftState.round_number || 1;
+        
+        const turnStartMessage = `${turnOrder} ターン${roundNum} 開始 (${currentPlayer.name})`;
+        
+        // presentationControllerへの直接参照を削除し、animation_queueにデータを追加
+        draftState.animation_queue.push({
+            effect: {
+                effect_type: 'TURN_START',
                 args: {
-                    player_id: player_id,
-                    card_template_name: card_template_name,
-                    destination_pile: 'hand',
+                    player_name: currentPlayer.name,
+                    player_id: currentPlayerId,
+                    turn_number: roundNum
                 }
-            };
-            newState.effect_queue.push([addEffect, sourceCard]);
-            break;
+            },
+            sourceCard: null // 特定のカードに紐づかないためnull
+        });
+
+        draftState.log.push(`--- ${currentPlayer.name}のターン開始 (${turnOrder} ターン${roundNum}) ---`);
+        
+        if (!draftState.game_log) {
+            draftState.game_log = [];
         }
-        case 'CHOICE_CARD_FROM_PILE': {
-            const chosenCard = chosenItems; // chosenItem is a card instance
-            let original_pile = null;
-
-            for (const pileName of source_piles) {
-                const pile = newState.players[player_id][pileName];
-                if (pile && pile.find(c => c.instance_id === chosenCard.instance_id)) {
-                    original_pile = pileName;
-                    break;
-                }
+        draftState.game_log.push({
+            id: `turn_start_${Date.now()}`,
+            timestamp: Date.now(),
+            type: "turn_start",
+            message: turnStartMessage,
+            details: {
+                player_id: currentPlayerId,
+                player_name: currentPlayer.name,
+                turn_order: turnOrder,
+                round_number: roundNum,
+                is_first_player: isFirstPlayer
             }
+        });
 
-            if (original_pile) {
-                const moveEffect = {
-                    effect_type: EffectType.MOVE_CARD,
+        console.log(`🎮GAME_ANIM [main.js] Pushing DRAW_CARD effect for player ${currentPlayerId}, Turn: ${draftState.turn_number}`);
+        draftState.effect_queue.push([{
+            effect_type: EffectType.DRAW_CARD,
+            args: { player_id: currentPlayerId }
+        }, null]);
+
+        const ownerEventArgs = { player_id: currentPlayerId, target_player_id: currentPlayerId };
+        const opponentEventArgs = { player_id: currentPlayerId, target_player_id: opponentPlayerId };
+        draftState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OWNER, args: ownerEventArgs }, null]);
+        draftState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OPPONENT, args: opponentEventArgs }, null]);
+    });
+};
+
+export const resolveInput = (gameState, chosenItems) => {
+    const nextState = produce(gameState, draftState => {
+        const { type, player_id, source_card_instance_id, destination_pile, source_piles, source_effect } = draftState.awaiting_input;
+
+        draftState.awaiting_input = null;
+
+        let sourceCard = null;
+        
+        sourceCard = draftState.all_card_instances[source_card_instance_id];
+        
+        if (!sourceCard) {
+            for (const p of Object.values(draftState.players)) {
+                sourceCard = [...p.field, p.ideology, ...p.hand, ...p.discard].find(c => c && c.instance_id === source_card_instance_id);
+                if (sourceCard) break;
+            }
+        }
+
+        if (!sourceCard) {
+            return;
+        }
+        
+        switch (type) {
+            case 'CHOICE_CARD_TO_ADD': {
+                const card_template_name = chosenItems;
+                const addEffect = {
+                    effect_type: EffectType.ADD_CARD_TO_GAME,
                     args: {
                         player_id: player_id,
-                        card_id: chosenCard.instance_id,
-                        source_pile: original_pile,
-                        destination_pile: destination_pile,
+                        card_template_name: card_template_name,
+                        destination_pile: 'hand',
                     }
                 };
-                newState.effect_queue.push([moveEffect, sourceCard]);
+                draftState.effect_queue.push([addEffect, sourceCard]);
+                break;
             }
-            break;
-        }
-        case 'CHOICE_CARDS_FOR_OPERATION': {
-            const newEffect = {
-                effect_type: source_effect.effect_type,
-                args: {
-                    ...source_effect.args,
-                    selected_cards: chosenItems, // Pass the array of chosen cards
-                }
-            };
-            newState.effect_queue.push([newEffect, sourceCard]);
-            break;
-        }
-        case 'CHOICE_NUMBER': {
-            const amount = chosenItems; // chosenItems is a number
-            const newEffect = {
-                effect_type: source_effect.effect_type,
-                args: {
-                    ...source_effect.args,
-                    amount: amount,
-                }
-            };
-            newState.effect_queue.push([newEffect, sourceCard]);
-            break;
-        }
-        case 'CHOICE_CARD_FOR_EFFECT':
-        default: {
-            const chosenCard = Array.isArray(chosenItems) ? chosenItems[0] : chosenItems;
-            const newEffect = {
-                effect_type: source_effect.effect_type,
-                args: {
-                    ...source_effect.args,
-                    card_id: chosenCard.instance_id,
-                }
-            };
-            newState.effect_queue.push([newEffect, sourceCard]);
-            break;
-        }
-    }
+            case 'CHOICE_CARD_FROM_PILE': {
+                const chosenCard = chosenItems;
+                let original_pile = null;
 
-    const finalState = processEffects(newState);
-    if (finalState.awaiting_input) return finalState;
+                for (const pileName of source_piles) {
+                    const pile = draftState.players[player_id][pileName];
+                    if (pile && pile.find(c => c.instance_id === chosenCard.instance_id)) {
+                        original_pile = pileName;
+                        break;
+                    }
+                }
+
+                if (original_pile) {
+                    const moveEffect = {
+                        effect_type: EffectType.MOVE_CARD,
+                        args: {
+                            player_id: player_id,
+                            card_id: chosenCard.instance_id,
+                            source_pile: original_pile,
+                            destination_pile: destination_pile,
+                        }
+                    };
+                    draftState.effect_queue.push([moveEffect, sourceCard]);
+                }
+                break;
+            }
+            case 'CHOICE_CARDS_FOR_OPERATION': {
+                const newEffect = {
+                    effect_type: source_effect.effect_type,
+                    args: {
+                        ...source_effect.args,
+                        selected_cards: chosenItems,
+                    }
+                };
+                draftState.effect_queue.push([newEffect, sourceCard]);
+                break;
+            }
+            case 'CHOICE_NUMBER': {
+                const amount = chosenItems;
+                const newEffect = {
+                    effect_type: source_effect.effect_type,
+                    args: {
+                        ...source_effect.args,
+                        amount: amount,
+                    }
+                };
+                draftState.effect_queue.push([newEffect, sourceCard]);
+                break;
+            }
+            case 'CHOICE_CARD_FOR_EFFECT':
+            default: {
+                const chosenCard = Array.isArray(chosenItems) ? chosenItems[0] : chosenItems;
+                const newEffect = {
+                    effect_type: source_effect.effect_type,
+                    args: {
+                        ...source_effect.args,
+                        card_id: chosenCard.instance_id,
+                    }
+                };
+                draftState.effect_queue.push([newEffect, sourceCard]);
+                break;
+            }
+        }
+    });
     
-    return checkGameOver(finalState);
+    let finalState = processEffects(nextState);
+    
+    if (finalState.awaiting_input) {
+        return finalState;
+    }
+    
+    if (finalState.processing_status.pending_turn_transition) {
+        finalState = produce(finalState, draftState => {
+            draftState.turn_end_state = 'processing_effects';
+            draftState.processing_status.awaiting_input_for = null;
+        });
+        
+        // Removed while loop here
+        // The App.js useEffect will handle further processing
+        //if (!finalState.awaiting_input && finalState.effect_queue.length === 0) {
+        //    return _proceedToNextTurn(finalState);
+        //}
+    }
+    
+    return finalState;
 };

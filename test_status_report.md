@@ -1,109 +1,253 @@
 # テストステータスレポート
 
 ## 概要
-このレポートは、Historio Web版プロジェクトにおける各カードのテスト状況をまとめたものです。
+このレポートは、Historio Web版プロジェクト(js&Reactベース。上位ディレクトリのpy版とは独立している)における各カードのテスト状況をまとめたものです。
+※historio-web\implementation_summary.txt の"8項"の二次検証となります。
+
+## 注意事項
+*   `implementation_summary.txt` に記載されているテスト状況と、この `test_status_report.md` のテスト状況に齟齬がある場合があります。これは、`implementation_summary.txt` 作成後に発生したファイル破損や文字化け等の問題により、一部の既存テストが失敗状態になったためです。この `test_status_report.md` が最新かつ正確なテスト状況を反映しています。
+*   2025/11/09現在、テストファイルの検証は全通過済。本番環境(npm startの実行)での検証を進めているところ。
+    *   そのため、本番環境で確認された不具合(バグ)の修正に関しては慎重に対応する必要がある。
+        *   具体的には「まずは備考欄の詳細な記述からソースコードの該当箇所を探す」「該当箇所を発見したら現在の実装を確認する」「すぐには修正せず、現在の実装と修正案を挙げ、対応方針を人間に確認すること」を必要とする。
+        *   card_definitions.jsonの修正が適切と判断される場合には、これを人間に依頼する。(カード定義ファイルは行数が多く処理負荷が高い、またPython版へも同様の修正を行っても問題なく動作するようにするため)
+        *   コンソールログを仕込む際は、調査区分に合わせたプレフィックスを付けること。複数の区分に跨る調査対象である場合は、一つのログに複数のプレフィックスを付けてもよい。また、ログ分析を効率的に行うために、基本的には無条件で通過する処理にはログを仕込まないこと。
 
 ## テスト状況
 | カード名 | テストファイル | テストステータス | 備考 |
 |---|---|---|---|
-| 戦士 | test_warrior_effect.js | 失敗 | 構文エラー & 文字化け |
-| 山 | test_mountain_effect.js | 失敗 | 構文エラー & 文字化け |
-| 砦 | test_fortress_effect.js | 失敗 | 構文エラー & 文字化け |
-| 聖なる領域 | test_sacred_domain_effect.js | 成功 | |
-| 交易路 | test_trade_route_effect.js | 失敗 | 構文エラー & 文字化け |
-| 果実 |  | 存在しない | |
-| 農民 |  | 存在しない | |
-| 開拓民 |  | 存在しない | |
-| 大嵐 |  | 存在しない |  |
-| 豊作 |  | 存在しない | |
-| 予感 |  | 存在しない |  |
-| 覚醒 |  | 存在しない | |
-| 内部崩壊 |  | 存在しない |  |
-| 秩序の瓦解 |  | 存在しない | |
-| 略奪 | test_looting_effect.js | 失敗 | 構文エラー & 文字化け |
-| 物々交換 | test_barter_effect.js | 失敗 | 構文エラー & 文字化け |
-| 接収 | test_seizure_effect.js | 失敗 | 構文エラー & 文字化け |
-| 経済学の興り | test_rise_of_economics_effect.js | 失敗 | 構文エラー & 文字化け |
-| 多文化主義 | test_multiculturalism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 帝国主義 | test_imperialism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 多神教 | test_polytheism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 原始共産制 | test_primitive_communism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 物質主義 | test_materialism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 一神教 | test_monotheism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 悟りの道 | test_path_to_enlightenment_effect.js | 失敗 | 構文エラー & 文字化け |
-| 聖典 | test_sacred_scripture_effect.js | 失敗 | 構文エラー & 文字化け |
-| 布教 | test_missionary_effect.js | 失敗 | 構文エラー & 文字化け |
-| 受難 | test_suffering_effect.js | 失敗 | 構文エラー & 文字化け |
-| 崇拝 | test_worship_effect.js | 失敗 | 構文エラー & 文字化け |
-| 救世 | test_salvation_effect.js | 失敗 | 構文エラー & 文字化け |
-| 終末 | test_apocalypse_effect.js | 失敗 | 構文エラー & 文字化け |
-| 輪廻転生 | test_reincarnation_effect.js | 失敗 | 構文エラー & 文字化け |
-| マネー | test_money_effect.js | 失敗 | 構文エラー & 文字化け |
-| 重金主義 | test_bullionism_effect.js | 存在しない | |
-| 重商主義 | test_mercantilism_effect.js | 存在しない | |
-| 重農主義 | test_physiocracy_effect.js | 存在しない | |
-| 資本主義 | test_capitalism_effect.js | 失敗 | 構文エラー & 文字化け |
-| 開拓 | test_pioneering_effect.js | 失敗 | 構文エラー & 文字化け |
-| 焦土 | test_scorched_earth_effect.js | 失敗 | 構文エラー & 文字化け |
-| 占領 | test_occupation_effect.js | 失敗 | 構文エラー & 文字化け |
-| 植民地 | test_colony_effect.js | 失敗 | 構文エラー & 文字化け |
-| 商人 | test_merchant_effect.js | 失敗 | 構文エラー & 文字化け |
-| 移民 | test_immigrant_effect.js | 失敗 | 構文エラー & 文字化け |
-| ディアスポラ | test_diaspora_effect.js | 失敗 | 構文エラー & 文字化け |
-| 内戦 | test_civil_war_effect.js | 失敗 | 構文エラー & 文字化け |
-| 技術革新 | test_tech_innovation_effect.js | 失敗 | 型エラー & 文字化け |
-| 技術提供 | test_tech_transfer_effect.js | 失敗 | 構文エラー & 文字化け |
-| 理想主義 | test_idealism_effect.js | 失敗 | 型エラー & 文字化け |
-| 職人 | test_artisan_effect.js | 失敗 | 型エラー & 文字化け |
-| 兵器 | test_weapon_effect.js | 失敗 | 構文エラー & 文字化け |
-| 民族自決 | test_self_determination_effect.js | 失敗 | 型エラー & 文字化け |
-| 解体 | test_deconstruction_effect.js | 失敗 | 効果未成立 |
-| 啓蒙時代 | test_enlightenment_era_effect.js | 失敗 | 効果未成立 |
-| 資源 | test_resource_effect.js | 成功 | |
-| 資源の発見 | test_discovery_of_resources_effect.js | 成功 | |
-| 徴兵 | test_conscription_effect.js | 成功 | |
-| 現実主義 | test_realism_effect.js | 成功 | |
-| 共同体主義 | test_communitarianism_effect.js | 成功 | |
-| コスモポリタニズム | test_cosmopolitanism_effect.js | 成功 | |
-| 思想の弾圧 | test_suppression_of_thought_effect.js | 成功 | |
-| 汎民族主義 | test_pan_nationalism_effect.js | 成功 | |
-| 分離主義 | test_separatism_effect.js | 成功 | |
-| 不干渉主義 | test_non_interventionism_effect.js | 成功 | |
-| 隘路 | test_chokepoint_effect.js | 成功 | |
-| 工作員 | test_agent_effect.js | 成功 | |
-| 工作活動 | test_espionage_effect.js | 成功 |  |
-| 大地震 | test_earthquake_effect.js | 成功 | |
-| 災害多発地域 | test_disaster_prone_area_effect.js | 成功 | |
-| 官僚主義 | test_bureaucracy_effect.js | 成功 | |
-| 保守主義 | test_conservatism_effect.js | 成功 | |
-| 環境主義 | test_environmentalism_effect.js | 成功 | |
-| リージョナリズム | test_regionalism_effect.js | 成功 | |
-| 社会主義 | test_socialism_effect.js | 成功 | |
-| アナーキズム | test_anarchism_effect.js | 成功 | |
-| 結束主義 | test_solidarism_effect.js | 成功 | |
-| 記憶の浄化 | test_memory_purification_effect.js | 成功 | |
-| 軍国主義 | test_militarism_effect.js | 成功 | |
-| 孤立主義 | test_isolationism_effect.js | 成功 | |
-| グローバリズム | test_globalism_effect.js | 成功 | |
-| リバタリアニズム | test_libertarianism_effect.js | 成功 | |
-| 共産主義 | test_communism_effect.js | 成功 | |
-| 覇権主義 | test_hegemonism_effect.js | 成功 | |
-| 多極主義 | test_multipolarism_effect.js | 成功 | |
-| ニューリベラリズム | test_new_liberalism_effect.js | 成功 | |
-| ネオリベラリズム | test_neoliberalism_effect.js | 成功 | |
-| 自由主義 | test_liberalism_effect.js | 成功 | |
-| ウルトラナショナリズム | test_ultranationalism_effect.js | 成功 | |
-| ポピュリズム | test_populism_effect.js | 成功 | |
-| 確証破壊能力 | test_mutual_assured_destruction_effect.js | 成功 | |
-| 相互確証破壊 | test_mutual_assured_destruction_effect.js | 成功 | |
-| 愛国教育 | test_education_and_culture_effects.js | 成功 | |
-| 嫌国教育 | test_education_and_culture_effects.js | 成功 | |
-| 文化的影響 | test_education_and_culture_effects.js | 成功 | |
-| 文化侵略 | test_education_and_culture_effects.js | 成功 | |
-| 教育機関 | test_educational_institution_effect.js | 成功 | |
+| 戦士 | test_warrior_effect.js | 成功 | 本番でもOK |
+| 山 | test_mountain_effect.js | 成功 | 本番でもOK |
+| 砦 | test_fortress_effect.js | 成功 | 本番でもOK |
+| 聖なる領域 | test_sacred_domain_effect.js | 成功 | 本番でもOK |
+| 交易路 | test_trade_route_effect.js | 成功 | 本番でもOK |
+| 果実 | test_fruit_effect.js | 成功(本番でバグ) | 耐久値0になったときの効果が発生しない |
+| 農民 | test_peasant_effect.js | 成功(本番でバグ) | (自分のカードの効果(「解体」)で耐久値0になったとき手札への追加が無かった。 |
+| 開拓民 | test_settler_effect.js | 成功 | 本番でもOK |
+| 大嵐 | test_tempest_effect.js | 成功 | 本番でもOK |
+| 豊作 | test_bountiful_harvest_effect.js | 成功 | 本番でもOK |
+| 予感 | test_premonition_effect.js | 成功 | 本番でもOK |
+| 覚醒 | test_awakening_effect.js | 成功(本番でバグ) | このカードで用いられているハンドラ修正に伴い、ReactのgameState監視問題に発展し、このカードの効果による必要規模の減少が表示に反映されていないことを確認(問題ないときもあったのに) |
+| 内部崩壊 | test_internal_collapse_effect.js | 成功 | 本番でもOK |
+| 秩序の瓦解 | test_collapse_of_order_effect.js | 成功 | 本番でもOK |
+| 略奪 | test_looting_effect.js | 成功 | 本番でもOK |
+| 物々交換 | test_barter_effect.js | 成功 | 本番でもOK |
+| 接収 | test_seizure_effect.js | 成功 | 本番でもOK |
+| 経済学の興り | test_rise_of_economics_effect.js | 成功 | 本番でもOK |
+| 多文化主義 | test_multiculturalism_effect.js | 成功 | 本番でもOK |
+| 帝国主義 | test_imperialism_effect.js | 成功(本番でバグ) | 相手の財の耐久値を0にすることによる、"自分の意識+2とすべての自分の場の財の耐久値+2"が働かない |
+| 多神教 | test_polytheism_effect.js | 成功 | 本番でもOK |
+| 原始共産制 | test_primitive_communism_effect.js | 成功 | 本番でもOK |
+| 物質主義 | test_materialism_effect.js | 成功 | 本番でもOK |
+| 一神教 | test_monotheism_effect.js | 成功 | 本番でもOK |
+| 悟りの道 | test_path_to_enlightenment_effect.js | 成功 | 本番でもOK |
+| 聖典 | test_sacred_scripture_effect.js | 成功 | 本番でもOK |
+| 布教 | test_missionary_effect.js | 成功 | 本番でもOK |
+| 受難 | test_suffering_effect.js | 成功 | 本番でもOK |
+| 崇拝 | test_worship_effect.js | 成功 | 本番でもOK |
+| 救世 | test_salvation_effect.js | 成功 | 本番でもOK |
+| 終末 | test_apocalypse_effect.js | 成功 | 本番でもOK |
+| 輪廻転生 | test_reincarnation_effect.js | 成功 | 本番でもOK |
+| マネー | test_money_effect.js | 成功(本番でバグ) | マネーだけは、場にマネーがある場合、場の制限に関係なく置けるようにしたい | |
+| 重金主義 | test_bullionism_effect.js | 成功 | 本番でもOK |
+| 重商主義 | test_mercantilism_effect.js | 成功 | 本番でもOK |
+| 重農主義 | test_physiocracy_effect.js | 成功 | 本番でもOK |
+| 資本主義 | test_capitalism_effect.js | 成功 | 本番でもOK |
+| 開拓 | test_pioneering_effect.js | 成功 | 本番でもOK |
+| 焦土 | test_scorched_earth_effect.js | 成功 | 本番でもOK |
+| 占領 | test_occupation_effect.js | 成功 | 本番でもOK |
+| 植民地 | test_colony_effect.js | 成功 | 本番でもOK |
+| 商人 | test_merchant_effect.js | 成功 | 本番でもOK |
+| 移民 | test_immigrant_effect.js | 成功 | 本番でもOK |
+| ディアスポラ | test_diaspora_effect.js | 成功 | 本番でもOK |
+| 内戦 | test_civil_war_effect.js | 成功 | 本番でもOK |
+| 技術革新 | test_tech_innovation_effect.js | 成功 | 本番でもOK |
+| 技術提供 | test_tech_transfer_effect.js | 成功 | 本番でもOK |
+| 理想主義 | test_idealism_effect.js | 成功 | 本番でもOK |
+| 職人 | test_artisan_effect.js | 成功 | 本番でもOK |
+| 兵器 | test_weapon_effect.js | 成功 | 本番でもOK |
+| 民族自決 | test_self_determination_effect.js | 成功 | 本番でもOK |
+| 解体 | test_deconstruction_effect.js |成功 | 本番でもOK |
+| 啓蒙時代 | test_enlightenment_era_effect.js | 成功 | 本番でもOK |
+| 資源 | test_resource_effect.js | 成功(本番でバグ) | 本番では略奪や解体でこれにダメージを与えてもマネーがもらえなかった(選択効果の過程でsourceが辿れなくなっているかも？) |
+| 資源の発見 | test_discovery_of_resources_effect.js | 成功 | 本番でもOK |
+| 徴兵 | test_conscription_effect.js | 成功 | 本番でもOK |
+| 現実主義 | test_realism_effect.js | 成功 | 本番でもOK |
+| 共同体主義 | test_communitarianism_effect.js | 成功(本番でバグ) | 配置時効果の捨て札の枚数が、配置したプレイヤーの捨て札の枚数より多い場合があることを確認した(詳細は不明だがとりあえず異常を検知)。 |
+| コスモポリタニズム | test_cosmopolitanism_effect.js | 成功 | 本番でもOK |
+| 思想の弾圧 | test_suppression_of_thought_effect.js | 成功(本番でバグ) | 基本動作はOKだが、「覚醒」で引いてきたイデオロギーをデッキに戻そうとすると手札に残ってしまう(プレイログでは"デッキからデッキに移動"と表示されていておかしい) |
+| 汎民族主義 | test_pan_nationalism_effect.js | 成功 | 本番でもOK |
+| 分離主義 | test_separatism_effect.js | 成功(本番でバグ) | 手札に加わった、必要規模が自分の規模より高いカード"以外"も捨ててしまう。 |
+| 不干渉主義 | test_non_interventionism_effect.js | 成功 | 本番でもOK |
+| 隘路 | test_chokepoint_effect.js | 成功 | 本番でもOK |
+| 工作員 | test_agent_effect.js | 成功 | 「公開する」という効果はログに出す必要もあるし、演出も入れたい(演出概要：対象のプレイヤー側(NPCなら右上,プレイヤーなら右下)から画面中央)に向かってフェードインしつつスライドイン。その後1秒画面中央で停止後、出てくるのと逆向きにフェードアウトしつつスライドアウト |
+| 工作活動 | test_espionage_effect.js | 成功 | 本番でもOK |
+| 大地震 | test_earthquake_effect.js | 成功 | 本番でもOK |
+| 災害多発地域 | test_disaster_prone_area_effect.js | 成功 | 本番でもOK |
+| 官僚主義 | test_bureaucracy_effect.js | 成功(本番でバグ) | 自分の配置中のイデオロギーが捨て札に移動したとき、これも捨て札にする効果が発揮されない |
+| 保守主義 | test_conservatism_effect.js | 成功 | 本番でもOK |
+| 環境主義 | test_environmentalism_effect.js | 成功(本番でバグ) | 孤立主義と同じ現象 |
+| リージョナリズム | test_regionalism_effect.js | 成功 | 本番でもOK |
+| 社会主義 | test_socialism_effect.js | 成功 | 本番でもOK |
+| アナーキズム | test_anarchism_effect.js | 成功 | 本番でもOK |
+| 結束主義 | test_solidarism_effect.js | 成功 | 本番でもOK |
+| 記憶の浄化 | test_memory_purification_effect.js | 成功 | 本番でもOK |
+| 軍国主義 | test_militarism_effect.js | 成功(本番でバグ) | 規模増加効果が発揮されない。また想定される挙動としては、耐久値が0になった財*3ずつ規模増加が行われる状態 |
+| 孤立主義 | test_isolationism_effect.js | 成功(本番でバグ) | 意識の減少効果を無効化できても自爆効果が発動してしまう(自爆大丈夫なときもあるぞ？)。& 財へのダメージ軽減が設定値より高く働きすぎている？(多分補正が消費されずに残っているから段々効果が高くなっちゃってる) |
+| グローバリズム | test_globalism_effect.js | 成功(本番でバグ) | 配時効果による意識減少の値が丸められていないため小数点以下の値が発生する。多極主義の規模への効果でも同様の不具合が起きている(多文化主義と同じく、減算する値を切捨てする方針で対応する) |
+| リバタリアニズム | test_libertarianism_effect.js | 成功(本番でバグ) | "カードを出すたびマネーを1枚手札に加える"が相手のカードプレイにも反応している|
+| 共産主義 | test_communism_effect.js | 成功 | 本番でもOK |
+| 覇権主義 | test_hegemonism_effect.js | 成功 | 本番でもOK |
+| 多極主義 | test_multipolarism_effect.js | 成功 | 本番でもOK |
+| ニューリベラリズム | test_new_liberalism_effect.js | 成功 | 本番でもOK |
+| ネオリベラリズム | test_neoliberalism_effect.js | 成功 | 本番でもOK |
+| 自由主義 | test_liberalism_effect.js | 成功 | "カードを出すたび意識+1"が相手のカードプレイにも反応している |
+| ウルトラナショナリズム | test_ultranationalism_effect.js | 成功 | 本番でもOK |
+| ポピュリズム | test_populism_effect.js | 成功 | 自動配置効果は発生していない(手札にある場合は発動しているかも！) & 自動配置ではなく手札からプレイしないと配置時効果が発揮されない & 配置時効果の選択したイデオロギーをデッキの一番上に仕込む効果が、デッキトップに仕込めていない(逆になっている可能性？) & ウルトラナショナリズムが捨て札に加わっていない & 捨て札になるときの意識+5が働いていない & 意識+2とドロー効果が相手のカードプレイにも反応している |
+| 確証破壊能力 | test_mutual_assured_destruction_effect.js | 成功 | 失敗時効果(相手の意識を0にする)が働いていない。→相手の手札に確証破壊能力がないはずなのに成功時の能力が発動している|
+| 相互確証破壊 | test_mutual_assured_destruction_effect.js | 成功 | 本番でもOK |
+| 愛国教育 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
+| 嫌国教育 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
+| 文化的影響 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
+| 文化侵略 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
+| 教育機関 | test_educational_institution_effect.js | 成功 | 本番でもOK |
 | test_helpers.js | (ヘルパーファイル) | 対象外 | |
 
 
 ## 備考
+- その他バグ
+    - 直前のターン終了時効果を受けて捨て札になったはずのカードのターン開始時効果が働いてしまう(ターン開始時効果が食い込んで発動してしまっている)
+    - 既にイデオロギーが配置されている場合にイデオロギーを重ねて配置したとき(イデオロギーが更新されるとき)、イデオロギーは捨て札に行くが、「捨て札になる処理」が働かない
+- その他気になること
+    - ターン開始時や終了時のカードの処理順を調査。可能であれば制御したい(「場の財の配置が古い順→場のイデオロギー→手札→デッキ→捨て札」これをターン中のプレイヤー→相手の順)
+    - デバッグコマンドを効く/効かないよう制御できるようにしたい
 - 複数カード検証テスト2件(2枚検証と4枚検証)により、テスト件数 = カード枚数 - 4
-    - 最終的にテストファイルは91件、ヘルパーを含めて92件になる想定
+    - 最終的にテストファイルは91件、ヘルパーを含めて92件になる想定(本番側でミスが出るとそれを直すためのテストが生成することもあるので、実際はそれより多い)
+- 特殊テストの成否
+    - test_turn_end_flash.js | 対象外 | 手動テスト用スクリプトのため |
+    - test_presentation_controller.js | 対象外 | DOM/ブラウザAPI依存のため |
+    - test_looting_durability_change_debug.js | 対象外 | デバッグ用スクリプトのため |
+    - test_craftsman_turn_end_fix.js | 対象外 | デバッグ用スクリプトのため |
+    - test_npc_card_selection_fix.js | 対象外 | 特殊テストのため |
+
+
+
+
+
+
+## バグ分析と修正方針
+
+現在、本番環境（`npm start`）で多数のカード効果にバグが確認されています。以下に、テスト状況のテーブルを基にバグを分類し、修正方針を提案します。
+
+### カテゴリ1: ゲーム進行に深刻な影響を与えるバグ
+
+これらのバグは、ゲームがクラッシュしたり、コアなゲームメカニクスが崩壊したりする可能性があるため、最優先で修正します。
+
+2.  **イベントカードの効果不発** (対応済だが、「覚醒」の不具合が顕在化した。当不具合についてはテスト状況の「覚醒」の項目の備考欄に記載)
+    *   **対象カード**: `大地震`
+    *   **現象**: 特定の条件下（カード効果によるドローなど）で引いた際に、効果が発動せず、捨て札にもならない。ターン開始時のドローでは正常に動作する。
+    *   **分析**: ドローの発生源（ターン開始、カード効果など）によって、イベントカードの効果を処理するロジックの呼び出しフローが異なっている可能性があります。特に、カード効果によって誘発されたドローの後に、手札のイベントカードをチェックする処理が抜けていると推測されます。
+    *   **方針**: 再考案
+
+### カテゴリ2: カードのコア効果が機能しないバグ
+
+カードの主要な機能が意図通りに動作しない問題です。ゲームバランスに大きな影響を与えるため、優先度は高めです。
+
+1.  **トリガー条件の誤判定**
+    *   **対象カード**: `リバタリアニズム`, `自由主義`, `ポピュリズム`
+    *   **現象**: 「カードを出すたび」の効果が、相手プレイヤーのカードプレイにも反応してしまう。
+    *   **分析**: 効果のトリガー定義が、プレイヤーを限定しない汎用的なもの（例: `PLAYER_PLAY_CARD_ACTION`）になっている可能性が高いです。
+    *   **方針**: `card_definitions.json`を修正し、トリガーを `PLAY_EVENT_OWNER`（事象カード）や `CARD_PLACED_OWNER`（財・イデオロギーカード）など、自分の行動にのみ反応するよう限定的なものに変更します。
+
+2.  **耐久値0になった際の誘発効果の不発**
+    *   **対象カード**: `果実`, `農民`
+    *   **現象**: 耐久値が0になっても、手札に加わるなどの効果が発生しない。
+    *   **分析**: 耐久値が0になったことを検知して効果を誘発する `DURABILITY_ZERO` トリガー、またはそれに関連する処理（特に自分のカード効果で破壊した場合）に問題がある可能性があります。
+    *   **方針**: `DURABILITY_ZERO` トリガーの処理フローをデバッグし、特に `source`（効果の発生源）が自分である場合の条件分岐などを確認・修正します。
+
+3.  **特定の条件下での効果不発**
+    *   **対象カード**: `帝国主義`, `資源`, `軍国主義`, `確証破壊能力`
+    *   **現象**:
+        *   `帝国主義`: 相手の財を破壊した際の意識・耐久値増加が発動しない。
+        *   `資源`: ダメージを受けた際にマネーが生成されない。
+        *   `軍国主義`: 財が破壊された際の規模増加が発動しない。
+        *   `確証破壊能力`: 失敗時（相手が対象カードを持っていない場合）の効果が発動しない。
+    *   **分析**: これらの問題は、効果の発生条件（トリガー）の定義ミス、または`effectHandler.js`内の効果処理ロジックの不備が原因と考えられます。特に、効果の対象を特定する `target` や、効果の発生源 `source` の情報が処理の途中で失われている可能性があります。
+    *   **方針**: 各カードについて、`card_definitions.json`のトリガー定義が正しいかを確認します。併せて、関連するエフェクトハンドラ（例: `MODIFY_CONSCIOUSNESS`, `ADD_CARD_TO_HAND`）の処理を追い、`source`や`target`の情報が正しく伝搬されているかをデバッグします。
+
+4.  **カードの状態・位置に関するバグ**
+    *   **対象カード**: `思想の弾圧`, `分離主義`, `官僚主義`, `ポピュリズム`
+    *   **現象**:
+        *   `思想の弾圧`: カードをデッキに戻せない。
+        *   `分離主義`: 関係ないカードまで捨ててしまう。
+        *   `官僚主義`: 条件を満たしても捨て札にならない。
+        *   `ポピュリズム`: 自動配置、配置時効果、デッキトップへの移動など、複数の効果が機能不全。
+    *   **分析**: `MOVE_CARD`エフェクトの引数（移動元 `from`, 移動先 `to`）の指定が誤っている、あるいはカードを選択するロジックにバグがある可能性が高いです。
+    *   **方針**: `MOVE_CARD`エフェクトを呼び出している箇所の引数を精査します。特に`ポピュリズム`のように複数の問題が複合しているカードは、一つ一つの効果を個別のテストケースとして切り分け、順にデバッグ・修正を行います。
+
+5.  **計算・制約に関するバグ**
+    *   **対象カード**: `マネー`, `孤立主義`, `環境主義`, `グローバリズム`, `多極主義`
+    *   **現象**:
+        *   `マネー`: 場の配置制限を無視できない。
+        *   `孤立主義`/`環境主義`: ダメージ軽減効果が過剰に累積する、特定の条件下で自爆効果が誤発動する。
+        *   `グローバリズム`/`多極主義`: 計算結果が丸められず小数点が発生する。
+    *   **分析**:
+        *   `マネー`: 配置ルールのチェックロジックで、`マネー`カードが特別扱いされていない。
+        *   `孤立主義`/`環境主義`: 効果の補正値がターン終了時にリセットされていない可能性があります。
+        *   `グローバリズム`/`多極主義`: 割合計算を行うエフェクトで、結果を整数に丸める処理が欠落しています。
+    *   **方針**:
+        *   `マネー`: カード配置ロジックに、対象カードが`マネー`である場合に配置上限チェックをスキップする例外処理を追加します。
+        *   `孤立主義`/`環境主義`: ターン終了時に効果の補正値をリセットする処理が正しく呼ばれているか確認します。
+        *   `グローバリズム`/`多極主義`: `card_definitions.json`の該当効果に、計算結果を切り捨てるための引数（例: `"round_down": true`）を追加します。
+
+### カテゴリ3: 演出・UXの改善
+
+ゲームプレイに直接的な影響は少ないものの、ユーザー体験を向上させるための項目です。
+
+1.  **「公開」効果の演出**
+    *   **対象カード**: `工作員`
+    *   **現象**: カードを「公開する」効果に、視覚的な演出がない。
+    *   **方針**: 備考欄にある演出概要（カードが画面中央に表示される）を参考に、`PresentationController`などを利用してアニメーションを実装します。ログにも表示されるようにします。
+    *   **ユーザーからの追伸**: これに合わせて、現状は存在しない事象カード使用の演出も作りたい。事象カード使用は、x氏やイデオロギー同様まず画面中央に出し、その場で捨て札時のパーティクル演出を出せばOK。「公開する」の場合はパーティクルを出さずに、該当カードを出したプレイヤー側("あなた"なら下、"NPCなら上"に向かってフェードアウトしながらスライドアウト)
+
+### その他・横断的な課題
+
+特定のカードに限定されない、システム全体に関わる課題です。
+
+
+
+2.  **カード効果の処理順序の制御**
+    *   **現象**: ターン開始・終了時に複数のカード効果が発動する場合の順序が不定。
+    *   **方針**: 備考欄の希望仕様（場の古い順→イデオロギー→手札…）を参考に、処理対象のカードを一度リストに集め、ルールに基づいてソートしてから順に効果を処理する仕組みを導入します。
+
+3.  **デバッグ機能の制御**
+    *   **現象**: デバッグ用のコマンドやログが常に有効になっている。
+    *   **方針**: 環境変数や設定ファイル、あるいはゲーム内コンソールなどを用いて、デバッグ機能のON/OFFを切り替えられる仕組みを導入します。
+
+
+
+### immer導入によって上手くいかなくなったこと
+- 財へのダメージや回復が反映されない → **修正で財カードの耐久値増減が正常に動作するようになりました。ただし、ダメージや回復、配置の演出は無く、捨て札になる演出は再生されます。**
+- ゲームが終了条件を満たしても、終了画面に遷移しない → **修正でゲームオーバー演出及び遷移が正常に動作するようになりました。ただし、ゲームオーバー条件を満たしていてもゲームが続行する場合があります。**
+- プレイログが出ない
+    - ゲームログオーバレイにも最新ログにも出ない
+        - 現在は「ターン開始」のみプレイログに表示されるようになった
+
+### immer導入に伴う不具合について
+
+#### 概要
+
+これまでの改修により、ゲームロジックとアニメーションシステム間の連携において深刻な問題が顕在化しました。
+
+#### 問題の核心と現在の課題
+
+1.  **ターン開始/終了演出の異常:**
+    *   `endTurn`および`startTurn`アニメーションが異常に複数回（4回など）トリガーされるといった重大な問題が発生しています。
+
+2.  **アニメーションの表示異常:**
+    *   **財/イデオロギーの配置アニメーション:** `EffectMonitor.shouldLogEffect`から関連エフェクトを除外し、`effectHandler.js`で`gameState.animation_queue`へのプッシュを追加しましたが、現在表示されなくなりました。これは`PresentationController`側で`CARD_PLACED`エフェクトが正しく処理されていないか、プッシュされたデータが期待する形式ではない可能性があります。
+    *   **意識/規模の変化アニメーション:** `gameState.animation_queue`への移行は成功し、増減のたびに一度だけ正しく表示されていることを確認済みです。これはアニメーション切り替えの一般的な方針は正しいことを示しています。
+    *   **カードの配置アニメーション:**
+        *   表示されません。現在は原因不明です。
+    *   **`LIMIT_WARNING` (手札)アニメーション:**
+        *   表示されません。これは`enforceHandLimit`が`gameState.animation_queue`に明示的にプッシュしていないためです。
+

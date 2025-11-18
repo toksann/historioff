@@ -1,0 +1,30 @@
+/* カードプレイ演出 - ドンッと置く効果 */
+.card-play-animation {
+  animation: cardPlayTest 0.8s ease-out !important;
+}
+
+/* より強力な指定 */
+.card.card-play-animation {
+  animation: cardPlayTest 0.8s ease-out !important;
+}
+
+@keyframes cardPlayTest {
+  0% { 
+    opacity: 0.3;
+    transform: scale(1.3);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+  70% { 
+    opacity: 1;
+    transform: scale(1.0);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  }
+  85% { 
+    transform: scale(1.0) translateX(-3px);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1.0) translateX(0);
+    box-shadow: none;
+  }
+}

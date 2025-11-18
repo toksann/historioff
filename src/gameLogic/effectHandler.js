@@ -1,6 +1,8 @@
+import { produce } from "immer";
 import { createCardInstance, shuffle } from './gameUtils.js';
 import { PlayerId, TriggerType, CardType, EffectType } from './constants.js';
 import { checkCardReaction } from './card.js';
+import { _updateGameOverState } from './gameOver.js';
 
 const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget, correctDirection, amount) => {
     const player = gameState.players[playerId];
@@ -28,6 +30,9 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
                     break;
                 case 'attenuation':
                     attenuation += correction.amount;
+                    break;
+                default:
+                    // 未知の補正タイプは無視
                     break;
             }
         }
@@ -58,6 +63,30 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
     });
 
     return finalAmount;
+};
+
+const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard) => {
+    if (player.hand.length >= player.hand_capacity) {
+        // 手札の上限到達警告演出をトリガー
+        // Push to gameState.animation_queue instead of effectsQueue
+        gameState.animation_queue.push({
+            effect: {
+                effect_type: 'LIMIT_WARNING',
+                args: {
+                    player_id: player.id,
+                    limit_type: 'hand',
+                    message: '手札の上限に達しています'
+                }
+            },
+            sourceCard: null
+        });
+        
+        // 手札上限超過時は捨て札に移動
+        player.discard.push(cardToAdd);
+        cardToAdd.location = 'discard';
+        return false; // 手札に追加しない
+    }
+    return true; // 手札に追加可能
 };
 
 const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
@@ -98,7 +127,8 @@ const _getCardsFromPiles = (player, source_piles, card_type) => {
 
 const _selectCards = (gameState, player, available_cards, selection_method, count, sourceCard, original_args) => {
     if (!available_cards || available_cards.length === 0) return [];
-    const selectionCount = count != null ? count : available_cards.length;
+    // For 'choice' selection method, default to 1 if count is not specified
+    const selectionCount = count != null ? count : (selection_method === 'choice' ? 1 : available_cards.length);
 
     switch (selection_method) {
         case 'all':
@@ -124,18 +154,78 @@ const _selectCards = (gameState, player, available_cards, selection_method, coun
                 options: available_cards,
                 player_id: player.id,
                 source_card_instance_id: sourceCard.instance_id,
+                source_card_name: sourceCard.name,
                 count: selectionCount,
                 source_effect: { 
                     effect_type: EffectType.PROCESS_CARD_OPERATION,
                     args: { ...original_args, selection_method: 'pre_selected' },
-                }
+                },
+                // Add context information for turn management
+                is_turn_end_effect: gameState.processing_status?.is_processing_turn_end || false
             };
             return null;
         case 'pre_selected':
-            const selectedIds = new Set(original_args.selected_cards || []);
+            const selectedCards = original_args.selected_cards;
+            // selected_cardsが配列でない場合の安全な処理
+            if (!Array.isArray(selectedCards)) {
+                // console.warn('[_selectCards] selected_cards is not an array:', selectedCards);
+                return [];
+            }
+            // selectedCardsはカードオブジェクトの配列なので、instance_idを抽出
+            const selectedIds = new Set(selectedCards.map(card => 
+                typeof card === 'object' && card.instance_id ? card.instance_id : card
+            ));
             return available_cards.filter(card => selectedIds.has(card.instance_id));
         default:
             return [];
+    }
+};
+
+const syncCardDataInAllPiles = (draftState, cardId, updatedData) => {
+    let cardFoundAndUpdated = false; // 更新があったかどうかを追跡するフラグ
+
+    // 1. all_card_instances を更新
+    if (draftState.all_card_instances[cardId]) {
+        for (const key in updatedData) {
+            if (draftState.all_card_instances[cardId][key] !== updatedData[key]) {
+                draftState.all_card_instances[cardId][key] = updatedData[key];
+                cardFoundAndUpdated = true;
+            }
+        }
+    } else {
+        return;
+    }
+
+    // 2. players の中のカードも更新する
+    for (const playerId in draftState.players) {
+        const player = draftState.players[playerId];
+        const piles = ['hand', 'field', 'deck', 'discard'];
+        piles.forEach(pileName => {
+            if (player[pileName] && Array.isArray(player[pileName])) {
+                const cardIndex = player[pileName].findIndex(c => c.instance_id === cardId);
+                if (cardIndex !== -1) {
+                    for (const key in updatedData) {
+                         if (player[pileName][cardIndex][key] !== updatedData[key]) {
+                            player[pileName][cardIndex][key] = updatedData[key];
+                            cardFoundAndUpdated = true;
+                        }
+                    }
+                }
+            }
+        });
+        if (player.ideology && player.ideology.instance_id === cardId) {
+            for (const key in updatedData) {
+                if (player.ideology[key] !== updatedData[key]) {
+                    player.ideology[key] = updatedData[key];
+                    cardFoundAndUpdated = true;
+                }
+            }
+        }
+    }
+
+    // 3. 変更があった場合、gameStateのトップレベルプロパティを更新してImmerに検知させる
+    if (cardFoundAndUpdated) {
+        draftState.lastUpdate = Date.now();
     }
 };
 
@@ -236,236 +326,106 @@ const effectHandlers = {
         }
     },
 
-                [EffectType.ADD_CARD_TO_GAME]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+    [EffectType.ADD_CARD_TO_GAME]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { player_id, card_template_name, destination_pile, count = 1, position, condition_field_wealth_limit } = args;
+        let { initial_durability } = args;
+        const player = gameState.players[player_id];
+        const cardTemplate = gameState.cardDefs[card_template_name];
 
-        
+        if (player && cardTemplate) {
+            if (condition_field_wealth_limit !== undefined) {
+                const limit = condition_field_wealth_limit > 0 ? condition_field_wealth_limit : player.field_limit;
+                const wealthOnField = player.field.filter(c => c.card_type === CardType.WEALTH).length;
 
-            
+                if (wealthOnField >= limit) {
+                    return;
+                }
+            }
 
-        
+            if (typeof initial_durability === 'string') {
 
-                    const { player_id, card_template_name, destination_pile, count = 1, position, condition_field_wealth_limit } = args;
+                if (initial_durability === 'self_all_wealth_on_field') {
+                    initial_durability = player.field
+                        .filter(c => c.card_type === CardType.WEALTH)
+                        .reduce((sum, card) => sum + (Math.max(card.current_durability, 0)), 0);
+                }
+                initial_durability = Math.max(0, initial_durability);
+            } else if (args.initial_durability_based_on_field_wealth_total) { // Added this block
+                initial_durability = player.field
+                    .filter(c => c.card_type === CardType.WEALTH)
+                    .reduce((sum, card) => sum + (card.current_durability || 0), 0);
+                initial_durability = Math.max(0, initial_durability);
+            }
+            initial_durability = initial_durability === 0 ? null : initial_durability;
 
-        
+            for (let i = 0; i < count; i++) {
+                const newCard = createCardInstance(cardTemplate, player_id);
+                if (initial_durability === null && cardTemplate.card_type === CardType.WEALTH) break;
+                if (initial_durability !== undefined) {
+                    newCard.durability = initial_durability;
+                    newCard.current_durability = initial_durability;
+                }
+                // Register the new card in all_card_instances
+                gameState.all_card_instances[newCard.instance_id] = newCard;
+                
+                if (destination_pile === 'field') {
 
-                    let { initial_durability } = args;
-
-        
-
-                    const player = gameState.players[player_id];
-
-        
-
-                    const cardTemplate = gameState.cardDefs[card_template_name];
-
-        
-
-            
-
-        
-
-                    if (player && cardTemplate) {
-
-        
-
-                        if (condition_field_wealth_limit !== undefined) {
-
-        
-
-                            const limit = condition_field_wealth_limit > 0 ? condition_field_wealth_limit : player.field_limit;
-
-        
-
-                            const wealthOnField = player.field.filter(c => c.card_type === CardType.WEALTH).length;
-
-        
-
-                            if (wealthOnField >= limit) {
-
-        
-
-                                return;
-
-        
-
-                            }
-
-        
-
+                    if (newCard.card_type === CardType.IDEOLOGY) {
+                        if (player.ideology) {
+                            player.ideology.location = 'discard';
+                            player.discard.push(player.ideology);
                         }
 
-        
-
-            
-
-        
-
-                        if (typeof initial_durability === 'string') {
-
-        
-
-                            if (initial_durability === 'self_all_wealth_on_field') {
-
-        
-
-                                initial_durability = player.field
-
-        
-
-                                    .filter(c => c.card_type === CardType.WEALTH)
-
-        
-
-                                    .reduce((sum, card) => sum + (card.current_durability || 0), 0);
-
-        
-
-                            }
-
-        
-
-                        }
-
-        
-
-                        for (let i = 0; i < count; i++) {
-
-        
-
-                            const newCard = createCardInstance(cardTemplate, player_id);
-
-        
-
-                            if (initial_durability !== undefined) {
-
-        
-
-                                newCard.durability = initial_durability;
-
-        
-
-                                newCard.current_durability = initial_durability;
-
-        
-
-                            }
-
-        
-
-            
-
-        
-
-                                            // Register the new card in all_card_instances
-
-        
-
-            
-
-        
-
-                                            gameState.all_card_instances[newCard.instance_id] = newCard;
-
-        
-
-            
-
-        
-
-                        if (destination_pile === 'field') {
-
-                            if (newCard.card_type === CardType.IDEOLOGY) {
-
-                                if (player.ideology) {
-
-                                    player.ideology.location = 'discard';
-
-                                    player.discard.push(player.ideology);
-
-                                }
-
-                                player.ideology = newCard;
-
-                                newCard.location = 'field'; 
-
-                            } else {
-
-                                player.field.push(newCard);
-
-                                newCard.location = 'field';
-
-                            }
-
-                        } else if (player[destination_pile] && Array.isArray(player[destination_pile])) {
-
-                            if (destination_pile === 'deck') {
-
-                                if (position === 'top') {
-
-                                    player.deck.unshift(newCard);
-
-                                }
-
-                                else { 
-
-                                    player.deck.push(newCard);
-
-                                }
-
-                            } else {
-
-                                player[destination_pile].push(newCard);
-
-                            }
-
-                            newCard.location = destination_pile;
-
-        
-
-                            const eventArgs = {
-
-                                player_id: newCard.owner,
-
-                                target_player_id: newCard.owner,
-
-                                card_id: newCard.instance_id,
-
-                                target_card_id: newCard.instance_id,
-
-                                card_type: newCard.card_type,
-
-                                source_pile: 'game_source',
-
-                                destination_pile: destination_pile,
-
-                            };
-
-                            if (destination_pile === 'hand') {
-
-                                const addEffect = (type, args) => {
-
-                                    effectsQueue.unshift([{ effect_type: type, args: args }, sourceCard || newCard]);
-
-                                };
-
-                                addEffect(TriggerType.CARD_ADDED_TO_HAND_THIS, eventArgs);
-
-                                addEffect(TriggerType.CARD_ADDED_TO_HAND, eventArgs);
-
-                                addEffect(TriggerType.CARD_ADDED_TO_HAND_OWNER, eventArgs);
-
-                            }
-
-                        } else {
-
-
-                        }
-
+                        player.ideology = newCard;
+                        newCard.location = 'field'; 
+                    } else {
+                        player.field.push(newCard);
+                        newCard.location = 'field';
                     }
 
-                }
+                } else if (player[destination_pile] && Array.isArray(player[destination_pile])) {
+                    if (destination_pile === 'deck') {
+                        if (position === 'top') {
+                            player.deck.unshift(newCard);
+                        }
+                        else { 
+                            player.deck.push(newCard);
+                        }
+                    } else {
+                        // Check hand limit before adding to hand
+                        if (destination_pile === 'hand') {
+                            if (!enforceHandLimit(gameState, player, newCard, effectsQueue, sourceCard)) {
+                                // Card was moved to discard due to hand limit, skip adding to hand
+                                continue;
+                            }
+                        }
+                        player[destination_pile].push(newCard);
+                    }
+                    newCard.location = destination_pile;
 
-            },
+                    const eventArgs = {
+                        player_id: newCard.owner,
+                        target_player_id: newCard.owner,
+                        card_id: newCard.instance_id,
+                        target_card_id: newCard.instance_id,
+                        card_type: newCard.card_type,
+                        source_pile: 'game_source',
+                        destination_pile: destination_pile,
+                    };
+
+                    if (destination_pile === 'hand') {
+                        const addEffect = (type, args) => {
+                            effectsQueue.unshift([{ effect_type: type, args: args }, sourceCard || newCard]);
+                        };
+                        addEffect(TriggerType.CARD_ADDED_TO_HAND_THIS, eventArgs);
+                        addEffect(TriggerType.CARD_ADDED_TO_HAND, eventArgs);
+                        addEffect(TriggerType.CARD_ADDED_TO_HAND_OWNER, eventArgs);
+                    }
+                } else {
+                }
+            }
+        }
+    },
 
         
     [EffectType.REMOVE_CARD_FROM_GAME]: (gameState, args) => {
@@ -492,30 +452,116 @@ const effectHandlers = {
             cardRemoved = true;
         }
 
-        if (cardRemoved && global.testHooks && global.testHooks.onCardRemoved) {
-            global.testHooks.onCardRemoved(card_id);
+        if (cardRemoved) {
+            // global.testHooks was removed as it's for testing purposes and not available in the browser.
         }
     },
-    [EffectType.MODIFY_CONSCIOUSNESS]: (gameState, args) => {
+    [EffectType.MODIFY_CONSCIOUSNESS]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, amount } = args;
         if (gameState.players[player_id]) {
+            const originalAmount = amount;
             const finalAmount = modifyParameterCorrectionCalculation(gameState, player_id, 'consciousness', amount > 0 ? 'increase' : 'decrease', amount);
             gameState.temp_effect_data.last_consciousness_change = finalAmount;
+            
+            // Store decrease amount for threshold checking (Python version compatibility)
+            if (finalAmount < 0) {
+                const tempKey = `${player_id}_last_consciousness_decrease`;
+                gameState.temp_effect_data[tempKey] = Math.abs(finalAmount);
+            }
+            
             gameState.players[player_id].consciousness += finalAmount;
+            
+            // Add trigger for card reactions
+            const triggerArgs = { ...args, target_player_id: player_id };
+            effectsQueue.unshift([{ effect_type: TriggerType.MODIFY_CONSCIOUSNESS, args: triggerArgs }, sourceCard]);
+            
+            // Add actual change result for accurate logging
+            // Show log if there's any change OR if correction occurred (even if result is 0)
+            if (finalAmount !== 0 || originalAmount !== finalAmount) {
+                // 軽減により効果が無効化された場合の演出
+                if (originalAmount !== 0 && finalAmount === 0) { // Removed gameState.presentationController check
+                    // console.log('🎮GAME_ANIM [EffectHandler] Adding EFFECT_NULLIFIED effect - Consciousness change nullified by correction');
+                    effectsQueue.push([{ // Changed to effectsQueue.push
+                        effect_type: 'EFFECT_NULLIFIED',
+                        args: {
+                            target_card_id: sourceCard?.instance_id,
+                            reason: 'correction_nullified',
+                            message: '意識変化が軽減により無効化されました'
+                        }
+                    }, sourceCard]);
+                }
+                
+                const changeArgs = {
+                    player_id,
+                    original_amount: originalAmount,
+                    actual_amount: finalAmount,
+                    source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null)
+                };
+                
+                // Add to animation queue for visual effect
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.CONSCIOUSNESS_CHANGED,
+                        args: changeArgs
+                    },
+                    sourceCard: sourceCard
+                });
+
+                effectsQueue.unshift([{ effect_type: EffectType.CONSCIOUSNESS_CHANGED, args: changeArgs }, sourceCard]);
+                effectsQueue.unshift([{ effect_type: EffectType.CHECK_GAME_OVER, args: {} }, sourceCard]);
+            }
         }
     },
-    [EffectType.MODIFY_SCALE]: (gameState, args) => {
+    [EffectType.MODIFY_SCALE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, amount } = args;
         if (gameState.players[player_id]) {
+            const originalAmount = amount;
             const finalAmount = modifyParameterCorrectionCalculation(gameState, player_id, 'scale', amount > 0 ? 'increase' : 'decrease', amount);
-            gameState.temp_effect_data.last_scale_change = finalAmount; // Add this line
-            gameState.players[player_id].scale += finalAmount;
+            gameState.temp_effect_data.last_scale_change = finalAmount;
+            // Apply scale change with minimum value of 0 to prevent negative scale
+            gameState.players[player_id].scale = Math.max(0, gameState.players[player_id].scale + finalAmount);
+            
+            // Add actual change result for accurate logging
+            // Show log if there's any change OR if correction occurred (even if result is 0)
+            if (finalAmount !== 0 || originalAmount !== finalAmount) {
+                // 軽減により効果が無効化された場合の演出
+                if (originalAmount !== 0 && finalAmount === 0) { // Removed gameState.presentationController check
+                    // console.log('🎮GAME_ANIM [EffectHandler] Adding EFFECT_NULLIFIED effect - Scale change nullified by correction');
+                    effectsQueue.push([{ // Changed to effectsQueue.push
+                        effect_type: 'EFFECT_NULLIFIED',
+                        args: {
+                            target_card_id: sourceCard?.instance_id,
+                            reason: 'correction_nullified',
+                            message: '規模変化が軽減により無効化されました'
+                        }
+                    }, sourceCard]);
+                }
+                
+                const changeArgs = {
+                    player_id,
+                    original_amount: originalAmount,
+                    actual_amount: finalAmount,
+                    source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null)
+                };
+                
+                // Add to animation queue for visual effect
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.SCALE_CHANGED,
+                        args: changeArgs
+                    },
+                    sourceCard: sourceCard
+                });
+
+                effectsQueue.unshift([{ effect_type: EffectType.SCALE_CHANGED, args: changeArgs }, sourceCard]);
             }
+        }
     },
-    [EffectType.SET_CONSCIOUSNESS]: (gameState, args) => {
+    [EffectType.SET_CONSCIOUSNESS]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, amount } = args;
         if (gameState.players[player_id]) {
             gameState.players[player_id].consciousness = Math.max(0, amount);
+            effectsQueue.unshift([{ effect_type: EffectType.CHECK_GAME_OVER, args: {} }, sourceCard]);
         }
     },
     [EffectType.SET_SCALE]: (gameState, args) => {
@@ -525,94 +571,149 @@ const effectHandlers = {
         }
     },
     [EffectType.MODIFY_CARD_DURABILITY]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        const targetCard = gameState.all_card_instances[args.card_id];
+        const targetCardRef = gameState.all_card_instances[args.card_id];
 
-        if (targetCard && (targetCard.location === 'field' || targetCard.location === 'ideology')) {
-            const finalAmount = modifyParameterCorrectionCalculation(gameState, targetCard.owner, 'wealth', args.amount > 0 ? 'increase' : 'decrease', args.amount);
+        if (!targetCardRef) {
+            if (sourceCard) {
+                effectsQueue.unshift([{
+                    effect_type: TriggerType.FAILED_PROCESS,
+                    args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
+                }, sourceCard]);
+            }
+            return;
+        }
 
-            if(targetCard.current_durability === undefined) targetCard.current_durability = targetCard.durability;
-            targetCard.current_durability += finalAmount;
+        // Implement "Mountain" card's passive damage immunity
+        if (targetCardRef && args.amount < 0 && targetCardRef.name !== '山' && targetCardRef.card_type === CardType.WEALTH) {
+            const owner = gameState.players[targetCardRef.owner];
+            if (owner && owner.field.some(c => c.name === '山')) {
+                // A Mountain is on the field, protecting this card. Skip damage.
+                if (sourceCard) {
+                    effectsQueue.unshift([{
+                        effect_type: TriggerType.SUCCESS_PROCESS,
+                        args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
+                    }, sourceCard]);
+                }
+                return; 
+            }
+        }
+
+        if (targetCardRef && (targetCardRef.location === 'field' || targetCardRef.location === 'ideology')) {
+            const originalAmount = args.amount;
+            const finalAmount = modifyParameterCorrectionCalculation(gameState, targetCardRef.owner, 'wealth', args.amount > 0 ? 'increase' : 'decrease', args.amount);
+            
+            const currentDurability = targetCardRef.current_durability !== undefined ? targetCardRef.current_durability : targetCardRef.durability;
+            const newDurability = currentDurability + finalAmount;
+
+            syncCardDataInAllPiles(gameState, args.card_id, { current_durability: newDurability });
+            
+            if (finalAmount !== 0 || originalAmount !== finalAmount) {
+                if (originalAmount !== 0 && finalAmount === 0) {
+                    effectsQueue.push([{
+                        effect_type: 'EFFECT_NULLIFIED',
+                        args: { target_card_id: targetCardRef.instance_id, reason: 'correction_nullified', message: '財ダメージが軽減により無効化されました' }
+                    }, sourceCard]);
+                }
+                
+                const changeArgs = {
+                    card_id: targetCardRef.instance_id,
+                    original_amount: originalAmount,
+                    actual_amount: finalAmount,
+                    source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null),
+                    new_durability: newDurability
+                };
+                
+                // if (finalAmount < 0) {
+                //     gameState.animation_queue.push({
+                //         effect: {
+                //             effect_type: 'PAUSE_GAME_LOGIC',
+                //             args: { reason: 'card_durability_change', card_id: targetCardRef.instance_id, amount: finalAmount }
+                //         },
+                //         sourceCard: sourceCard
+                //     });
+                // }
+                
+                // Instead, push CARD_DURABILITY_CHANGED to animation_queue
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.CARD_DURABILITY_CHANGED,
+                        args: changeArgs
+                    },
+                    sourceCard: sourceCard
+                });
+                
+                effectsQueue.unshift([{ effect_type: EffectType.CARD_DURABILITY_CHANGED, args: changeArgs }, sourceCard]);
+            }
 
             if (finalAmount < 0) {
                 effectsQueue.unshift([{ 
                     effect_type: TriggerType.DAMAGE_THIS, 
                     args: { 
-                        damaged_card_id: targetCard.instance_id, 
+                        damaged_card_id: targetCardRef.instance_id, 
                         damage_amount: finalAmount,
                         source_card_id: sourceCard ? sourceCard.instance_id : null,
-                        target_card_id: targetCard.instance_id
+                        target_card_id: targetCardRef.instance_id
                     }, 
-                    target_card_id: targetCard.instance_id 
+                    target_card_id: targetCardRef.instance_id 
                 }, sourceCard]);
             }
-            if (targetCard.current_durability <= 0) {
-                const ownerPlayerId = targetCard.owner;
-                const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+            if (newDurability <= 0) {
+                const ownerPlayerId = targetCardRef.owner;
             
                 const baseArgs = {
                     player_id: ownerPlayerId,
-                    card_id: targetCard.instance_id,
-                    target_card_id: targetCard.instance_id,
+                    card_id: targetCardRef.instance_id,
+                    target_card_id: targetCardRef.instance_id,
                 };
             
                 const ownerArgs = { ...baseArgs, target_player_id: ownerPlayerId };
-                const opponentArgs = { ...baseArgs, target_player_id: opponentPlayerId };
 
-                effectsQueue.unshift([{
-                    effect_type: EffectType.MOVE_CARD,
-                    args: {
-                        player_id: targetCard.owner,
-                        card_id: targetCard.instance_id,
+                const delayedEffects = [
+                    [{ effect_type: EffectType.MOVE_CARD, args: {
+                        player_id: targetCardRef.owner,
+                        card_id: targetCardRef.instance_id,
                         source_pile: 'field',
                         destination_pile: 'discard',
                         source_card_id: sourceCard ? sourceCard.instance_id : null,
-                    }
-                }, sourceCard]);
-
-                effectsQueue.unshift([{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO, args: ownerArgs }, targetCard]);
-                effectsQueue.unshift([{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OWNER, args: ownerArgs }, targetCard]);
-                effectsQueue.unshift([{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT, args: opponentArgs }, targetCard]);
-                effectsQueue.unshift([{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_THIS, args: ownerArgs }, targetCard]);
+                    }}, sourceCard],
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO, args: ownerArgs }, targetCardRef],
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OWNER, args: ownerArgs }, targetCardRef],
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_THIS, args: ownerArgs }, targetCardRef]
+                ];
+                
+                if (!gameState.delayedEffects) {
+                    gameState.delayedEffects = [];
+                }
+                gameState.delayedEffects.push(...delayedEffects);
             }
             if (sourceCard) {
                 effectsQueue.unshift([{
                     effect_type: TriggerType.SUCCESS_PROCESS,
-                    args: {
-                        player_id: sourceCard.owner,
-                        card_id: sourceCard.instance_id,
-                        target_card_id: sourceCard.instance_id
-                    }
+                    args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
                 }, sourceCard]);
             }
         } else {
             if (sourceCard) {
                 effectsQueue.unshift([{
                     effect_type: TriggerType.FAILED_PROCESS,
-                    args: {
-                        player_id: sourceCard.owner,
-                        card_id: sourceCard.instance_id,
-                        target_card_id: sourceCard.instance_id
-                    }
+                    args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
                 }, sourceCard]);
             }
         }
     },
-    [EffectType.MODIFY_CARD_REQUIRED_SCALE]: (gameState, args, cardDefs, sourceCard) => {
+    [EffectType.MODIFY_CARD_REQUIRED_SCALE]: (draftState, args) => {
         const { card_id, amount, min_value = 0, set_value = false } = args;
-        let targetCard = null;
-
-        for (const p of Object.values(gameState.players)) {
-            targetCard = p.hand.find(c => c.instance_id === card_id);
-            if (targetCard) break;
-        }
+        const targetCard = draftState.all_card_instances[card_id];
 
         if (targetCard) {
+            let new_scale;
             if (set_value) {
-                targetCard.required_scale = Math.max(min_value, amount);
+                new_scale = Math.max(min_value, amount);
             } else {
-                targetCard.required_scale = Math.max(min_value, targetCard.required_scale + amount);
+                new_scale = Math.max(min_value, targetCard.required_scale + amount);
             }
-        } else {
+            
+            syncCardDataInAllPiles(draftState, card_id, { required_scale: new_scale });
         }
     },
     [EffectType.MODIFY_FIELD_LIMIT]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -623,8 +724,8 @@ const effectHandlers = {
         const new_limit = player.field_limit + amount;
         const current_field_cards = player.field.length;
 
-        if (amount < 0) {
-            if (new_limit < current_field_cards) {
+        if (amount < 0) { // This is a decrease
+            if (new_limit < current_field_cards) { // If new limit is less than current cards on field, it's a failure
                 if (sourceCard) {
                     effectsQueue.unshift([{
                         effect_type: TriggerType.FAILED_PROCESS,
@@ -632,7 +733,7 @@ const effectHandlers = {
                     }, sourceCard]);
                 }
                 return;
-            } else {
+            } else { // Otherwise, it's a success
                 if (sourceCard) {
                     effectsQueue.unshift([{
                         effect_type: TriggerType.SUCCESS_PROCESS,
@@ -641,7 +742,7 @@ const effectHandlers = {
                 }
             }
         }
-
+        // Apply new limit after checking for decrease success/failure
         player.field_limit = Math.max(0, new_limit);
     },
 
@@ -715,6 +816,11 @@ const effectHandlers = {
             return;
         }
 
+        // Add CHECK_GAME_OVER effect if a card was moved from the deck
+        if (source_pile === 'deck') {
+            effectsQueue.unshift([{ effect_type: EffectType.CHECK_GAME_OVER, args: {} }, sourceCard]);
+        }
+
         if (source_pile !== 'game_source') {
             originalLocation = cardToMove.location;
         }
@@ -740,6 +846,20 @@ const effectHandlers = {
         }
 
         if (destination_pile === 'ideology' || (destination_pile === 'field' && cardToMove.card_type === CardType.IDEOLOGY)) {
+            // Check for same-name ideology bonus before replacing
+            if (destination_player.ideology && 
+                destination_player.ideology.instance_id !== cardToMove.instance_id &&
+                destination_player.ideology.name === cardToMove.name) {
+                // Same-name ideology placement bonus: +1 consciousness
+                effectsQueue.unshift([{
+                    effect_type: EffectType.MODIFY_CONSCIOUSNESS,
+                    args: {
+                        player_id: destination_player.id,
+                        amount: 1
+                    }
+                }, cardToMove]);
+            }
+            
             if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id) {
                 destination_player.ideology.location = 'discard';
                 destination_player.discard.push(destination_player.ideology);
@@ -754,9 +874,12 @@ const effectHandlers = {
             // Just update the card's location.
             cardToMove.location = 'playing_event';
         } else if (destination_player[destination_pile] && Array.isArray(destination_player[destination_pile])) {
-             if (destination_pile === 'hand' && destination_player.hand.length >= destination_player.hand_capacity) {
-                destination_player.discard.push(cardToMove);
-                cardToMove.location = 'discard';
+             if (destination_pile === 'hand') {
+                if (!enforceHandLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
+                    // Card was moved to discard due to hand limit, location already set in enforceHandLimit
+                } else {
+                    destination_player[destination_pile].push(cardToMove);
+                }
             } else {
                 destination_player[destination_pile].push(cardToMove);
             }
@@ -766,6 +889,11 @@ const effectHandlers = {
                  cardToMove.location = originalLocation;
             }
             return;
+        }
+
+        // Ensure the location is synchronized in the central card instance registry.
+        if (gameState.all_card_instances[cardToMove.instance_id]) {
+            gameState.all_card_instances[cardToMove.instance_id].location = cardToMove.location;
         }
 
         const ownerPlayerId = cardToMove.owner;
@@ -787,10 +915,40 @@ const effectHandlers = {
         };
 
         if (destination_pile === 'field' || destination_pile === 'ideology') {
+            // Add to animation queue for visual effect
+            gameState.animation_queue.push({
+                effect: {
+                    effect_type: 'MOVE_CARD', // Use a generic CARD_PLACED for animation
+                    args: {
+                        player_id: ownerPlayerId,
+                        card_id: cardToMove.instance_id,
+                        card_type: cardToMove.card_type,
+                        source_pile: 'hand',
+                        destination_pile: destination_pile,
+                    }
+                },
+                sourceCard: cardToMove
+            });
+
             addEffect(TriggerType.CARD_PLACED_THIS, ownerEventArgs);
             addEffect(TriggerType.CARD_PLACED, ownerEventArgs);
             addEffect(TriggerType.CARD_PLACED_OWNER, ownerEventArgs);
             addEffect(TriggerType.CARD_PLACED_OPPONENT, opponentEventArgs);
+            
+            // 場の上限チェック（財カードの場合のみ）
+            if (destination_pile === 'field' && cardToMove.card_type === '財' && player.field.length >= player.field_limit) {
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: 'LIMIT_WARNING',
+                        args: {
+                            player_id: player.id,
+                            limit_type: 'field',
+                            message: '場の上限に達しました'
+                        }
+                    },
+                    sourceCard: null
+                });
+            }
         }
 
         if (destination_pile === 'hand') {
@@ -802,6 +960,21 @@ const effectHandlers = {
                 addEffect(TriggerType.CARD_DRAWN_THIS, ownerEventArgs);
                 addEffect(TriggerType.CARD_DRAWN, ownerEventArgs);
                 addEffect(TriggerType.CARD_DRAWN_OWNER, ownerEventArgs);
+
+                // Add to animation queue for visual effect
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.DRAW_CARD, // Use DRAW_CARD for animation
+                        args: {
+                            player_id: ownerPlayerId,
+                            card_id: cardToMove.instance_id,
+                            card_type: cardToMove.card_type,
+                            source_pile: source_pile,
+                            destination_pile: destination_pile,
+                        }
+                    },
+                    sourceCard: cardToMove
+                });
             }
         } 
         
@@ -822,6 +995,18 @@ const effectHandlers = {
         }
 
         let { operation, source_piles, source_pile, card_type, selection_method, count } = args;
+
+        // Handle special late-binding selections for durability modification
+        if (operation === 'modify_durability' && (selection_method === 'front' || selection_method === 'left_opponent')) {
+            effectsQueue.unshift([{ 
+                effect_type: EffectType.MODIFY_CARD_DURABILITY_RESERVE, 
+                args: { 
+                    ...args, // Pass all args through
+                    card_id: selection_method, // Use the selection_method string as the card_id
+                }
+            }, sourceCard]);
+            return;
+        }
 
         // source_pile の正規化
         if (source_pile === 'discard_pile') source_pile = 'discard';
@@ -860,6 +1045,10 @@ const effectHandlers = {
                 let availableCards = _getCardsFromPiles(player, source_piles, card_type);
                 if (sourceCard) {
                     availableCards = availableCards.filter(c => c.instance_id !== sourceCard.instance_id);
+                }
+                // Exclude the card that triggered this operation, if applicable (e.g. a played event card)
+                if (args.triggering_effect_args && args.triggering_effect_args.card_id) {
+                    availableCards = availableCards.filter(c => c.instance_id !== args.triggering_effect_args.card_id);
                 }
                 
                 const selected = _selectCards(gameState, player, availableCards, selection_method, count, sourceCard, args);
@@ -960,6 +1149,7 @@ const effectHandlers = {
                 options: options,
                 player_id: player_id,
                 source_card_instance_id: sourceCard.instance_id,
+                source_card_name: sourceCard.name,
                 source_effect: {
                     effect_type: 'PROCESS_CHOOSE_AND_DISCARD_IDEOLOGY_RESOLVED',
                     args: {}
@@ -1201,7 +1391,7 @@ const effectHandlers = {
             const random_card = target_cards[Math.floor(Math.random() * target_cards.length)];
             effectsQueue.unshift([{ effect_type: EffectType.MODIFY_CARD_DURABILITY_RESERVE, args: { card_id: random_card.instance_id, amount: amount, source_card_id: sourceCard ? sourceCard.instance_id : null } }, sourceCard]);
         }
-        effectsQueue.unshift([{ effect_type: EffectType.MOVE_CARD, args: { player_id: player_id, card_id: moneyCard.instance_id, source_pile: 'field', destination_pile: 'discard', source_card_id: sourceCard ? sourceCard.instance_id : null } }, sourceCard]);
+        effectsQueue.push([{ effect_type: EffectType.MOVE_CARD, args: { player_id: player_id, card_id: moneyCard.instance_id, source_pile: 'field', destination_pile: 'discard', source_card_id: sourceCard ? sourceCard.instance_id : null } }, sourceCard]);
     },
     PROCESS_REDUCE_MONEY_DURABILITY_AND_GAIN_SCALE_RESOLVED: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, money_card_id, amount, source_card_id } = args;
@@ -1241,6 +1431,26 @@ const effectHandlers = {
                     }
                 }, sourceCard]);
             }
+        }
+    },
+    [EffectType.PROCESS_ADD_CARD_CONDITIONAL]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { player_id, condition_target, threshold, card_template_name, is_above = true } = args;
+        const player = gameState.players[player_id];
+        if (!player) return;
+
+        const value = player[condition_target];
+        const conditionMet = is_above ? value >= threshold : value < threshold;
+
+        if (conditionMet) {
+            effectsQueue.unshift([{
+                effect_type: EffectType.ADD_CARD_TO_GAME,
+                args: {
+                    player_id: player_id,
+                    card_template_name: card_template_name,
+                    destination_pile: 'hand',
+                    source_card_id: sourceCard ? sourceCard.instance_id : null,
+                }
+            }, sourceCard]);
         }
     },
     [EffectType.PROCESS_ADD_CHOICE_CARD_TO_HAND]: (gameState, args, cardDefs, sourceCard) => {
@@ -1287,6 +1497,7 @@ const effectHandlers = {
                 options: candidateCards, 
                 player_id, 
                 source_card_instance_id: sourceCard.instance_id, 
+                source_card_name: sourceCard.name,
                 source_effect: { 
                     effect_type: 'PROCESS_CHOOSE_AND_MODIFY_DURABILITY_TO_WEALTH_RESOLVED', 
                     args: { ...args } 
@@ -1347,6 +1558,25 @@ const effectHandlers = {
         }, sourceCard]);
     },
 
+    [EffectType.PROCESS_ALL_WEALTH_BOOST]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { player_id, amount } = args;
+
+        const operationArgs = {
+            player_id: player_id,
+            operation: 'modify_durability',
+            target_player_id: player_id,
+            selection_method: 'all',
+            source_piles: ['field'],
+            card_type: CardType.WEALTH,
+            amount: amount
+        };
+
+        effectsQueue.unshift([{
+            effect_type: EffectType.PROCESS_CARD_OPERATION,
+            args: operationArgs
+        }, sourceCard]);
+    },
+
     PROCESS_CHOOSE_AND_MODIFY_DURABILITY_TO_WEALTH_RESOLVED: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { card_id, amount, bonus_effect_if_money, bonus_scale_amount, player_id } = args;
         
@@ -1359,7 +1589,7 @@ const effectHandlers = {
         if (targetCard) {
             effectsQueue.unshift([{ 
                 effect_type: EffectType.MODIFY_CARD_DURABILITY_RESERVE, 
-                args: { card_id: targetCard.instance_id, amount: amount } 
+                args: { card_id: targetCard.instance_id, amount: amount, source_card_id: sourceCard ? sourceCard.instance_id : null } 
             }, sourceCard]);
 
             if (bonus_effect_if_money && targetCard.name === 'マネー') {
@@ -1368,12 +1598,6 @@ const effectHandlers = {
                     args: { player_id: player_id, amount: bonus_scale_amount }
                 }, sourceCard]);
             }
-
-            effectsQueue.unshift([{ 
-                effect_type: TriggerType.SUCCESS_PROCESS, 
-                args: { ...args, target_card_id: sourceCard.instance_id } 
-            }, sourceCard]);
-
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
         }
@@ -1393,6 +1617,7 @@ const effectHandlers = {
                 options: candidateCards, 
                 player_id, 
                 source_card_instance_id: sourceCard.instance_id, 
+                source_card_name: sourceCard.name,
                 source_effect: { 
                     effect_type: 'PROCESS_CHOOSE_AND_BOUNCE_TO_WEALTH_RESOLVED', 
                     args: { ...args } 
@@ -1425,7 +1650,7 @@ const effectHandlers = {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_instance_id } }, sourceCard]);
         }
     },
-    [EffectType.PROCESS_DRAW_RANDOM_CARD_AND_MODIFY_REQUIRED_SCALE]: (gameState, args) => {
+    [EffectType.PROCESS_DRAW_RANDOM_CARD_AND_MODIFY_REQUIRED_SCALE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => { // effectsQueue を引数に追加
         const { player_id, card_type, amount, scale_reduction, scale_reduction_percentage, round_down } = args;
         const player = gameState.players[player_id];
         if (!player || !player.deck || player.deck.length === 0) return;
@@ -1433,20 +1658,43 @@ const effectHandlers = {
         const matchingCards = player.deck.filter(c => c.card_type === card_type);
         if (matchingCards.length === 0) return;
 
-        for (let i = 0; i < amount; i++) {
-            if (matchingCards.length === 0) break;
-            const randomIndex = Math.floor(Math.random() * matchingCards.length);
-            const cardToDraw = matchingCards.splice(randomIndex, 1)[0];
-            const deckCardIndex = player.deck.findIndex(c => c.instance_id === cardToDraw.instance_id);
-            if (deckCardIndex > -1) player.deck.splice(deckCardIndex, 1);
+        const shuffledMatchingCards = shuffle([...matchingCards]);
 
-            if (scale_reduction) cardToDraw.required_scale = Math.max(0, cardToDraw.required_scale - scale_reduction);
-            else if (scale_reduction_percentage) {
+        for (let i = 0; i < amount; i++) {
+            if (i >= shuffledMatchingCards.length) break;
+            const cardToDraw = shuffledMatchingCards[i];
+            
+            // MOVE_CARDエフェクトを先に積む（後で実行される）
+            effectsQueue.unshift([{
+                effect_type: EffectType.MOVE_CARD,
+                args: {
+                    player_id: player_id,
+                    card_id: cardToDraw.instance_id,
+                    source_pile: 'deck',
+                    destination_pile: 'hand',
+                }
+            }, sourceCard]);
+
+            // 必要規模の変更エフェクトを後に積む（先に実行される）
+            let scaleChangeAmount = 0;
+            if (scale_reduction) {
+                scaleChangeAmount = -scale_reduction;
+            } else if (scale_reduction_percentage) {
                 let reduction = cardToDraw.required_scale * (scale_reduction_percentage / 100);
                 if (round_down) reduction = Math.floor(reduction);
-                cardToDraw.required_scale = Math.max(0, cardToDraw.required_scale - reduction);
+                scaleChangeAmount = -reduction;
             }
-            player.hand.push(cardToDraw);
+
+            if (scaleChangeAmount !== 0) {
+                effectsQueue.unshift([{
+                    effect_type: EffectType.MODIFY_CARD_REQUIRED_SCALE,
+                    args: {
+                        card_id: cardToDraw.instance_id,
+                        amount: scaleChangeAmount,
+                        min_value: 0
+                    }
+                }, sourceCard]);
+            }
         }
     },
     [EffectType.PROCESS_COUNTER_ATTACK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -1515,6 +1763,11 @@ const effectHandlers = {
         
         resolvedArgs.target_player_id = resolvedArgs.player_id;
         
+        // Add source_card_id for proper tracking (prevents infinite loops)
+        if (sourceCard && !resolvedArgs.source_card_id) {
+            resolvedArgs.source_card_id = sourceCard.instance_id;
+        }
+        
         const effects_to_add = [];
         effects_to_add.push([{ effect_type: EffectType.MODIFY_CONSCIOUSNESS, args: resolvedArgs }, sourceCard]);
 
@@ -1545,6 +1798,11 @@ const effectHandlers = {
         }
 
         resolvedArgs.target_player_id = resolvedArgs.player_id;
+        
+        // Add source_card_id for proper tracking (prevents infinite loops)
+        if (sourceCard && !resolvedArgs.source_card_id) {
+            resolvedArgs.source_card_id = sourceCard.instance_id;
+        }
         
         const effects_to_add = [];
         effects_to_add.push([{ effect_type: EffectType.MODIFY_SCALE, args: resolvedArgs }, sourceCard]);
@@ -1619,6 +1877,7 @@ const effectHandlers = {
         
         const newArgs = { ...resolved_args, card_id: resolved_card_id };
 
+
         const effects_to_add = [];
         effects_to_add.push([{ effect_type: EffectType.MODIFY_CARD_DURABILITY, args: newArgs, target_card_id: resolved_card_id }, sourceCard]);
 
@@ -1633,6 +1892,100 @@ const effectHandlers = {
         }
 
         effectsQueue.unshift(...effects_to_add.reverse());
+    },
+    
+    // 演出完了後にカード移動を実行するハンドラー（演出システム連携版）
+    [EffectType.MOVE_CARD_AFTER_ANIMATION]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { card_id } = args;
+        const targetCard = gameState.all_card_instances[card_id];
+        
+        if (!targetCard) {
+            return;
+        }
+        
+        // 演出システムに完了コールバックを登録
+        // この処理は演出システムが実装されるまでの暫定処理
+        if (gameState.animationCallbacks) {
+            gameState.animationCallbacks.set(card_id, () => {
+                effectsQueue.unshift([{ 
+                    effect_type: EffectType.MOVE_CARD, 
+                    args: {
+                        player_id: args.player_id,
+                        card_id: args.card_id,
+                        source_pile: args.source_pile,
+                        destination_pile: args.destination_pile,
+                        source_card_id: args.source_card_id
+                    }
+                }, sourceCard]);
+            });
+        } else {
+            // フォールバック：演出システムが利用できない場合は即座に実行
+            effectsQueue.unshift([{ 
+                effect_type: EffectType.MOVE_CARD, 
+                args: {
+                    player_id: args.player_id,
+                    card_id: args.card_id,
+                    source_pile: args.source_pile,
+                    destination_pile: args.destination_pile,
+                    source_card_id: args.source_card_id
+                }
+            }, sourceCard]);
+        }
+    },
+    
+    // 演出完了後にトリガーを実行するハンドラー（演出システム連携版）
+    [EffectType.TRIGGER_AFTER_ANIMATION]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        // 演出システムに完了コールバックを登録
+        // この処理は演出システムが実装されるまでの暫定処理
+        if (gameState.animationCallbacks) {
+            const callbackId = `trigger-${Date.now()}-${Math.random()}`;
+            gameState.animationCallbacks.set(callbackId, () => {
+                effectsQueue.unshift([{ 
+                    effect_type: args.trigger_type, 
+                    args: args.trigger_args
+                }, sourceCard]);
+            });
+        } else {
+            // フォールバック：演出システムが利用できない場合は即座に実行
+            effectsQueue.unshift([{ 
+                effect_type: args.trigger_type, 
+                args: args.trigger_args
+            }, sourceCard]);
+        }
+    },
+    
+    // ゲーム進行演出用のエフェクトハンドラー（演出専用、ゲームロジックは変更しない）
+    [EffectType.TURN_START]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+    },
+    
+    [EffectType.TURN_END]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+    },
+    
+    [EffectType.GAME_RESULT]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+    },
+    
+    [EffectType.TURN_ORDER_DECISION]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+    },
+
+    [EffectType.REORDER_FIELD_CARDS]: (gameState, args) => {
+        const { player_id, card_id, position } = args;
+        const player = gameState.players[player_id];
+        if (!player || !player.field) return;
+
+        const cardIndex = player.field.findIndex(c => c.instance_id === card_id);
+        if (cardIndex === -1) return; // カードが場にない場合は何もしない
+
+        const [cardToMove] = player.field.splice(cardIndex, 1); // 場からカードを削除
+
+        if (position === 'leftmost') {
+            player.field.unshift(cardToMove); // 一番左に挿入
+        } else if (position === 'rightmost') {
+            player.field.push(cardToMove); // 一番右に挿入
+        }
+        // 他のpositionも必要であれば追加
+    },
+    [EffectType.CHECK_GAME_OVER]: () => {
+        // This is a marker effect. The actual check is done in the processEffects loop.
     },
 };
 
@@ -1669,34 +2022,85 @@ const checkAllReactions = (processedEffect, sourceCard, gameState) => {
     return newEffects;
 };
 
+// グローバルなエフェクトログ記録システム
+let globalEffectLogger = null;
+
+export const setEffectLogger = (logger) => {
+    globalEffectLogger = logger;
+    console.log('🎬ANIM [effectHandler] EffectLogger has been set.');
+};
+
 export const processEffects = (gameState) => {
-    let safetyBreak = 0;
-    while (gameState.effect_queue.length > 0 && !gameState.awaiting_input && safetyBreak < 200) {
-        const [effect, sourceCard] = gameState.effect_queue.shift();
-        if (gameState.effects_to_skip && gameState.effects_to_skip[effect.effect_type]) {
-            const skippablePlayerId = gameState.effects_to_skip[effect.effect_type];
-            if (effect.args.player_id === skippablePlayerId) {
-                delete gameState.effects_to_skip[effect.effect_type];
-                safetyBreak++;
-                continue;
+    const stateAfterImmediateEffects = produce(gameState, draftState => {
+        if (draftState.game_over) return;
+        let safetyBreak = 0;
+        
+        while (draftState.effect_queue.length > 0 && !draftState.awaiting_input && !draftState.game_over && safetyBreak < 500) {
+            const [effect, sourceCard] = draftState.effect_queue.shift();
+
+            if (globalEffectLogger) {
+                globalEffectLogger.recordEffect(draftState, effect, sourceCard);
+            }
+            
+            if (draftState.effects_to_skip && draftState.effects_to_skip[effect.effect_type]) {
+                const skippablePlayerId = draftState.effects_to_skip[effect.effect_type];
+                if (effect.args.player_id === skippablePlayerId) {
+                    delete draftState.effects_to_skip[effect.effect_type];
+                    if (effect.args.card_id) {
+                        draftState.animation_queue.push({
+                            effect: {
+                                effect_type: 'EFFECT_NULLIFIED',
+                                args: {
+                                    target_card_id: effect.args.card_id,
+                                    reason: 'skip_effect',
+                                    message: 'エフェクトがスキップされました'
+                                }
+                            },
+                            sourceCard: sourceCard
+                        });
+                    }
+                    safetyBreak++;
+                    continue;
+                }
+            }
+
+            const handler = effectHandlers[effect.effect_type];
+            if (handler) {
+                handler(draftState, effect.args, draftState.cardDefs, sourceCard, draftState.effect_queue);
+                 if (draftState.awaiting_input) {
+                    return;
+                }
+            }
+
+            const reactionEffects = checkAllReactions(effect, sourceCard, draftState);
+            if (reactionEffects.length > 0) {
+                draftState.effect_queue.unshift(...reactionEffects);
+            }
+
+            // Check for game over state at the end of each effect processing cycle
+            _updateGameOverState(draftState);
+
+            safetyBreak++;
+            if (safetyBreak >= 500) {
+                draftState.game_over = true;
+                draftState.game_over_reason = "セーフティブレーク発動：無限ループの可能性があります。";
             }
         }
-
-        const handler = effectHandlers[effect.effect_type];
-        if (handler) {
-            handler(gameState, effect.args, gameState.cardDefs, sourceCard, gameState.effect_queue);
-            if (gameState.awaiting_input) {
-                return gameState;
-            }
+            
+        if (globalEffectLogger && globalEffectLogger.notifyEffectProcessingComplete) {
+            globalEffectLogger.notifyEffectProcessingComplete();
         }
+    });
 
-        const reactionEffects = checkAllReactions(effect, sourceCard, gameState);
-        if (reactionEffects.length > 0) {
-            gameState.effect_queue.unshift(...reactionEffects);
-
-        }
-        safetyBreak++;
+    // After processing immediate effects, check if there are delayed effects to process.
+    if (stateAfterImmediateEffects.delayedEffects && stateAfterImmediateEffects.delayedEffects.length > 0) {
+        const stateWithDelayedEffectsQueued = produce(stateAfterImmediateEffects, draftState => {
+            draftState.effect_queue.push(...draftState.delayedEffects);
+            draftState.delayedEffects = [];
+        });
+        // Recursively call processEffects to handle the newly queued (previously delayed) effects.
+        return processEffects(stateWithDelayedEffectsQueued);
     }
 
-    return gameState;
+    return stateAfterImmediateEffects;
 };

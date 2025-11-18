@@ -38,6 +38,14 @@
                         "player_id": "self",
                         "amount": 5
                     }
+                },
+                {
+                    "effect_type": "REORDER_FIELD_CARDS",
+                    "args": {
+                        "player_id": "self",
+                        "card_id": "self",
+                        "position": "leftmost"
+                    }
                 }
             ]
         }
@@ -108,7 +116,7 @@
         "card_type": "財",
         "required_scale": 6,
         "durability": 3,
-        "description": "配置時自分の規模+3。相手の場に財は配置されるたび、自分の規模+1。",
+        "description": "配置時自分の規模+3。相手の場に財が配置されるたび、自分の規模+1。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -487,7 +495,8 @@
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": 100
+                        "amount_percentage": 100,
+                        "round_down": false
                     }
                 }
             ],
@@ -1181,7 +1190,7 @@
         "name": "資本主義",
         "card_type": "イデオロギー",
         "required_scale": 35,
-        "description": "ターン終了時、場のマネーの耐久値と同じ回数ランダムな財の耐久値を+1し、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に2ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。",
+        "description": "ターン終了時、場のマネーの耐久値と同じ回数ランダムな財の耐久値を+1し、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に6ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1207,7 +1216,7 @@
                     "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
                     "args": {
                         "player_ids": "self",
-                        "amount": 5
+                        "amount": 6
                     }
                 },
                 {
@@ -2116,8 +2125,7 @@
                 {
                     "effect_type": "ADD_CARD_TO_GAME",
                     "args": {
-                        "player_id": "self",
-                        "target_player_id": "opponent",
+                        "player_id": "opponent",
                         "card_template_name": "大地震",
                         "destination_pile": "deck",
                         "position": "random",
@@ -2602,7 +2610,8 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": -30
+                        "amount_percentage": -30,
+                        "round_down": true
                     }
                 }
             ],
@@ -2798,7 +2807,8 @@
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": -50
+                        "amount_percentage": -50,
+                        "round_down": true
                     }
                 }
             ],
@@ -3111,8 +3121,7 @@
                     }
                 }
             ]
-        },
-        "is_token": true
+        }
     },
     {
         "name": "確証破壊能力",
@@ -3189,7 +3198,7 @@
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
-                        "player_id": "self",
+                        "player_id": "opponent",
                         "amount_percentage": -90,
                         "round_down": true
                     }
@@ -3197,7 +3206,7 @@
                 {
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
-                        "player_id": "self",
+                        "player_id": "opponent",
                         "amount_percentage": -90,
                         "round_down": true
                     }

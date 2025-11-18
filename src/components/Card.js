@@ -1,12 +1,20 @@
 import React from 'react';
 import '../App.css';
 
-const Card = ({ card, isSelectable, onClick }) => {
-  const cardClassName = `card ${isSelectable ? 'selectable' : ''} ${onClick ? 'clickable' : ''} card-type-${card.card_type}`;
+const Card = ({ card, isSelectable, onClick, onAnimationEnd }) => {
+  // console.log(`DEBUG: Card.js rendering - ${card.name} (ID: ${card.instance_id}), Required Scale: ${card.required_scale}`); // NEW DEBUG LOG
+
+  const cardClassName = `card ${onClick ? 'clickable' : ''} card-type-${card.card_type} ${card.animation || ''}`;
 
   const handleClick = () => {
     if (onClick) {
       onClick(card);
+    }
+  };
+
+  const handleAnimationEnd = () => {
+    if (card.animation === 'destroying' && onAnimationEnd) {
+      onAnimationEnd(card.instance_id);
     }
   };
 
@@ -15,10 +23,14 @@ const Card = ({ card, isSelectable, onClick }) => {
   const durabilityValue = card.current_durability !== undefined ? card.current_durability : card.durability;
 
   return (
-    <div className={cardClassName} onClick={handleClick}>
+    <div 
+      className={cardClassName} 
+      onClick={handleClick}
+      onAnimationEnd={handleAnimationEnd}
+      data-card-id={card.instance_id}
+    >
       <div className="card-header">
         <div className="card-name">{card.name}</div>
-        <div className="card-type">{card.card_type}</div>
       </div>
       
       <div className="card-center">

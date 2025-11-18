@@ -5,19 +5,12 @@ const checkCondition = (condition, comparison) => {
     return condition ? comparison : !comparison;
 };
 
-const checkParameterDecreaseThreshold = (ownerId, gameState, parameter_type, threshold) => {
-    const temp_key = `${ownerId}_last_${parameter_type}_decrease`;
-    const actual_decrease = gameState.temp_effect_data[temp_key];
-    if (actual_decrease === undefined) {
-        return false;
-    }
-    return actual_decrease >= threshold;
-};
+// 未使用の関数を削除
 
 export const checkCardReaction = (card, triggeredEffect, gameState) => {
     const triggeredEffectType = triggeredEffect.effect_type;
     const triggeringEffectArgs = triggeredEffect.args;
-    const logPrefix = `[ReactionCheck] Card: '${card.name}' (${card.instance_id.slice(0,5)}), Trigger: '${triggeredEffectType}' ->`;
+    // ログプレフィックスは現在未使用
 
     if (!card.triggers) {
         return [];
@@ -85,6 +78,27 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
     const reactionEffects = [];
 
+    // Refactored guard clauses for card location
+    const isFieldCard = card.card_type === CardType.WEALTH || card.card_type === CardType.IDEOLOGY;
+    const isOnField = card.location === 'field' || card.location === 'ideology';
+
+    if (isFieldCard && !isOnField) {
+        // 場にあるべきカードが場にない場合、原則として効果を発動させない
+        const allowedTriggers = [
+            TriggerType.CARD_DISCARDED_THIS,
+            TriggerType.WEALTH_DURABILITY_ZERO_THIS,
+        ];
+        if (allowedTriggers.includes(triggeredEffectType)) {
+            // 「このカードが捨てられた/破壊された時」の効果は許可
+        } else if (card.name === "ポピュリズム" && triggeredEffectType === TriggerType.START_TURN_OWNER) {
+            // ポピュリズムの特殊な自動配置効果は許可
+        }
+        else {
+            return []; // 上記の例外以外はガード
+        }
+    }
+
+
     for (const cardEffect of effectsToCheck) {
         let conditionMet = true;
         if (cardEffect.condition) {
@@ -111,26 +125,30 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
         let current_args = { ...cardEffect.args };
 
+        if (card.name === '帝国主義' && triggeredEffectType === TriggerType.END_TURN_OWNER) {
+            if (owner.ideology && owner.ideology.instance_id === card.instance_id) {
+                if (owner.field_limit > opponent.field_limit) {
+                    const diff = owner.field_limit - opponent.field_limit;
+                    if (current_args.player_id === 'opponent') {
+                        current_args.amount = -diff;
+                        delete current_args.amount_based_on_field_limit_diff;
+                    } else if (current_args.player_id === 'self') {
+                        current_args.amount = diff;
+                        delete current_args.amount_based_on_field_limit_diff;
+                    }
+                } else {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+        }
+
         if (current_args.source_pile === 'current') {
             current_args.source_pile = card.location;
         }
 
-        if (cardEffect.effect_type === EffectType.PROCESS_ADD_CARD_CONDITIONAL) {
-            const { condition_target, threshold, card_template_name } = current_args;
-            const player = gameState.players[owner.id];
-            if (player && player[condition_target] >= threshold) {
-                reactionEffects.push({
-                    effect_type: EffectType.ADD_CARD_TO_GAME,
-                    args: {
-                        player_id: owner.id,
-                        card_template_name: card_template_name,
-                        destination_pile: 'hand'
-                    }
-                });
-            } else {
-            }
-            continue;
-        }
+
 
         if (cardEffect.effect_type === EffectType.PROCESS_ADD_CARD_CONDITIONAL_ON_DECK_COUNT) {
             const { threshold, card_if_above, card_if_below } = current_args;
@@ -225,7 +243,8 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             const moneyCard = owner.field.find(c => c.name === 'マネー');
             if (moneyCard) {
                 current_args.card_id = moneyCard.instance_id;
-            } else {
+            }
+            else {
                 continue;
             }
         }
@@ -237,40 +256,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             }
         }
 
-        if ([CardType.WEALTH, CardType.IDEOLOGY].includes(card.card_type)) {
-            let blockTrigger = false;
 
-            if (card.location !== 'field' && card.location !== 'ideology') {
-                blockTrigger = true;
-            }
-
-            if (triggeredEffectType.includes('DISCARDED') && card.location === 'discard') {
-                blockTrigger = false;
-            }
-
-            if (triggeredEffectType.includes('PLACED_THIS') && (card.location === 'hand' || card.location === 'field')) {
-                blockTrigger = false;
-            }
-
-            if (card.name === "ポピュリズム" && triggeredEffectType === TriggerType.START_TURN_OWNER) {
-                blockTrigger = false;
-            }
-
-            if (blockTrigger) {
-                continue;
-            }
-        }
-        if (card.card_type === CardType.EVENT) {
-            const handTriggers = [
-                TriggerType.START_TURN_OWNER, TriggerType.START_TURN_OPPONENT, TriggerType.START_TURN,
-                TriggerType.END_TURN_OWNER, TriggerType.END_TURN_OPPONENT, TriggerType.END_TURN_PHASE,
-                TriggerType.CARD_ADDED_TO_HAND_OWNER, TriggerType.CARD_BOUNCE_OWNER, TriggerType.CARD_DISCARDED_OWNER,
-                TriggerType.CARD_DRAWN_OWNER, TriggerType.CARD_PLACED_OWNER, TriggerType.CARD_DRAWN_THIS
-            ];
-            if (handTriggers.includes(triggeredEffectType) && card.location !== 'hand') {
-                continue;
-            }
-        }
 
         if (card.name === 'ポピュリズム' && triggeredEffectType === TriggerType.START_TURN_OWNER) {
             if (owner.consciousness > 5) {
@@ -327,18 +313,29 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             }
         }
 
-        if (card.name === '孤立主義' && triggeredEffectType === TriggerType.MODIFY_CONSCIOUSNESS) {
-            // This block validates the self-destruct trigger.
-            // It should only proceed if the final calculated damage is 1 or more.
+        if (card.name === '孤立主義' && triggeredEffectType === EffectType.MODIFY_CONSCIOUSNESS) {
+            // This block validates the self-destruct trigger (Python version compatibility).
             
             // First, ensure the effect is targeting this card's owner
             if (!triggeredEffect.args || triggeredEffect.args.target_player_id !== owner.id) {
                 continue;
             }
-    
-            // Then, check the final damage amount stored in temp_effect_data.
-            // If there's no actual damage, or consciousness increased, skip.
-            if (!gameState.temp_effect_data.last_consciousness_change || gameState.temp_effect_data.last_consciousness_change >= 0) {
+            
+            // Prevent infinite loop: Skip if the consciousness change was caused by 孤立主義 itself
+            const sourceCardId = triggeredEffect.args.source_card_id;
+            if (sourceCardId === card.instance_id) {
+                continue;
+            }
+            
+            // Check if the original amount is negative (damage)
+            if (!triggeredEffect.args.amount || triggeredEffect.args.amount >= 0) {
+                continue;
+            }
+            
+            // Check if the final decrease meets the threshold (1 or more)
+            const tempKey = `${owner.id}_last_consciousness_decrease`;
+            const actualDecrease = gameState.temp_effect_data[tempKey];
+            if (!actualDecrease || actualDecrease < 1) {
                 continue;
             }
         }
@@ -348,15 +345,17 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
                 if (triggeredEffectType === TriggerType.END_TURN_OWNER) {
                     if (owner.field_limit > opponent.field_limit) {
                         const diff_field_limit = owner.field_limit - opponent.field_limit;
-                        if (current_args.player_id === opponent.id) {
+                        if (current_args.player_id === 'opponent') {
                             current_args.amount = diff_field_limit * -1;
-                        } else if (current_args.player_id === owner.id) {
+                        } else if (current_args.player_id === 'self') {
                             current_args.amount = diff_field_limit;
                         }
-                    } else {
+                    }
+                    else {
                         continue;
                     }
-                } else if (triggeredEffectType === TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT) {
+                }
+                else if (triggeredEffectType === TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT) {
                     const destroyed_card_owner_id = triggeringEffectArgs.player_id;
                     if (destroyed_card_owner_id === opponent.id && gameState.current_turn === owner.id) {
                     }
@@ -364,7 +363,8 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
                         continue;
                     }
                 }
-            } else {
+            }
+            else {
                 continue;
             }
         }
@@ -411,10 +411,10 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         }
 
         if (card.name === 'アナーキズム' && triggeredEffectType === TriggerType.CARD_PLACED_OWNER) {
-            const placed_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.field.find(c => c.instance_id === triggeringEffectArgs.card_id);
+            const placed_card = gameState.all_card_instances[triggeringEffectArgs.card_id];
             if (placed_card) {
                 if (placed_card.card_type !== CardType.WEALTH) {
-                    continue;
+                    return [];
                 }
             }
         }
@@ -543,6 +543,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     }
 
     if (reactionEffects.length > 0) {
-    }
-    return reactionEffects;
-};
+            }
+        
+            return reactionEffects;
+        };
