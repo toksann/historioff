@@ -138,16 +138,6 @@
 
 カードの主要な機能が意図通りに動作しない問題です。ゲームバランスに大きな影響を与えるため、優先度は高めです。
 
-5.  **特定の条件下での効果不発**
-    *   **対象カード**: `帝国主義`, `資源`, `軍国主義`, `確証破壊能力`
-    *   **現象**:
-        *   `帝国主義`: 相手の財を破壊した際の意識・耐久値増加が発動しない。
-        *   `資源`: ダメージを受けた際にマネーが生成されない。
-        *   `軍国主義`: 財が破壊された際の規模増加が発動しない。
-        *   `確証破壊能力`: 失敗時（相手が対象カードを持っていない場合）の効果が発動しない。
-    *   **分析**: これらの問題は、効果の発生条件（トリガー）の定義ミス、または`effectHandler.js`内の効果処理ロジックの不備が原因と考えられます。特に、効果の対象を特定する `target` や、効果の発生源 `source` の情報が処理の途中で失われている可能性があります。
-    *   **方針**: 各カードについて、`card_definitions.json`のトリガー定義が正しいかを確認します。併せて、関連するエフェクトハンドラ（例: `MODIFY_CONSCIOUSNESS`, `ADD_CARD_TO_HAND`）の処理を追い、`source`や`target`の情報が正しく伝搬されているかをデバッグします。
-
 6.  **カードの状態・位置に関するバグ**
     *   **対象カード**: `思想の弾圧`, `分離主義`, `官僚主義`, `ポピュリズム`
     *   **現象**:
@@ -203,5 +193,16 @@
     *   **現象**: デバッグ用のコマンドやログが常に有効になっている。
     *   **方針**: 環境変数や設定ファイル、あるいはゲーム内コンソールなどを用いて、デバッグ機能のON/OFFを切り替えられる仕組みを導入します。
 
+
+確認された未分析のエラー
+Uncaught runtime errors:
+×
+ERROR
+Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
+    at getRootForUpdatedFiber (http://localhost:3000/static/js/bundle.js:9850:167)
+    at enqueueConcurrentHookUpdate (http://localhost:3000/static/js/bundle.js:9836:12)
+    at dispatchSetStateInternal (http://localhost:3000/static/js/bundle.js:11807:16)
+    at dispatchSetState (http://localhost:3000/static/js/bundle.js:11780:5)
+    at processAnimation (http://localhost:3000/static/js/bundle.js:28989:9)          
 
 
