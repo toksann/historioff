@@ -2633,7 +2633,7 @@
                     }
                 }
             ],
-            "PLAYER_PLAY_CARD_ACTION": [
+            "PLAYER_PLAY_CARD_ACTION_OPPONENT": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
@@ -2650,7 +2650,7 @@
         "required_scale": 25,
         "description": "自分の意識も規模も増えなくなる。カードを出すたび「マネー」を手札に加える。ターン開始時、自分の場にある「マネー」の耐久値を-70%か+100%する。",
         "triggers": {
-            "PLAYER_PLAY_CARD_ACTION": [
+            "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
                     "effect_type": "ADD_CARD_TO_GAME",
                     "args": {
@@ -2956,7 +2956,7 @@
                     }
                 }
             ],
-            "PLAYER_PLAY_CARD_ACTION": [
+            "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
@@ -2997,7 +2997,7 @@
                     }
                 }
             ],
-            "PLAYER_PLAY_CARD_ACTION": [
+            "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
@@ -3094,7 +3094,7 @@
                     }
                 }
             ],
-            "PLAYER_PLAY_CARD_ACTION": [
+            "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {

@@ -46,7 +46,8 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     const opponentTriggers = [
         TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT, TriggerType.PLAY_EVENT_OPPONENT,
         TriggerType.CARD_PLACED_OPPONENT, TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT, 
-        TriggerType.START_TURN_OPPONENT, TriggerType.END_TURN_OPPONENT
+        TriggerType.START_TURN_OPPONENT, TriggerType.END_TURN_OPPONENT,
+        TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT
     ];
     if (opponentTriggers.includes(triggeredEffectType)) {
         if (!triggeredEffect.args || !opponent || triggeredEffect.args.player_id !== opponent.id) {
@@ -58,7 +59,8 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         TriggerType.MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER, TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER,
         TriggerType.MODIFY_SCALE_INCREASE_RESERVE_OWNER, TriggerType.PLAY_EVENT_OWNER, TriggerType.CARD_DRAWN_OWNER,
         TriggerType.CARD_PLACED_OWNER, TriggerType.CARD_DISCARDED_OWNER,
-        TriggerType.CARD_BOUNCED_OWNER, TriggerType.CARD_ADDED_TO_HAND_OWNER, TriggerType.START_TURN_OWNER, TriggerType.END_TURN_OWNER, TriggerType.WEALTH_DURABILITY_ZERO_OWNER
+        TriggerType.CARD_BOUNCED_OWNER, TriggerType.CARD_ADDED_TO_HAND_OWNER, TriggerType.START_TURN_OWNER, TriggerType.END_TURN_OWNER, TriggerType.WEALTH_DURABILITY_ZERO_OWNER,
+        TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER
     ];
     if (ownerTriggers.includes(triggeredEffectType)) {
         const effect_player_id = triggeredEffect.args.target_player_id || triggeredEffect.args.player_id;

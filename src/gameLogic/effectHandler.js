@@ -281,7 +281,12 @@ const effectHandlers = {
                 addEffectToBack(TriggerType.PLAY_EVENT, ownerEventArgs, card);
                 addEffectToBack(TriggerType.PLAY_EVENT_OWNER, ownerEventArgs, card);
                 addEffectToBack(TriggerType.PLAY_EVENT_OPPONENT, opponentEventArgs, card);
+                
+                // 汎用、オーナー限定、相手限定の3つのトリガーをすべて発行
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: opponentPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+
 
             } else { // Wealth & Ideology
                 addEffect(EffectType.MOVE_CARD, {
@@ -290,7 +295,14 @@ const effectHandlers = {
                     destination_pile: card.card_type === CardType.IDEOLOGY ? 'ideology' : 'field',
                     player_id: player_id,
                 }, card);
+                
+                const ownerPlayerId = player_id;
+                const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+                
+                // 汎用、オーナー限定、相手限定の3つのトリガーをすべて発行
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: opponentPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
             }
             gameState.temp_effect_data["last_played_card_id"] = card.instance_id;
         }
@@ -828,19 +840,23 @@ const effectHandlers = {
         cardToMove.location = destination_pile;
         cardToMove.owner = args.target_player_id || player_id; // Update owner before pushing to destination
 
-        if (destination_pile === 'hand' && cardToMove.name === 'マネー') {
-            maintain = true;
-        }
-
         if (!maintain && destination_pile !== 'field' && destination_pile !== 'discard') {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
+                const updates = {};
                 if (cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined) {
-                    cardToMove.durability = cardTemplate.durability;
-                    cardToMove.current_durability = cardTemplate.durability;
+                    updates.durability = cardTemplate.durability;
+                    updates.current_durability = cardTemplate.durability;
                 }
                 if (cardTemplate.required_scale !== undefined) {
-                    cardToMove.required_scale = cardTemplate.required_scale;
+                    updates.required_scale = cardTemplate.required_scale;
+                }
+
+                if (Object.keys(updates).length > 0) {
+                    // Apply updates to the object we are holding
+                    Object.assign(cardToMove, updates);
+                    // Sync these updates to all other references of the card
+                    syncCardDataInAllPiles(gameState, cardToMove.instance_id, updates);
                 }
             }
         }
@@ -1664,18 +1680,7 @@ const effectHandlers = {
             if (i >= shuffledMatchingCards.length) break;
             const cardToDraw = shuffledMatchingCards[i];
             
-            // MOVE_CARDエフェクトを先に積む（後で実行される）
-            effectsQueue.unshift([{
-                effect_type: EffectType.MOVE_CARD,
-                args: {
-                    player_id: player_id,
-                    card_id: cardToDraw.instance_id,
-                    source_pile: 'deck',
-                    destination_pile: 'hand',
-                }
-            }, sourceCard]);
-
-            // 必要規模の変更エフェクトを後に積む（先に実行される）
+            // 必要規模の変更エフェクトを先に積む（後で実行される）
             let scaleChangeAmount = 0;
             if (scale_reduction) {
                 scaleChangeAmount = -scale_reduction;
@@ -1695,6 +1700,17 @@ const effectHandlers = {
                     }
                 }, sourceCard]);
             }
+            
+            // MOVE_CARDエフェクトを後に積む（先に実行される）
+            effectsQueue.unshift([{
+                effect_type: EffectType.MOVE_CARD,
+                args: {
+                    player_id: player_id,
+                    card_id: cardToDraw.instance_id,
+                    source_pile: 'deck',
+                    destination_pile: 'hand',
+                }
+            }, sourceCard]);
         }
     },
     [EffectType.PROCESS_COUNTER_ATTACK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -1983,6 +1999,19 @@ const effectHandlers = {
             player.field.push(cardToMove); // 一番右に挿入
         }
         // 他のpositionも必要であれば追加
+        
+        // Add to animation queue for visual effect
+        gameState.animation_queue.push({
+            effect: {
+                effect_type: 'FIELD_CARDS_REORDERED',
+                args: {
+                    player_id: player_id,
+                    card_id: card_id,
+                    position: position
+                }
+            },
+            sourceCard: null // This effect is not directly tied to a source card
+        });
     },
     [EffectType.CHECK_GAME_OVER]: () => {
         // This is a marker effect. The actual check is done in the processEffects loop.

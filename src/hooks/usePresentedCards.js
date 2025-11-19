@@ -6,34 +6,31 @@ const usePresentedCards = (fieldCards, ideologyCard) => {
 
     useEffect(() => {
         const incomingCards = [...(fieldCards || []), ...(ideologyCard ? [ideologyCard] : [])];
-        const incomingCardsMap = new Map(incomingCards.map(c => [c.instance_id, c]));
+        const incomingCardIds = new Set(incomingCards.map(c => c.instance_id));
 
         setPresentedCards(currentPresented => {
-            const nextState = produce(currentPresented, draft => {
-                const draftMap = new Map(draft.map(c => [c.instance_id, c]));
-
-                // Update/Remove existing cards in draft
-                draft.forEach(cardInDraft => {
-                    const incoming = incomingCardsMap.get(cardInDraft.instance_id);
-                    if (incoming) {
-                        // Card still exists: update its data, but only if it's not animating out
-                        if (!cardInDraft.animation) {
-                            Object.assign(cardInDraft, incoming);
-                        }
+            const nextState = produce([], draft => {
+                const currentMap = new Map(currentPresented.map(c => [c.instance_id, c]));
+                
+                // Add all incoming cards in their new order
+                for (const incomingCard of incomingCards) {
+                    const existingCard = currentMap.get(incomingCard.instance_id);
+                    if (existingCard) {
+                        // Preserve animation state if it exists, otherwise use incoming data
+                        draft.push({ ...incomingCard, animation: existingCard.animation });
                     } else {
-                        // Card is removed: flag for animation if not already flagged
-                        if (!cardInDraft.animation) {
-                           cardInDraft.animation = 'destroying';
-                        }
+                        // It's a new card
+                        draft.push(incomingCard);
                     }
-                });
+                }
 
-                // Add new incoming cards that are not in the draft yet
-                incomingCards.forEach(card => {
-                    if (!draftMap.has(card.instance_id)) {
-                        draft.push(card);
+                // Find cards that are in current state but not in incoming, and are not already animating.
+                // These need to be flagged for destruction and kept for their animation.
+                for (const currentCard of currentPresented) {
+                    if (!incomingCardIds.has(currentCard.instance_id) && !currentCard.animation) {
+                        draft.push({ ...currentCard, animation: 'destroying' });
                     }
-                });
+                }
             });
             return nextState;
         });
