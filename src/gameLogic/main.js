@@ -184,7 +184,7 @@ export const playCard = (gameState, playerId, cardInstanceId, options = {}) => {
             return;
         }
 
-        if (card.card_type === CardType.WEALTH && player.field.length >= player.field_limit) {
+        if (card.name !== 'マネー' && card.card_type === CardType.WEALTH && player.field.length >= player.field_limit) {
             // presentationControllerへの直接参照を削除し、animation_queueにデータを追加
             draftState.animation_queue.push({
                 effect: {

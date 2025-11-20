@@ -16,11 +16,11 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
     const canPlay = () => {
         if (!player || gameState.awaiting_input) return false;
         
-        const effectiveScale = getEffectiveScale(player);
+        const effectiveScale = getEffectiveScale(player, gameState);
         const hasEnoughScale = effectiveScale >= card.required_scale;
         
-        // 財カードの場合は場の上限もチェック
-        if (card.card_type === '財') {
+        // 財カードの場合は場の上限もチェック（「マネー」は除く）
+        if (card.card_type === '財' && card.name !== 'マネー') {
             const fieldCount = player.field.length;
             const hasFieldSpace = fieldCount < player.field_limit;
             return hasEnoughScale && hasFieldSpace;
@@ -35,8 +35,8 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
     // プレイ不可の理由を取得
     const getPlayRestriction = () => {
         if (gameState.awaiting_input) return '選択待ち中';
-        if (getEffectiveScale(player) < card.required_scale) return '規模不足';
-        if (card.card_type === '財' && player.field.length >= player.field_limit) return '場が満杯';
+        if (getEffectiveScale(player, gameState) < card.required_scale) return '規模不足';
+        if (card.card_type === '財' && card.name !== 'マネー' && player.field.length >= player.field_limit) return '場が満杯';
         return 'プレイ不可';
     };
 
