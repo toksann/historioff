@@ -289,6 +289,8 @@ const effectHandlers = {
 
 
             } else { // Wealth & Ideology
+                // Queue the effect to move the played card from hand to the field/ideology slot.
+                // This is queued first so it executes *after* the old ideology is discarded.
                 addEffect(EffectType.MOVE_CARD, {
                     card_id: card.instance_id,
                     source_pile: 'hand',
@@ -905,10 +907,36 @@ const effectHandlers = {
                 }, cardToMove]);
             }
             
-            if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id) {
-                destination_player.ideology.location = 'discard';
-                destination_player.discard.push(destination_player.ideology);
+            // If there's an old ideology and we haven't handled its replacement yet
+            if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id && !args.is_after_replacement) {
+                // To correctly handle replacement, we need to sequence two MOVE_CARD effects.
+                
+                // 2. Re-queue this MOVE_CARD effect to run *after* the old one is removed.
+                //    This is queued first, so it runs second.
+                const newArgs = { ...args, card_to_move: cardToMove, is_after_replacement: true };
+                effectsQueue.unshift([{
+                    effect_type: EffectType.MOVE_CARD,
+                    args: newArgs
+                }, sourceCard]);
+
+                // 1. Queue the removal of the old ideology.
+                //    This is queued second, so it runs first.
+                effectsQueue.unshift([{
+                    effect_type: EffectType.MOVE_CARD,
+                    args: {
+                        card_id: destination_player.ideology.instance_id,
+                        source_pile: 'ideology',
+                        destination_pile: 'discard',
+                        player_id: destination_player_id
+                    }
+                }, cardToMove]);
+
+                // 3. Early return to prevent the new card from being placed immediately.
+                return;
             }
+            
+            // This part now runs only if there was no ideology to replace, 
+            // or if the old one has already been moved.
             destination_player.ideology = cardToMove;
             cardToMove.location = 'field';
         } else if (destination_pile === 'field') {
@@ -2005,19 +2033,21 @@ const effectHandlers = {
 
 const checkAllReactions = (processedEffect, sourceCard, gameState) => {
     const newEffects = [];
-            const allCards = [];
-            Object.values(gameState.players).forEach(player => {
-                allCards.push(...player.field);
-                allCards.push(...player.hand);
-                allCards.push(...player.discard);
-                if (player.ideology) {
-                    allCards.push(player.ideology);
-                }
-            });
-            // Add cards in 'playing_event' to the list of cards checked for reactions
-            if (sourceCard && sourceCard.location === 'playing_event') {
-                allCards.push(sourceCard);
-            }    const filteredCards = allCards.filter(card => card && card.card_type);
+    const allCards = [];
+    Object.values(gameState.players).forEach(player => {
+        if (player.ideology) {
+            allCards.push(player.ideology);
+        }
+        allCards.push(...player.field);
+        allCards.push(...player.hand);
+        allCards.push(...player.discard);
+        allCards.push(...player.deck);
+    });
+    // Add cards in 'playing_event' to the list of cards checked for reactions
+    if (sourceCard && sourceCard.location === 'playing_event') {
+        allCards.push(sourceCard);
+    }
+    const filteredCards = allCards.filter(card => card && card.card_type);
 
     for (const card of filteredCards) {
         const reactionEffects = checkCardReaction(card, processedEffect, gameState);
