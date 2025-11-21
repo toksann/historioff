@@ -20,28 +20,28 @@
 | 砦 | test_fortress_effect.js | 成功 | 本番でもOK |
 | 聖なる領域 | test_sacred_domain_effect.js | 成功 | 本番でもOK |
 | 交易路 | test_trade_route_effect.js | 成功 | 本番でもOK |
-| 果実 | test_fruit_effect.js | 成功(本番でバグ) | 耐久値0になったときの効果が発生しない |
-| 農民 | test_peasant_effect.js | 成功(本番でバグ) | (自分のカードの効果(「解体」)で耐久値0になったとき手札への追加が無かった。 |
+| 果実 | test_fruit_effect.js | 成功 | 本番でもOK |
+| 農民 | test_peasant_effect.js | 成功 | 本番でもOK |
 | 開拓民 | test_settler_effect.js | 成功 | 本番でもOK |
 | 大嵐 | test_tempest_effect.js | 成功 | 本番でもOK |
 | 豊作 | test_bountiful_harvest_effect.js | 成功 | 本番でもOK |
 | 予感 | test_premonition_effect.js | 成功 | 本番でもOK |
-| 覚醒 | test_awakening_effect.js | 成功 | このカードの効果による必要規模の減少が表示に反映されていないバグを修正済み。
+| 覚醒 | test_awakening_effect.js | 成功 | 本番でもOK |
 | 内部崩壊 | test_internal_collapse_effect.js | 成功 | 本番でもOK |
 | 秩序の瓦解 | test_collapse_of_order_effect.js | 成功 | 本番でもOK |
 | 略奪 | test_looting_effect.js | 成功 | 本番でもOK |
 | 物々交換 | test_barter_effect.js | 成功 | 本番でもOK |
-| 接収 | test_seizure_effect.js | 成功(本番でバグ) | このカードの効果による規模加算が二重に行われている |
+| 接収 | test_seizure_effect.js | 成功 | 本番でもOK |
 | 経済学の興り | test_rise_of_economics_effect.js | 成功 | 本番でもOK |
 | 多文化主義 | test_multiculturalism_effect.js | 成功 | 本番でもOK |
-| 帝国主義 | test_imperialism_effect.js | 成功(本番でバグ) | 相手の財の耐久値を0にすることによる、"自分の意識+2とすべての自分の場の財の耐久値+2"が働かない |
+| 帝国主義 | test_imperialism_effect.js | 成功 | 本番でもOK |
 | 多神教 | test_polytheism_effect.js | 成功 | 本番でもOK |
 | 原始共産制 | test_primitive_communism_effect.js | 成功(本番でバグ) | NPCが止まる場合がある(財を出そうとして失敗している？) |
 | 物質主義 | test_materialism_effect.js | 成功 | 本番でもOK |
-| 一神教 | test_monotheism_effect.js | 成功 | 本番でもOK |
+| 一神教 | test_monotheism_effect.js | 成功(本番でバグ) | 既に置いてある「一神教」に「一神教」をかぶせて配置すると表示されなくなる & 「手札とデッキのすべてのイデオロギーカードを捨て札にし」という効果を捨て札にではなく、除外にしたい |
 | 悟りの道 | test_path_to_enlightenment_effect.js | 成功 | 本番でもOK |
 | 聖典 | test_sacred_scripture_effect.js | 成功 | 本番でもOK |
-| 布教 | test_missionary_effect.js | 成功(本番でバグ) | 捨て札にあっても、ターン終了時効果が発動してしまう |
+| 布教 | test_missionary_effect.js | 成功 | 本番でもOK |
 | 受難 | test_suffering_effect.js | 成功 | 本番でもOK |
 | 崇拝 | test_worship_effect.js | 成功 | 本番でもOK |
 | 救世 | test_salvation_effect.js | 成功 | 本番でもOK |
@@ -91,7 +91,7 @@
 | アナーキズム | test_anarchism_effect.js | 成功 | 本番でもOK |
 | 結束主義 | test_solidarism_effect.js | 成功 | 本番でもOK |
 | 記憶の浄化 | test_memory_purification_effect.js | 成功 | 本番でもOK |
-| 軍国主義 | test_militarism_effect.js | 成功(本番でバグ) | 規模増加効果が発揮されない。また想定される挙動としては、耐久値が0になった財*3ずつ規模増加が行われる状態 |
+| 軍国主義 | test_militarism_effect.js | 成功 | 本番でもOK |
 | 孤立主義 | test_isolationism_effect.js | 成功(本番でバグ) | 意識の減少効果を無効化できても自爆効果が発動してしまう(自爆大丈夫なときもあるぞ？)。& 財へのダメージ軽減が設定値より高く働きすぎている？(多分補正が消費されずに残っているから段々効果が高くなっちゃってる) |
 | グローバリズム | test_globalism_effect.js | 成功 | 本番でもOK |
 | リバタリアニズム | test_libertarianism_effect.js | 成功 | 本番でもOK |
@@ -100,7 +100,7 @@
 | 多極主義 | test_multipolarism_effect.js | 成功 | 本番でもOK |
 | ニューリベラリズム | test_new_liberalism_effect.js | 成功 | 本番でもOK |
 | ネオリベラリズム | test_neoliberalism_effect.js | 成功 | 本番でもOK |
-| 自由主義 | test_liberalism_effect.js | 成功 | "カードを出すたび意識+1"が相手のカードプレイにも反応している |
+| 自由主義 | test_liberalism_effect.js | 成功 | 本番でもOK |
 | ウルトラナショナリズム | test_ultranationalism_effect.js | 成功 | 本番でもOK |
 | ポピュリズム | test_populism_effect.js | 成功 | 自動配置効果は手札に無い場合は発生していない & 自動配置された場合、画面から見えなくなっている(その場にはあるらしい) & 配置時効果の選択したイデオロギーをデッキの一番上に仕込む効果が、デッキトップに仕込めていない(逆になっている可能性？) & ウルトラナショナリズムが捨て札に加わっていない & イデオロギー選択効果が自動配置した場合は働かない & 捨て札になるときの意識+5が働いていない |
 | 確証破壊能力 | test_mutual_assured_destruction_effect.js | 成功 | 失敗時効果(相手の意識を0にする)が働いていない。→相手の手札に確証破壊能力がないはずなのに成功時の能力が発動している|

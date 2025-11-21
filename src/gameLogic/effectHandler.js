@@ -1308,9 +1308,11 @@ const effectHandlers = {
         }
     },
         [EffectType.PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-            const { player_id } = args;
+            const { player_id, specified_pile } = args;
             const player = gameState.players[player_id];
             if (!player) return;
+
+            if (!specified_pile) specified_pile = 'hand_and_deck';
     
             const ideologiesToDiscard = [
                 ...player.hand.filter(c => c.card_type === CardType.IDEOLOGY),
@@ -1323,6 +1325,7 @@ const effectHandlers = {
     
             for (const card of ideologiesToDiscard) {
                 const source_pile = player.hand.some(c => c.instance_id === card.instance_id) ? 'hand' : 'deck';
+                if (!specified_pile.includes(source_pile)) continue;
                 effectsQueue.unshift([{ 
                     effect_type: EffectType.MOVE_CARD,
                     args: {
