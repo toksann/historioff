@@ -328,6 +328,7 @@ function App() {
             onProvideInput={handleProvideInput}
             onGameStateUpdate={setGameState}
             effectMonitor={enhancedLog.getEffectMonitor()}
+            enhancedLog={enhancedLog}
           />
           {playingGameResultAnimation && (
             // Animation is playing, potentially overlaying something

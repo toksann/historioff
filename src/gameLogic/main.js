@@ -85,7 +85,6 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         },
         current_turn: null,
         phase: GamePhase.START_TURN,
-        log: ["Game initialized."],
         effect_queue: [],
         awaiting_input: null,
         effects_to_skip: {},
@@ -144,7 +143,6 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
     
     const firstPlayerDebuff = -3;
     gameState.players[firstPlayerId].consciousness += firstPlayerDebuff;
-    gameState.log.push(`[${gameState.players[firstPlayerId].name}] が先攻です。意識に ${firstPlayerDebuff} の影響を受けます。`);
     
     gameState.game_log.push({
         id: `game_start_${Date.now()}`,
@@ -302,8 +300,6 @@ export const startTurn = (gameState) => {
             },
             sourceCard: null // 特定のカードに紐づかないためnull
         });
-
-        draftState.log.push(`--- ${currentPlayer.name}のターン開始 (${turnOrder} ターン${roundNum}) ---`);
         
         if (!draftState.game_log) {
             draftState.game_log = [];

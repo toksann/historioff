@@ -1,27 +1,15 @@
-** ログを取ったときの状況 **
-- 場に「耐久値5の戦士」と「イデオロギー:アナーキズム」が配置されている状況で開始
-- 「耐久値5の戦士」を「接収」で手札に戻す。この時アナーキズムの効果で事象カードプレイ時に場の財の耐久値+1が働き、手札に戻す「耐久値5の戦士」は耐久値6になった状態で手札に戻った。
-- 手札に戻った戦士は本来の耐久値2に戻っていた。
-- 手札に戻った「戦士」を場に出すと、耐久値2のまま場に出た。この時「アナーキズム」効果で財カードプレイ時にカードを1枚引く効果が働き、手札に「啓蒙時代」が加わった。
-- その後、「技術革新」を場にあった「農民」に使い、この時再び「アナーキズム」の効果で事象カードプレイ時に場の財の耐久値+1が働く。
-- 「アナーキズム」の効果で手札に戻った後、出しなおした「戦士」に耐久値+1の効果が働くと、現在の耐久値2に+1で3“とはならず”、場にあったときの耐久値6に+1で7になっていた。
-
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '接収', destination: 'playing_event', maintain: false, initial_durability: undefined}
-effectHandler.js:845 耐久値バグ調査: リセットロジック実行前 {cardName: '接収', current_durability: undefined, template_durability: undefined}
-effectHandler.js:859 耐久値バグ調査: リセットロジック実行後 {cardName: '接収', current_durability: undefined}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '接収', destination: 'discard', maintain: false, initial_durability: undefined}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '戦士', destination: 'hand', maintain: false, initial_durability: 6}
-effectHandler.js:845 耐久値バグ調査: リセットロジック実行前 {cardName: '戦士', current_durability: 6, template_durability: 2}
-effectHandler.js:859 耐久値バグ調査: リセットロジック実行後 {cardName: '戦士', current_durability: 2}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '戦士', destination: 'field', maintain: false, initial_durability: 2}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '啓蒙時代', destination: 'hand', maintain: false, initial_durability: undefined}
-effectHandler.js:845 耐久値バグ調査: リセットロジック実行前 {cardName: '啓蒙時代', current_durability: undefined, template_durability: undefined}
-effectHandler.js:859 耐久値バグ調査: リセットロジック実行後 {cardName: '啓蒙時代', current_durability: undefined}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '職人', destination: 'field', maintain: false, initial_durability: 3}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '技術革新', destination: 'hand', maintain: false, initial_durability: undefined}
-effectHandler.js:845 耐久値バグ調査: リセットロジック実行前 {cardName: '技術革新', current_durability: undefined, template_durability: undefined}
-effectHandler.js:859 耐久値バグ調査: リセットロジック実行後 {cardName: '技術革新', current_durability: undefined}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '技術革新', destination: 'playing_event', maintain: false, initial_durability: undefined}
-effectHandler.js:845 耐久値バグ調査: リセットロジック実行前 {cardName: '技術革新', current_durability: undefined, template_durability: undefined}
-effectHandler.js:859 耐久値バグ調査: リセットロジック実行後 {cardName: '技術革新', current_durability: undefined}
-effectHandler.js:835 耐久値バグ調査: MOVE_CARD {cardName: '技術革新', destination: 'discard', maintain: false, initial_durability: undefined}
+Uncaught runtime errors:
+×
+ERROR
+Cannot read properties of undefined (reading 'bind')
+TypeError: Cannot read properties of undefined (reading 'bind')
+    at new LogEntryGenerator (http://localhost:3000/static/js/bundle.js:34921:54)
+    at ./src/gameLogic/effectHandler.js (http://localhost:3000/static/js/bundle.js:37059:27)
+    at options.factory (http://localhost:3000/static/js/bundle.js:42217:30)
+    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:41572:32)
+    at fn (http://localhost:3000/static/js/bundle.js:41833:21)
+    at hotRequire (http://localhost:3000/static/js/bundle.js:42200:47)
+    at ./src/gameLogic/main.js (http://localhost:3000/static/js/bundle.js:40096:75)
+    at options.factory (http://localhost:3000/static/js/bundle.js:42217:30)
+    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:41572:32)
+    at fn (http://localhost:3000/static/js/bundle.js:41833:21)

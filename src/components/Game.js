@@ -9,15 +9,13 @@ import GameInfo from './GameInfo.js';
 import GameLogOverlay from './GameLogOverlay.js';
 import NPCController from './NPCController.js';
 import RulesOverlay from './overlays/RulesOverlay.js';
-import useEnhancedLog from '../hooks/useEnhancedLog.js';
 import useAnimationManager from '../hooks/useAnimationManager.js';
 import usePresentedCards from '../hooks/usePresentedCards.js'; // 新しいフックをインポート
 import '../App.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
-//import { startTurn } from '../gameLogic/main.js';
 import { produce } from 'immer'; // immerをインポート
 
-const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpdate, effectMonitor }) => {
+const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpdate, effectMonitor, enhancedLog }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [actionMenuCard, setActionMenuCard] = useState(null);
     const [showGameLog, setShowGameLog] = useState(false);
@@ -25,9 +23,6 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
     
     const humanPlayer = gameState?.players?.[HUMAN_PLAYER_ID];
     const npcPlayer = gameState?.players?.[NPC_PLAYER_ID];
-
-    // 強化されたログシステムを初期化（常に監視）
-    const enhancedLog = useEnhancedLog(gameState);
     
     // 新しい演出システムを初期化
     const {
@@ -328,11 +323,11 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
             {/* ゲームログオーバーレイ */}
             {showGameLog && (
                 <>
-                    {console.log('DEBUG: Game.js passing logEntries to GameLogOverlay:', enhancedLog.enhancedEntries)}
+                    {console.log('DEBUG: Game.js passing logEntries to GameLogOverlay:', enhancedLog.combinedLog)}
                     <GameLogOverlay
                         gameState={gameState}
-                        logEntries={enhancedLog.enhancedEntries} // Pass enhancedEntries directly
-                        getFilteredEntries={enhancedLog.getFilteredEntries} // Pass getFilteredEntries directly
+                        logEntries={enhancedLog.combinedLog} 
+                        getFilteredEntries={enhancedLog.getFilteredEntries} 
                         onClose={() => setShowGameLog(false)}
                     />
                 </>

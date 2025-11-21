@@ -19,6 +19,8 @@ class LogEntryGenerator {
             MODIFY_SCALE_RESERVE: this.formatScaleChange.bind(this),
             MODIFY_CONSCIOUSNESS: this.formatConsciousnessChange.bind(this),
             MODIFY_SCALE: this.formatScaleChange.bind(this),
+            SET_CONSCIOUSNESS: this.formatSetConsciousness.bind(this),
+            SET_SCALE: this.formatSetScale.bind(this),
             
             // 実際の変化結果（補正後の値）
             CONSCIOUSNESS_CHANGED: this.formatActualConsciousnessChange.bind(this),
@@ -266,6 +268,64 @@ class LogEntryGenerator {
             };
         } catch (error) {
             console.error('[LogEntryGenerator] Error formatting scale change:', error);
+            return null;
+        }
+    }
+
+    /**
+     * 意識設定のフォーマッター
+     */
+    formatSetConsciousness(args, sourceCard, gameState) {
+        try {
+            const player = gameState.players[args.player_id];
+            if (!player) return null;
+
+            const amount = args.amount;
+            const playerName = player.name;
+            
+            const description = `意識を${amount}に設定`;
+
+            return {
+                playerName,
+                sourceCard: this.formatCardSource(sourceCard, gameState),
+                description,
+                details: {
+                    resource: 'consciousness',
+                    amount,
+                    newValue: amount
+                }
+            };
+        } catch (error) {
+            console.error('[LogEntryGenerator] Error formatting set consciousness:', error);
+            return null;
+        }
+    }
+
+    /**
+     * 規模設定のフォーマッター
+     */
+    formatSetScale(args, sourceCard, gameState) {
+        try {
+            const player = gameState.players[args.player_id];
+            if (!player) return null;
+
+            const amount = args.amount;
+            const playerName = player.name;
+            
+            const description = `規模を${amount}に設定`;
+
+            return {
+                playerName,
+                sourceCard: this.formatCardSource(sourceCard, gameState),
+                description,
+                details: {
+                    resource: 'scale',
+                    amount,
+                    newValue: amount
+                }
+            };
+        } catch (error) {
+            console.error('[LogEntryGenerator] Error formatting set scale:', error);
             return null;
         }
     }
@@ -592,6 +652,7 @@ class LogEntryGenerator {
             'deck': 'デッキ',
             'discard': '捨て札',
             'ideology': '場',
+            'playing_event': '手元',
             'game': 'ゲーム'
         };
         

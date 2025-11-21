@@ -3,6 +3,10 @@ import { createCardInstance, shuffle } from './gameUtils.js';
 import { PlayerId, TriggerType, CardType, EffectType } from './constants.js';
 import { checkCardReaction } from './card.js';
 import { _updateGameOverState } from './gameOver.js';
+import LogEntryGenerator from './LogEntryGenerator.js'; // Import LogEntryGenerator
+
+const logEntryGenerator = new LogEntryGenerator(); // Instantiate LogEntryGenerator globally
+let globalEffectLogger = null;
 
 const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget, correctDirection, amount) => {
     const player = gameState.players[playerId];
@@ -1308,11 +1312,10 @@ const effectHandlers = {
         }
     },
         [EffectType.PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-            const { player_id, specified_pile } = args;
+            const { player_id} = args;
             const player = gameState.players[player_id];
             if (!player) return;
 
-            if (!specified_pile) specified_pile = 'hand_and_deck';
     
             const ideologiesToDiscard = [
                 ...player.hand.filter(c => c.card_type === CardType.IDEOLOGY),
@@ -1325,7 +1328,6 @@ const effectHandlers = {
     
             for (const card of ideologiesToDiscard) {
                 const source_pile = player.hand.some(c => c.instance_id === card.instance_id) ? 'hand' : 'deck';
-                if (!specified_pile.includes(source_pile)) continue;
                 effectsQueue.unshift([{ 
                     effect_type: EffectType.MOVE_CARD,
                     args: {
@@ -2069,12 +2071,96 @@ const checkAllReactions = (processedEffect, sourceCard, gameState) => {
     return newEffects;
 };
 
-// グローバルなエフェクトログ記録システム
-let globalEffectLogger = null;
-
 export const setEffectLogger = (logger) => {
     globalEffectLogger = logger;
     console.log('🎬ANIM [effectHandler] EffectLogger has been set.');
+};
+
+/**
+ * エフェクトをログに記録すべきかどうかを判定する内部ヘルパー関数
+ * @param {Object} effect - エフェクト
+ * @returns {boolean} ログに記録すべきかどうか
+ */
+const shouldLogEffectInternal = (effect) => {
+    if (!effect || !effect.effect_type) return false;
+
+    // 除外するエフェクト（内部処理や重複ログ防止）
+    const excludedEffects = [
+        // アニメーションキューで処理されるため除外
+        'TURN_START', 'TURN_END', 'GAME_RESULT', 'TURN_ORDER_DECISION', 
+        'LIMIT_WARNING', 'EFFECT_NULLIFIED',
+
+        // 内部処理のみ
+        'ADD_MODIFY_PARAMETER_CORRECTION', 'REMOVE_MODIFY_PARAMETER_CORRECTION', 'CLEAR_MODIFY_PARAMETER_CORRECTIONS',
+        'TRIGGER_EFFECT', 'CHECK_REACTION', 'CHECK_GAME_OVER',
+        'MODIFY_CONSCIOUSNESS_RESERVE', 'MODIFY_SCALE_RESERVE', 'MODIFY_CARD_DURABILITY_RESERVE', // RESERVEは中間処理
+        'MODIFY_CONSCIOUSNESS', 'MODIFY_SCALE', 'MODIFY_CARD_DURABILITY', // 直接的な変更は結果のxxx_CHANGEDでログ
+        'SKIP_EFFECT',
+        
+        // トリガー系は具体的な効果が処理された際にログに記録されるため、トリガー自体は除外
+        TriggerType.START_TURN, TriggerType.END_TURN_OWNER, TriggerType.END_TURN_OPPONENT,
+        TriggerType.PLAY_EVENT, TriggerType.PLAY_EVENT_OWNER, TriggerType.PLAY_EVENT_OPPONENT, TriggerType.PLAY_EVENT_THIS,
+        TriggerType.PLAYER_PLAY_CARD_ACTION, TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT,
+        TriggerType.CARD_ADDED_TO_HAND_THIS, TriggerType.CARD_ADDED_TO_HAND, TriggerType.CARD_ADDED_TO_HAND_OWNER,
+        TriggerType.CARD_DRAWN_THIS, TriggerType.CARD_DRAWN, TriggerType.CARD_DRAWN_OWNER,
+        TriggerType.CARD_PLACED_THIS, TriggerType.CARD_PLACED, TriggerType.CARD_PLACED_OWNER, TriggerType.CARD_PLACED_OPPONENT,
+        TriggerType.CARD_DISCARDED_THIS, TriggerType.CARD_DISCARDED, TriggerType.CARD_DISCARDED_OWNER,
+        TriggerType.DAMAGE_THIS,
+        TriggerType.WEALTH_DURABILITY_ZERO, TriggerType.WEALTH_DURABILITY_ZERO_OWNER, TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT, TriggerType.WEALTH_DURABILITY_ZERO_THIS,
+        TriggerType.MODIFY_CONSCIOUSNESS, TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER, TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT, TriggerType.MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER,
+        TriggerType.MODIFY_SCALE_DECREASE_RESERVE_OWNER, TriggerType.MODIFY_SCALE_INCREASE_RESERVE_OWNER,
+        TriggerType.MODIFY_CARD_DURABILITY_DECREASE_RESERVE_OWNER, TriggerType.MODIFY_CARD_DURABILITY_INCREASE_RESERVE_OWNER,
+        TriggerType.SUCCESS_PROCESS, TriggerType.FAILED_PROCESS,
+    ];
+
+    if (excludedEffects.includes(effect.effect_type)) {
+        return false;
+    }
+    
+    // LogEntryGeneratorがフォーマッタを持つエフェクトはログ対象とする
+    const hasFormatter = logEntryGenerator.getAvailableFormatters().includes(effect.effect_type);
+    if (hasFormatter) {
+        return true;
+    }
+
+    // デフォルトでログに含めるべき重要なエフェクトタイプ
+    const explicitlyIncludedEffects = [
+        'PLAYER_ACTION',
+        'ADD_CARD_TO_GAME',
+        'REMOVE_CARD_FROM_GAME',
+        'PROCESS_CARD_OPERATION',
+        'PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH',
+        'PROCESS_CHOOSE_AND_DISCARD_IDEOLOGY',
+        'PROCESS_DISCARD_ALL_HAND_WEALTH_CARDS_AND_DRAW',
+        'PROCESS_MOVE_HAND_WEALTH_TO_DECK_AND_DRAW',
+        'PROCESS_EXPOSE_CARD_BY_TYPE',
+        'PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK',
+        'PROCESS_SET_ALL_SCALE_TO_ZERO_AND_REDUCE_CONSCIOUSNESS',
+        'PROCESS_MONEY_CARD_PLACEMENT_EFFECT',
+        'PROCESS_MONEY_CARD_TURN_START_EFFECT',
+        'PROCESS_DISCARD_ALL_HAND_IDEOLOGY_AND_ADD_MONEY',
+        'PROCESS_MODIFY_MONEY_DURABILITY_RANDOM',
+        'PROCESS_REDUCE_MONEY_DURABILITY_AND_GAIN_SCALE',
+        'PROCESS_ADD_MONEY_TOKEN_BASED_ON_CARDS_PLAYED',
+        'PROCESS_MONEY_DURABILITY_BASED_COUNT_MODIFY_CARD_DURABILITY',
+        'PROCESS_ADD_CARDS_BASED_ON_DISCARDED_COUNT',
+        'PROCESS_ADD_CARD_CONDITIONAL',
+        'PROCESS_ADD_CHOICE_CARD_TO_HAND',
+        'PROCESS_CHOOSE_AND_MOVE_CARD_FROM_PILE',
+        'PROCESS_CHOOSE_AND_MODIFY_DURABILITY_TO_WEALTH',
+        'PROCESS_RETURN_LARGEST_REQUIRED_SCALE_CARD_TO_DECK',
+        'PROCESS_ALL_WEALTH_BOOST',
+        'PROCESS_CHOOSE_AND_BOUNCE_TO_WEALTH',
+        'PROCESS_DRAW_RANDOM_CARD_AND_MODIFY_REQUIRED_SCALE',
+        'PROCESS_COUNTER_ATTACK',
+        'REORDER_FIELD_CARDS',
+    ];
+    
+    if (explicitlyIncludedEffects.includes(effect.effect_type)) {
+        return true;
+    }
+    
+    return false;
 };
 
 export const processEffects = (gameState) => {
@@ -2122,6 +2208,19 @@ export const processEffects = (gameState) => {
             const reactionEffects = checkAllReactions(effect, sourceCard, draftState);
             if (reactionEffects.length > 0) {
                 draftState.effect_queue.unshift(...reactionEffects);
+            }
+
+            // Log the effect AFTER it has been processed and potential reactions have been queued
+            if (shouldLogEffectInternal(effect)) {
+                const logEntry = logEntryGenerator.generateEntry(
+                    effect.effect_type,
+                    effect.args || {},
+                    sourceCard, // sourceCard can be null for system effects
+                    draftState
+                );
+                if (logEntry) {
+                    draftState.game_log.push(logEntry);
+                }
             }
 
             // Check for game over state at the end of each effect processing cycle
