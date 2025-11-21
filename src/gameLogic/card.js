@@ -81,6 +81,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     const reactionEffects = [];
 
     // Refactored guard clauses for card location
+    // Check in Field
     const isFieldCard = card.card_type === CardType.WEALTH || card.card_type === CardType.IDEOLOGY;
     const isOnField = card.location === 'field' || card.location === 'ideology';
 
@@ -97,6 +98,17 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         }
         else {
             return []; // 上記の例外以外はガード
+        }
+    }
+
+    // Check in Playing Event
+    const isEventCard = card.card_type === CardType.EVENT;
+    const isOnPlayingEvent = card.location === 'playing_event';
+
+    if (isEventCard && !isOnPlayingEvent) {
+        if (card.name === "布教" && card.location === 'hand') {
+        } else {
+            return []; // イベントカードがプレイ中でない場合、効果を発動させない
         }
     }
 
@@ -124,7 +136,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         if (!conditionMet) {
             continue; 
         }
-
         let current_args = { ...cardEffect.args };
 
         if (card.name === '帝国主義' && triggeredEffectType === TriggerType.END_TURN_OWNER) {
