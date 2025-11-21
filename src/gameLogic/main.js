@@ -182,22 +182,6 @@ export const playCard = (gameState, playerId, cardInstanceId, options = {}) => {
             return;
         }
 
-        if (card.name !== 'マネー' && card.card_type === CardType.WEALTH && player.field.length >= player.field_limit) {
-            // presentationControllerへの直接参照を削除し、animation_queueにデータを追加
-            draftState.animation_queue.push({
-                effect: {
-                    effect_type: 'LIMIT_WARNING',
-                    args: {
-                        player_id: playerId,
-                        limit_type: 'field',
-                        message: '場の上限に達しているため配置できません'
-                    }
-                },
-                sourceCard: null // 特定のカードに紐づかないためnull
-            });
-            return;
-        }
-
         const playerActionEffect = {
             effect_type: EffectType.PLAYER_ACTION,
             args: {

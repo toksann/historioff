@@ -93,6 +93,35 @@ const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard
     return true; // 手札に追加可能
 };
 
+const enforceFieldLimit = (gameState, player, cardToMove, effectsQueue, sourceCard) => {
+    if (player.field.length >= player.field_limit && cardToMove.card_type === CardType.WEALTH) {
+        // Queue a LIMIT_WARNING effect to be handled by the PresentationController
+        effectsQueue.push([{ 
+            effect_type: 'LIMIT_WARNING',
+            args: {
+                player_id: player.id,
+                limit_type: 'field',
+                message: '場の上限に達しているため配置できません'
+            }
+        }, sourceCard]);
+
+        // Divert the card to the discard pile instead of placing it on the field
+        effectsQueue.push([{
+            effect_type: EffectType.MOVE_CARD,
+            args: {
+                player_id: player.id,
+                card_id: cardToMove.instance_id,
+                card_to_move: cardToMove,
+                source_pile: cardToMove.location, // Use its current location as source
+                destination_pile: 'discard'
+            }
+        }, sourceCard]);
+        
+        return false; // Indicates the move to the field should not proceed
+    }
+    return true; // Indicates the card can be placed on the field
+};
+
 const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
     if (Array.isArray(targetPlayerIdStr)) {
         return targetPlayerIdStr.map(id => gameState.players[id]);
@@ -951,21 +980,6 @@ const effectHandlers = {
         };
 
         if (destination_pile === 'field' || destination_pile === 'ideology') {
-            // Add to animation queue for visual effect
-            gameState.animation_queue.push({
-                effect: {
-                    effect_type: 'MOVE_CARD', // Use a generic CARD_PLACED for animation
-                    args: {
-                        player_id: ownerPlayerId,
-                        card_id: cardToMove.instance_id,
-                        card_type: cardToMove.card_type,
-                        source_pile: 'hand',
-                        destination_pile: destination_pile,
-                    }
-                },
-                sourceCard: cardToMove
-            });
-
             addEffect(TriggerType.CARD_PLACED_THIS, ownerEventArgs);
             addEffect(TriggerType.CARD_PLACED, ownerEventArgs);
             addEffect(TriggerType.CARD_PLACED_OWNER, ownerEventArgs);
@@ -997,20 +1011,6 @@ const effectHandlers = {
                 addEffect(TriggerType.CARD_DRAWN, ownerEventArgs);
                 addEffect(TriggerType.CARD_DRAWN_OWNER, ownerEventArgs);
 
-                // Add to animation queue for visual effect
-                gameState.animation_queue.push({
-                    effect: {
-                        effect_type: EffectType.DRAW_CARD, // Use DRAW_CARD for animation
-                        args: {
-                            player_id: ownerPlayerId,
-                            card_id: cardToMove.instance_id,
-                            card_type: cardToMove.card_type,
-                            source_pile: source_pile,
-                            destination_pile: destination_pile,
-                        }
-                    },
-                    sourceCard: cardToMove
-                });
             }
         } 
         

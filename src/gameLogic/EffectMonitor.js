@@ -15,12 +15,6 @@ export class EffectMonitor {
      * @param {Object} sourceCard - 発生源カード
      */
     recordEffect(gameState, effect, sourceCard) {
-        // MOVE_CARD is handled by direct pushes to the animation_queue in its handler.
-        // Notifying here would cause duplicate animations.
-        if (effect.effect_type === 'MOVE_CARD') {
-            return;
-        }
-
         this.pendingEffects = true;
         
         // 演出システムに通知する前に、effectとsourceCardをディープクローンする

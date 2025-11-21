@@ -654,7 +654,7 @@ class LogEntryGenerator {
             'discard_pile': '捨て札',
             'ideology': '場',
             'playing_event': '手元',
-            'game': 'ゲーム'
+            'game_source': '不定の未来'
         };
         
         return translations[zoneName] || zoneName;
