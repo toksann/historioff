@@ -651,6 +651,7 @@ class LogEntryGenerator {
             'field': '場',
             'deck': 'デッキ',
             'discard': '捨て札',
+            'discard_pile': '捨て札',
             'ideology': '場',
             'playing_event': '手元',
             'game': 'ゲーム'

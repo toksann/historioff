@@ -350,98 +350,57 @@ const effectHandlers = {
         const player = gameState.players[player_id];
         const cardTemplate = gameState.cardDefs[card_template_name];
 
-        if (player && cardTemplate) {
-            if (condition_field_wealth_limit !== undefined) {
-                const limit = condition_field_wealth_limit > 0 ? condition_field_wealth_limit : player.field_limit;
-                const wealthOnField = player.field.filter(c => c.card_type === CardType.WEALTH).length;
+        if (!player || !cardTemplate) return;
 
-                if (wealthOnField >= limit) {
-                    return;
-                }
+        if (condition_field_wealth_limit !== undefined) {
+            const limit = condition_field_wealth_limit > 0 ? condition_field_wealth_limit : player.field_limit;
+            const wealthOnField = player.field.filter(c => c.card_type === CardType.WEALTH).length;
+
+            if (wealthOnField >= limit) {
+                return;
             }
+        }
 
-            if (typeof initial_durability === 'string') {
-
-                if (initial_durability === 'self_all_wealth_on_field') {
-                    initial_durability = player.field
-                        .filter(c => c.card_type === CardType.WEALTH)
-                        .reduce((sum, card) => sum + (Math.max(card.current_durability, 0)), 0);
-                }
-                initial_durability = Math.max(0, initial_durability);
-            } else if (args.initial_durability_based_on_field_wealth_total) { // Added this block
+        if (typeof initial_durability === 'string') {
+            if (initial_durability === 'self_all_wealth_on_field') {
                 initial_durability = player.field
                     .filter(c => c.card_type === CardType.WEALTH)
-                    .reduce((sum, card) => sum + (card.current_durability || 0), 0);
-                initial_durability = Math.max(0, initial_durability);
+                    .reduce((sum, card) => sum + (Math.max(card.current_durability, 0)), 0);
             }
-            initial_durability = initial_durability === 0 ? null : initial_durability;
+            initial_durability = Math.max(0, initial_durability);
+        } else if (args.initial_durability_based_on_field_wealth_total) {
+            initial_durability = player.field
+                .filter(c => c.card_type === CardType.WEALTH)
+                .reduce((sum, card) => sum + (card.current_durability || 0), 0);
+            initial_durability = Math.max(0, initial_durability);
+        }
+        initial_durability = initial_durability === 0 ? null : initial_durability;
 
-            for (let i = 0; i < count; i++) {
-                const newCard = createCardInstance(cardTemplate, player_id);
-                if (initial_durability === null && cardTemplate.card_type === CardType.WEALTH) break;
-                if (initial_durability !== undefined) {
-                    newCard.durability = initial_durability;
-                    newCard.current_durability = initial_durability;
-                }
-                // Register the new card in all_card_instances
-                gameState.all_card_instances[newCard.instance_id] = newCard;
-                
-                if (destination_pile === 'field') {
+        for (let i = 0; i < count; i++) {
+            const newCard = createCardInstance(cardTemplate, player_id);
+            if (initial_durability === null && cardTemplate.card_type === CardType.WEALTH) continue; // 0耐久性の財は生成しない
 
-                    if (newCard.card_type === CardType.IDEOLOGY) {
-                        if (player.ideology) {
-                            player.ideology.location = 'discard';
-                            player.discard.push(player.ideology);
-                        }
-
-                        player.ideology = newCard;
-                        newCard.location = 'field'; 
-                    } else {
-                        player.field.push(newCard);
-                        newCard.location = 'field';
-                    }
-
-                } else if (player[destination_pile] && Array.isArray(player[destination_pile])) {
-                    if (destination_pile === 'deck') {
-                        if (position === 'top') {
-                            player.deck.unshift(newCard);
-                        }
-                        else { 
-                            player.deck.push(newCard);
-                        }
-                    } else {
-                        // Check hand limit before adding to hand
-                        if (destination_pile === 'hand') {
-                            if (!enforceHandLimit(gameState, player, newCard, effectsQueue, sourceCard)) {
-                                // Card was moved to discard due to hand limit, skip adding to hand
-                                continue;
-                            }
-                        }
-                        player[destination_pile].push(newCard);
-                    }
-                    newCard.location = destination_pile;
-
-                    const eventArgs = {
-                        player_id: newCard.owner,
-                        target_player_id: newCard.owner,
-                        card_id: newCard.instance_id,
-                        target_card_id: newCard.instance_id,
-                        card_type: newCard.card_type,
-                        source_pile: 'game_source',
-                        destination_pile: destination_pile,
-                    };
-
-                    if (destination_pile === 'hand') {
-                        const addEffect = (type, args) => {
-                            effectsQueue.unshift([{ effect_type: type, args: args }, sourceCard || newCard]);
-                        };
-                        addEffect(TriggerType.CARD_ADDED_TO_HAND_THIS, eventArgs);
-                        addEffect(TriggerType.CARD_ADDED_TO_HAND, eventArgs);
-                        addEffect(TriggerType.CARD_ADDED_TO_HAND_OWNER, eventArgs);
-                    }
-                } else {
-                }
+            if (initial_durability !== undefined && initial_durability !== null) {
+                newCard.durability = initial_durability;
+                newCard.current_durability = initial_durability;
             }
+            
+            // Register the new card in all_card_instances
+            gameState.all_card_instances[newCard.instance_id] = newCard;
+
+            // Delegate the actual card movement to the MOVE_CARD effect
+            effectsQueue.unshift([{
+                effect_type: EffectType.MOVE_CARD,
+                args: {
+                    player_id: player_id,
+                    card_id: newCard.instance_id,
+                    card_to_move: newCard,
+                    source_pile: 'game_source', // Conceptual pile for newly created cards
+                    destination_pile: destination_pile,
+                    position: position, // For deck placement
+                    source_card_id: sourceCard ? sourceCard.instance_id : null
+                }
+            }, sourceCard]);
         }
     },
 
