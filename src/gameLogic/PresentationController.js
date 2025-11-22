@@ -411,9 +411,7 @@ class PresentationController {
                     
                     await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
                 } else {
-                    console.warn('🔥ANIM_DEBUG [Presentation] Card element still not found after delay:', cardId);
-                    // 利用可能なカード要素を表示
-                    
+
                 }
             }, 50); // より短い遅延
         }
@@ -442,8 +440,6 @@ class PresentationController {
                     
                     await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
                 } else {
-                    console.warn('🔥ANIM_DEBUG [Presentation] Ideology card element still not found after delay:', cardId);
-                    // 利用可能なカード要素を表示
                     
                 }
             }, 50); // より短い遅延

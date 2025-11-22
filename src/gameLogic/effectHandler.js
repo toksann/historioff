@@ -782,7 +782,8 @@ const effectHandlers = {
     },
 
     [EffectType.MOVE_CARD]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        let { player_id, card_id, source_pile, destination_pile, maintain = false , card_to_move = null } = args;
+        let { player_id, card_id, source_pile, destination_pile, maintain = false } = args; // card_to_move removed from destructuring
+        let cardToMove = args.card_to_move; // Declare and initialize cardToMove once
 
         const destination_player_id = args.target_player_id || player_id;
         const destination_player = gameState.players[destination_player_id];
@@ -794,10 +795,17 @@ const effectHandlers = {
             const player = gameState.players[player_id];
             if (player && player.deck.length > 0) {
                 const drawnCard = player.deck.shift();
-                const newArgs = { ...args, card_id: drawnCard.instance_id, card_to_move: drawnCard };
-                effectsQueue.unshift([{ effect_type: EffectType.MOVE_CARD, args: newArgs }, sourceCard]);
+                // Update the current effect's arguments with the actual drawn card's info
+                args.card_id = drawnCard.instance_id;
+                card_id = drawnCard.instance_id; // Also update local card_id
+                cardToMove = drawnCard;
+                // DO NOT return here, continue processing with the actual drawn card
+            } else {
+                // If deck is empty, this draw effect has no target, so return early.
+                // Log a warning or handle gracefully if this state is unexpected.
+                console.warn(`[EffectHandler] Attempted to draw from an empty deck for player ${player_id}.`);
+                return; 
             }
-            return;
         }
 
         if (source_pile === 'discard_pile') source_pile = 'discard';
@@ -808,7 +816,6 @@ const effectHandlers = {
             return;
         }
 
-        let cardToMove = card_to_move;
         let originalLocation = null;
 
         // Find and remove the card from its source pile in one go.
@@ -844,7 +851,7 @@ const effectHandlers = {
 
         if (!cardToMove) {
             // If card is still not found, it might have been passed directly.
-            cardToMove = card_to_move;
+            // cardToMove is already initialized with args.card_to_move at the top.
         }
         
         if (!cardToMove) {

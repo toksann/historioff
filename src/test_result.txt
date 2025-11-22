@@ -1,15 +1,32 @@
-Uncaught runtime errors:
+Compiled with problems:
 ×
 ERROR
-Cannot read properties of undefined (reading 'bind')
-TypeError: Cannot read properties of undefined (reading 'bind')
-    at new LogEntryGenerator (http://localhost:3000/static/js/bundle.js:34921:54)
-    at ./src/gameLogic/effectHandler.js (http://localhost:3000/static/js/bundle.js:37059:27)
-    at options.factory (http://localhost:3000/static/js/bundle.js:42217:30)
-    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:41572:32)
-    at fn (http://localhost:3000/static/js/bundle.js:41833:21)
-    at hotRequire (http://localhost:3000/static/js/bundle.js:42200:47)
-    at ./src/gameLogic/main.js (http://localhost:3000/static/js/bundle.js:40096:75)
-    at options.factory (http://localhost:3000/static/js/bundle.js:42217:30)
-    at __webpack_require__ (http://localhost:3000/static/js/bundle.js:41572:32)
-    at fn (http://localhost:3000/static/js/bundle.js:41833:21)
+[eslint] 
+src\gameLogic\effectHandler.js
+  Line 854:26:  'card_to_move' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
+
+
+
+WARNING in [eslint]
+src\gameLogic\PresentationController.js
+  Line 155:25:  'amount' is assigned a value but never used        no-unused-vars
+  Line 205:17:  'cardId' is assigned a value but never used        no-unused-vars
+  Line 205:25:  'from' is assigned a value but never used          no-unused-vars
+  Line 205:31:  'to' is assigned a value but never used            no-unused-vars
+  Line 218:17:  'playerId' is assigned a value but never used      no-unused-vars
+  Line 218:27:  'resourceType' is assigned a value but never used  no-unused-vars
+  Line 218:41:  'amount' is assigned a value but never used        no-unused-vars
+  Line 393:19:  'playerId' is assigned a value but never used      no-unused-vars
+  Line 422:19:  'playerId' is assigned a value but never used      no-unused-vars
+  Line 482:15:  'changeAmount' is assigned a value but never used  no-unused-vars
+  Line 487:19:  'result' is assigned a value but never used        no-unused-vars
+  Line 547:15:  'changeAmount' is assigned a value but never used  no-unused-vars
+
+src\gameLogic\effectHandler.js
+  Line 96:7:    'enforceFieldLimit' is assigned a value but never used                                       no-unused-vars
+  Line 236:23:  Function declared in a loop contains unsafe references to variable(s) 'cardFoundAndUpdated'  no-loop-func
+  Line 801:17:  'cardToMove' was used before it was defined                                                  no-use-before-define
+
+webpack compiled with 1 warning
