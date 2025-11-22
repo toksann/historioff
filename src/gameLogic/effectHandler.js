@@ -41,6 +41,7 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
             }
         }
     });
+    player.modify_parameter_corrections.length = 0; // Clear all corrections; will re-add unused ones later
 
     if (usedCorrections.length === 0) {
         return amount;

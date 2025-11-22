@@ -74,7 +74,7 @@
 | 現実主義 | test_realism_effect.js | 成功 | 本番でもOK |
 | 共同体主義 | test_communitarianism_effect.js | 成功 | 本番でもOK |
 | コスモポリタニズム | test_cosmopolitanism_effect.js | 成功 | 本番でもOK |
-| 思想の弾圧 | test_suppression_of_thought_effect.js | 成功 | 本番でもOK?ログの復活で改めて確認が必要かも |
+| 思想の弾圧 | test_suppression_of_thought_effect.js | 成功 | 本番でもOK |
 | 汎民族主義 | test_pan_nationalism_effect.js | 成功 | 本番でもOK |
 | 分離主義 | test_separatism_effect.js | 成功 | 本番でもOK |
 | 不干渉主義 | test_non_interventionism_effect.js | 成功 | 本番でもOK |
@@ -85,14 +85,14 @@
 | 災害多発地域 | test_disaster_prone_area_effect.js | 成功 | 本番でもOK |
 | 官僚主義 | test_bureaucracy_effect.js | 成功 | 本番でもOK |
 | 保守主義 | test_conservatism_effect.js | 成功 | 本番でもOK |
-| 環境主義 | test_environmentalism_effect.js | 成功(本番でバグ) | 孤立主義と同じ現象 |
+| 環境主義 | test_environmentalism_effect.js | 成功 | 本番でもOK |
 | リージョナリズム | test_regionalism_effect.js | 成功 | 本番でもOK |
 | 社会主義 | test_socialism_effect.js | 成功 | 本番でもOK |
 | アナーキズム | test_anarchism_effect.js | 成功 | 本番でもOK |
 | 結束主義 | test_solidarism_effect.js | 成功 | 本番でもOK |
 | 記憶の浄化 | test_memory_purification_effect.js | 成功 | 本番でもOK |
 | 軍国主義 | test_militarism_effect.js | 成功 | 本番でもOK |
-| 孤立主義 | test_isolationism_effect.js | 成功(本番でバグ) | 意識の減少効果を無効化できても自爆効果が発動してしまう(自爆大丈夫なときもあるぞ？)。& 財へのダメージ軽減が設定値より高く働きすぎている？(多分補正が消費されずに残っているから段々効果が高くなっちゃってる) |
+| 孤立主義 | test_isolationism_effect.js | 成功(本番でバグ) | 意識の減少効果を無効化できても自爆効果が発動してしまう(自爆大丈夫なときもあるぞ？)。 |
 | グローバリズム | test_globalism_effect.js | 成功 | 本番でもOK |
 | リバタリアニズム | test_libertarianism_effect.js | 成功 | 本番でもOK |
 | 共産主義 | test_communism_effect.js | 成功 | 本番でもOK |
@@ -146,14 +146,6 @@
     *   **分析**: `MOVE_CARD`エフェクトの引数（移動元 `from`, 移動先 `to`）の指定が誤っている、あるいはカードを選択するロジックにバグがある可能性が高いです。
     *   **方針**: `MOVE_CARD`エフェクトを呼び出している箇所の引数を精査します。特に`ポピュリズム`のように複数の問題が複合しているカードは、一つ一つの効果を個別のテストケースとして切り分け、順にデバッグ・修正を行います。
 
-7.  **計算・制約に関するバグ**
-    *   **対象カード**: `孤立主義`, `環境主義`  →　要再検証
-    *   **現象**:
-        *   `孤立主義`/`環境主義`: ダメージ軽減効果が過剰に累積する、特定の条件下で自爆効果が誤発動する。
-    *   **分析**:
-        *   `孤立主義`/`環境主義`: 効果の補正値がターン終了時にリセットされていない可能性があります。また、耐久値変化では対応したが、意識&規模では予約効果の処理を予約に絞り、それ以外を本体に移す対応をしていないことも影響がある可能性が疑われる。
-    *   **方針**:
-        *   `孤立主義`/`環境主義`: ターン終了時に効果の補正値をリセットする処理が正しく呼ばれているか確認します。
 
 ### カテゴリ3: 演出・UXの改善
 
