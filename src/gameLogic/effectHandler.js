@@ -1075,7 +1075,9 @@ const effectHandlers = {
                 }
                 // Exclude the card that triggered this operation, if applicable (e.g. a played event card)
                 if (args.triggering_effect_args && args.triggering_effect_args.card_id) {
-                    availableCards = availableCards.filter(c => c.instance_id !== args.triggering_effect_args.card_id);
+                    if (!source_piles.includes('hand')) {
+                        availableCards = availableCards.filter(c => c.instance_id !== args.triggering_effect_args.card_id);
+                    }
                 }
                 
                 const selected = _selectCards(gameState, player, availableCards, selection_method, count, sourceCard, args);

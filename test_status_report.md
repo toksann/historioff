@@ -16,7 +16,7 @@
 | カード名 | テストファイル | テストステータス | 備考 |
 |---|---|---|---|
 | 戦士 | test_warrior_effect.js | 成功 | 本番でもOK |
-| 山 | test_mountain_effect.js | 成功 | 本番でもOK |
+| 山 | test_mountain_effect.js | 成功(本番でバグ) | ハードコーディングしていた「自分の場にある「山」以外の財カードはダメージを受けなくなる。」の処理がなくなったため効果が発揮されない(ADD_MODIFY_PARAMETER_CORRECTIONにこれを実現できる仕組みでも追加するべきだろうか？) |
 | 砦 | test_fortress_effect.js | 成功 | 本番でもOK |
 | 聖なる領域 | test_sacred_domain_effect.js | 成功 | 本番でもOK |
 | 交易路 | test_trade_route_effect.js | 成功 | 本番でもOK |
