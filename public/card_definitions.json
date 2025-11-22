@@ -1758,7 +1758,7 @@
         "name": "共同体主義",
         "card_type": "イデオロギー",
         "required_scale": 0,
-        "description": "配置時、捨て札の枚数だけ自分の意識をプラスする。自分のカードが捨て札になるたび、自分の意識+1。",
+        "description": "配置時、捨て札の枚数だけ自分の意識をプラスする。自分のカードが捨て札になるたび、自分の意識+1。このカードが捨て札になるとき自分の意識-50%。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -1775,6 +1775,16 @@
                     "args": {
                         "player_id": "self",
                         "amount": 1
+                    }
+                }
+            ],
+            "CARD_DISCARDED_THIS": [
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_percentage": -50,
+                        "round_down": true
                     }
                 }
             ]
