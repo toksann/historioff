@@ -94,7 +94,7 @@ class LogEntryGenerator {
 
             return {
                 playerName: player.name,
-                sourceCard: this.formatCardSource(card, gameState),
+                sourceCard: this.formatCardSource(sourceCard, gameState),
                 description,
                 details: {
                     cardType: card.card_type,
@@ -164,29 +164,31 @@ class LogEntryGenerator {
             
             const playerName = player.name;
             const sourceCardName = sourceCard?.name || 'システム';
+
+            const cardName = card.name;
             
             // NPCのドローは非表示
-            if (args.source_pile === 'deck' && args.destination_pile === 'hand') {
+            if (args.destination_pile !== 'field') {
                 const isNPC = args.player_id === 'PLAYER2'; // PLAYER2がNPC
                 if (isNPC) {
-                    return null; // NPCのドローは表示しない
+                    cardName = " ---- "; // 相手のカード名は表示しない
                 }
             }
 
             let description;
             if (args.source_pile === 'deck' && args.destination_pile === 'hand') {
-                description = `${card.name}をドロー`;
+                description = `${cardName}をドロー`;
             } else if (args.source_pile === 'hand' && args.destination_pile === 'field') {
-                description = `${card.name}を場に配置`;
+                description = `${cardName}を場に配置`;
             } else if (args.destination_pile === 'discard') {
-                description = `${card.name}を捨て札に`;
+                description = `${cardName}を捨て札に`;
             } else {
-                description = `${card.name}を${sourceZone}から${destZone}に移動`;
+                description = `${cardName}を${sourceZone}から${destZone}に移動`;
             }
 
             return {
                 playerName,
-                sourceCard: this.formatCardSource(card, gameState),
+                sourceCard: this.formatCardSource(sourceCard, gameState),
                 description,
                 details: {
                     cardName: card.name,

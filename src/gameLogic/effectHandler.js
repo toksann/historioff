@@ -893,7 +893,7 @@ const effectHandlers = {
 
         if (destination_pile === 'ideology' || (destination_pile === 'field' && cardToMove.card_type === CardType.IDEOLOGY)) {
             // Check for same-name ideology bonus before replacing
-            if (destination_player.ideology && 
+            if (destination_player.ideology &&
                 destination_player.ideology.instance_id !== cardToMove.instance_id &&
                 destination_player.ideology.name === cardToMove.name) {
                 // Same-name ideology placement bonus: +1 consciousness
@@ -906,36 +906,20 @@ const effectHandlers = {
                 }, cardToMove]);
             }
             
-            // If there's an old ideology and we haven't handled its replacement yet
-            if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id && !args.is_after_replacement) {
-                // To correctly handle replacement, we need to sequence two MOVE_CARD effects.
-                
-                // 2. Re-queue this MOVE_CARD effect to run *after* the old one is removed.
-                //    This is queued first, so it runs second.
-                const newArgs = { ...args, card_to_move: cardToMove, is_after_replacement: true };
-                effectsQueue.unshift([{
-                    effect_type: EffectType.MOVE_CARD,
-                    args: newArgs
-                }, sourceCard]);
-
-                // 1. Queue the removal of the old ideology.
-                //    This is queued second, so it runs first.
+            // If there's an old ideology, queue its removal first
+            if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id) {
                 effectsQueue.unshift([{
                     effect_type: EffectType.MOVE_CARD,
                     args: {
+                        player_id: destination_player_id, // Use destination_player_id as owner
                         card_id: destination_player.ideology.instance_id,
                         source_pile: 'ideology',
                         destination_pile: 'discard',
-                        player_id: destination_player_id
+                        source_card_id: sourceCard ? sourceCard.instance_id : null,
                     }
                 }, cardToMove]);
-
-                // 3. Early return to prevent the new card from being placed immediately.
-                return;
             }
-            
-            // This part now runs only if there was no ideology to replace, 
-            // or if the old one has already been moved.
+            // Directly place the new ideology
             destination_player.ideology = cardToMove;
             cardToMove.location = 'field';
         } else if (destination_pile === 'field') {
