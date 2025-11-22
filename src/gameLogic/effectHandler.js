@@ -696,31 +696,45 @@ const effectHandlers = {
             if (newDurability <= 0) {
                 const ownerPlayerId = targetCardRef.owner;
             
+                // 論理的なカードの移動 (field -> discard) を即座に行う
+                // targetCardRefがフィールドにあることを確認
+                const fieldIndex = gameState.players[ownerPlayerId].field.findIndex(c => c.instance_id === resolved_card_id);
+                if (fieldIndex !== -1) {
+                    const [removedCard] = gameState.players[ownerPlayerId].field.splice(fieldIndex, 1);
+                    gameState.players[ownerPlayerId].discard.push(removedCard);
+                    removedCard.location = 'discard';
+                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
+                } else if (gameState.players[ownerPlayerId].ideology && gameState.players[ownerPlayerId].ideology.instance_id === resolved_card_id) {
+                    // イデオロギーカードの場合
+                    const removedCard = gameState.players[ownerPlayerId].ideology;
+                    gameState.players[ownerPlayerId].ideology = null;
+                    gameState.players[ownerPlayerId].discard.push(removedCard);
+                    removedCard.location = 'discard';
+                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
+                }
+
+                // 破壊アニメーションをanimation_queueに追加
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.CARD_DESTROYED, // CARD_DESTROYED はアニメーション専用のEffectType
+                        args: { card_id: resolved_card_id }
+                    },
+                    sourceCard: sourceCard
+                });
+            
+                // WEALTH_DURABILITY_ZERO トリガーを即座にeffectsQueueに追加
                 const baseArgs = {
                     player_id: ownerPlayerId,
                     card_id: resolved_card_id,
                     target_card_id: resolved_card_id,
                 };
-            
                 const ownerArgs = { ...baseArgs, target_player_id: ownerPlayerId };
 
-                const delayedEffects = [
-                    [{ effect_type: EffectType.MOVE_CARD, args: {
-                        player_id: targetCardRef.owner,
-                        card_id: resolved_card_id,
-                        source_pile: 'field',
-                        destination_pile: 'discard',
-                        source_card_id: sourceCard ? sourceCard.instance_id : null,
-                    }}, sourceCard],
+                effectsQueue.unshift(
                     [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO, args: ownerArgs }, targetCardRef],
                     [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OWNER, args: ownerArgs }, targetCardRef],
                     [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_THIS, args: ownerArgs }, targetCardRef]
-                ];
-                
-                if (!gameState.delayedEffects) {
-                    gameState.delayedEffects = [];
-                }
-                gameState.delayedEffects.push(...delayedEffects);
+                );
             }
             if (sourceCard) {
                 effectsQueue.unshift([{
@@ -2190,16 +2204,6 @@ export const processEffects = (gameState) => {
             globalEffectLogger.notifyEffectProcessingComplete();
         }
     });
-
-    // After processing immediate effects, check if there are delayed effects to process.
-    if (stateAfterImmediateEffects.delayedEffects && stateAfterImmediateEffects.delayedEffects.length > 0) {
-        const stateWithDelayedEffectsQueued = produce(stateAfterImmediateEffects, draftState => {
-            draftState.effect_queue.push(...draftState.delayedEffects);
-            draftState.delayedEffects = [];
-        });
-        // Recursively call processEffects to handle the newly queued (previously delayed) effects.
-        return processEffects(stateWithDelayedEffectsQueued);
-    }
 
     return stateAfterImmediateEffects;
 };

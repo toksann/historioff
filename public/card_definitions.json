@@ -2831,7 +2831,8 @@
                         "operation": "move",
                         "source_pile": "hand",
                         "destination_pile": "discard_pile",
-                        "selection_method": "bottom"
+                        "selection_method": "bottom",
+                        "count": 1
                     }
                 },
                 {

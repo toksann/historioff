@@ -29,7 +29,7 @@
 | 覚醒 | test_awakening_effect.js | 成功 | 本番でもOK |
 | 内部崩壊 | test_internal_collapse_effect.js | 成功 | 本番でもOK |
 | 秩序の瓦解 | test_collapse_of_order_effect.js | 成功 | 本番でもOK |
-| 略奪 | test_looting_effect.js | 成功 | 本番でもOK |
+| 略奪 | test_looting_effect.js | 成功(本番でバグ) | 成功時効果が発生しない？(多分「兵器」と共通の問題) |
 | 物々交換 | test_barter_effect.js | 成功 | 本番でもOK |
 | 接収 | test_seizure_effect.js | 成功 | 本番でもOK |
 | 経済学の興り | test_rise_of_economics_effect.js | 成功 | 本番でもOK |

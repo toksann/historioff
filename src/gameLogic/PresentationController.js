@@ -486,22 +486,6 @@ class PresentationController {
             
             const result = await this.animationManager.triggerTransientEffect('CARD_DAMAGE', target, { effect, sourceCard });
             
-            // 演出完了後、遅延エフェクトを実行
-            
-            if (this.gameState && this.gameState.delayedEffects && this.gameState.delayedEffects.length > 0) {
-                
-                // 遅延エフェクトを取得してクリア
-                const delayedEffects = this.gameState.delayedEffects;
-                this.gameState.delayedEffects = [];
-                
-                // コールバック関数を使って遅延エフェクトを実行
-                if (this.gameState.executeDelayedEffects) {
-                    this.gameState.executeDelayedEffects(delayedEffects);
-                } else {
-                    console.warn('🔥ANIM_DEBUG [Presentation] executeDelayedEffects callback not found');
-                }
-            }
-            
             // ゲームロジックを再開
             if (this.gameLogicPaused) {
                 

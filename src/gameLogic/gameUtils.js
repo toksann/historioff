@@ -124,6 +124,5 @@ export const createInitialGameState = (player1Id, player2Id, cardDefs, presetDec
         awaiting_input: null,
         temp_effect_data: {},
         effects_to_skip: {},
-        delayedEffects: [],
     };
 };

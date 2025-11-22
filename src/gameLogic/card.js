@@ -106,7 +106,9 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     const isOnPlayingEvent = card.location === 'playing_event';
 
     if (isEventCard && !isOnPlayingEvent) {
-        if (card.name === "布教" && card.location === 'hand') {
+        if ((card.name === "布教" && card.location === 'hand' ||
+            (card.name === "官僚主義" && card.location === 'hand'))
+        ) {
         } else {
             return []; // イベントカードがプレイ中でない場合、効果を発動させない
         }

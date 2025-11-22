@@ -227,13 +227,6 @@ export const endTurn = (gameState) => {
 export const _proceedToNextTurn = (gameState) => {
     let currentGameState = gameState;
 
-    if (currentGameState.delayedEffects && currentGameState.delayedEffects.length > 0) {
-        currentGameState = produce(currentGameState, draftState => {
-            draftState.effect_queue.push(...draftState.delayedEffects);
-            draftState.delayedEffects = [];
-        });
-    }
-
     const nextState = produce(currentGameState, draftState => {
         const currentPlayerId = draftState.current_turn;
         const nextPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
