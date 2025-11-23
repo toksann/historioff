@@ -310,7 +310,7 @@ export const startTurn = (gameState) => {
 
 export const resolveInput = (gameState, chosenItems) => {
     const nextState = produce(gameState, draftState => {
-        const { type, player_id, source_card_instance_id, destination_pile, source_piles, source_effect } = draftState.awaiting_input;
+        const { type, player_id, source_card_instance_id, destination_pile, source_piles, source_effect, position } = draftState.awaiting_input;
 
         draftState.awaiting_input = null;
 
@@ -363,6 +363,7 @@ export const resolveInput = (gameState, chosenItems) => {
                             card_id: chosenCard.instance_id,
                             source_pile: original_pile,
                             destination_pile: destination_pile,
+                            position: position,
                         }
                     };
                     draftState.effect_queue.push([moveEffect, sourceCard]);

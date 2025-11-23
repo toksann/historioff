@@ -1,21 +1,163 @@
- WARNING in [eslint]
-src\gameLogic\PresentationController.js
-  Line 155:25:  'amount' is assigned a value but never used        no-unused-vars
-  Line 205:17:  'cardId' is assigned a value but never used        no-unused-vars
-  Line 205:25:  'from' is assigned a value but never used          no-unused-vars
-  Line 205:31:  'to' is assigned a value but never used            no-unused-vars
-  Line 218:17:  'playerId' is assigned a value but never used      no-unused-vars
-  Line 218:27:  'resourceType' is assigned a value but never used  no-unused-vars
-  Line 218:41:  'amount' is assigned a value but never used        no-unused-vars
-  Line 393:19:  'playerId' is assigned a value but never used      no-unused-vars
-  Line 422:19:  'playerId' is assigned a value but never used      no-unused-vars
-  Line 482:15:  'changeAmount' is assigned a value but never used  no-unused-vars
-  Line 487:19:  'result' is assigned a value but never used        no-unused-vars
-  Line 547:15:  'changeAmount' is assigned a value but never used  no-unused-vars
+  console.log
+    [GAME_END_DEBUG] Winner determined: PLAYER2. Updating state.
 
-src\gameLogic\effectHandler.js
-  Line 96:7:    'enforceFieldLimit' is assigned a value but never used                                       no-unused-vars
-  Line 236:23:  Function declared in a loop contains unsafe references to variable(s) 'cardFoundAndUpdated'  no-loop-func
-  Line 801:17:  'cardToMove' was used before it was defined                                                  no-use-before-define
+      at _updateGameOverState (src/gameLogic/gameOver.js:32:17)
 
-webpack compiled with 1 warning
+  console.log
+    [GAME_END_DEBUG] draftState set to: { game_over: true, winner: 'PLAYER2' }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:35:17)
+
+  console.log
+    [GAME_END_DEBUG] Pushed GAME_RESULT to animation_queue. {
+      effect: {
+        effect_type: 'GAME_RESULT',
+        args: {
+          is_victory: false,
+          message: 'デッキ切れによる判定',
+          winner_name: 'Player 2'
+        }
+      },
+      sourceCard: null
+    }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:60:17)
+
+  console.log
+    [GAME_END_DEBUG] Animation queue length: 1
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:61:17)
+
+  console.log
+    [GAME_END_DEBUG] Winner determined: PLAYER2. Updating state.
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:32:17)
+
+  console.log
+    [GAME_END_DEBUG] draftState set to: { game_over: true, winner: 'PLAYER2' }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:35:17)
+
+  console.log
+    [GAME_END_DEBUG] Pushed GAME_RESULT to animation_queue. {
+      effect: {
+        effect_type: 'GAME_RESULT',
+        args: {
+          is_victory: false,
+          message: 'デッキ切れによる判定',
+          winner_name: 'Player 2'
+        }
+      },
+      sourceCard: null
+    }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:60:17)
+
+  console.log
+    [GAME_END_DEBUG] Animation queue length: 1
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:61:17)
+
+  console.log
+    [GAME_END_DEBUG] Winner determined: PLAYER2. Updating state.
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:32:17)
+
+  console.log
+    [GAME_END_DEBUG] draftState set to: { game_over: true, winner: 'PLAYER2' }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:35:17)
+
+  console.log
+    [GAME_END_DEBUG] Pushed GAME_RESULT to animation_queue. {
+      effect: {
+        effect_type: 'GAME_RESULT',
+        args: {
+          is_victory: false,
+          message: 'デッキ切れによる判定',
+          winner_name: 'Player 2'
+        }
+      },
+      sourceCard: null
+    }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:60:17)
+
+  console.log
+    [GAME_END_DEBUG] Animation queue length: 1
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:61:17)
+
+  console.log
+    [GAME_END_DEBUG] Winner determined: PLAYER2. Updating state.
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:32:17)
+
+  console.log
+    [GAME_END_DEBUG] draftState set to: { game_over: true, winner: 'PLAYER2' }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:35:17)
+
+  console.log
+    [GAME_END_DEBUG] Pushed GAME_RESULT to animation_queue. {
+      effect: {
+        effect_type: 'GAME_RESULT',
+        args: {
+          is_victory: false,
+          message: 'デッキ切れによる判定',
+          winner_name: 'Player 2'
+        }
+      },
+      sourceCard: null
+    }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:60:17)
+
+  console.log
+    [GAME_END_DEBUG] Animation queue length: 1
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:61:17)
+
+  console.log
+    [GAME_END_DEBUG] Winner determined: PLAYER2. Updating state.
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:32:17)
+
+  console.log
+    [GAME_END_DEBUG] draftState set to: { game_over: true, winner: 'PLAYER2' }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:35:17)
+
+  console.log
+    [GAME_END_DEBUG] Pushed GAME_RESULT to animation_queue. {
+      effect: {
+        effect_type: 'GAME_RESULT',
+        args: {
+          is_victory: false,
+          message: 'デッキ切れによる判定',
+          winner_name: 'Player 2'
+        }
+      },
+      sourceCard: null
+    }
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:60:17)
+
+  console.log
+    [GAME_END_DEBUG] Animation queue length: 1
+
+      at _updateGameOverState (src/gameLogic/gameOver.js:61:17)
+
+ PASS  src/tests/move_card_position.test.js
+  MOVE_CARD with position argument
+    √ should move card to the top of the deck when position is "top" (14 ms)
+    √ should move card to the bottom of the deck when position is "bottom" (11 ms)
+    √ should move card to a random position in the deck when position is "random" (7 ms)
+    √ should default to "random" when moving to deck without a position argument (9 ms)
+    √ should default to "bottom" when moving to discard pile without a position argument (6 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        0.28 s, estimated 1 s
+Ran all test suites matching /src\\tests\\move_card_position.test.js/i.

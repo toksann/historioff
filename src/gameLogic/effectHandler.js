@@ -945,14 +945,36 @@ const effectHandlers = {
             // Just update the card's location.
             cardToMove.location = 'playing_event';
         } else if (destination_player[destination_pile] && Array.isArray(destination_player[destination_pile])) {
-             if (destination_pile === 'hand') {
-                if (!enforceHandLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
-                    // Card was moved to discard due to hand limit, location already set in enforceHandLimit
-                } else {
-                    destination_player[destination_pile].push(cardToMove);
+            if (destination_pile === 'hand') {
+                if (enforceHandLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
+                    destination_player.hand.push(cardToMove);
                 }
             } else {
-                destination_player[destination_pile].push(cardToMove);
+                const destinationPile = destination_player[destination_pile];
+                let { position } = args;
+
+                // If position is not specified, set default based on destination_pile
+                if (!position) {
+                    if (destination_pile === 'deck') {
+                        position = 'random';
+                    } else {
+                        position = 'bottom';
+                    }
+                }
+
+                switch (position) {
+                    case 'top':
+                        destinationPile.unshift(cardToMove);
+                        break;
+                    case 'random':
+                        const randomIndex = Math.floor(Math.random() * (destinationPile.length + 1));
+                        destinationPile.splice(randomIndex, 0, cardToMove);
+                        break;
+                    case 'bottom':
+                    default:
+                        destinationPile.push(cardToMove);
+                        break;
+                }
             }
         } else {
             if (originalLocation && destination_player[originalLocation]) {
@@ -1503,7 +1525,7 @@ const effectHandlers = {
         gameState.awaiting_input = { type: 'CHOICE_CARD_TO_ADD', options, player_id, source_card_instance_id: sourceCard.instance_id };
     },
     [EffectType.PROCESS_CHOOSE_AND_MOVE_CARD_FROM_PILE]: (gameState, args, cardDefs, sourceCard) => {
-        let { player_id, source_piles, destination_pile, card_type } = args;
+        let { player_id, source_piles, destination_pile, card_type, position } = args;
 
         if (source_piles && source_piles.includes('discard_pile')) {
             source_piles = source_piles.map(p => p === 'discard_pile' ? 'discard' : p);
@@ -1524,7 +1546,7 @@ const effectHandlers = {
         if (card_type) candidateCards = candidateCards.filter(c => c.card_type === card_type);
 
         if (candidateCards.length > 0) {
-            gameState.awaiting_input = { type: 'CHOICE_CARD_FROM_PILE', options: candidateCards, destination_pile, player_id, source_card_instance_id: sourceCard.instance_id, source_piles };
+            gameState.awaiting_input = { type: 'CHOICE_CARD_FROM_PILE', options: candidateCards, destination_pile, player_id, source_card_instance_id: sourceCard.instance_id, source_piles, position };
         } 
     },
     [EffectType.PROCESS_CHOOSE_AND_MODIFY_DURABILITY_TO_WEALTH]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
