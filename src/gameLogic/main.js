@@ -91,6 +91,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         game_over: false,
         winner: null,
         temp_effect_data: {},
+        displaced_ideology: null,
         all_card_instances: {},
         cardDefs: cardDefs,
         turn_number: 1,

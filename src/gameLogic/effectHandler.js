@@ -844,6 +844,9 @@ const effectHandlers = {
                     if (sourcePlayer.ideology && sourcePlayer.ideology.instance_id === card_id) {
                         cardToMove = sourcePlayer.ideology;
                         sourcePlayer.ideology = null;
+                    } else if (gameState.displaced_ideology && gameState.displaced_ideology.instance_id === card_id) {
+                        cardToMove = gameState.displaced_ideology;
+                        gameState.displaced_ideology = null; // Clear the holding area
                     }
                 } else if (source_pile === 'field') {
                     let cardIndex = sourcePlayer.field.findIndex(c => c.instance_id === card_id);
@@ -907,7 +910,7 @@ const effectHandlers = {
         }
 
         if (destination_pile === 'ideology' || (destination_pile === 'field' && cardToMove.card_type === CardType.IDEOLOGY)) {
-            // Check for same-name ideology bonus before replacing
+            // Check for same-name ideology bonus before placing the new one
             if (destination_player.ideology &&
                 destination_player.ideology.instance_id !== cardToMove.instance_id &&
                 destination_player.ideology.name === cardToMove.name) {
@@ -920,23 +923,42 @@ const effectHandlers = {
                     }
                 }, cardToMove]);
             }
-            
-            // If there's an old ideology, queue its removal first
+
+            // Defer the actual placement to a new effect to ensure ordering
+            const placeIdeologyEffect = {
+                effect_type: EffectType._PLACE_IDEOLOGY,
+                args: {
+                    player_id: destination_player_id,
+                    card_id: cardToMove.instance_id,
+                }
+            };
+
+            // If there's an old ideology, queue its removal first, then the placement.
             if (destination_player.ideology && destination_player.ideology.instance_id !== cardToMove.instance_id) {
-                effectsQueue.unshift([{
+                const oldIdeology = destination_player.ideology;
+                
+                const discardOldIdeoEffect = {
                     effect_type: EffectType.MOVE_CARD,
                     args: {
-                        player_id: destination_player_id, // Use destination_player_id as owner
-                        card_id: destination_player.ideology.instance_id,
+                        player_id: destination_player_id,
+                        card_id: oldIdeology.instance_id,
                         source_pile: 'ideology',
                         destination_pile: 'discard',
-                        source_card_id: sourceCard ? sourceCard.instance_id : null,
                     }
-                }, cardToMove]);
+                };
+
+                // Queue placement, then discard (discard will be processed first)
+                effectsQueue.unshift([placeIdeologyEffect, cardToMove]);
+                effectsQueue.unshift([discardOldIdeoEffect, oldIdeology]);
+
+            } else {
+                // If no old ideology, just queue the placement
+                effectsQueue.unshift([placeIdeologyEffect, cardToMove]);
             }
-            // Directly place the new ideology
-            destination_player.ideology = cardToMove;
-            cardToMove.location = 'field';
+
+            // Stop the current MOVE_CARD effect, as its logic is now split
+            // into the two effects queued above.
+            return; 
         } else if (destination_pile === 'field') {
             destination_player.field.push(cardToMove);
             cardToMove.location = 'field';
@@ -1047,6 +1069,44 @@ const effectHandlers = {
             addEffect(TriggerType.CARD_DISCARDED, ownerEventArgs);
             addEffect(TriggerType.CARD_DISCARDED_OWNER, ownerEventArgs);
         }
+    },
+
+    [EffectType._PLACE_IDEOLOGY]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { player_id, card_id } = args;
+        const player = gameState.players[player_id];
+        const cardToPlace = gameState.all_card_instances[card_id];
+
+        if (!player || !cardToPlace) return;
+
+        // Place the new ideology
+        player.ideology = cardToPlace;
+        cardToPlace.location = 'field'; // Ideologies are logically on the field
+
+        // Ensure the location is synchronized in the central card instance registry.
+        if (gameState.all_card_instances[cardToPlace.instance_id]) {
+            gameState.all_card_instances[cardToPlace.instance_id].location = cardToPlace.location;
+        }
+
+        const ownerPlayerId = cardToPlace.owner;
+        const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+
+        const baseEventArgs = {
+            card_id: cardToPlace.instance_id,
+            target_card_id: cardToPlace.instance_id,
+            card_type: cardToPlace.card_type,
+            source_pile: 'ideology', // This is where it was moved from conceptually
+            destination_pile: 'ideology', // Logical destination for trigger args
+        };
+        const ownerEventArgs = { ...baseEventArgs, player_id: ownerPlayerId, target_player_id: ownerPlayerId };
+        
+        const addEffect = (type, args, effectSourceCard) => {
+            effectsQueue.unshift([{ effect_type: type, args: args }, effectSourceCard]);
+        };
+
+        // Fire placement triggers for the card being placed
+        addEffect(TriggerType.CARD_PLACED_THIS, ownerEventArgs, cardToPlace);
+        addEffect(TriggerType.CARD_PLACED, ownerEventArgs, cardToPlace); // Generic placed trigger
+        addEffect(TriggerType.CARD_PLACED_OWNER, ownerEventArgs, cardToPlace);
     },
 
     [EffectType.PROCESS_CARD_OPERATION]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {

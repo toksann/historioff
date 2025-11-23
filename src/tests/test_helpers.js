@@ -70,6 +70,7 @@ const createTestGameState = (cardDefs) => {
         game_over: false,
         winner: null,
         temp_effect_data: {}, 
+        displaced_ideology: null,
         all_card_instances: {},
         cardDefs: cardDefs,
         processing_status: {
