@@ -143,21 +143,21 @@
         "card_type": "財",
         "required_scale": 0,
         "durability": 1,
-        "description": "このカードの耐久値が0になったとき互いの規模+1。",
+        "description": "このカードの耐久値が0になったとき互いの規模+3。",
         "triggers": {
             "WEALTH_DURABILITY_ZERO_THIS": [
                 {
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount_based_on_self_durability": "plus"
+                        "amount": 3
                     }
                 },
                 {
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "opponent",
-                        "amount": 1
+                        "amount": 3
                     }
                 }
             ]
