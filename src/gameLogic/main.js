@@ -113,9 +113,11 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
 
     Object.values(gameState.players).forEach(player => {
         player.deck.forEach(card => {
+            card.location = 'deck'; // SET LOCATION
             gameState.all_card_instances[card.instance_id] = card;
         });
         player.hand.forEach(card => {
+            card.location = 'hand'; // SET LOCATION
             gameState.all_card_instances[card.instance_id] = card;
         });
     });
