@@ -396,11 +396,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
                 continue;
             }
             if (current_args.condition_scale_exceeds_25) {
-                // At this point, owner.scale is the new, updated scale.
-                // We also need to check the scale BEFORE the change.
-                const lastChange = gameState.temp_effect_data.last_scale_change || 0;
-                const previousScale = owner.scale - lastChange;
-                if (previousScale <= 25 && owner.scale > 25) {
+                if (owner.scale > 25) {
                     // The condition is met, proceed.
                 } else {
                     continue;

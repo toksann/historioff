@@ -55,14 +55,14 @@
         "card_type": "財",
         "required_scale": 15,
         "durability": 5,
-        "description": "相手の意識-4。反撃1。",
+        "description": "相手の意識-2。反撃1。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "opponent",
-                        "amount": -4
+                        "amount": -2
                     }
                 }
             ],
@@ -150,7 +150,7 @@
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 1
+                        "amount_based_on_self_durability": "plus"
                     }
                 },
                 {
@@ -315,6 +315,13 @@
                         "amount": 1,
                         "scale_reduction": 5
                     }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
                 }
             ]
         }
@@ -349,7 +356,7 @@
     {
         "name": "秩序の瓦解",
         "card_type": "事象",
-        "required_scale": 20,
+        "required_scale": 10,
         "description": "自分か相手のイデオロギーを捨て札にする。",
         "triggers": {
             "PLAY_EVENT_THIS": [
@@ -660,7 +667,7 @@
     {
         "name": "物質主義",
         "card_type": "イデオロギー",
-        "required_scale": 6,
+        "required_scale": 8,
         "description": "ターン終了時、自分の場の財の数と同じ値だけ自分の規模をプラスする。自分の場の財が3枚以上ある場合、自分の意識+1、相手の意識-1。",
         "triggers": {
             "END_TURN_OWNER": [
@@ -1266,7 +1273,7 @@
         "name": "焦土",
         "card_type": "事象",
         "required_scale": 45,
-        "description": "相手の場を1減らす。",
+        "description": "相手の場を1減らす。相手の場に空きが無いなら、相手の財を1枚選び捨て札にする。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -1274,6 +1281,20 @@
                     "args": {
                         "player_id": "opponent",
                         "amount": -1
+                    }
+                }
+            ],
+            "FAILED_PROCESS": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "field",
+                        "destination_pile": "discard_pile",
+                        "card_type": "財",
+                        "target_player_id": "opponent",
+                        "selection_method": "choice"
                     }
                 }
             ]
@@ -1806,7 +1827,7 @@
     {
         "name": "コスモポリタニズム",
         "card_type": "イデオロギー",
-        "required_scale": 40,
+        "required_scale": 25,
         "description": "ターン終了時、相手の規模が自分の規模を上回っているなら、相手の規模-3。ターン開始時、互いの意識-3。",
         "triggers": {
             "END_TURN_OWNER": [
@@ -1841,7 +1862,7 @@
         "name": "思想の弾圧",
         "card_type": "事象",
         "required_scale": 10,
-        "description": "手札のイデオロギーをすべてデッキに戻し、自分の意識+5。手札のすべてのカードの必要規模-5。",
+        "description": "手札のイデオロギーをすべてデッキに戻し、自分の意識+3。手札のすべてのカードの必要規模-5。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -1859,7 +1880,7 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 5
+                        "amount": 3
                     }
                 },
                 {
@@ -2373,7 +2394,7 @@
     {
         "name": "アナーキズム",
         "card_type": "イデオロギー",
-        "required_scale": 0,
+        "required_scale": 15,
         "description": "財を出すたびカードを1枚引く。事象を出すたび自分のすべての財の耐久値+1。",
         "triggers": {
             "CARD_PLACED_OWNER": [
@@ -2558,21 +2579,21 @@
         "name": "孤立主義",
         "card_type": "イデオロギー",
         "required_scale": 15,
-        "description": "自分が受ける意識の減少効果を-3。相手が受ける意識の減少効果を0にする。自分の場のすべての財が受けるダメージ-1。自分の意識が1以上の減少効果を受けるとき、自分の意識と規模を+10して、このカードを捨て札にする。",
+        "description": "自分が受ける意識の減少効果を-3。相手が受ける意識の減少効果を0にする。自分の場のすべての財が受けるダメージ-1。自分の意識が1以上の減少効果を受けるとき、自分の意識と規模を+5して、このカードを捨て札にする。",
         "triggers": {
             "MODIFY_CONSCIOUSNESS": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 10
+                        "amount": 5
                     }
                 },
                 {
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 10
+                        "amount": 5
                     }
                 },
                 {
@@ -2814,8 +2835,8 @@
     {
         "name": "多極主義",
         "card_type": "イデオロギー",
-        "required_scale": 60,
-        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加える。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-5。",
+        "required_scale": 65,
+        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加える。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -2863,7 +2884,7 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "opponent",
-                        "amount": -5,
+                        "amount_percentage": -14,
                         "condition_self_scale_lower": true
                     }
                 }
@@ -2951,8 +2972,8 @@
     {
         "name": "自由主義",
         "card_type": "イデオロギー",
-        "required_scale": 15,
-        "description": "ターン開始時意識-2し、カードを1枚引く。カードを引くたび規模+2。カードを出すたび意識+1。自分の規模がプラスされたとき25を超えたなら「ニューリベラリズム」「ネオリベラリズム」「リバタリアニズム」から1枚選んで手札に加える。",
+        "required_scale": 9,
+        "description": "ターン開始時意識-2し、カードを1枚引く。カードを引くたび規模+2。カードを出すたび意識+1。自分の規模がプラスされたとき25を超えていたなら「ニューリベラリズム」「ネオリベラリズム」「リバタリアニズム」から1枚選んで手札に加える。",
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -3010,8 +3031,8 @@
     {
         "name": "ウルトラナショナリズム",
         "card_type": "イデオロギー",
-        "required_scale": 20,
-        "description": "配置時、自分の意識+5。カードを出すたび自分の意識と規模+3、デッキからカードを1枚引く。ターン終了時、捨て札を1枚デッキに戻す。",
+        "required_scale": 10,
+        "description": "配置時、自分の意識+5。カードを出すたび互いの意識+1、自分の規模+3、デッキからカードを1枚引く。ターン終了時、捨て札を3枚デッキに戻す。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -3027,7 +3048,13 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 3
+                        "amount": 1
+                    }
+                },{
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 1
                     }
                 },
                 {
@@ -3056,7 +3083,7 @@
                         "source_pile": "discard_pile",
                         "destination_pile": "deck",
                         "selection_method": "random",
-                        "count": 1
+                        "count": 3
                     }
                 }
             ]
@@ -3067,7 +3094,7 @@
         "name": "ポピュリズム",
         "card_type": "イデオロギー",
         "required_scale": 70,
-        "description": "これが未配置でターン開始時、自分の意識が5以下かつイデオロギーがポピュリズムでないならこれを配置する。配置時、自分の規模と同じ耐久値（最低値1）を持つ「マネー」を手札に加え自分の規模を0にする。さらに「ウルトラナショナリズム」を捨て札に加え、捨て札にあるイデオロギーから1枚選びそれをデッキの一番上に加える。カードを出すたび意識+2、デッキからカードを1枚引く。これが捨て札になるとき自分の意識+5。",
+        "description": "これが未配置でターン開始時、自分の意識が5以下かつイデオロギーがポピュリズムでないならこれを配置する。配置時、自分の規模と同じ耐久値（最低値1）を持つ「マネー」を手札に加え自分の規模を0にする。さらに「ウルトラナショナリズム」を捨て札に加え、捨て札にあるイデオロギーから1枚選びそれをデッキの一番上に加える。カードを出すたび互いの意識+1、自分の規模+2、デッキからカードを1枚引く。これが捨て札になるとき自分の意識+5。",
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -3122,6 +3149,20 @@
             "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": 1
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
                         "amount": 2
