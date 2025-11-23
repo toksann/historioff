@@ -436,7 +436,7 @@
         "name": "接収",
         "card_type": "事象",
         "required_scale": 0,
-        "description": "自分の場の財カード1枚を手札に戻し、自分の規模+4。",
+        "description": "自分の場の財カード1枚を手札に戻し、自分の規模+2。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -452,7 +452,7 @@
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 4
+                        "amount": 2
                     }
                 }
             ]
