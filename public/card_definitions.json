@@ -698,9 +698,22 @@
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
-                    "effect_type": "PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK",
+                    "effect_type": "PROCESS_CARD_OPERATION",
                     "args": {
-                        "player_id": "self"
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "hand",
+                        "card_type": "イデオロギー",
+                        "selection_method": "all"
+                    }
+                },{
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "deck",
+                        "card_type": "イデオロギー",
+                        "selection_method": "all"
                     }
                 },
                 {

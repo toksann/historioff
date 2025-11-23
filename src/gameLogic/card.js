@@ -106,7 +106,13 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     const isOnPlayingEvent = card.location === 'playing_event';
 
     if (isEventCard && !isOnPlayingEvent) {
-        if ((card.name === "布教" && card.location === 'hand' ||
+        const allowedTriggers = [
+            TriggerType.CARD_DISCARDED_THIS,
+            TriggerType.CARD_DRAWN_THIS
+        ];
+        if (allowedTriggers.includes(triggeredEffectType)) {
+            // 「このカードが捨てられた/破壊された時」の効果は許可
+        } else if ((card.name === "布教" && card.location === 'hand' ||
             (card.name === "官僚主義" && card.location === 'hand'))
         ) {
         } else {

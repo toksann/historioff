@@ -38,7 +38,7 @@
 | 多神教 | test_polytheism_effect.js | 成功 | 本番でもOK |
 | 原始共産制 | test_primitive_communism_effect.js | 成功(本番でバグ) | NPCがこれを配置中に止まる場合がある(財を出そうとして失敗している？) |
 | 物質主義 | test_materialism_effect.js | 成功 | 本番でもOK |
-| 一神教 | test_monotheism_effect.js | 成功 | 「手札とデッキのすべてのイデオロギーカードを捨て札にし」という効果を捨て札にではなく、除外にしたい |
+| 一神教 | test_monotheism_effect.js | 成功 | 本番でもOK |
 | 悟りの道 | test_path_to_enlightenment_effect.js | 成功 | 本番でもOK |
 | 聖典 | test_sacred_scripture_effect.js | 成功 | 本番でもOK |
 | 布教 | test_missionary_effect.js | 成功 | 本番でもOK |
