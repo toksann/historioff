@@ -357,13 +357,20 @@
         "name": "秩序の瓦解",
         "card_type": "事象",
         "required_scale": 10,
-        "description": "自分か相手のイデオロギーを捨て札にする。",
+        "description": "自分か相手のイデオロギーを捨て札にし、相手の意識-2。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
                     "effect_type": "PROCESS_CHOOSE_AND_DISCARD_IDEOLOGY",
                     "args": {
                         "player_id": "self"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -2
                     }
                 }
             ]
