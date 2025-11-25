@@ -356,6 +356,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             // Check if the final decrease meets the threshold (1 or more)
             const tempKey = `${owner.id}_last_consciousness_decrease`;
             const actualDecrease = gameState.temp_effect_data[tempKey];
+            console.log(`[孤立主義] 実際の意識減少量: ${actualDecrease} ソース: ${sourceCardId} tempKey :${tempKey}`);
             if (!actualDecrease || actualDecrease < 1) {
                 continue;
             }
@@ -391,6 +392,9 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         }
 
         if (card.name === '自由主義' && triggeredEffectType === EffectType.MODIFY_SCALE) {
+            if (gameState.current_turn === owner.id) {
+                continue;
+            }
             // This reaction should only happen on scale INCREASE.
             if (triggeringEffectArgs.amount <= 0) {
                 continue;
@@ -552,7 +556,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             }
         }
 
-        reactionEffects.push({ ...cardEffect, args: current_args, target_card_id: card.instance_id, target_player_id: card.owner, target_type: "card", target_card_type: card.card_type });
+        reactionEffects.push({ effect_type: cardEffect.effect_type, args: current_args, target_card_id: card.instance_id, target_player_id: card.owner, target_type: "card", target_card_type: card.card_type });
         if (cardEffect.effect_type === EffectType.ADD_MODIFY_PARAMETER_CORRECTION) {
             console.log(`[checkCardReaction] Pushed ADD_MODIFY_PARAMETER_CORRECTION from ${card.name} for trigger ${triggeredEffectType}`);
         }

@@ -231,12 +231,18 @@ class PresentationController {
      * @param {Object} sourceCard - ソースカード
      */
     async onGameEffect(gameState, effect, sourceCard) {
-        
+        console.log(`[DEBUG] PresentationController.onGameEffect called with effect: ${effect.effect_type}`);
         
         
         if (!effect || !effect.effect_type) {
             console.warn('[GAME_END_DEBUG] PresentationController: onGameEffect received null or invalid effect. Skipping.');
             return;
+        }
+
+        // Add a fallback to find sourceCard if it's undefined
+        if (!sourceCard && effect && effect.args && effect.args.card_id && this.gameState) {
+            sourceCard = this.gameState.all_card_instances[effect.args.card_id];
+            console.log(`[DEBUG] PresentationController: sourceCard was undefined. Found from gameState: ${sourceCard ? sourceCard.name : 'Not Found'}`);
         }
 
         
@@ -267,6 +273,7 @@ class PresentationController {
      * @param {Object} sourceCard - ソースカード
      */
     async delegateToAnimationManager(effect, sourceCard) {
+        console.log(`[DEBUG] delegateToAnimationManager called with effect: ${effect.effect_type}`);
         
         
         if (!this.animationManager) {
@@ -339,6 +346,14 @@ class PresentationController {
                     
                     await this.handleEffectNullified(effect, sourceCard);
                     break;
+                
+                case 'EVENT_CARD_PLAYED':
+                    await this.handleEventCardPlayed(effect, sourceCard);
+                    break;
+                
+                case 'CARD_REVEALED':
+                    await this.handleCardRevealed(effect, sourceCard);
+                    break;
                     
                 default:
                     console.log('🎭 [Presentation] No animation mapping for effect:', effect.effect_type);
@@ -362,6 +377,28 @@ class PresentationController {
             await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
         } else {
             console.warn('🔥ANIM_DEBUG [Presentation] Card element not found for placement:', cardId);
+        }
+    }
+
+    /**
+     * Event card played animation
+     */
+    async handleEventCardPlayed(effect, sourceCard) {
+        console.log('[DEBUG] PresentationController.handleEventCardPlayed entered.');
+        console.log('[DEBUG] PresentationController.handleEventCardPlayed - this.animationManager:', this.animationManager);
+        // Event cards are not in the DOM when this is called, so pass null for the target
+        // and let the AnimationManager create a virtual card.
+        await this.animationManager.triggerTransientEffect('EVENT_CARD_PLAYED', null, { effect, sourceCard });
+    }
+
+    /**
+     * Card revealed animation
+     */
+    async handleCardRevealed(effect, sourceCard) {
+        const cardId = effect.args.card_id;
+        const target = document.querySelector(`[data-card-id="${cardId}"]`);
+        if (target) {
+            await this.animationManager.triggerTransientEffect('CARD_REVEALED', target, { effect, sourceCard });
         }
     }
 
@@ -443,6 +480,16 @@ class PresentationController {
                     
                 }
             }, 50); // より短い遅延
+        }
+        // Added case for card creation by an event
+        else if (sourcePile === 'game_source' && destPile === 'field') {
+            this.hideCardImmediately(cardId);
+            setTimeout(async () => {
+                const target = document.querySelector(`[data-card-id="${cardId}"]`);
+                if (target) {
+                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
+                }
+            }, 50);
         }
         // 事象カードの移動は演出をスキップ
         else if (sourcePile === 'hand' && destPile === 'playing_event') {

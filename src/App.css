@@ -3497,3 +3497,39 @@ ameInfoコンポーネント内のルールボタン */
   z-index: 100; /* 他のカードの上に表示されるように調整 */
   pointer-events: none; /* アニメーション中のクリックを無効化 */
 }
+
+/* Event card particle effect */
+.particle-event {
+  background: radial-gradient(circle, #ffcc80 0%, #ff9800 70%, #f57c00 100%);
+  box-shadow: 0 0 12px rgba(255, 152, 0, 0.8), 0 0 6px rgba(255, 152, 0, 1);
+}
+
+/* Card Reveal Animation Keyframes */
+@keyframes cardReveal {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+@keyframes slideUpAndFade {
+    to {
+        top: -200px;
+        opacity: 0;
+    }
+}
+
+@keyframes slideDownAndFade {
+    to {
+        top: 120vh;
+        opacity: 0;
+    }
+}

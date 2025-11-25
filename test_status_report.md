@@ -69,7 +69,7 @@
 | 解体 | test_deconstruction_effect.js |成功 | 本番でもOK |
 | 啓蒙時代 | test_enlightenment_era_effect.js | 成功 | 本番でもOK |
 | 資源 | test_resource_effect.js | 成功(本番でバグ) | 本番では略奪や解体でこれにダメージを与えてもマネーがもらえなかった(選択効果の過程でsourceが辿れなくなっているかも？) |
-| 資源の発見 | test_discovery_of_resources_effect.js | 成功 | 本番でもOK |
+| 資源の発見 | test_discovery_of_resources_effect.js | 成功(本番でバグ) | 場が満杯でも置けてしまう！ |
 | 徴兵 | test_conscription_effect.js | 成功 | 本番でもOK |
 | 現実主義 | test_realism_effect.js | 成功 | 本番でもOK |
 | 共同体主義 | test_communitarianism_effect.js | 成功 | 本番でもOK |
@@ -92,7 +92,7 @@
 | 結束主義 | test_solidarism_effect.js | 成功 | 本番でもOK |
 | 記憶の浄化 | test_memory_purification_effect.js | 成功 | 本番でもOK |
 | 軍国主義 | test_militarism_effect.js | 成功 | 本番でもOK |
-| 孤立主義 | test_isolationism_effect.js | 成功(本番でバグ) | 意識の減少効果を無効化できても自爆効果が発動してしまう(自爆大丈夫なときもあるぞ？)。 |
+| 孤立主義 | test_isolationism_effect.js | 成功 | 本番でもOK |
 | グローバリズム | test_globalism_effect.js | 成功 | 本番でもOK |
 | リバタリアニズム | test_libertarianism_effect.js | 成功 | 本番でもOK |
 | 共産主義 | test_communism_effect.js | 成功 | 本番でもOK |
@@ -118,7 +118,7 @@
     - (済) 直前のターン終了時効果を受けて捨て札になったはずのカードのターン開始時効果が働いてしまう(ターン開始時効果が食い込んで発動してしまっている)→修正済み
     - (済) 既にイデオロギーが配置されている場合にイデオロギーを重ねて配置したとき(イデオロギーが更新されるとき)、イデオロギーは捨て札に行くが、「捨て札になる処理」が働かない(MOVECARDではなく直接捨て札にしている)
     - (済) 手札に戻ったカードの耐久値がリセットされないバグを修正済み。
-    - NPCが確率でターン終了する仕様がもしかして入っていない？
+    - 「資源の発見」「徴兵」などの事象で場にカードを配置する効果の場合、配置アニメーションが再生されない(一時期上手くいっていたのに)→「交易路」は出たカードに反応しているので効果は大丈夫そう！
 - その他気になること
     - ターン開始時や終了時のカードの処理順を調査。可能であれば制御したい(「場の財の配置が古い順→場のイデオロギー→手札→デッキ→捨て札」これをターン中のプレイヤー→相手の順)
     - デバッグコマンドを効く/効かないよう制御できるようにしたい

@@ -169,6 +169,8 @@ export const EffectType = {
 
   // Internal effects for sequencing
   _PLACE_IDEOLOGY: "_PLACE_IDEOLOGY",
+  EVENT_EFFECTS_COMPLETE: "EVENT_EFFECTS_COMPLETE", // Sentinel effect for event card animations
+  EVENT_CARD_PLAYED: "EVENT_CARD_PLAYED", // Animation-specific effect for event card play
 };
 
 // Game settings

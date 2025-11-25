@@ -56,7 +56,10 @@ class AnimationManager {
      * @param {Object} gameState - ゲーム状態オブジェクト
      */
     setGameState(gameState) {
+        console.log('[DEBUG] AnimationManager.setGameState called.');
+        console.log('[DEBUG] AnimationManager.setGameState received gameState:', gameState);
         this.gameState = gameState;
+        console.log('[DEBUG] AnimationManager.setGameState - this.gameState after set:', this.gameState);
     }
 
     /**
@@ -123,7 +126,7 @@ class AnimationManager {
         }
         
         // 仮想演出（targetが不要な演出）のリスト
-        const virtualEffects = ['CARD_DRAW', 'TURN_START', 'TURN_END', 'GAME_RESULT', 'TURN_ORDER_DECISION'];
+        const virtualEffects = ['CARD_DRAW', 'TURN_START', 'TURN_END', 'GAME_RESULT', 'TURN_ORDER_DECISION', 'EVENT_CARD_PLAYED'];
         
         if (!target && !virtualEffects.includes(effectType)) {
             console.warn('🎬ANIM [Warning] Target element not found for:', effectType);
@@ -266,6 +269,12 @@ class AnimationManager {
                     // キューイングシステムで演出を待機
                     result = await this.queueCardPlayAnimation(target, params);
                     console.log('🔥ANIM_DEBUG [Execute] *** CARD_PLAY ANIMATION RESULT ***', result);
+                    break;
+                case 'EVENT_CARD_PLAYED':
+                    result = await this.animateEventCardPlay(target, params);
+                    break;
+                case 'CARD_REVEALED':
+                    result = await this.animateCardReveal(target, params);
                     break;
                 case 'CARD_DRAW':
                     console.log('🎬ANIM [Execute] CARD_DRAW case reached in executeAnimation!'); // New log
@@ -680,6 +689,144 @@ class AnimationManager {
     }
 
     /**
+     * 
+     * @param {*} target 
+     * @param {*} params 
+     * @returns 
+     */
+    async animateEventCardPlay(target, params = {}) {
+        console.log('[DEBUG] animateEventCardPlay: Start');
+        return new Promise((resolve) => {
+            let animationCard;
+    
+            if (target) {
+                console.log('[DEBUG] animateEventCardPlay: Target found, cloning.');
+                animationCard = target.cloneNode(true);
+                animationCard.classList.remove('card-animation-hidden');
+            } else {
+                console.log('[DEBUG] animateEventCardPlay: Target is null, creating virtual card.');
+                const cardId = params.effect?.args?.card_id;
+                const cardInstance = this.gameState?.all_card_instances[cardId];
+
+                if (!cardInstance || !cardInstance.name || !this.gameState || !this.gameState.cardDefs) {
+                    console.log('[DEBUG] animateEventCardPlay: Aborting virtual card creation due to missing data.');
+                    console.log(`[DEBUG]   cardId: ${cardId}`);
+                    console.log(`[DEBUG]   cardInstance: ${cardInstance ? JSON.stringify(cardInstance) : 'null/undefined'}`);
+                    console.log(`[DEBUG]   cardInstance.name: ${cardInstance?.name}`);
+                    console.log(`[DEBUG]   this.gameState: ${this.gameState ? 'exists' : 'null/undefined'}`);
+                    console.log(`[DEBUG]   this.gameState.cardDefs: ${this.gameState?.cardDefs ? 'exists' : 'null/undefined'}`);
+                    resolve({ success: false, reason: 'Missing data for virtual card' });
+                    return;
+                }
+                const cardData = this.gameState.cardDefs[cardInstance.name]; // Use card name for lookup
+                if (!cardData) {
+                    console.log(`[DEBUG] animateEventCardPlay: Card data not found for name: ${cardInstance.name}`);
+                    resolve({ success: false, reason: 'Card definition not found' });
+                    return;
+                }
+    
+                // Create a virtual card element
+                animationCard = document.createElement('div');
+                animationCard.className = `card card-type-${cardData.card_type}`;
+                animationCard.innerHTML = `
+                    <div class="card-name">${cardData.name}</div>
+                `;
+                console.log(`[DEBUG] animateEventCardPlay: Virtual card created for ${cardData.name}`);
+            }
+    
+            const playerId = params.effect?.args?.player_id || null;
+            const fieldCenter = this.getFieldCenter(target, playerId);
+            console.log('[DEBUG] animateEventCardPlay: Field center calculated:', fieldCenter);
+    
+            animationCard.classList.add('card-animation-clone');
+            animationCard.style.position = 'fixed';
+            animationCard.style.top = `${fieldCenter.y}px`;
+            animationCard.style.left = `${fieldCenter.x + 150}px`;
+            animationCard.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            animationCard.style.transition = 'all 0.3s ease-out';
+            animationCard.style.zIndex = '9999';
+    
+            document.body.appendChild(animationCard);
+            console.log('[DEBUG] animateEventCardPlay: Cloned/virtual card appended to body.');
+    
+            setTimeout(() => {
+                console.log('[DEBUG] animateEventCardPlay: Creating particle explosion.');
+                this.createParticleExplosion(animationCard, '事象');
+                setTimeout(() => {
+                    console.log('[DEBUG] animateEventCardPlay: Fading out card.');
+                    animationCard.style.transition = 'opacity 0.5s ease-out';
+                    animationCard.style.opacity = '0';
+                    setTimeout(() => {
+                        console.log('[DEBUG] animateEventCardPlay: Removing card from DOM.');
+                        if (animationCard.parentNode) {
+                            document.body.removeChild(animationCard);
+                        }
+                        resolve({ success: true, duration: 800 });
+                    }, 500);
+                }, 300);
+            }, 100);
+        });
+    }
+
+    /**
+     * 
+     * @param {*} target 
+     * @param {*} params 
+     * @returns 
+     */
+    async animateCardReveal(target, params = {}) {
+        return new Promise((resolve) => {
+            if (!target) {
+                resolve({ success: false, reason: 'Element not found' });
+                return;
+            }
+
+            const playerId = params.effect?.args?.player_id;
+            const fieldCenter = this.getFieldCenter(target, playerId);
+            const animationCard = target.cloneNode(true);
+            
+            animationCard.classList.remove('card-animation-hidden');
+            animationCard.classList.add('card-animation-clone');
+            animationCard.style.position = 'fixed';
+            animationCard.style.zIndex = '10000';
+            animationCard.style.transition = 'all 0.4s ease-out';
+            
+            // Initial position (where the card is)
+            const initialRect = target.getBoundingClientRect();
+            animationCard.style.top = `${initialRect.top}px`;
+            animationCard.style.left = `${initialRect.left}px`;
+            animationCard.style.width = `${initialRect.width}px`;
+            animationCard.style.height = `${initialRect.height}px`;
+
+            document.body.appendChild(animationCard);
+
+            // Phase 1: Move to center and enlarge
+            setTimeout(() => {
+                animationCard.style.top = `${fieldCenter.y}px`;
+                animationCard.style.left = `${fieldCenter.x}px`;
+                animationCard.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            }, 50);
+
+            // Phase 2: Pause
+            setTimeout(() => {
+                // Phase 3: Slide off-screen
+                animationCard.style.transition = 'all 0.5s ease-in';
+                const slideUp = playerId === 'PLAYER2'; // NPC's card goes up
+                animationCard.style.top = slideUp ? '-200px' : `${window.innerHeight + 200}px`;
+                animationCard.style.opacity = '0';
+                
+                // Phase 4: Clean up
+                setTimeout(() => {
+                    if (animationCard.parentNode) {
+                        document.body.removeChild(animationCard);
+                    }
+                    resolve({ success: true, duration: 1550 });
+                }, 500);
+            }, 1000);
+        });
+    }
+
+    /**
      * 場の中央位置を計算
      * @param {HTMLElement} target - 対象カード要素
      * @param {string} playerId - プレイヤーID (PLAYER1 or PLAYER2)
@@ -691,7 +838,7 @@ class AnimationManager {
         
         if (playerId) {
             // イデオロギーカードかどうかを判定
-            const isIdeologyCard = target.closest('.ideology-area') || target.classList.contains('card-type-イデオロギー');
+            const isIdeologyCard = target && (target.closest('.ideology-area') || target.classList.contains('card-type-イデオロギー'));
             
             if (isIdeologyCard) {
                 // イデオロギーエリアを取得
@@ -711,7 +858,7 @@ class AnimationManager {
         }
         
         // フォールバック: カードの親要素から場を特定
-        if (!fieldElement) {
+        if (!fieldElement && target) {
             fieldElement = target.closest('.player-field-area, .opponent-field-area');
             if (fieldElement) {
                 fieldElement = fieldElement.querySelector('.wealth-cards-scrollable');
@@ -719,7 +866,7 @@ class AnimationManager {
         }
         
         // さらなるフォールバック: wealth-cards-scrollableエリアを探す
-        if (!fieldElement) {
+        if (!fieldElement && target) {
             fieldElement = target.closest('.wealth-cards-scrollable');
         }
         
@@ -1252,7 +1399,8 @@ class AnimationManager {
         const centerY = rect.top + rect.height / 2;
         
         // パーティクルの色を決定
-        const particleClass = cardType === '財' ? 'particle-wealth' : 'particle-ideology';
+        const particleClass = cardType === '財' ? 'particle-wealth' : 
+                              cardType === '事象' ? 'particle-event' : 'particle-ideology';
         
         // パーティクル数
         const particleCount = 12;

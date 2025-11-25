@@ -96,7 +96,6 @@ const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard
 
 const enforceFieldLimit = (gameState, player, cardToMove, effectsQueue, sourceCard) => {
     if (player.field.length >= player.field_limit && cardToMove.card_type === CardType.WEALTH) {
-        // Queue a LIMIT_WARNING effect to be handled by the PresentationController
         effectsQueue.push([{ 
             effect_type: 'LIMIT_WARNING',
             args: {
@@ -106,28 +105,34 @@ const enforceFieldLimit = (gameState, player, cardToMove, effectsQueue, sourceCa
             }
         }, sourceCard]);
 
-        // Divert the card to the discard pile instead of placing it on the field
-        effectsQueue.push([{
-            effect_type: EffectType.MOVE_CARD,
-            args: {
-                player_id: player.id,
-                card_id: cardToMove.instance_id,
-                card_to_move: cardToMove,
-                source_pile: cardToMove.location, // Use its current location as source
-                destination_pile: 'discard'
+                    // Divert the card to the discard pile instead of placing it on the field
+                console.log(`[DEBUG] Pushing effect to effectsQueue (L110): Type=${EffectType.MOVE_CARD}, Args=${JSON.stringify({
+                    player_id: player.id,
+                    card_id: cardToMove.instance_id,
+                    card_to_move: cardToMove,
+                    source_pile: cardToMove.location, // Use its current location as source
+                    destination_pile: 'discard'
+                })}`);
+                effectsQueue.push([{
+                    effect_type: EffectType.MOVE_CARD,
+                    args: {
+                        player_id: player.id,
+                        card_id: cardToMove.instance_id,
+                        card_to_move: cardToMove,
+                        source_pile: cardToMove.location, // Use its current location as source
+                        destination_pile: 'discard'
+                    }
+                }, sourceCard]);
+                
+                return false; // Indicates the move to the field should not proceed
             }
-        }, sourceCard]);
+            return true; // Indicates the card can be placed on the field
+        };
         
-        return false; // Indicates the move to the field should not proceed
-    }
-    return true; // Indicates the card can be placed on the field
-};
-
-const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
-    if (Array.isArray(targetPlayerIdStr)) {
-        return targetPlayerIdStr.map(id => gameState.players[id]);
-    }
-    const opponentPlayerId = selfPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
+            if (Array.isArray(targetPlayerIdStr)) {
+                return targetPlayerIdStr.map(id => gameState.players[id]);
+            }    const opponentPlayerId = selfPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
     switch (targetPlayerIdStr) {
         case 'self':
             return [gameState.players[selfPlayerId]];
@@ -314,12 +319,13 @@ const effectHandlers = {
 
                 addEffectToBack(TriggerType.PLAY_EVENT, ownerEventArgs, card);
                 addEffectToBack(TriggerType.PLAY_EVENT_OWNER, ownerEventArgs, card);
-                addEffectToBack(TriggerType.PLAY_EVENT_OPPONENT, opponentEventArgs, card);
-                
                 // 汎用、オーナー限定、相手限定の3つのトリガーをすべて発行
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: opponentPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+
+                // Add sentinel effect to mark the completion of event card's immediate effects
+                addEffectToBack(EffectType.EVENT_EFFECTS_COMPLETE, { card_id: card.instance_id, player_id: player_id }, card);
 
 
             } else { // Wealth & Ideology
@@ -471,9 +477,10 @@ const effectHandlers = {
             gameState.temp_effect_data.last_consciousness_change = finalAmount;
             
             // Store decrease amount for threshold checking (Python version compatibility)
-            if (finalAmount < 0) {
+            if (originalAmount < 0) {
                 const tempKey = `${player_id}_last_consciousness_decrease`;
                 gameState.temp_effect_data[tempKey] = Math.abs(finalAmount);
+                console.log(`[孤立主義] Stored last consciousness decrease for ${player_id}: ${gameState.temp_effect_data[tempKey]} tempKey:${tempKey}`);
             }
             
             gameState.players[player_id].consciousness += finalAmount;
@@ -496,6 +503,7 @@ const effectHandlers = {
                             message: '意識変化が軽減により無効化されました'
                         }
                     }, sourceCard]);
+                    console.log(`[孤立主義] 意識変化が軽減により無効化されました originalAmount:${originalAmount}, finalAmount:${finalAmount}`);
                 }
                 
                 const changeArgs = {
@@ -1342,6 +1350,8 @@ const effectHandlers = {
         }
     },
     [EffectType.PROCESS_EXPOSE_CARD_BY_TYPE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE handler entered.');
+        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE args:', args);
         const { player_id, source_piles, card_type, count = 1 } = args;
         const player = gameState.players[player_id];
         if (!player) {
@@ -1355,6 +1365,22 @@ const effectHandlers = {
             const exposedCards = shuffle(candidateCards).slice(0, count);
             if (!gameState.exposed_cards) gameState.exposed_cards = [];
             gameState.exposed_cards.push(...exposedCards.map(c => ({...c, exposed_by: player.id})));
+            
+            // Add animation for each exposed card
+            exposedCards.forEach(card => {
+                console.log(`[DEBUG] Queuing CARD_REVEALED animation for card: ${card.name}`);
+                gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.CARD_REVEALED,
+                        args: { 
+                            card_id: card.instance_id,
+                            player_id: player.id 
+                        }
+                    },
+                    sourceCard: card
+                });
+            });
+
             effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
@@ -2080,6 +2106,19 @@ const effectHandlers = {
             sourceCard: null // This effect is not directly tied to a source card
         });
     },
+    [EffectType.EVENT_EFFECTS_COMPLETE]: (gameState, args) => {
+        // This sentinel effect triggers the deferred event card animation.
+        // It's processed only after all other effects triggered by the event card have resolved.
+        console.log('[DEBUG] EVENT_EFFECTS_COMPLETE triggered. Queuing EVENT_CARD_PLAYED animation.');
+        gameState.animation_queue.push({
+            effect: {
+                effect_type: EffectType.EVENT_CARD_PLAYED,
+                args: { card_id: args.card_id, player_id: args.player_id }
+            },
+            sourceCard: gameState.all_card_instances[args.card_id]
+        });
+    },
+
     [EffectType.CHECK_GAME_OVER]: () => {
         // This is a marker effect. The actual check is done in the processEffects loop.
     },
@@ -2215,11 +2254,11 @@ const shouldLogEffectInternal = (effect) => {
 export const processEffects = (gameState) => {
     const stateAfterImmediateEffects = produce(gameState, draftState => {
         if (draftState.game_over) return;
-        let safetyBreak = 0;
-        
-        while (draftState.effect_queue.length > 0 && !draftState.awaiting_input && !draftState.game_over && safetyBreak < 500) {
-            const [effect, sourceCard] = draftState.effect_queue.shift();
-
+                    let safetyBreak = 0;
+                    
+                    while (draftState.effect_queue.length > 0 && !draftState.awaiting_input && !draftState.game_over && safetyBreak < 500) {
+                        const [effect, sourceCard] = draftState.effect_queue.shift();
+                        console.log(`[DEBUG] Processing effect in queue: Type=${effect?.effect_type}, Args=${JSON.stringify(effect?.args)}, SourceCard=${sourceCard?.name || 'N/A'}`);
             if (globalEffectLogger) {
                 globalEffectLogger.recordEffect(draftState, effect, sourceCard);
             }
