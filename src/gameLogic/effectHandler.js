@@ -1350,9 +1350,9 @@ const effectHandlers = {
         }
     },
     [EffectType.PROCESS_EXPOSE_CARD_BY_TYPE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE handler entered.');
+        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE(公開) handler entered.');
         console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE args:', args);
-        const { player_id, source_piles, card_type, count = 1 } = args;
+        const { player_id, source_piles, card_type, card_id, card_name, count = 1 } = args;
         const player = gameState.players[player_id];
         if (!player) {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
@@ -1362,12 +1362,16 @@ const effectHandlers = {
         const candidateCards = _getCardsFromPiles(player, source_piles, card_type);
 
         if (candidateCards.length > 0) {
+            let matchName = true;
             const exposedCards = shuffle(candidateCards).slice(0, count);
             if (!gameState.exposed_cards) gameState.exposed_cards = [];
             gameState.exposed_cards.push(...exposedCards.map(c => ({...c, exposed_by: player.id})));
             
             // Add animation for each exposed card
             exposedCards.forEach(card => {
+                if (card_name && card.name !== card_name) {
+                    matchName = false;
+                }
                 console.log(`[DEBUG] Queuing CARD_REVEALED animation for card: ${card.name}`);
                 gameState.animation_queue.push({
                     effect: {
@@ -1377,13 +1381,36 @@ const effectHandlers = {
                             player_id: player.id 
                         }
                     },
-                    sourceCard: card
+                    sourceCard: sourceCard
                 });
             });
 
+            if (card_name && !matchName) {
+                console.log(`公開に失敗: プレイヤー ${player_id} はカードタイプ ${card_type} のカードを見つけられませんでした。名前指定:${card_name}`);
+                effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
+            } else {
+                console.log(`公開に成功: プレイヤー ${player_id} がカードタイプ ${card_type} のカードを公開しました。`);
+                effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
+            }
+
+        } else if (card_id){
+            const exposedCards = [];
+            exposedCards.push(gameState.all_card_instances[card_id]);
+            gameState.animation_queue.push({
+                    effect: {
+                        effect_type: EffectType.CARD_REVEALED,
+                        args: { 
+                            card_id: card_id,
+                            player_id: player.id 
+                        }
+                    },
+                    sourceCard: sourceCard
+                });
             effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
+            console.log(`公開に成功: プレイヤー ${player_id} がカードタイプ ${card_type} のカードを公開しました。card_id指定: ${card_id}`);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
+            console.log(`公開に失敗: プレイヤー ${player_id} はカードタイプ ${card_type} のカードを見つけられませんでした。`);
         }
     },
         [EffectType.PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -1751,6 +1778,10 @@ const effectHandlers = {
                     args: { player_id: player_id, amount: bonus_scale_amount }
                 }, sourceCard]);
             }
+            effectsQueue.unshift([{
+                    effect_type: TriggerType.SUCCESS_PROCESS,
+                    args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
+                }, sourceCard]);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
         }

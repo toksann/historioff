@@ -16,7 +16,7 @@
 | カード名 | テストファイル | テストステータス | 備考 |
 |---|---|---|---|
 | 戦士 | test_warrior_effect.js | 成功 | 本番でもOK |
-| 山 | test_mountain_effect.js | 成功(本番でバグ) | ハードコーディングしていた「自分の場にある「山」以外の財カードはダメージを受けなくなる。」の処理がなくなったため効果が発揮されない(ADD_MODIFY_PARAMETER_CORRECTIONにこれを実現できる仕組みでも追加するべきだろうか？) |
+| 山 | test_mountain_effect.js | 成功 | 本番でもOK |
 | 砦 | test_fortress_effect.js | 成功 | 本番でもOK |
 | 聖なる領域 | test_sacred_domain_effect.js | 成功 | 本番でもOK |
 | 交易路 | test_trade_route_effect.js | 成功 | 本番でもOK |
@@ -29,7 +29,7 @@
 | 覚醒 | test_awakening_effect.js | 成功 | 本番でもOK |
 | 内部崩壊 | test_internal_collapse_effect.js | 成功 | 本番でもOK |
 | 秩序の瓦解 | test_collapse_of_order_effect.js | 成功 | 本番でもOK |
-| 略奪 | test_looting_effect.js | 成功(本番でバグ) | 成功時効果が発生しない？(多分「兵器」と共通の問題) |
+| 略奪 | test_looting_effect.js | 成功 | 本番でもOK |
 | 物々交換 | test_barter_effect.js | 成功 | 本番でもOK |
 | 接収 | test_seizure_effect.js | 成功 | 本番でもOK |
 | 経済学の興り | test_rise_of_economics_effect.js | 成功 | 本番でもOK |
@@ -47,7 +47,7 @@
 | 救世 | test_salvation_effect.js | 成功 | 本番でもOK |
 | 終末 | test_apocalypse_effect.js | 成功 | 本番でもOK |
 | 輪廻転生 | test_reincarnation_effect.js | 成功 | 本番でもOK |
-| マネー | test_money_effect.js | 成功 | 本番でもOK |
+| マネー | test_money_effect.js | 成功 | 場に空きが無くても最初の1枚がおけちゃう！ |
 | 重金主義 | test_bullionism_effect.js | 成功 | 本番でもOK |
 | 重商主義 | test_mercantilism_effect.js | 成功 | 本番でもOK |
 | 重農主義 | test_physiocracy_effect.js | 成功 | 本番でもOK |
@@ -103,7 +103,7 @@
 | 自由主義 | test_liberalism_effect.js | 成功 | 本番でもOK |
 | ウルトラナショナリズム | test_ultranationalism_effect.js | 成功 | 本番でもOK |
 | ポピュリズム | test_populism_effect.js | 成功 | 本番でもOK |
-| 確証破壊能力 | test_mutual_assured_destruction_effect.js | 成功 | 失敗時効果(相手の意識を0にする)が働いていない。→相手の手札に確証破壊能力がないはずなのに成功時の能力が発動している|
+| 確証破壊能力 | test_mutual_assured_destruction_effect.js | 成功 | 本番でもOK |
 | 相互確証破壊 | test_mutual_assured_destruction_effect.js | 成功 | 本番でもOK |
 | 愛国教育 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
 | 嫌国教育 | test_education_and_culture_effects.js | 成功 | 本番でもOK |
