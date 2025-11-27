@@ -47,7 +47,7 @@
 | 救世 | test_salvation_effect.js | 成功 | 本番でもOK |
 | 終末 | test_apocalypse_effect.js | 成功 | 本番でもOK |
 | 輪廻転生 | test_reincarnation_effect.js | 成功 | 本番でもOK |
-| マネー | test_money_effect.js | 成功 | 場に空きが無くても最初の1枚がおけちゃう！ |
+| マネー | test_money_effect.js | 成功 | 本番でもOK |
 | 重金主義 | test_bullionism_effect.js | 成功 | 本番でもOK |
 | 重商主義 | test_mercantilism_effect.js | 成功 | 本番でもOK |
 | 重農主義 | test_physiocracy_effect.js | 成功 | 本番でもOK |
@@ -64,12 +64,12 @@
 | 技術提供 | test_tech_transfer_effect.js | 成功 | 本番でもOK |
 | 理想主義 | test_idealism_effect.js | 成功 | 本番でもOK |
 | 職人 | test_artisan_effect.js | 成功 | 本番でもOK |
-| 兵器 | test_weapon_effect.js | 成功(本番でバグ) | 財にダメージを与えられなかったとき、意識減少を行う効果が発生していない(MODIFY_DURABILITY修正の影響？) |
+| 兵器 | test_weapon_effect.js | 成功(本番でバグ) | 財にダメージを与えられなかったとき、意識減少を行う効果が発生していない |
 | 民族自決 | test_self_determination_effect.js | 成功 | 本番でもOK |
 | 解体 | test_deconstruction_effect.js |成功 | 本番でもOK |
 | 啓蒙時代 | test_enlightenment_era_effect.js | 成功 | 本番でもOK |
-| 資源 | test_resource_effect.js | 成功(本番でバグ) | 本番では略奪や解体でこれにダメージを与えてもマネーがもらえなかった(選択効果の過程でsourceが辿れなくなっているかも？) |
-| 資源の発見 | test_discovery_of_resources_effect.js | 成功(本番でバグ) | 場が満杯でも置けてしまう！ |
+| 資源 | test_resource_effect.js | 成功(本番でバグ) | 本番では戦士や兵器やその他イデオロギーによるダメージでは問題ないが略奪や解体でこれにダメージを与えてもマネーがもらえなかった(選択効果の過程でsourceが辿れなくなっているかも？) |
+| 資源の発見 | test_discovery_of_resources_effect.js | 成功 | 本番でもOK |
 | 徴兵 | test_conscription_effect.js | 成功 | 本番でもOK |
 | 現実主義 | test_realism_effect.js | 成功 | 本番でもOK |
 | 共同体主義 | test_communitarianism_effect.js | 成功 | 本番でもOK |
@@ -79,7 +79,7 @@
 | 分離主義 | test_separatism_effect.js | 成功 | 本番でもOK |
 | 不干渉主義 | test_non_interventionism_effect.js | 成功 | 本番でもOK |
 | 隘路 | test_chokepoint_effect.js | 成功 | 本番でもOK |
-| 工作員 | test_agent_effect.js | 成功 | 「公開する」という効果はログに出す必要もあるし、演出も入れたい(演出概要：対象のプレイヤー側(NPCなら右上,プレイヤーなら右下)から画面中央)に向かってフェードインしつつスライドイン。その後1秒画面中央で停止後、出てくるのと逆向きにフェードアウトしつつスライドアウト |
+| 工作員 | test_agent_effect.js | 成功 | 本番でもOK |
 | 工作活動 | test_espionage_effect.js | 成功 | 本番でもOK |
 | 大地震 | test_earthquake_effect.js | 成功 | 本番でもOK |
 | 災害多発地域 | test_disaster_prone_area_effect.js | 成功 | 本番でもOK |
@@ -114,16 +114,9 @@
 
 
 ## 備考
-- その他バグ
-    - (済) 直前のターン終了時効果を受けて捨て札になったはずのカードのターン開始時効果が働いてしまう(ターン開始時効果が食い込んで発動してしまっている)→修正済み
-    - (済) 既にイデオロギーが配置されている場合にイデオロギーを重ねて配置したとき(イデオロギーが更新されるとき)、イデオロギーは捨て札に行くが、「捨て札になる処理」が働かない(MOVECARDではなく直接捨て札にしている)
-    - (済) 手札に戻ったカードの耐久値がリセットされないバグを修正済み。
-    - (済) 「資源の発見」「徴兵」などの事象で場にカードを配置する効果の場合、配置アニメーションが再生されない(一時期上手くいっていたのに)→「交易路」は出たカードに反応しているので効果は大丈夫そう！
 - その他気になること
     - ターン開始時や終了時のカードの処理順を調査。可能であれば制御したい(「場の財の配置が古い順→場のイデオロギー→手札→デッキ→捨て札」これをターン中のプレイヤー→相手の順)
-    - デバッグコマンドを効く/効かないよう制御できるようにしたい
-- 複数カード検証テスト2件(2枚検証と4枚検証)により、テスト件数 = カード枚数 - 4
-    - 最終的にテストファイルは91件、ヘルパーを含めて92件になる想定(本番側でミスが出るとそれを直すためのテストが生成することもあるので、実際はそれより多い)
+    - デバッグコマンドを効く/効かないよう制御できるようにしたい →　immerが入ってからは効かないはず
 - 特殊テストの成否
     - test_turn_end_flash.js | 対象外 | 手動テスト用スクリプトのため |
     - test_presentation_controller.js | 対象外 | DOM/ブラウザAPI依存のため |
@@ -134,6 +127,9 @@
 ## バグ分析と修正方針
 
 現在、本番環境（`npm start`）で多数のカード効果にバグが確認されています。以下に、テスト状況のテーブルを基にバグを分類し、修正方針を提案します。
+
+ **公開効果をログに乘るようにしたい**
+
 
 ### 横断的な課題
 
@@ -150,6 +146,7 @@
 
 確認された未分析のエラー
 *   **確認状況**: 「資本主義」の「マネー」の耐久値と同じ回数だけ他の財の耐久値を+1する効果が重すぎたのか当該エラーが発生。
+*    **方針**: 「資本主義」の効果をランダムに割り振った計算後に加算するように変更することで軽減を図るかなどが考えられるが、以後強化回数に依存する効果を加える可能性を考えると仕様を変更したくない！
 
 Uncaught runtime errors:
 ×

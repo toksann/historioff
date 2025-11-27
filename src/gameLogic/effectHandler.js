@@ -424,6 +424,13 @@ const effectHandlers = {
             // Register the new card in all_card_instances
             gameState.all_card_instances[newCard.instance_id] = newCard;
 
+            let last_destination_pile = args.destination_pile;
+            if (destination_pile === 'field' && player.field.length >= player.field_limit && newCard.card_type === CardType.WEALTH) {
+                // 場の上限に達している場合、捨て札に移動するように設定する
+                last_destination_pile = 'discard';
+            }
+
+
             // Delegate the actual card movement to the MOVE_CARD effect
             effectsQueue.unshift([{
                 effect_type: EffectType.MOVE_CARD,
@@ -432,7 +439,7 @@ const effectHandlers = {
                     card_id: newCard.instance_id,
                     card_to_move: newCard,
                     source_pile: 'game_source', // Conceptual pile for newly created cards
-                    destination_pile: destination_pile,
+                    destination_pile: last_destination_pile,
                     position: position, // For deck placement
                     source_card_id: sourceCard ? sourceCard.instance_id : null
                 }
