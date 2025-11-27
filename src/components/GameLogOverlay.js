@@ -83,21 +83,15 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
             return null;
         }
         
-        // console.log('Getting card from entry:', entry);
-        
         // 1. details.cardIdから検索（最も確実）
         if (entry.details && entry.details.cardId && gameState.all_card_instances) {
-            // console.log('Searching by details.cardId:', entry.details.cardId);
             const card = gameState.all_card_instances[entry.details.cardId];
-            // console.log('Found card by details.cardId:', card);
             if (card) return card;
         }
         
         // 2. sourceCardIdから検索
         if (entry.sourceCardId && gameState.all_card_instances) {
-            // console.log('Searching by sourceCardId:', entry.sourceCardId);
             const card = gameState.all_card_instances[entry.sourceCardId];
-            // console.log('Found card by sourceCardId:', card);
             if (card) return card;
         }
         
@@ -108,12 +102,9 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
                 ? entry.sourceCard.split('>')[1] 
                 : entry.sourceCard;
             
-            // console.log('Extracted card name:', cardName);
-            
             // cardDefsから検索
             if (gameState.cardDefs && gameState.cardDefs[cardName]) {
                 const card = gameState.cardDefs[cardName];
-                // console.log('Found card by name in cardDefs:', card);
                 return card;
             }
             
@@ -121,7 +112,6 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
             if (gameState.all_card_instances) {
                 const cardInstance = Object.values(gameState.all_card_instances)
                     .find(card => card && card.name === cardName);
-                // console.log('Found card by name in instances:', cardInstance);
                 if (cardInstance) return cardInstance;
             }
             
@@ -174,8 +164,6 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
 
     // ログエントリーのフォーマット
     const formatLogEntry = (entry, index) => {
-        // デバッグ用: ログエントリーの構造を確認
-        console.log('DEBUG: formatLogEntry - entry structure:', entry);
         
         // 強化されたログエントリーの場合（より柔軟な条件）
         if ((entry.type === 'effect' || entry.source === 'effect_queue') && 

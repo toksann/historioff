@@ -352,6 +352,7 @@ class PresentationController {
                     break;
                 
                 case 'CARD_REVEALED':
+                    console.log('[REVEAL_DEBUG] 3. PresentationController: Handling CARD_REVEALED, delegating to AnimationManager.');
                     await this.handleCardRevealed(effect, sourceCard);
                     break;
                     
@@ -395,11 +396,9 @@ class PresentationController {
      * Card revealed animation
      */
     async handleCardRevealed(effect, sourceCard) {
-        const cardId = effect.args.card_id;
-        const target = document.querySelector(`[data-card-id="${cardId}"]`);
-        if (target) {
-            await this.animationManager.triggerTransientEffect('CARD_REVEALED', target, { effect, sourceCard });
-        }
+        console.log('[REVEAL_DEBUG] 3. PresentationController: Handling CARD_REVEALED, delegating to AnimationManager with null target.');
+        // The target is always null because we will create a virtual card in the AnimationManager.
+        await this.animationManager.triggerTransientEffect('CARD_REVEALED', null, { effect, sourceCard });
     }
 
     /**

@@ -633,6 +633,7 @@ const effectHandlers = {
 
         // --- TARGET VALIDITY CHECK (if target resolution failed) ---
         if (!targetCardRef) {
+            console.log (`[耐久値変更] ターゲットの耐久値変更が無効化されました。resolved_card_id: ${resolved_card_id}`);
             if (sourceCard) { // Trigger FAILED_PROCESS if sourceCard exists
                 effectsQueue.unshift([{
                     effect_type: TriggerType.FAILED_PROCESS,
@@ -782,9 +783,12 @@ const effectHandlers = {
         const new_limit = player.field_limit + amount;
         const current_field_cards = player.field.length;
 
+        console.log(`[フィールド制限変更] 現在の制限: ${player.field_limit}, 変更量: ${amount}, 新しい制限: ${new_limit}, フィールド上のカード数: ${current_field_cards}`);
         if (amount < 0) { // This is a decrease
             if (new_limit < current_field_cards) { // If new limit is less than current cards on field, it's a failure
+                console.log(`[フィールド制限変更] フィールド制限の減少が無効化されました。new_limit: ${new_limit}, current_field_cards: ${current_field_cards}`);
                 if (sourceCard) {
+                console.log(`[フィールド制限変更] FAILED_PROCESS 発行`);
                     effectsQueue.unshift([{
                         effect_type: TriggerType.FAILED_PROCESS,
                         args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
@@ -896,7 +900,7 @@ const effectHandlers = {
         cardToMove.location = destination_pile;
         cardToMove.owner = args.target_player_id || player_id; // Update owner before pushing to destination
 
-        if (!maintain && destination_pile !== 'field' && destination_pile !== 'discard') {
+        if (!maintain && destination_pile !== 'field') {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
                 const updates = {};
@@ -1371,18 +1375,19 @@ const effectHandlers = {
             exposedCards.forEach(card => {
                 if (card_name && card.name !== card_name) {
                     matchName = false;
+                } else {
+                    console.log(`[DEBUG] Queuing CARD_REVEALED animation for card: ${card.name}`);
+                    gameState.animation_queue.push({
+                        effect: {
+                            effect_type: EffectType.CARD_REVEALED,
+                            args: { 
+                                card_id: card.instance_id,
+                                player_id: player.id 
+                            }
+                        },
+                        sourceCard: sourceCard
+                    });
                 }
-                console.log(`[DEBUG] Queuing CARD_REVEALED animation for card: ${card.name}`);
-                gameState.animation_queue.push({
-                    effect: {
-                        effect_type: EffectType.CARD_REVEALED,
-                        args: { 
-                            card_id: card.instance_id,
-                            player_id: player.id 
-                        }
-                    },
-                    sourceCard: sourceCard
-                });
             });
 
             if (card_name && !matchName) {

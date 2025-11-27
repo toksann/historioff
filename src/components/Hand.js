@@ -5,8 +5,6 @@ import '../App.css';
 const Hand = ({ player, onPlayCard, onProvideInput, awaiting_input, onCardClick }) => {
     if (!player) return <div className="hand">Loading hand...</div>;
 
-    console.log('DEBUG: Hand.js rendering. player.hand:', player.hand); // NEW DEBUG LOG
-
     const isAwaitingChoice = awaiting_input && awaiting_input.type === 'CHOOSE_CARD_FOR_EFFECT';
     const isAwaitingCardOperation = awaiting_input && awaiting_input.type === 'CHOICE_CARDS_FOR_OPERATION';
 

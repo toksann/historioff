@@ -2,7 +2,6 @@ import React from 'react';
 import '../App.css';
 
 const Card = ({ card, isSelectable, onClick, onAnimationEnd }) => {
-  // console.log(`DEBUG: Card.js rendering - ${card.name} (ID: ${card.instance_id}), Required Scale: ${card.required_scale}`); // NEW DEBUG LOG
 
   const cardClassName = `card ${onClick ? 'clickable' : ''} card-type-${card.card_type} ${card.animation || ''}`;
 

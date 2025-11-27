@@ -1,243 +1,47 @@
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(1), awaiting_input: null, …}
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAYER_ACTION, Args={"player_id":"PLAYER1","action_type":"play_card","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAYER_ACTION
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAYER_ACTION
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MOVE_CARD, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","source_pile":"hand","destination_pile":"playing_event","player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MOVE_CARD
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MOVE_CARD
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAY_EVENT_THIS, Args={"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAY_EVENT_THIS
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAY_EVENT_THIS
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_CONSCIOUSNESS_RESERVE, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_CONSCIOUSNESS_RESERVE
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_CONSCIOUSNESS_RESERVE
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"},"target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_CONSCIOUSNESS, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"},"target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_CONSCIOUSNESS
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_CONSCIOUSNESS
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=CHECK_GAME_OVER, Args={}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CHECK_GAME_OVER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CHECK_GAME_OVER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=CONSCIOUSNESS_CHANGED, Args={"player_id":"PLAYER1","original_amount":3,"actual_amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CONSCIOUSNESS_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CONSCIOUSNESS_CHANGED
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=undefined, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"},"target_player_id":"PLAYER1"}, SourceCard=豊作
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_SCALE_RESERVE, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_SCALE_RESERVE
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_SCALE_RESERVE
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_SCALE_INCREASE_RESERVE_OWNER, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"},"target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_SCALE_INCREASE_RESERVE_OWNER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_SCALE_INCREASE_RESERVE_OWNER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MODIFY_SCALE, Args={"player_id":"PLAYER1","amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","triggering_effect_args":{"player_id":"PLAYER1","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"},"target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MODIFY_SCALE
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MODIFY_SCALE
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=SCALE_CHANGED, Args={"player_id":"PLAYER1","original_amount":3,"actual_amount":3,"source_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: SCALE_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: SCALE_CHANGED
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=MOVE_CARD, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","source_pile":"playing_event","destination_pile":"discard","player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: MOVE_CARD
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: MOVE_CARD
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=CARD_DISCARDED_OWNER, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","card_type":"事象","source_pile":"playing_event","destination_pile":"discard","player_id":"PLAYER1","target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CARD_DISCARDED_OWNER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CARD_DISCARDED_OWNER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=CARD_DISCARDED, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","card_type":"事象","source_pile":"playing_event","destination_pile":"discard","player_id":"PLAYER1","target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CARD_DISCARDED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CARD_DISCARDED
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=CARD_DISCARDED_THIS, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","card_type":"事象","source_pile":"playing_event","destination_pile":"discard","player_id":"PLAYER1","target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CARD_DISCARDED_THIS
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CARD_DISCARDED_THIS
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAY_EVENT, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","card_type":"事象","player_id":"PLAYER1","target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAY_EVENT
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAY_EVENT
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAY_EVENT_OWNER, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","card_type":"事象","player_id":"PLAYER1","target_player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAY_EVENT_OWNER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAY_EVENT_OWNER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAYER_PLAY_CARD_ACTION, Args={"player_id":"PLAYER1","action_type":"card_played","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","target_card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAYER_PLAY_CARD_ACTION
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAYER_PLAY_CARD_ACTION
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAYER_PLAY_CARD_ACTION_OWNER, Args={"player_id":"PLAYER1","action_type":"card_played","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAYER_PLAY_CARD_ACTION_OWNER
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAYER_PLAY_CARD_ACTION_OWNER
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=PLAYER_PLAY_CARD_ACTION_OPPONENT, Args={"player_id":"PLAYER2","action_type":"card_played","card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: PLAYER_PLAY_CARD_ACTION_OPPONENT
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: PLAYER_PLAY_CARD_ACTION_OPPONENT
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2261 [DEBUG] Processing effect in queue: Type=EVENT_EFFECTS_COMPLETE, Args={"card_id":"PLAYER1-豊作-25159590-c5de-442f-bc60-09492011afe3","player_id":"PLAYER1"}, SourceCard=豊作
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: EVENT_EFFECTS_COMPLETE
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: Proxy(Object) {type_: 0, scope_: {…}, modified_: true, finalized_: false, assigned_: {…}, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: EVENT_EFFECTS_COMPLETE
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: undefined
-effectHandler.js:2112 [DEBUG] EVENT_EFFECTS_COMPLETE triggered. Queuing EVENT_CARD_PLAYED animation.
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: CONSCIOUSNESS_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: CONSCIOUSNESS_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: SCALE_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: SCALE_CHANGED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:234 [DEBUG] PresentationController.onGameEffect called with effect: EVENT_CARD_PLAYED
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-PresentationController.js:276 [DEBUG] delegateToAnimationManager called with effect: EVENT_CARD_PLAYED
-PresentationController.js:387 [DEBUG] PresentationController.handleEventCardPlayed entered.
-PresentationController.js:388 [DEBUG] PresentationController.handleEventCardPlayed - this.animationManager: AnimationManager {animationQueue: Array(7), activeAnimations: Set(2), persistentStates: Map(0), completedCount: 7, errors: Array(0), …}
-AnimationManager.js:698 [DEBUG] animateEventCardPlay: Start
-AnimationManager.js:707 [DEBUG] animateEventCardPlay: Target is null, creating virtual card.
-AnimationManager.js:721 [DEBUG] cardInstance.name 豊作
-AnimationManager.js:722 [DEBUG] this.gameState.cardDefs {戦士: {…}, 山: {…}, 砦: {…}, 聖なる領域: {…}, 交易路: {…}, …}
-AnimationManager.js:737 [DEBUG] animateEventCardPlay: Virtual card created for 豊作
-AnimationManager.js:742 [DEBUG] animateEventCardPlay: Field center calculated: {x: 804.5, y: 561}
-AnimationManager.js:753 [DEBUG] animateEventCardPlay: Cloned/virtual card appended to body.
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:59 [DEBUG] AnimationManager.setGameState called.
-AnimationManager.js:60 [DEBUG] AnimationManager.setGameState received gameState: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:62 [DEBUG] AnimationManager.setGameState - this.gameState after set: {players: {…}, current_turn: 'PLAYER1', phase: 'START_TURN', effect_queue: Array(0), awaiting_input: null, …}
-AnimationManager.js:756 [DEBUG] animateEventCardPlay: Creating particle explosion.
-AnimationManager.js:759 [DEBUG] animateEventCardPlay: Fading out card.
-AnimationManager.js:763 [DEBUG] animateEventCardPlay: Removing card from DOM.
+[DEBUG] Queuing CARD_REVEALED animation for card: グローバリズム
+effectHandler.js:1391 💣💥 [EFFECT_HANDLER_REVEAL_DEBUG] Pushing animation object (from candidateCards): {
+  "effect": {
+    "args": {
+      "card_id": "PLAYER2-グローバリズム-4a3f3331-459d-4d78-a891-1e28e9ecf1ef",
+      "player_id": "PLAYER2"
+    }
+  },
+  "sourceCard": {
+    "name": "工作員",
+    "card_type": "財",
+    "required_scale": 0,
+    "durability": 1,
+    "description": "自分のターン開始時、自分の意識-1。相手のターン開始時、自分の手札かデッキにあるイデオロギーカードを1枚公開する。",
+    "triggers": {
+      "START_TURN_OWNER": [
+        {
+          "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+          "args": {
+            "player_id": "self",
+            "amount": -1
+          }
+        }
+      ],
+      "START_TURN_OPPONENT": [
+        {
+          "effect_type": "PROCESS_EXPOSE_CARD_BY_TYPE",
+          "args": {
+            "player_id": "self",
+            "source_piles": [
+              "hand",
+              "deck"
+            ],
+            "count": 1,
+            "card_type": "イデオロギー"
+          }
+        }
+      ]
+    },
+    "is_token": true,
+    "definitionOrder": 64,
+    "owner": "PLAYER2",
+    "instance_id": "PLAYER2-工作員-7d87591d-d4e7-40a7-a70d-7e748bbf6098",
+    "current_durability": 1,
+    "location": "field"
+  }
+}

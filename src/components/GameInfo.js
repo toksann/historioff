@@ -43,15 +43,11 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
     const latestEffects = getLatestEffects();
 
     // 点滅アニメーションをトリガー
-    const triggerFlash = useCallback(() => {
-        // console.log('🎨 [GameInfo] triggerFlash called, isFlashing:', isFlashing);
-        
+    const triggerFlash = useCallback(() => {        
         if (isFlashing) {
-            // console.log('🎨 [GameInfo] Already flashing, ignoring');
             return; // 既に点滅中の場合は無視
         }
         
-        // console.log('🎨 [GameInfo] Starting flash animation');
         setIsFlashing(true);
         
         // 既存のタイマーをクリア
@@ -61,50 +57,29 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
         
         // 600ms後に点滅を終了
         timerRef.current = setTimeout(() => {
-            // console.log('🎨 [GameInfo] Flash animation ended');
             setIsFlashing(false);
             timerRef.current = null;
         }, 600);
     }, [isFlashing]);
 
     // ターン終了を検出して点滅をトリガー
-    const checkForTurnEnd = useCallback(() => {
-        // console.log('🔍 [GameInfo] checkForTurnEnd called', {
-        //     hasEnhancedLog: !!enhancedLog,
-        //     hasGameState: !!gameState
-        // });
-        
+    const checkForTurnEnd = useCallback(() => {        
         if (!enhancedLog || !gameState) return;
         
         // 最新のログエントリーからターン終了を検出
         const allEntries = enhancedLog.getFilteredEntries ? enhancedLog.getFilteredEntries('all') : [];
-        // console.log('🔍 [GameInfo] All entries count:', allEntries.length);
         
         if (allEntries.length === 0) return;
         
         const latestEntry = allEntries[allEntries.length - 1];
         const entryId = latestEntry.id || `${allEntries.length - 1}-${latestEntry.description || latestEntry.message}`;
         
-        // console.log('🔍 [GameInfo] Latest entry:', {
-        //     id: latestEntry.id,
-        //     description: latestEntry.description,
-        //     message: latestEntry.message,
-        //     effectType: latestEntry.effectType,
-        //     type: latestEntry.type,
-        //     source: latestEntry.source,
-        //     entryId: entryId,
-        //     lastProcessedEntryId: lastProcessedEntryId,
-        //     fullEntry: latestEntry
-        // });
-        
         // 既に処理済みのエントリーの場合はスキップ
         if (entryId === lastProcessedEntryId) {
-            // console.log('🔍 [GameInfo] Entry already processed, skipping');
             return;
         }
         
         const entryText = (latestEntry.description || latestEntry.message || latestEntry.toString()).toLowerCase();
-        // console.log('🔍 [GameInfo] Entry text to check:', entryText);
         
         // ターン開始メッセージからターン番号を抽出してターン終了を検出
         const isTurnStart = entryText.includes('ターン') && entryText.includes('開始');
@@ -119,10 +94,6 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
                 const currentTurnNumber = parseInt(turnMatch[1], 10);
                 const currentPlayer = playerMatch ? playerMatch[1] : null;
                 
-                // console.log('🔍 [GameInfo] Current turn:', currentTurnNumber, 'Player:', currentPlayer);
-                // console.log('🔍 [GameInfo] Last seen turn:', lastSeenTurnNumber, 'Player:', lastSeenPlayer);
-                // console.log('🔍 [GameInfo] Entry text:', entryText);
-                
                 // ターン番号が増加した場合、またはプレイヤーが変わった場合
                 const turnIncreased = currentTurnNumber > lastSeenTurnNumber;
                 const playerChanged = currentPlayer && currentPlayer !== lastSeenPlayer;
@@ -131,13 +102,6 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
                     shouldTriggerFlash = true;
                     setLastSeenTurnNumber(currentTurnNumber);
                     setLastSeenPlayer(currentPlayer);
-                    
-                    // if (turnIncreased) {
-                    //     console.log('🔍 [GameInfo] Turn number increased, triggering flash');
-                    // }
-                    // if (playerChanged) {
-                    //     console.log('🔍 [GameInfo] Player changed, triggering flash');
-                    // }
                 }
             }
         }
@@ -151,12 +115,7 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
         
         const isTurnEnd = isDirectTurnEnd || shouldTriggerFlash;
         
-        // console.log('🔍 [GameInfo] Is turn start detected:', isTurnStart);
-        // console.log('🔍 [GameInfo] Should trigger flash:', shouldTriggerFlash);
-        // console.log('🔍 [GameInfo] Is turn end detected:', isTurnEnd);
-        
         if (isTurnEnd) {
-            // console.log('🔄 Turn ended detected in log! Triggering flash animation');
             triggerFlash();
         }
         

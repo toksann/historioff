@@ -171,6 +171,7 @@ export const EffectType = {
   _PLACE_IDEOLOGY: "_PLACE_IDEOLOGY",
   EVENT_EFFECTS_COMPLETE: "EVENT_EFFECTS_COMPLETE", // Sentinel effect for event card animations
   EVENT_CARD_PLAYED: "EVENT_CARD_PLAYED", // Animation-specific effect for event card play
+  CARD_REVEALED: "CARD_REVEALED", // Animation-specific effect for revealing a card
 };
 
 // Game settings

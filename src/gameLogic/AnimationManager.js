@@ -126,7 +126,7 @@ class AnimationManager {
         }
         
         // 仮想演出（targetが不要な演出）のリスト
-        const virtualEffects = ['CARD_DRAW', 'TURN_START', 'TURN_END', 'GAME_RESULT', 'TURN_ORDER_DECISION', 'EVENT_CARD_PLAYED'];
+        const virtualEffects = ['CARD_DRAW', 'TURN_START', 'TURN_END', 'GAME_RESULT', 'TURN_ORDER_DECISION', 'EVENT_CARD_PLAYED', 'CARD_REVEALED'];
         
         if (!target && !virtualEffects.includes(effectType)) {
             console.warn('🎬ANIM [Warning] Target element not found for:', effectType);
@@ -775,54 +775,62 @@ class AnimationManager {
      * @returns 
      */
     async animateCardReveal(target, params = {}) {
+        const cardId = params.effect?.args?.card_id;
+        const cardInstance = this.gameState?.all_card_instances[cardId];
+        const cardData = cardInstance ? this.gameState?.cardDefs[cardInstance.name] : null;
+
         return new Promise((resolve) => {
-            if (!target) {
-                resolve({ success: false, reason: 'Element not found' });
+            if (!cardInstance || !cardInstance.name || !this.gameState || !this.gameState.cardDefs || !cardData) {
+                resolve({ success: false, reason: 'Missing data for virtual card' });
                 return;
             }
 
-            const playerId = params.effect?.args?.player_id;
-            const fieldCenter = this.getFieldCenter(target, playerId);
-            const animationCard = target.cloneNode(true);
-            
-            animationCard.classList.remove('card-animation-hidden');
+            // Create a virtual card element
+            const animationCard = document.createElement('div');
+            animationCard.className = `card card-type-${cardData.card_type}`;
+            animationCard.innerHTML = `
+                <div class="card-name">${cardData.name}</div>
+            `;
+
+            const playerId = params.effect?.args?.player_id || null;
+            const fieldCenter = this.getFieldCenter(null, playerId);
+
+            // Set initial position for slide-in
+            const initialY = playerId === 'PLAYER1' ? `${fieldCenter.y + 100}px` : `${fieldCenter.y - 100}px`;
+
             animationCard.classList.add('card-animation-clone');
             animationCard.style.position = 'fixed';
-            animationCard.style.zIndex = '10000';
-            animationCard.style.transition = 'all 0.4s ease-out';
-            
-            // Initial position (where the card is)
-            const initialRect = target.getBoundingClientRect();
-            animationCard.style.top = `${initialRect.top}px`;
-            animationCard.style.left = `${initialRect.left}px`;
-            animationCard.style.width = `${initialRect.width}px`;
-            animationCard.style.height = `${initialRect.height}px`;
+            animationCard.style.top = initialY;
+            animationCard.style.left = `${fieldCenter.x}px`;
+            animationCard.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            animationCard.style.zIndex = '9999';
+            animationCard.style.opacity = '0';
+            animationCard.style.transition = 'all 0.8s ease-in-out';
 
             document.body.appendChild(animationCard);
 
-            // Phase 1: Move to center and enlarge
+            // Slide in and fade in
             setTimeout(() => {
                 animationCard.style.top = `${fieldCenter.y}px`;
-                animationCard.style.left = `${fieldCenter.x}px`;
-                animationCard.style.transform = 'translate(-50%, -50%) scale(1.5)';
-            }, 50);
+                animationCard.style.opacity = '1';
+            }, 100);
 
-            // Phase 2: Pause
+            // Hold and then slide out
             setTimeout(() => {
-                // Phase 3: Slide off-screen
-                animationCard.style.transition = 'all 0.5s ease-in';
-                const slideUp = playerId === 'PLAYER2'; // NPC's card goes up
-                animationCard.style.top = slideUp ? '-200px' : `${window.innerHeight + 200}px`;
-                animationCard.style.opacity = '0';
-                
-                // Phase 4: Clean up
+                this.createParticleExplosion(animationCard, cardData.card_type);
                 setTimeout(() => {
-                    if (animationCard.parentNode) {
-                        document.body.removeChild(animationCard);
-                    }
-                    resolve({ success: true, duration: 1550 });
-                }, 500);
-            }, 1000);
+                    const slideDirection = playerId === 'PLAYER1' ? '150%' : '-150%';
+                    animationCard.style.transition = 'opacity 0.8s ease-in-out, top 0.8s ease-in-out';
+                    animationCard.style.opacity = '0';
+                    animationCard.style.top = slideDirection;
+                    setTimeout(() => {
+                        if (animationCard.parentNode) {
+                            document.body.removeChild(animationCard);
+                        }
+                        resolve({ success: true, duration: 2600 });
+                    }, 800);
+                }, 1000); 
+            }, 800);
         });
     }
 

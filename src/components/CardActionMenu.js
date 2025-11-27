@@ -20,7 +20,7 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
         const hasEnoughScale = effectiveScale >= card.required_scale;
         
         // 財カードの場合は場の上限もチェック（「マネー」は除く）
-        if (card.card_type === '財' && card.name !== 'マネー') {
+        if (card.card_type === '財' && !(player.field.filter(c => c.name === 'マネー').length > 0 && card.name === 'マネー')) {
             const fieldCount = player.field.length;
             const hasFieldSpace = fieldCount < player.field_limit;
             return hasEnoughScale && hasFieldSpace;

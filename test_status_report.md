@@ -118,7 +118,7 @@
     - (済) 直前のターン終了時効果を受けて捨て札になったはずのカードのターン開始時効果が働いてしまう(ターン開始時効果が食い込んで発動してしまっている)→修正済み
     - (済) 既にイデオロギーが配置されている場合にイデオロギーを重ねて配置したとき(イデオロギーが更新されるとき)、イデオロギーは捨て札に行くが、「捨て札になる処理」が働かない(MOVECARDではなく直接捨て札にしている)
     - (済) 手札に戻ったカードの耐久値がリセットされないバグを修正済み。
-    - 「資源の発見」「徴兵」などの事象で場にカードを配置する効果の場合、配置アニメーションが再生されない(一時期上手くいっていたのに)→「交易路」は出たカードに反応しているので効果は大丈夫そう！
+    - (済) 「資源の発見」「徴兵」などの事象で場にカードを配置する効果の場合、配置アニメーションが再生されない(一時期上手くいっていたのに)→「交易路」は出たカードに反応しているので効果は大丈夫そう！
 - その他気になること
     - ターン開始時や終了時のカードの処理順を調査。可能であれば制御したい(「場の財の配置が古い順→場のイデオロギー→手札→デッキ→捨て札」これをターン中のプレイヤー→相手の順)
     - デバッグコマンドを効く/効かないよう制御できるようにしたい
@@ -135,22 +135,7 @@
 
 現在、本番環境（`npm start`）で多数のカード効果にバグが確認されています。以下に、テスト状況のテーブルを基にバグを分類し、修正方針を提案します。
 
-### カテゴリ2: カードのコア効果が機能しないバグ
-
-カードの主要な機能が意図通りに動作しない問題です。ゲームバランスに大きな影響を与えるため、優先度は高めです。
-
-
-### カテゴリ3: 演出・UXの改善
-
-ゲームプレイに直接的な影響は少ないものの、ユーザー体験を向上させるための項目です。
-
-1.  **「公開」効果の演出**
-    *   **対象カード**: `工作員`
-    *   **現象**: カードを「公開する」効果に、視覚的な演出がない。
-    *   **方針**: 備考欄にある演出概要（カードが画面中央に表示される）を参考に、`PresentationController`などを利用してアニメーションを実装します。ログにも表示されるようにします。
-    *   **ユーザーからの追伸**: これに合わせて、現状は存在しない事象カード使用の演出も作りたい。事象カード使用は、財やイデオロギー同様まず画面中央に出し、その場で捨て札時のパーティクル演出を出せばOK(パーティクルの色はカード種別に連動しているはずなので事象はオレンジかな)。「公開する」の場合はパーティクルを出さずに、該当カードを出したプレイヤー側("あなた"なら下、"NPCなら上"に向かってフェードアウトしながらスライドアウト)
-
-### その他・横断的な課題
+### 横断的な課題
 
 特定のカードに限定されない、システム全体に関わる課題です。
 
@@ -170,10 +155,9 @@ Uncaught runtime errors:
 ×
 ERROR
 Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-    at getRootForUpdatedFiber (http://localhost:3000/static/js/bundle.js:9850:167)
-    at enqueueConcurrentHookUpdate (http://localhost:3000/static/js/bundle.js:9836:12)
-    at dispatchSetStateInternal (http://localhost:3000/static/js/bundle.js:11807:16)
-    at dispatchSetState (http://localhost:3000/static/js/bundle.js:11780:5)
-    at processAnimation (http://localhost:3000/static/js/bundle.js:28989:9)          
-
+    at getRootForUpdatedFiber (http://localhost:3000/static/js/bundle.js:9886:167)
+    at enqueueConcurrentHookUpdate (http://localhost:3000/static/js/bundle.js:9872:12)
+    at dispatchSetStateInternal (http://localhost:3000/static/js/bundle.js:11843:16)
+    at dispatchSetState (http://localhost:3000/static/js/bundle.js:11816:5)
+    at processAnimation (http://localhost:3000/static/js/bundle.js:29021:9)
 

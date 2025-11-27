@@ -82,12 +82,6 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
 
   useEffect(() => {
     const processAnimation = async () => {
-      
-      
-      
-      
-      
-
       if (gameState?.animation_queue?.length > 0 && handleEffectForAnimation && !gameState.isAnimationLocked && animationReady) { // Add animationReady to condition
         const nextAnimation = gameState.animation_queue[0];
         const effect = nextAnimation.effect;
@@ -323,7 +317,7 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
             {/* ゲームログオーバーレイ */}
             {showGameLog && (
                 <>
-                    {console.log('DEBUG: Game.js passing logEntries to GameLogOverlay:', enhancedLog.combinedLog)}
+                    {}
                     <GameLogOverlay
                         gameState={gameState}
                         logEntries={enhancedLog.combinedLog} 
