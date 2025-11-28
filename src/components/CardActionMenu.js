@@ -15,6 +15,8 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
     // プレイ可能かどうかの判定
     const canPlay = () => {
         if (!player || gameState.awaiting_input) return false;
+        const isPlayerTurn = gameState.current_turn === card.owner;
+        if (!isPlayerTurn) return false;
         
         const effectiveScale = getEffectiveScale(player, gameState);
         const hasEnoughScale = effectiveScale >= card.required_scale;
@@ -37,6 +39,7 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
         if (gameState.awaiting_input) return '選択待ち中';
         if (getEffectiveScale(player, gameState) < card.required_scale) return '規模不足';
         if (card.card_type === '財' && card.name !== 'マネー' && player.field.length >= player.field_limit) return '場が満杯';
+        if (gameState.current_turn !== card.owner) return '相手のターン中';
         return 'プレイ不可';
     };
 
