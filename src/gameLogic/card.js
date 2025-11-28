@@ -38,7 +38,9 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         TriggerType.SUCCESS_PROCESS, TriggerType.FAILED_PROCESS
     ];
     if (thisCardTriggers.includes(triggeredEffectType)) {
-        const idToCheck = (triggeredEffectType === TriggerType.PLAY_EVENT_THIS) ? triggeredEffect.args.card_id : triggeredEffect.args.target_card_id;
+        const idToCheck = (triggeredEffectType === TriggerType.DAMAGE_THIS ||
+                            triggeredEffectType === TriggerType.BOOST_THIS)
+                            ? triggeredEffect.args.target_card_id : triggeredEffect.args.card_id;
         if (!triggeredEffect.args || idToCheck !== card.instance_id) {
             return [];
         }
@@ -271,7 +273,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
         if (current_args.initial_durability === 'damage_this') {
             const damage = triggeringEffectArgs.damage_amount;
-            console.log(`[資源] initial_durability 'damage_this' resolved to ${damage} source_card_id=${triggeringEffectArgs.source_card_id} player_id=${current_args.player_id}`);
             if (damage && damage < 0) {
                 current_args.initial_durability = Math.abs(damage);
             }

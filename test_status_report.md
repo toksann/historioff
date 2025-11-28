@@ -64,7 +64,7 @@
 | 技術提供 | test_tech_transfer_effect.js | 成功 | 本番でもOK |
 | 理想主義 | test_idealism_effect.js | 成功 | 本番でもOK |
 | 職人 | test_artisan_effect.js | 成功 | 本番でもOK |
-| 兵器 | test_weapon_effect.js | 成功(本番でバグ) | 財にダメージを与えられなかったとき、意識減少を行う効果が発生していない |
+| 兵器 | test_weapon_effect.js | 成功 | 本番でもOK |
 | 民族自決 | test_self_determination_effect.js | 成功 | 本番でもOK |
 | 解体 | test_deconstruction_effect.js |成功 | 本番でもOK |
 | 啓蒙時代 | test_enlightenment_era_effect.js | 成功 | 本番でもOK |

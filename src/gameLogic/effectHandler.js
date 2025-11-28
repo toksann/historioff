@@ -358,6 +358,7 @@ const effectHandlers = {
         // Therefore, this handler itself does nothing.
     },
     [TriggerType.DAMAGE_THIS]: () => {},
+    [TriggerType.BOOST_THIS]: () => {},
     [TriggerType.WEALTH_DURABILITY_ZERO]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, target_player_id, card_id, target_card_id } = args;
         const eventArgs = { player_id, target_player_id, card_id, target_card_id };
@@ -641,7 +642,6 @@ const effectHandlers = {
 
         // --- TARGET VALIDITY CHECK (if target resolution failed) ---
         if (!targetCardRef) {
-            console.log (`[耐久値変更] ターゲットの耐久値変更が無効化されました。resolved_card_id: ${resolved_card_id}`);
             if (sourceCard) { // Trigger FAILED_PROCESS if sourceCard exists
                 effectsQueue.unshift([{
                     effect_type: TriggerType.FAILED_PROCESS,
@@ -704,6 +704,17 @@ const effectHandlers = {
                     args: { 
                         damaged_card_id: resolved_card_id, 
                         damage_amount: finalAmount,
+                        source_card_id: sourceCard ? sourceCard.instance_id : null,
+                        target_card_id: resolved_card_id
+                    }, 
+                    target_card_id: resolved_card_id 
+                }, sourceCard]);
+            } else if (finalAmount > 0) {
+                effectsQueue.unshift([{ 
+                    effect_type: TriggerType.BOOST_THIS,
+                    args: { 
+                        boosted_card_id: resolved_card_id, 
+                        boost_amount: finalAmount,
                         source_card_id: sourceCard ? sourceCard.instance_id : null,
                         target_card_id: resolved_card_id
                     }, 
@@ -912,7 +923,7 @@ const effectHandlers = {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
                 const updates = {};
-                if (cardToMove.name !== 'マネー' && cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined) {
+                if ((cardToMove.name === 'マネー' && destination_pile === 'discard') || cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined) {
                     updates.durability = cardTemplate.durability;
                     updates.current_durability = cardTemplate.durability;
                 }
@@ -1361,8 +1372,6 @@ const effectHandlers = {
         }
     },
     [EffectType.PROCESS_EXPOSE_CARD_BY_TYPE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE(公開) handler entered.');
-        console.log('[DEBUG] PROCESS_EXPOSE_CARD_BY_TYPE args:', args);
         const { player_id, source_piles, card_type, card_id, card_name, count = 1 } = args;
         const player = gameState.players[player_id];
         if (!player) {
@@ -1383,7 +1392,6 @@ const effectHandlers = {
                 if (card_name && card.name !== card_name) {
                     matchName = false;
                 } else {
-                    console.log(`[DEBUG] Queuing CARD_REVEALED animation for card: ${card.name}`);
                     gameState.animation_queue.push({
                         effect: {
                             effect_type: EffectType.CARD_REVEALED,
@@ -1398,10 +1406,8 @@ const effectHandlers = {
             });
 
             if (card_name && !matchName) {
-                console.log(`公開に失敗: プレイヤー ${player_id} はカードタイプ ${card_type} のカードを見つけられませんでした。名前指定:${card_name}`);
                 effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
             } else {
-                console.log(`公開に成功: プレイヤー ${player_id} がカードタイプ ${card_type} のカードを公開しました。`);
                 effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
             }
 
@@ -1419,10 +1425,8 @@ const effectHandlers = {
                     sourceCard: sourceCard
                 });
             effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
-            console.log(`公開に成功: プレイヤー ${player_id} がカードタイプ ${card_type} のカードを公開しました。card_id指定: ${card_id}`);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
-            console.log(`公開に失敗: プレイヤー ${player_id} はカードタイプ ${card_type} のカードを見つけられませんでした。`);
         }
     },
         [EffectType.PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -2237,6 +2241,7 @@ const shouldLogEffectInternal = (effect) => {
         TriggerType.CARD_PLACED_THIS, TriggerType.CARD_PLACED, TriggerType.CARD_PLACED_OWNER, TriggerType.CARD_PLACED_OPPONENT,
         TriggerType.CARD_DISCARDED_THIS, TriggerType.CARD_DISCARDED, TriggerType.CARD_DISCARDED_OWNER,
         TriggerType.DAMAGE_THIS,
+        TriggerType.BOOST_THIS,
         TriggerType.WEALTH_DURABILITY_ZERO, TriggerType.WEALTH_DURABILITY_ZERO_OWNER, TriggerType.WEALTH_DURABILITY_ZERO_OPPONENT, TriggerType.WEALTH_DURABILITY_ZERO_THIS,
         TriggerType.MODIFY_CONSCIOUSNESS, TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER, TriggerType.MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OPPONENT, TriggerType.MODIFY_CONSCIOUSNESS_INCREASE_RESERVE_OWNER,
         TriggerType.MODIFY_SCALE_DECREASE_RESERVE_OWNER, TriggerType.MODIFY_SCALE_INCREASE_RESERVE_OWNER,
