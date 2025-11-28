@@ -105,34 +105,35 @@ const enforceFieldLimit = (gameState, player, cardToMove, effectsQueue, sourceCa
             }
         }, sourceCard]);
 
-                    // Divert the card to the discard pile instead of placing it on the field
-                console.log(`[DEBUG] Pushing effect to effectsQueue (L110): Type=${EffectType.MOVE_CARD}, Args=${JSON.stringify({
-                    player_id: player.id,
-                    card_id: cardToMove.instance_id,
-                    card_to_move: cardToMove,
-                    source_pile: cardToMove.location, // Use its current location as source
-                    destination_pile: 'discard'
-                })}`);
-                effectsQueue.push([{
-                    effect_type: EffectType.MOVE_CARD,
-                    args: {
-                        player_id: player.id,
-                        card_id: cardToMove.instance_id,
-                        card_to_move: cardToMove,
-                        source_pile: cardToMove.location, // Use its current location as source
-                        destination_pile: 'discard'
-                    }
-                }, sourceCard]);
-                
-                return false; // Indicates the move to the field should not proceed
+        // Divert the card to the discard pile instead of placing it on the field
+        console.log(`[DEBUG] Pushing effect to effectsQueue (L110): Type=${EffectType.MOVE_CARD}, Args=${JSON.stringify({
+            player_id: player.id,
+            card_id: cardToMove.instance_id,
+            card_to_move: cardToMove,
+            source_pile: cardToMove.location, // Use its current location as source
+            destination_pile: 'discard'
+        })}`);
+        effectsQueue.push([{
+            effect_type: EffectType.MOVE_CARD,
+            args: {
+                player_id: player.id,
+                card_id: cardToMove.instance_id,
+                card_to_move: cardToMove,
+                source_pile: cardToMove.location, // Use its current location as source
+                destination_pile: 'discard'
             }
-            return true; // Indicates the card can be placed on the field
-        };
+        }, sourceCard]);
         
-        const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
-            if (Array.isArray(targetPlayerIdStr)) {
-                return targetPlayerIdStr.map(id => gameState.players[id]);
-            }    const opponentPlayerId = selfPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        return false; // Indicates the move to the field should not proceed             
+    }
+    return true; // Indicates the card can be placed on the field
+};
+        
+const _getTargetPlayers = (gameState, selfPlayerId, targetPlayerIdStr) => {
+    if (Array.isArray(targetPlayerIdStr)) {
+        return targetPlayerIdStr.map(id => gameState.players[id]);
+    }
+    const opponentPlayerId = selfPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
     switch (targetPlayerIdStr) {
         case 'self':
             return [gameState.players[selfPlayerId]];
@@ -239,6 +240,7 @@ const syncCardDataInAllPiles = (draftState, cardId, updatedData) => {
     for (const playerId in draftState.players) {
         const player = draftState.players[playerId];
         const piles = ['hand', 'field', 'deck', 'discard'];
+        let isUpdated = false;
         piles.forEach(pileName => {
             if (player[pileName] && Array.isArray(player[pileName])) {
                 const cardIndex = player[pileName].findIndex(c => c.instance_id === cardId);
@@ -246,12 +248,14 @@ const syncCardDataInAllPiles = (draftState, cardId, updatedData) => {
                     for (const key in updatedData) {
                          if (player[pileName][cardIndex][key] !== updatedData[key]) {
                             player[pileName][cardIndex][key] = updatedData[key];
-                            cardFoundAndUpdated = true;
+                            isUpdated = true;
                         }
                     }
                 }
             }
         });
+        cardFoundAndUpdated = isUpdated;
+
         if (player.ideology && player.ideology.instance_id === cardId) {
             for (const key in updatedData) {
                 if (player.ideology[key] !== updatedData[key]) {
@@ -312,17 +316,15 @@ const effectHandlers = {
                 }, card);
 
                 const ownerPlayerId = player_id;
-                const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
                 const baseEventArgs = { card_id: card.instance_id, target_card_id: card.instance_id, card_type: card.card_type };
                 const ownerEventArgs = { ...baseEventArgs, player_id: ownerPlayerId, target_player_id: ownerPlayerId };
-                const opponentEventArgs = { ...baseEventArgs, player_id: ownerPlayerId, target_player_id: opponentPlayerId };
 
                 addEffectToBack(TriggerType.PLAY_EVENT, ownerEventArgs, card);
                 addEffectToBack(TriggerType.PLAY_EVENT_OWNER, ownerEventArgs, card);
                 // 汎用、オーナー限定、相手限定の3つのトリガーをすべて発行
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
-                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: opponentPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
 
                 // Add sentinel effect to mark the completion of event card's immediate effects
                 addEffectToBack(EffectType.EVENT_EFFECTS_COMPLETE, { card_id: card.instance_id, player_id: player_id }, card);
@@ -339,12 +341,11 @@ const effectHandlers = {
                 }, card);
                 
                 const ownerPlayerId = player_id;
-                const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
                 
                 // 汎用、オーナー限定、相手限定の3つのトリガーをすべて発行
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
-                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: opponentPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
+                addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
             }
             gameState.temp_effect_data["last_played_card_id"] = card.instance_id;
         }
@@ -1107,7 +1108,6 @@ const effectHandlers = {
         }
 
         const ownerPlayerId = cardToPlace.owner;
-        const opponentPlayerId = ownerPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
 
         const baseEventArgs = {
             card_id: cardToPlace.instance_id,

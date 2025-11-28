@@ -29,6 +29,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     if (!owner) {
         return [];
     }
+    const sourceCard = Object.values(gameState.players).flatMap(p => [...p.hand, ...p.field, p.ideology]).find(c => c && c.instance_id === triggeringEffectArgs.source_card_id);
 
     const thisCardTriggers = [
         TriggerType.PLAY_EVENT_THIS, TriggerType.CARD_DRAWN_THIS, TriggerType.CARD_PLACED_THIS,
@@ -50,7 +51,10 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT
     ];
     if (opponentTriggers.includes(triggeredEffectType)) {
-        if (!triggeredEffect.args || !opponent || triggeredEffect.args.player_id !== opponent.id) {
+        if (card.name === "グローバリズム" && owner.ideology && owner.ideology.instance_id === card.instance_id) {
+            console.log(`グローバリズムの対戦相手トリガーチェック: triggeredEffect.args.player_id=${triggeredEffect.args ? triggeredEffect.args.player_id : 'undefined'}, opponent.id=${opponent.id}`);
+        }
+        if (!triggeredEffect.args || triggeredEffect.args.player_id !== opponent.id) {
             return [];
         }
     }
@@ -63,8 +67,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER
     ];
     if (ownerTriggers.includes(triggeredEffectType)) {
-        const effect_player_id = triggeredEffect.args.target_player_id || triggeredEffect.args.player_id;
-        if (!triggeredEffect.args || effect_player_id !== owner.id) {
+        if (!triggeredEffect.args || triggeredEffect.args.player_id !== owner.id) {
             return [];
         }
     }
@@ -112,7 +115,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         ];
         if (allowedTriggers.includes(triggeredEffectType)) {
             // 「このカードが捨てられた/破壊された時」の効果は許可
-        } else if ((card.name === "布教" && card.location === 'hand' ||
+        } else if (((card.name === "布教" && card.location === 'hand') ||
             (card.name === "官僚主義" && card.location === 'hand'))
         ) {
         } else {
@@ -196,7 +199,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         } else if (current_args.player_id === 'random' && opponent) {
             current_args.player_id = Math.random() < 0.5 ? owner.id : opponent.id;
         } else if (current_args.player_id === 'source' && triggeringEffectArgs.source_card_id) {
-            const sourceCard = Object.values(gameState.players).flatMap(p => [...p.hand, ...p.field, p.ideology]).find(c => c && c.instance_id === triggeringEffectArgs.source_card_id);
             if (sourceCard) {
                 current_args.player_id = sourceCard.owner;
             }
@@ -327,6 +329,13 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             }
         }
 
+        if (card.name === 'リバタリアニズム' && triggeredEffectType === TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER) {
+            const played_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.field.find(c => c.instance_id === triggeringEffectArgs.card_id);
+            if (!played_card || played_card.name === 'マネー') {
+                continue;
+            }
+        }
+
         if (card.name === 'ニューリベラリズム' && triggeredEffectType === TriggerType.CARD_PLACED_OWNER) {
             const placed_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.field.find(c => c.instance_id === triggeringEffectArgs.card_id);
             if (!placed_card || placed_card.name !== 'マネー') {
@@ -392,7 +401,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         }
 
         if (card.name === '自由主義' && triggeredEffectType === EffectType.MODIFY_SCALE) {
-            if (gameState.current_turn === owner.id) {
+            if (gameState.current_turn !== owner.id) {
                 continue;
             }
             // This reaction should only happen on scale INCREASE.
@@ -405,13 +414,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
                 } else {
                     continue;
                 }
-            }
-        }
-
-        if (card.name === 'グローバリズム' && triggeredEffectType === TriggerType.PLAYER_PLAY_CARD_ACTION) {
-            // Should only trigger on opponent's card play, not self-play.
-            if (!triggeringEffectArgs || triggeringEffectArgs.player_id === owner.id) {
-                continue;
             }
         }
 
