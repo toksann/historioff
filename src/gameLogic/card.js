@@ -29,7 +29,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
     if (!owner) {
         return [];
     }
-    const sourceCard = Object.values(gameState.players).flatMap(p => [...p.hand, ...p.field, p.ideology]).find(c => c && c.instance_id === triggeringEffectArgs.source_card_id);
+    const sourceCard = Object.values(gameState.players).flatMap(p => [...p.hand, ...p.discard, ...p.field, p.ideology, p.playing_event]).find(c => c && c.instance_id === triggeringEffectArgs.source_card_id);
 
     const thisCardTriggers = [
         TriggerType.PLAY_EVENT_THIS, TriggerType.CARD_DRAWN_THIS, TriggerType.CARD_PLACED_THIS,
@@ -51,9 +51,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT
     ];
     if (opponentTriggers.includes(triggeredEffectType)) {
-        if (card.name === "グローバリズム" && owner.ideology && owner.ideology.instance_id === card.instance_id) {
-            console.log(`グローバリズムの対戦相手トリガーチェック: triggeredEffect.args.player_id=${triggeredEffect.args ? triggeredEffect.args.player_id : 'undefined'}, opponent.id=${opponent.id}`);
-        }
         if (!triggeredEffect.args || triggeredEffect.args.player_id !== opponent.id) {
             return [];
         }
@@ -274,6 +271,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
         if (current_args.initial_durability === 'damage_this') {
             const damage = triggeringEffectArgs.damage_amount;
+            console.log(`[資源] initial_durability 'damage_this' resolved to ${damage} source_card_id=${triggeringEffectArgs.source_card_id} player_id=${current_args.player_id}`);
             if (damage && damage < 0) {
                 current_args.initial_durability = Math.abs(damage);
             }
@@ -534,6 +532,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
         // Add the source card id to all reaction effects for better tracking
         current_args.source_card_id = card.instance_id;
+        current_args.source_card_owner_id = owner.id;
 
         if (card.name === 'ポピュリズム' && cardEffect.effect_type === EffectType.ADD_CARD_TO_GAME) {
             if (current_args.initial_durability_based_on_scale) {

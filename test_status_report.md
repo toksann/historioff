@@ -68,7 +68,7 @@
 | 民族自決 | test_self_determination_effect.js | 成功 | 本番でもOK |
 | 解体 | test_deconstruction_effect.js |成功 | 本番でもOK |
 | 啓蒙時代 | test_enlightenment_era_effect.js | 成功 | 本番でもOK |
-| 資源 | test_resource_effect.js | 成功(本番でバグ) | 本番では戦士や兵器やその他イデオロギーによるダメージでは問題ないが略奪や解体でこれにダメージを与えてもマネーがもらえなかった(選択効果の過程でsourceが辿れなくなっているかも？) |
+| 資源 | test_resource_effect.js | 成功 | 本番でもOK |
 | 資源の発見 | test_discovery_of_resources_effect.js | 成功 | 本番でもOK |
 | 徴兵 | test_conscription_effect.js | 成功 | 本番でもOK |
 | 現実主義 | test_realism_effect.js | 成功 | 本番でもOK |
