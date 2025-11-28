@@ -213,7 +213,7 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
                 <div className="choice-prompt-overlay">
                     <div className="choice-prompt">
                         <h3>{sourceCardName}の効果</h3>
-                        <p>手札から財カードを1枚選択してください（必要規模を-1します）</p>
+                        <p>手札から財カードを1枚選択してください</p>
                         <div className="choice-options-scrollable">
                             {awaiting_input.options.map(card => (
                                 <div key={card.instance_id} className="choice-card-container">

@@ -1175,6 +1175,7 @@ const effectHandlers = {
         }
 
         const targetPlayers = _getTargetPlayers(gameState, player_id, target_player_id);
+        const sourcePlayer = _getTargetPlayers(gameState, player_id, 'self')[0];
 
         for (const player of targetPlayers) {
             if (!player) continue;
@@ -1206,8 +1207,12 @@ const effectHandlers = {
                         availableCards = availableCards.filter(c => c.instance_id !== args.triggering_effect_args.card_id);
                     }
                 }
-                
-                const selected = _selectCards(gameState, player, availableCards, selection_method, count, sourceCard, args);
+
+                let selectionPlayer = player;
+                if (selection_method === 'choice') {
+                    selectionPlayer = sourcePlayer;
+                }
+                const selected = _selectCards(gameState, selectionPlayer, availableCards, selection_method, count, sourceCard, args);
                 if (selected === null) {
                     return;
                 }

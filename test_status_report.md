@@ -53,7 +53,7 @@
 | 重農主義 | test_physiocracy_effect.js | 成功 | 本番でもOK |
 | 資本主義 | test_capitalism_effect.js | 成功 | 本番でもOK |
 | 開拓 | test_pioneering_effect.js | 成功 | 本番でもOK |
-| 焦土 | test_scorched_earth_effect.js | 成功 | 本番でもOK |
+| 焦土 | test_scorched_earth_effect.js | 成功(本番でバグ) |  選択肢がでない！|
 | 占領 | test_occupation_effect.js | 成功 | 本番でもOK |
 | 植民地 | test_colony_effect.js | 成功 | 本番でもOK |
 | 商人 | test_merchant_effect.js | 成功 | 本番でもOK |

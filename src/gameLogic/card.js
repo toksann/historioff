@@ -281,7 +281,7 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
 
 
         if (card.name === 'ポピュリズム' && triggeredEffectType === TriggerType.START_TURN_OWNER) {
-            if (owner.consciousness > 5) {
+            if (owner.consciousness > 1) {
                 continue;
             }
             if (owner.ideology && owner.ideology.name === 'ポピュリズム') {
