@@ -923,7 +923,7 @@ const effectHandlers = {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
                 const updates = {};
-                if ((cardToMove.name === 'マネー' && destination_pile === 'discard') || cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined) {
+                if ((cardToMove.name === 'マネー' && destination_pile === 'discard') || (cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined)) {
                     updates.durability = cardTemplate.durability;
                     updates.current_durability = cardTemplate.durability;
                 }

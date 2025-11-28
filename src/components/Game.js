@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayerStats from './PlayerStats.js';
 import Field from './Field.js';
 import Hand from './Hand.js';
@@ -113,7 +113,7 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
         return <div>Loading Game...</div>;
     }
 
-    const { players, current_turn, awaiting_input } = gameState;
+    const { current_turn, awaiting_input } = gameState;
     
     // スクロール対応なのでmaxFieldSizeは不要（Fieldコンポーネント内で動的に管理）
 

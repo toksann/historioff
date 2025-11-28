@@ -36,7 +36,7 @@
 | 多文化主義 | test_multiculturalism_effect.js | 成功 | 本番でもOK |
 | 帝国主義 | test_imperialism_effect.js | 成功 | 本番でもOK |
 | 多神教 | test_polytheism_effect.js | 成功 | 本番でもOK |
-| 原始共産制 | test_primitive_communism_effect.js | 成功(本番でバグ) | NPCがこれを配置中に止まる場合がある(財を出そうとして失敗している？) |
+| 原始共産制 | test_primitive_communism_effect.js | 成功(本番でバグ) | NPCがこれを配置中に止まる場合がある(財を出そうとして失敗している？) → とりあえず無反応が続いたらターン終了させる？|
 | 物質主義 | test_materialism_effect.js | 成功 | 本番でもOK |
 | 一神教 | test_monotheism_effect.js | 成功 | 本番でもOK |
 | 悟りの道 | test_path_to_enlightenment_effect.js | 成功 | 本番でもOK |
@@ -129,6 +129,7 @@
 現在、本番環境（`npm start`）で多数のカード効果にバグが確認されています。以下に、テスト状況のテーブルを基にバグを分類し、修正方針を提案します。
 
  **公開効果をログに乘るようにしたい**
+ **'enforceFieldLimit使ってなくね？**
 
 
 ### 横断的な課題
