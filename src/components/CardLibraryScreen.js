@@ -21,10 +21,10 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
         switch (filterScale) {
           case '0-2':
             return scale >= 0 && scale <= 2;
-          case '3-5':
-            return scale >= 3 && scale <= 5;
-          case '6+':
-            return scale >= 6;
+          case '3-15':
+            return scale >= 3 && scale <= 15;
+          case '16+':
+            return scale >= 16;
           default:
             return true;
         }
@@ -76,8 +76,8 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
           <select value={filterScale} onChange={(e) => setFilterScale(e.target.value)}>
             <option value="all">すべて</option>
             <option value="0-2">0-2</option>
-            <option value="3-5">3-5</option>
-            <option value="6+">6+</option>
+            <option value="3-15">3-15</option>
+            <option value="16+">16+</option>
           </select>
         </div>
       </div>

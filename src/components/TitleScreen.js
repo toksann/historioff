@@ -43,7 +43,7 @@ const TitleScreen = ({ onMenuSelect }) => {
             className="menu-button"
             onClick={() => onMenuSelect('cardLibrary')}
           >
-            カード一覧
+            ライブラリ
           </button>
           
           <button 
