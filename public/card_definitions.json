@@ -1345,7 +1345,7 @@
     {
         "name": "植民地",
         "card_type": "財",
-        "required_scale": 50,
+        "required_scale": 30,
         "durability": 20,
         "description": "ターン終了時これの耐久値-1、マネーを1枚手札に加える。",
         "triggers": {
