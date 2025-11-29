@@ -161,7 +161,7 @@ const GameInfo = ({ gameState, enhancedLog, onShowLog, onShowRules }) => {
     return (
         <div className="game-info">
             <div className="game-info-header">
-                <h3>H1$†or!0</h3>
+                <h3>h1$tor!0</h3>
                 {onShowRules && (
                     <button 
                         className="rules-button"

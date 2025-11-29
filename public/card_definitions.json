@@ -1600,7 +1600,7 @@
         "card_type": "財",
         "required_scale": 30,
         "durability": 4,
-        "description": "ターン終了時、相手の場に財がある場合は相手の場の一番左の財の耐久値を、無いなら相手の意識をこのカードの耐久値と同じ値だけマイナスする。ターン開始時これの耐久値-1。",
+        "description": "ターン終了時、相手の場に財がある場合は相手の場の一番左の財の耐久値を、無いなら相手の意識をこのカードの耐久値と同じ値だけマイナスし、これの耐久値-1。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1608,6 +1608,13 @@
                     "args": {
                         "card_id": "left_opponent",
                         "amount_based_on_self_durability": "minus"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
+                    "args": {
+                        "card_id": "self",
+                        "amount": -1
                     }
                 }
             ],
@@ -1617,15 +1624,6 @@
                     "args": {
                         "player_id": "opponent",
                         "amount_based_on_self_durability": "minus"
-                    }
-                }
-            ],
-            "START_TURN_OWNER": [
-                {
-                    "effect_type": "MODIFY_CARD_DURABILITY_RESERVE",
-                    "args": {
-                        "card_id": "self",
-                        "amount": -1
                     }
                 }
             ]

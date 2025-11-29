@@ -1,47 +1,18 @@
-[DEBUG] Queuing CARD_REVEALED animation for card: グローバリズム
-effectHandler.js:1391 💣💥 [EFFECT_HANDLER_REVEAL_DEBUG] Pushing animation object (from candidateCards): {
-  "effect": {
-    "args": {
-      "card_id": "PLAYER2-グローバリズム-4a3f3331-459d-4d78-a891-1e28e9ecf1ef",
-      "player_id": "PLAYER2"
-    }
-  },
-  "sourceCard": {
-    "name": "工作員",
-    "card_type": "財",
-    "required_scale": 0,
-    "durability": 1,
-    "description": "自分のターン開始時、自分の意識-1。相手のターン開始時、自分の手札かデッキにあるイデオロギーカードを1枚公開する。",
-    "triggers": {
-      "START_TURN_OWNER": [
-        {
-          "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
-          "args": {
-            "player_id": "self",
-            "amount": -1
-          }
-        }
-      ],
-      "START_TURN_OPPONENT": [
-        {
-          "effect_type": "PROCESS_EXPOSE_CARD_BY_TYPE",
-          "args": {
-            "player_id": "self",
-            "source_piles": [
-              "hand",
-              "deck"
-            ],
-            "count": 1,
-            "card_type": "イデオロギー"
-          }
-        }
-      ]
-    },
-    "is_token": true,
-    "definitionOrder": 64,
-    "owner": "PLAYER2",
-    "instance_id": "PLAYER2-工作員-7d87591d-d4e7-40a7-a70d-7e748bbf6098",
-    "current_durability": 1,
-    "location": "field"
-  }
-}
+card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-81519666-1103-4f23-97e4-bff6c2439253) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
+card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-b4f6467d-8989-4ce5-9f6c-2dbb381458d5) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
+card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER2-接収-d9536380-a8fc-4e9e-aef7-f52951cb4532) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
+card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER2-接収-9e312aeb-520a-4cf5-9439-81cde4bc3aac) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
+card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-81519666-1103-4f23-97e4-bff6c2439253) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-b4f6467d-8989-4ce5-9f6c-2dbb381458d5) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER2-接収-d9536380-a8fc-4e9e-aef7-f52951cb4532) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER2-接収-9e312aeb-520a-4cf5-9439-81cde4bc3aac) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
+
+
+
+card.js:41 [確証破壊能力]  PLAY_EVENT_THIS instance_id: (PLAYER2-確証破壊能力-03f53ff9-61de-47ce-80c3-081d08440bd0) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271
+card.js:41 [確証破壊能力]  PLAY_EVENT_THIS instance_id: (PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271
+card.js:41 [確証破壊能力]  FAILED_PROCESS instance_id: (PLAYER2-確証破壊能力-03f53ff9-61de-47ce-80c3-081d08440bd0) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger undefined
+card.js:41 [確証破壊能力]  FAILED_PROCESS instance_id: (PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger undefined

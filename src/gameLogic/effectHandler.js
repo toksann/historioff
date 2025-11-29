@@ -13,6 +13,7 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
     if (!player || !player.modify_parameter_corrections || player.modify_parameter_corrections.length === 0) {
         return amount;
     }
+    console.log(`[補正値] start find corrections`);
 
     let limit = null;
     let amplification = 0;
@@ -21,6 +22,7 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
 
     // 1. Collect all applicable corrections and mark them for removal
     player.modify_parameter_corrections.forEach((correction, index) => {
+        console.log(`[補正値(${index})] find correction: ${correction.source_card_id} type: ${correction.correct_type} for target:${correction.correct_target}, direction:${correction.correct_direction}`);
         if (correction.correct_target === correctTarget && correction.correct_direction === correctDirection) {
             usedCorrections.push(index);
             switch (correction.correct_type) {
@@ -42,6 +44,7 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
         }
     });
     player.modify_parameter_corrections.length = 0; // Clear all corrections; will re-add unused ones later
+    console.log(`[補正値] end find corrections`);
 
     if (usedCorrections.length === 0) {
         return amount;
@@ -923,7 +926,7 @@ const effectHandlers = {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
                 const updates = {};
-                if ((cardToMove.name === 'マネー' && destination_pile === 'discard') || (cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined)) {
+                if ((cardToMove.name === 'マネー' && destination_pile === 'discard') || (cardToMove.name !== 'マネー' && cardToMove.card_type === CardType.WEALTH && cardTemplate.durability !== undefined)) {
                     updates.durability = cardTemplate.durability;
                     updates.current_durability = cardTemplate.durability;
                 }
@@ -1411,9 +1414,9 @@ const effectHandlers = {
             });
 
             if (card_name && !matchName) {
-                effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
+                effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
             } else {
-                effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
+                effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
             }
 
         } else if (card_id){
@@ -1429,9 +1432,9 @@ const effectHandlers = {
                     },
                     sourceCard: sourceCard
                 });
-            effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id } }, sourceCard]);
+            effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
         } else {
-            effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
+            effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
         }
     },
         [EffectType.PROCESS_DISCARD_ALL_IDEOLOGY_FROM_HAND_AND_DECK]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
@@ -1734,7 +1737,7 @@ const effectHandlers = {
 
             effectsQueue.unshift([{
                 effect_type: TriggerType.SUCCESS_PROCESS,
-                args: { ...args, returned_card_id: cardToReturn.instance_id, target_card_id: sourceCard.instance_id }
+                args: { ...args, returned_card_id: cardToReturn.instance_id, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id }
             }, sourceCard]);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
@@ -1849,7 +1852,7 @@ const effectHandlers = {
 
             effectsQueue.unshift([{ 
                 effect_type: TriggerType.SUCCESS_PROCESS, 
-                args: { ...args, target_card_id: sourceCard.instance_id }
+                args: { ...args, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id }
             }, sourceCard]);
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_instance_id } }, sourceCard]);
@@ -1926,15 +1929,25 @@ const effectHandlers = {
         if (player) {
             if (!player.modify_parameter_corrections) {
                 player.modify_parameter_corrections = [];
+            } else {
+                if (player.modify_parameter_corrections.some(correction =>
+                    correction.source_card_id === args.source_card_id &&
+                    correction.correct_target === args.correct_target &&
+                    correction.correct_direction === args.correct_direction &&
+                    correction.correct_type === args.correct_type &&
+                    correction.amount === args.amount)) {
+                    return;
+                } else {
+                    const newCorrection = { 
+                        correct_target: args.correct_target, 
+                        correct_direction: args.correct_direction, 
+                        correct_type: args.correct_type, 
+                        amount: args.amount,
+                        source_card_id: args.source_card_id
+                    };
+                    player.modify_parameter_corrections.push(newCorrection);
+                }
             }
-            const newCorrection = { 
-                correct_target: args.correct_target, 
-                correct_direction: args.correct_direction, 
-                correct_type: args.correct_type, 
-                amount: args.amount,
-                source_card_id: args.source_card_id
-            };
-            player.modify_parameter_corrections.push(newCorrection);
         }
     },
 
