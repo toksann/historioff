@@ -8,9 +8,17 @@ export const NPCActions = {
         // 規模条件を満たすカードを取得
         const effectiveScale = player.scale; // 簡易版：getEffectiveScaleは後で統合
         
+        // 「原始共産制」が有効かどうかをチェック
+        const isPrimitiveCommunismActive = player.ideology && player.ideology.name === '原始共産制';
+
         return player.hand.filter(card => {
             // 規模条件チェック
             if (card.required_scale > effectiveScale) return false;
+
+            // 「原始共産制」が有効な場合、財カードはプレイ不可
+            if (isPrimitiveCommunismActive && card.card_type === '財') {
+                return false;
+            }
             
             // 財カードの場合は場の上限もチェック
             if (card.card_type === '財') {
