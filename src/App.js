@@ -279,6 +279,14 @@ function App() {
     setGameState(newGameState);
   };
 
+  const handleSurrender = () => {
+    if (!gameState || gameState.game_over) return;
+    const newState = produce(gameState, draft => {
+      draft.players[HUMAN_PLAYER_ID].consciousness = 0;
+    });
+    setGameState(checkGameOver(newState));
+  };
+
   if (error) {
     return (
       <div className="App">
@@ -327,6 +335,7 @@ function App() {
             onPlayCard={handlePlayCard}
             onEndTurn={handleEndTurn}
             onProvideInput={handleProvideInput}
+            onSurrender={handleSurrender}
             onGameStateUpdate={setGameState}
             effectMonitor={enhancedLog.getEffectMonitor()}
             enhancedLog={enhancedLog}

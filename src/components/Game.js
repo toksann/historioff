@@ -15,11 +15,12 @@ import '../App.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 import { produce } from 'immer'; // immerをインポート
 
-const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onGameStateUpdate, effectMonitor, enhancedLog }) => {
+const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSurrender, onGameStateUpdate, effectMonitor, enhancedLog }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [actionMenuCard, setActionMenuCard] = useState(null);
     const [showGameLog, setShowGameLog] = useState(false);
     const [showRulesOverlay, setShowRulesOverlay] = useState(false);
+    const [showSurrenderConfirm, setShowSurrenderConfirm] = useState(false);
     
     const humanPlayer = gameState?.players?.[HUMAN_PLAYER_ID];
     const npcPlayer = gameState?.players?.[NPC_PLAYER_ID];
@@ -140,6 +141,10 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onGa
             // その他のカードは詳細表示
             setSelectedCard(card);
         }
+    };
+
+    const handleSurrenderClick = () => {
+        setShowSurrenderConfirm(true);
     };
 
     // アクションメニューからのプレイ処理
@@ -307,6 +312,29 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onGa
             />
             
             {renderChoicePrompt()}
+
+            {showSurrenderConfirm && (
+                <div className="choice-prompt-overlay" onClick={() => setShowSurrenderConfirm(false)}>
+                    <div className="choice-prompt" onClick={(e) => e.stopPropagation()}>
+                        <h3>本当に降伏しますか？</h3>
+                        <p>この操作は取り消せません。</p>
+                        <div className="choice-options">
+                            <button
+                                className="surrender-confirm-yes"
+                                onClick={() => {
+                                    onSurrender();
+                                    setShowSurrenderConfirm(false);
+                                }}
+                            >
+                                はい
+                            </button>
+                            <button onClick={() => setShowSurrenderConfirm(false)}>
+                                いいえ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             
             {/* カードアクションメニュー */}
             {actionMenuCard && (
@@ -398,6 +426,9 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onGa
                     awaiting_input={awaiting_input}
                     onCardClick={handleCardClick}
                 />
+                <button className="surrender-button" onClick={handleSurrenderClick}>
+                    降伏
+                </button>
             </div>
             
             {/* 左下: 自分（人間）ステータス */}
