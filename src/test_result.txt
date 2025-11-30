@@ -1,4 +1,7 @@
-card.js:47 [略奪] リアクション 対象カードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539 チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
-card.js:47 [略奪] リアクション 対象カードPLAYER2-開拓民-b29d795e-4f0e-40b8-bd6e-c8c20439dc4b チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
-card.js:47 [略奪] リアクション 対象カードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539 チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
-card.js:47 [略奪] リアクション 対象カードPLAYER2-開拓民-b29d795e-4f0e-40b8-bd6e-c8c20439dc4b チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
+WARNING in [eslint]
+src\gameLogic\LogEntryGenerator.js
+  Line 168:19:  'sourceCardName' is assigned a value but never used  no-unused-vars
+  Line 176:21:  'cardName' is constant                               no-const-assign
+
+src\gameLogic\effectHandler.js
+  Line 100:7:  'enforceFieldLimit' is assigned a value but never used  no-unused-vars

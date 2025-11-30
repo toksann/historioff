@@ -994,6 +994,9 @@ const effectHandlers = {
             // into the two effects queued above.
             return; 
         } else if (destination_pile === 'field') {
+            if (!enforceFieldLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
+                return;
+            }
             destination_player.field.push(cardToMove);
             cardToMove.location = 'field';
         } else if (destination_pile === 'playing_event') {
@@ -1392,6 +1395,7 @@ const effectHandlers = {
         if (candidateCards.length > 0) {
             let matchName = true;
             const exposedCards = shuffle(candidateCards).slice(0, count);
+            args.exposed_cards = exposedCards; // Add this for logging
             if (!gameState.exposed_cards) gameState.exposed_cards = [];
             gameState.exposed_cards.push(...exposedCards.map(c => ({...c, exposed_by: player.id})));
             
@@ -1421,18 +1425,29 @@ const effectHandlers = {
 
         } else if (card_id){
             const exposedCards = [];
-            exposedCards.push(gameState.all_card_instances[card_id]);
-            gameState.animation_queue.push({
-                    effect: {
-                        effect_type: EffectType.CARD_REVEALED,
-                        args: { 
-                            card_id: card_id,
-                            player_id: player.id 
-                        }
-                    },
-                    sourceCard: sourceCard
-                });
-            effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
+            const actual_card_id = card_id === 'self' ? sourceCard.instance_id : card_id;
+            const card_to_expose = gameState.all_card_instances[actual_card_id];
+            
+            if(card_to_expose) {
+                exposedCards.push(card_to_expose);
+                args.exposed_cards = exposedCards; // Add this for logging
+            }
+            
+            if (exposedCards.length > 0) {
+                gameState.animation_queue.push({
+                        effect: {
+                            effect_type: EffectType.CARD_REVEALED,
+                            args: { 
+                                card_id: actual_card_id,
+                                player_id: player.id 
+                            }
+                        },
+                        sourceCard: sourceCard
+                    });
+                effectsQueue.unshift([{ effect_type: TriggerType.SUCCESS_PROCESS, args: { ...args, exposed_cards: exposedCards.map(c => c.instance_id), target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
+            } else {
+                effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
+            }
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id, card_id: sourceCard.instance_id } }, sourceCard]);
         }

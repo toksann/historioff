@@ -32,6 +32,8 @@ class LogEntryGenerator {
             
             // その他のエフェクト
             DRAW_CARD: this.formatCardDraw.bind(this),
+            PROCESS_EXPOSE_CARD_BY_TYPE: this.formatExposeCard.bind(this),
+            REMOVE_CARD_FROM_GAME: this.formatRemoveCard.bind(this),
             
             // ターン管理
             END_TURN_OWNER: this.formatTurnEnd.bind(this),
@@ -163,9 +165,8 @@ class LogEntryGenerator {
             const destZone = this.translateZoneName(args.destination_pile);
             
             const playerName = player.name;
-            const sourceCardName = sourceCard?.name || 'システム';
 
-            const cardName = card.name;
+            let cardName = card.name;
             
             // NPCのドローは非表示
             if (args.destination_pile !== 'field') {
@@ -384,6 +385,56 @@ class LogEntryGenerator {
             };
         } catch (error) {
             console.error('[LogEntryGenerator] Error formatting card draw:', error);
+            return null;
+        }
+    }
+
+    /**
+     * カード公開のフォーマッター
+     */
+    formatExposeCard(args, sourceCard, gameState) {
+        try {
+            const player = gameState.players[args.player_id];
+            if (!player || !args.exposed_cards || args.exposed_cards.length === 0) return null;
+
+            const exposedCardNames = args.exposed_cards.map(c => c.name).join(', ');
+            const description = `${exposedCardNames}を公開しました`;
+
+            return {
+                playerName: player.name,
+                sourceCard: this.formatCardSource(sourceCard, gameState),
+                description,
+                details: {
+                    exposedCards: args.exposed_cards.map(c => c.name)
+                }
+            };
+        } catch (error) {
+            console.error('[LogEntryGenerator] Error formatting expose card:', error);
+            return null;
+        }
+    }
+
+    /**
+     * カード除外のフォーマッター
+     */
+    formatRemoveCard(args, sourceCard, gameState) {
+        try {
+            const player = gameState.players[args.player_id];
+            const card = gameState.all_card_instances[args.card_id];
+            if (!player || !card) return null;
+
+            const description = `${card.name}がゲームから除外されました`;
+
+            return {
+                playerName: player.name,
+                sourceCard: this.formatCardSource(sourceCard, gameState),
+                description,
+                details: {
+                    removedCard: card.name
+                }
+            };
+        } catch (error) {
+            console.error('[LogEntryGenerator] Error formatting remove card:', error);
             return null;
         }
     }

@@ -1576,7 +1576,7 @@
         "card_type": "財",
         "required_scale": 1,
         "durability": 3,
-        "description": "ターン終了時、自分の手札の財の必要規模-1。",
+        "description": "ターン終了時、自分の手札の財の必要規模-3。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
