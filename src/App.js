@@ -323,6 +323,7 @@ function App() {
         <>
           <Game 
             gameState={gameState} 
+            cardDefs={gameData.cardDefs}
             onPlayCard={handlePlayCard}
             onEndTurn={handleEndTurn}
             onProvideInput={handleProvideInput}

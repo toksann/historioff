@@ -994,7 +994,7 @@ const effectHandlers = {
             // into the two effects queued above.
             return; 
         } else if (destination_pile === 'field') {
-            if (!enforceFieldLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
+            if (cardToMove.name !== 'マネー' && !enforceFieldLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
                 return;
             }
             destination_player.field.push(cardToMove);

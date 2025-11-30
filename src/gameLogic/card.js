@@ -329,7 +329,8 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         }
 
         if (card.name === 'リバタリアニズム' && triggeredEffectType === TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER) {
-            const played_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.field.find(c => c.instance_id === triggeringEffectArgs.card_id);
+            let played_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.field.find(c => c.instance_id === triggeringEffectArgs.card_id);
+            if (!played_card) played_card = triggeringEffectArgs.card_id && gameState.players[triggeringEffectArgs.player_id]?.discard.find(c => c.instance_id === triggeringEffectArgs.card_id);
             if (!played_card || played_card.name === 'マネー') {
                 continue;
             }

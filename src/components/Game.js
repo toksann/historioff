@@ -15,7 +15,7 @@ import '../App.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 import { produce } from 'immer'; // immerをインポート
 
-const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpdate, effectMonitor, enhancedLog }) => {
+const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onGameStateUpdate, effectMonitor, enhancedLog }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [actionMenuCard, setActionMenuCard] = useState(null);
     const [showGameLog, setShowGameLog] = useState(false);
@@ -180,9 +180,14 @@ const Game = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onGameStateUpd
                         <h3>カードを選択してください</h3>
                         <div className="choice-options">
                             {awaiting_input.options.map(option => (
-                                <button key={option} onClick={() => onProvideInput(option)}>
-                                    {option}
-                                </button>
+                                <div key={option} className="choice-card-container">
+                                    <button onClick={() => onProvideInput(option)}>
+                                        {option}
+                                    </button>
+                                    <button onClick={() => setSelectedCard(cardDefs[option])}>
+                                        詳細
+                                    </button>
+                                </div>
                             ))}
                         </div>
                     </div>
