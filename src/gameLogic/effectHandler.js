@@ -1802,10 +1802,8 @@ const effectHandlers = {
                     args: { player_id: player_id, amount: bonus_scale_amount }
                 }, sourceCard]);
             }
-            effectsQueue.unshift([{
-                    effect_type: TriggerType.SUCCESS_PROCESS,
-                    args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
-                }, sourceCard]);
+            // The next process will determine success, so do not add it here!
+            
         } else {
             effectsQueue.unshift([{ effect_type: TriggerType.FAILED_PROCESS, args: { ...args, target_card_id: sourceCard.instance_id } }, sourceCard]);
         }
@@ -2174,7 +2172,6 @@ const effectHandlers = {
     [EffectType.EVENT_EFFECTS_COMPLETE]: (gameState, args) => {
         // This sentinel effect triggers the deferred event card animation.
         // It's processed only after all other effects triggered by the event card have resolved.
-        console.log('[DEBUG] EVENT_EFFECTS_COMPLETE triggered. Queuing EVENT_CARD_PLAYED animation.');
         gameState.animation_queue.push({
             effect: {
                 effect_type: EffectType.EVENT_CARD_PLAYED,

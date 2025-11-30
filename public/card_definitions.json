@@ -1588,7 +1588,7 @@
                         "card_type": "財",
                         "count": 1,
                         "selection_method": "choice",
-                        "amount": -1,
+                        "amount": -3,
                         "min_value": 0
                     }
                 }
@@ -2924,7 +2924,8 @@
                     "args": {
                         "player_id": "opponent",
                         "amount_percentage": -14,
-                        "condition_self_scale_lower": true
+                        "condition_self_scale_lower": true,
+                        "round_down": true
                     }
                 }
             ]

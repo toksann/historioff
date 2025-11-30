@@ -1,18 +1,4 @@
-card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-81519666-1103-4f23-97e4-bff6c2439253) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
-card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-b4f6467d-8989-4ce5-9f6c-2dbb381458d5) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
-card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER2-接収-d9536380-a8fc-4e9e-aef7-f52951cb4532) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
-card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER2-接収-9e312aeb-520a-4cf5-9439-81cde4bc3aac) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
-card.js:41 [接収]  PLAY_EVENT_THIS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-81519666-1103-4f23-97e4-bff6c2439253) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-b4f6467d-8989-4ce5-9f6c-2dbb381458d5) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER2-接収-d9536380-a8fc-4e9e-aef7-f52951cb4532) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER2-接収-9e312aeb-520a-4cf5-9439-81cde4bc3aac) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-card.js:41 [接収]  SUCCESS_PROCESS instance_id: (PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e) target PLAYER1-接収-29c51306-66aa-4eb9-adbf-99934d5a426e trigger PLAYER1-教育機関-caa9e064-0e74-4a97-a030-17ed8c1cf66b
-
-
-
-card.js:41 [確証破壊能力]  PLAY_EVENT_THIS instance_id: (PLAYER2-確証破壊能力-03f53ff9-61de-47ce-80c3-081d08440bd0) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271
-card.js:41 [確証破壊能力]  PLAY_EVENT_THIS instance_id: (PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271
-card.js:41 [確証破壊能力]  FAILED_PROCESS instance_id: (PLAYER2-確証破壊能力-03f53ff9-61de-47ce-80c3-081d08440bd0) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger undefined
-card.js:41 [確証破壊能力]  FAILED_PROCESS instance_id: (PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271) target PLAYER1-確証破壊能力-24e66239-4785-4bcf-94d0-7f0e375e2271 trigger undefined
+card.js:47 [略奪] リアクション 対象カードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539 チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
+card.js:47 [略奪] リアクション 対象カードPLAYER2-開拓民-b29d795e-4f0e-40b8-bd6e-c8c20439dc4b チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
+card.js:47 [略奪] リアクション 対象カードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539 チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
+card.js:47 [略奪] リアクション 対象カードPLAYER2-開拓民-b29d795e-4f0e-40b8-bd6e-c8c20439dc4b チェック中のカードPLAYER1-略奪-7ca0a5c1-0f89-4b7f-ac29-d35744204539
