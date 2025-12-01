@@ -1039,20 +1039,10 @@
     {
         "name": "輪廻転生",
         "card_type": "事象",
-        "required_scale": 30,
-        "description": "自分のデッキをすべて除外し、捨て札をデッキに加える",
+        "required_scale": 40,
+        "description": "捨て札すべてをデッキに加え、デッキの上から20枚捨て札にする。その後捨て札をすべて除外する。",
         "triggers": {
             "PLAY_EVENT_THIS": [
-                {
-                    "effect_type": "PROCESS_CARD_OPERATION",
-                    "args": {
-                        "player_id": "self",
-                        "operation": "remove",
-                        "source_pile": "deck",
-                        "selection_method": "all",
-                        "store_count_key": "removed_deck_count"
-                    }
-                },
                 {
                     "effect_type": "PROCESS_CARD_OPERATION",
                     "args": {
@@ -1061,6 +1051,27 @@
                         "source_pile": "discard_pile",
                         "destination_pile": "deck",
                         "selection_method": "all"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "deck",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "top",
+                        "count": 20
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "remove",
+                        "source_pile": "discard_pile",
+                        "selection_method": "all",
+                        "store_count_key": "removed_deck_count"
                     }
                 }
             ]
