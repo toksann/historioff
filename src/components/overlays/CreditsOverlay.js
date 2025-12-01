@@ -1,8 +1,6 @@
 import React from 'react';
 
-const CREDITS_TEXT = `--- クレジット ---
-
-このゲームの作成には以下のツールが関わっています。
+const CREDITS_TEXT = `このゲームの作成には以下のツールが関わっています。
 
 ■コーディング＆サポート
  ・Google Gemini (https://gemini.google.com/)
@@ -27,7 +25,7 @@ const CreditsOverlay = ({ isOpen, onClose }) => {
     <div className="overlay" onClick={handleOverlayClick}>
       <div className="overlay-modal credits-overlay">
         <div className="overlay-header">
-          <h2>クレジット</h2>
+          <h2>【謝辞】</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         

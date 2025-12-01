@@ -3283,7 +3283,7 @@ button:disabled {
 }
 
 .close-button {
-  background: none;
+  background: #292929;
   border: none;
   color: #fff;
   font-size: 24px;

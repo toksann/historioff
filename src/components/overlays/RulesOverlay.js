@@ -1,8 +1,8 @@
 import React from 'react';
 
 const RULES_TEXT = `
-『h1$tor!0』へようこそ！
-このゲームは、民を導く皆さまが、互いが率いる民族の「意識」を競い合うカードゲームです。
+ようこそ『h1$tor!0』へ……
+このゲームは、民意の化身たる皆さまが、互いが率いる民族の「意識」を競い合うカードゲームです。
 
 
 ■【勝利・敗北条件】
@@ -62,7 +62,7 @@ const RulesOverlay = ({ isOpen, onClose }) => {
     <div className="overlay" onClick={handleOverlayClick}>
       <div className="overlay-modal rules-overlay">
         <div className="overlay-header">
-          <h2>ルール説明</h2>
+          <h2>【世の理】</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         
