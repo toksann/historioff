@@ -97,7 +97,7 @@
 .surrender-button {
   position: absolute;
   bottom: 10px;
-  right: 10px;
+  left: 10px;
   padding: 6px 16px; /* 少し大きくする */
   background-color: #333; /* 暗い背景色 */
   color: #f44336; /* 赤い文字色 */
