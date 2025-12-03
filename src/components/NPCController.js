@@ -1,13 +1,22 @@
-import React, { useEffect } from 'react';
-import { NPC_PLAYER_ID } from '../gameLogic/constants.js';
+import React, { useEffect, useRef } from 'react';
+import { NPC_PLAYER_ID, GamePhase, HUMAN_PLAYER_ID } from '../gameLogic/constants.js';
 import NPCActions from './NPCActions.js';
 
-const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput }) => {
-    useEffect(() => {
-        if (!gameState || gameState.game_over) return;
+const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPerformMulligan }) => {
+    // Ref to hold the latest gameState
+    const gameStateRef = useRef(gameState);
 
-        const { current_turn, awaiting_input, players } = gameState;
-        const npcPlayer = players[NPC_PLAYER_ID];
+    // Update the ref whenever gameState changes
+    useEffect(() => {
+        gameStateRef.current = gameState;
+    }, [gameState]);
+
+    // Effect for handling regular turn actions and inputs
+    useEffect(() => {
+        const currentGameState = gameStateRef.current; // Access latest gameState via ref
+        if (!currentGameState || currentGameState.game_over || currentGameState.phase === GamePhase.MULLIGAN) return;
+
+        const { current_turn, awaiting_input } = currentGameState;
         
         // NPCのターンかどうかチェック
         const isNPCTurn = current_turn === NPC_PLAYER_ID;
@@ -15,24 +24,7 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput }) => 
         // NPCが選択待ち状態かどうかチェック
         const isNPCAwaitingInput = awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID;
         
-        // デバッグ情報の出力
-        if (awaiting_input) {
-            console.log('[NPCController] Awaiting input detected:', {
-                type: awaiting_input.type,
-                player_id: awaiting_input.player_id,
-                current_turn,
-                isNPCAwaitingInput,
-                isNPCTurn
-            });
-        }
-
         if (isNPCTurn || isNPCAwaitingInput) {
-            console.log('[NPCController] NPC action needed:', {
-                isNPCTurn,
-                isNPCAwaitingInput,
-                awaiting_input_type: awaiting_input?.type
-            });
-            
             // 2秒後にNPCの行動を実行
             const timer = setTimeout(() => {
                 handleNPCAction();
@@ -40,32 +32,51 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput }) => 
             
             return () => clearTimeout(timer);
         }
-    }, [gameState, onPlayCard, onEndTurn, onProvideInput]);
+    }, [onPlayCard, onEndTurn, onProvideInput, gameStateRef.current]);
+
+    // Effect for handling the mulligan phase
+    useEffect(() => {
+        // Use gameStateRef.current to get the latest gameState
+        const currentGameState = gameStateRef.current;
+        
+        // Condition to initiate mulligan action
+        const shouldInitiateMulligan = 
+            currentGameState?.phase === GamePhase.MULLIGAN && 
+            currentGameState.mulligan_state[NPC_PLAYER_ID].status === 'undecided'; // Access .status
+
+        if (shouldInitiateMulligan) {
+            // Execute immediately if condition is met
+            const npcPlayer = currentGameState.players[NPC_PLAYER_ID];
+            
+            // NPCActions.jsでカード選択ロジックを実装
+            const cardsToMulligan = NPCActions.decideMulligan(npcPlayer, currentGameState);
+            const selectedCardIds = cardsToMulligan.map(card => card.instance_id);
+
+            onPerformMulligan(selectedCardIds);
+        }
+    }, [onPerformMulligan, gameStateRef.current]); // Added gameStateRef.current to dependencies
+
 
     const handleNPCAction = () => {
-        if (!gameState || gameState.game_over) return;
+        if (!gameStateRef.current || gameStateRef.current.game_over) return;
 
-        const { current_turn, awaiting_input, players } = gameState;
+        const { current_turn, awaiting_input, players } = gameStateRef.current;
         const npcPlayer = players[NPC_PLAYER_ID];
         
         // 選択待ち状態の処理
         if (awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID) {
-            console.log('[NPCController] Handling NPC input selection');
             handleNPCInput(awaiting_input);
             return;
         }
         
         // NPCのターン時の処理
         if (current_turn === NPC_PLAYER_ID) {
-            console.log('[NPCController] Handling NPC turn');
             handleNPCTurn(npcPlayer);
             return;
         }
     };
 
     const handleNPCInput = (awaitingInput) => {
-        console.log('[NPCController] NPC making choice for:', awaitingInput.type);
-        
         let choice = null;
         
         switch (awaitingInput.type) {
@@ -102,7 +113,7 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput }) => 
 
     const handleNPCTurn = (npcPlayer) => {
         // カードプレイを試行
-        const cardPlayed = NPCActions.executeCardPlay(npcPlayer, gameState, onPlayCard);
+        const cardPlayed = NPCActions.executeCardPlay(npcPlayer, gameStateRef.current, onPlayCard); // Use gameStateRef.current here
         
         if (!cardPlayed) {
             // プレイ可能なカードがない場合はターン終了

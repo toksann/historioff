@@ -4,8 +4,8 @@ import './App.css';
 import './test-animation.css';
 import Game from './components/Game.js';
 import MenuSystem from './components/MenuSystem.js';
-import { initializeGame, playCard, endTurn, resolveInput, checkGameOver, _proceedToNextTurn } from './gameLogic/main.js';
-import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from './gameLogic/constants.js';
+import { initializeGame, playCard, endTurn, resolveInput, checkGameOver, _proceedToNextTurn, performMulligan, resolveMulliganPhase } from './gameLogic/main.js';
+import { HUMAN_PLAYER_ID, NPC_PLAYER_ID, GamePhase } from './gameLogic/constants.js';
 import { processEffects } from './gameLogic/effectHandler.js'; // Import processEffects
 import useEnhancedLog from './hooks/useEnhancedLog.js'; // Import useEnhancedLog
 import GameOverScreen from './components/GameOverScreen.js'; // Import GameOverScreen
@@ -18,6 +18,14 @@ function App() {
   const [error, setError] = useState(null);
   const [playingGameResultAnimation, setPlayingGameResultAnimation] = useState(false);
   
+  // Ref to hold the latest gameState
+  const gameStateRef = useRef(gameState);
+  // Update the ref whenever gameState changes
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
+
+
   // メニューシステム用の状態
   const [currentScreen, setCurrentScreen] = useState('title'); // 'title', 'deckSelection', 'cardLibrary', 'game', 'gameOver'
 
@@ -157,33 +165,6 @@ function App() {
     }
   }, [gameData, loading, error]);
 
-  // テスト用：開発者コンソールからゲームを終了させる関数
-  useEffect(() => {
-    window.testEndGame = (playerWins = true) => {
-      if (gameState) {
-        console.log('🎮TEST [EndGame] Forcing game end - Player wins:', playerWins);
-        const newState = {...gameState};
-        
-        if (playerWins) {
-          // プレイヤー勝利：NPCの意識を0にする
-          newState.players[NPC_PLAYER_ID].consciousness = 0;
-        } else {
-          // プレイヤー敗北：プレイヤーの意識を0にする
-          newState.players[HUMAN_PLAYER_ID].consciousness = 0;
-        }
-        
-        // checkGameOverを呼び出してゲーム終了処理を実行
-        const finalState = checkGameOver(newState);
-        
-        setGameState(finalState);
-      }
-    };
-    
-    return () => {
-      delete window.testEndGame;
-    };
-  }, [gameState]);
-
   // 勝敗演出完了イベントをリッスン
   const handleGameResultAnimationComplete = useCallback(() => {
     console.log('[GAME_END_DEBUG] App.js: handleGameResultAnimationComplete called.');
@@ -213,79 +194,84 @@ function App() {
     };
   }, [handleGameResultAnimationComplete, handleSystemAnimationComplete]);
 
-  const handlePlayCard = (card) => {
-    if (!gameState || !card || gameState.awaiting_input || gameState.game_over || gameState.isAnimationLocked) {
-      if (gameState?.isAnimationLocked) {
+  const handleConfirmMulligan = useCallback((playerId, selectedCardIds) => {
+      if (!gameStateRef.current || gameStateRef.current.mulligan_state[playerId].status === 'decided') return; // Prevent multiple calls
+  
+      const newGameState = performMulligan(gameStateRef.current, playerId, selectedCardIds);
+      setGameState(newGameState);
+  }, []); // <-- Empty dependency array for stability
+  // Effect to reliably resolve the mulligan phase once both players have decided
+  useEffect(() => {
+    console.log(`[App Debug] Mulligan resolution useEffect running. Phase: ${gameState?.phase}, Human State: ${gameState?.mulligan_state[HUMAN_PLAYER_ID]?.status}, NPC State: ${gameState?.mulligan_state[NPC_PLAYER_ID]?.status}`);
+
+    if (gameState?.phase !== GamePhase.MULLIGAN) return;
+
+    const { mulligan_state } = gameState;
+    const humanDecided = mulligan_state[HUMAN_PLAYER_ID]?.status === 'decided';
+    const npcDecided = mulligan_state[NPC_PLAYER_ID]?.status === 'decided';
+
+    if (humanDecided && npcDecided) {
+        console.log('[App] Both players have decided their mulligans. Starting resolution timer.');
+        const timer = setTimeout(() => {
+            setGameState(gs => {
+                // Only resolve if we are still in the mulligan phase
+                if (gs.phase === GamePhase.MULLIGAN) {
+                    console.log('[App] Resolving mulligan phase after timer.');
+                    return resolveMulliganPhase(gs);
+                }
+                console.log('[App] Mulligans already resolved or phase changed during timer.');
+                return gs; // Do nothing if phase changed already
+            });
+        }, 3000); // 2-second delay for user to see new hand
+
+        return () => {
+            console.log('[App] Cleaning up mulligan resolution timer.');
+            clearTimeout(timer);
+        };
+    }
+  }, [gameState]); // Simplified dependency to just gameState
+
+  const handlePlayCard = useCallback((card) => { // useCallback added here
+    if (!gameStateRef.current || !card || gameStateRef.current.awaiting_input || gameStateRef.current.game_over || gameStateRef.current.isAnimationLocked) {
+      if (gameStateRef.current?.isAnimationLocked) {
         console.log('[App] Card play blocked - animation in progress');
       }
       return;
     }
-    console.log('[App] Playing card:', card.name, 'Current turn:', gameState.current_turn);
-    
-    // 現在のターンプレイヤーのIDを使用（人間またはNPC）
-    const currentPlayerId = gameState.current_turn;
-    const newGameState = playCard(gameState, currentPlayerId, card.instance_id);
-    console.log('[App] After playCard - Turn changed:', gameState.current_turn, '->', newGameState.current_turn);
-    // 新しいオブジェクトとして設定して確実に再レンダリングを促す
+    const currentPlayerId = gameStateRef.current.current_turn;
+    const newGameState = playCard(gameStateRef.current, currentPlayerId, card.instance_id);
     setGameState(newGameState);
-  };
+  }, []);
 
-  const handleEndTurn = () => {
-    if (!gameState || gameState.awaiting_input || gameState.game_over || gameState.isAnimationLocked) {
-      if (gameState?.isAnimationLocked) {
+  const handleEndTurn = useCallback(() => { // useCallback added here
+    if (!gameStateRef.current || gameStateRef.current.awaiting_input || gameStateRef.current.game_over || gameStateRef.current.isAnimationLocked) {
+      if (gameStateRef.current?.isAnimationLocked) {
         console.log('[App] End turn blocked - animation in progress');
       }
       return;
     }
-    console.log('[App] Ending turn - Current turn:', gameState.current_turn);
-    console.log('[App] Before endTurn - Effect queue length:', gameState.effect_queue?.length || 0);
-    
-    // ターン終了前の状態を記録
-    const beforeState = {
-      playerScale: gameState.players[gameState.current_turn]?.scale || 0,
-      playerConsciousness: gameState.players[gameState.current_turn]?.consciousness || 0
-    };
-    console.log('[App] Before endTurn - Player state:', beforeState);
-    
-    let newGameState = endTurn(gameState); // endTurn now only queues effects
-
-    
-    console.log('[App] After endTurn - Turn changed:', gameState.current_turn, '->', newGameState.current_turn);
-    console.log('[App] After endTurn - Effect queue length:', newGameState.effect_queue?.length || 0);
-    
-    // ターン終了後の状態を記録
-    const afterState = {
-      playerScale: newGameState.players[gameState.current_turn]?.scale || 0,
-      playerConsciousness: newGameState.players[gameState.current_turn]?.consciousness || 0
-    };
-    console.log('[App] After endTurn - Player state:', afterState);
-    
-    // 新しいオブジェクトとして設定して確実に再レンダリングを促す
+    let newGameState = endTurn(gameStateRef.current); // endTurn now only queues effects
     setGameState(newGameState);
-  };
+  }, []);
 
-  const handleProvideInput = (chosenCard) => {
-    if (!gameState || !gameState.awaiting_input || gameState.game_over || gameState.isAnimationLocked) {
-      if (gameState?.isAnimationLocked) {
+  const handleProvideInput = useCallback((chosenCard) => { // useCallback added here
+    if (!gameStateRef.current || !gameStateRef.current.awaiting_input || gameStateRef.current.game_over || gameStateRef.current.isAnimationLocked) {
+      if (gameStateRef.current?.isAnimationLocked) {
         console.log('[App] Input blocked - animation in progress');
       }
       return;
     }
-    console.log('[App] Providing input:', chosenCard);
-    let newGameState = resolveInput(gameState, chosenCard); // resolveInput now only queues effects
-    console.log('[App] After resolveInput - awaiting_input:', newGameState.awaiting_input);
-
-    // 新しいオブジェクトとして設定して確実に再レンダリングを促す
+    let newGameState = resolveInput(gameStateRef.current, chosenCard); // resolveInput now only queues effects
     setGameState(newGameState);
-  };
+  }, []);
 
-  const handleSurrender = () => {
-    if (!gameState || gameState.game_over) return;
-    const newState = produce(gameState, draft => {
+  const handleSurrender = useCallback(() => { // useCallback added here
+    if (!gameStateRef.current || gameStateRef.current.game_over) return;
+    const newState = produce(gameStateRef.current, draft => {
       draft.players[HUMAN_PLAYER_ID].consciousness = 0;
     });
     setGameState(checkGameOver(newState));
-  };
+  }, []);
 
   if (error) {
     return (
@@ -339,6 +325,7 @@ function App() {
             onGameStateUpdate={setGameState}
             effectMonitor={enhancedLog.getEffectMonitor()}
             enhancedLog={enhancedLog}
+            onConfirmMulligan={handleConfirmMulligan}
           />
           {playingGameResultAnimation && (
             // Animation is playing, potentially overlaying something

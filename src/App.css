@@ -2436,124 +2436,6 @@ button:disabled {
   transform: translateY(-1px);
 }
 
-/* ========================================
-   ゲーム演出システム用CSS
-   🎬ANIM - Animation System Styles
-   ======================================== */
-
-/* 継続演出: 規模不足カード */
-.card-insufficient-scale {
-  opacity: 0.5 !important;
-  filter: grayscale(100%) !important;
-  transition: opacity 0.3s ease, filter 0.3s ease !important;
-  pointer-events: none;
-}
-
-/* 継続演出が解除された時の復帰アニメーション */
-.card:not(.card-insufficient-scale) {
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-/* テスト用演出 */
-.test-flash {
-  animation: testFlash 1s ease-in-out;
-}
-
-@keyframes testFlash {
-  0%, 100% { 
-    background-color: transparent; 
-    transform: scale(1);
-  }
-  50% { 
-    background-color: #ffff00; 
-    transform: scale(1.05);
-  }
-}
-
-/* カードプレイ演出（基本版） */
-.card-play-animation {
-  animation: cardPlayBasic 0.8s ease-out;
-}
-
-@keyframes cardPlayBasic {
-  0% { 
-    opacity: 0; 
-    transform: scale(1.2); 
-  }
-  70% { 
-    opacity: 1; 
-    transform: scale(1.0); 
-  }
-  85% { 
-    transform: scale(1.0) translateX(-2px); 
-  }
-  100% { 
-    transform: scale(1.0) translateX(0); 
-  }
-}
-
-/* カードダメージ演出（基本版） */
-.card-damage-animation {
-  animation: cardDamageBasic 0.5s ease-in-out;
-}
-
-@keyframes cardDamageBasic {
-  0%, 100% { 
-    transform: translateX(0); 
-    background-color: transparent;
-  }
-  25% { 
-    transform: translateX(-3px); 
-    background-color: rgba(244, 67, 54, 0.3);
-  }
-  75% { 
-    transform: translateX(3px); 
-    background-color: rgba(244, 67, 54, 0.3);
-  }
-}
-
-/* リソース変化演出（基本版） */
-.resource-increase-animation {
-  animation: resourceIncrease 0.6s ease-out;
-}
-
-.resource-decrease-animation {
-  animation: resourceDecrease 0.6s ease-out;
-}
-
-@keyframes resourceIncrease {
-  0%, 100% { 
-    color: inherit; 
-    transform: scale(1); 
-  }
-  50% { 
-    color: #ffd700; 
-    transform: scale(1.1); 
-  }
-}
-
-@keyframes resourceDecrease {
-  0%, 100% { 
-    color: inherit; 
-    transform: scale(1); 
-  }
-  50% { 
-    color: #2196f3; 
-    transform: scale(1.1); 
-  }
-}
-
-/* 演出中の要素が他の要素に影響しないようにする */
-.animating {
-  position: relative;
-  z-index: 10;
-}
-
-/* 演出システムが無効化されている場合のフォールバック */
-.animations-disabled * {
-  animation: none !important;
-  transition: none !important;
-}
 
 /* ========================================
    ゲーム演出システム用CSS
@@ -2565,7 +2447,7 @@ button:disabled {
   opacity: 0.5 !important;
   filter: grayscale(100%) !important;
   transition: opacity 0.3s ease, filter 0.3s ease !important;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 /* 継続演出が解除された時の復帰アニメーション */

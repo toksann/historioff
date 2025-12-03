@@ -1,5 +1,6 @@
 export const GamePhase = {
   SETUP: "SETUP",
+  MULLIGAN: "MULLIGAN",
   START_TURN: "START_TURN",
   MAIN_PHASE: "MAIN_PHASE",
   END_TURN: "END_TURN",

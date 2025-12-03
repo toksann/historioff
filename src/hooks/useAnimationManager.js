@@ -86,7 +86,7 @@ const useAnimationManager = (gameState, effectMonitor) => {
     // テスト用演出を実行
     const testAnimation = async (target) => {
         if (!controller) {
-            console.warn('🎮GAME_ANIM [Hook] PresentationController not ready');
+            //console.warn('🎮GAME_ANIM [Hook] PresentationController not ready');
             return;
         }
 

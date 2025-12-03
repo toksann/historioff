@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PlayerStats from './PlayerStats.js';
 import Field from './Field.js';
 import Hand from './Hand.js';
@@ -9,13 +9,14 @@ import GameInfo from './GameInfo.js';
 import GameLogOverlay from './GameLogOverlay.js';
 import NPCController from './NPCController.js';
 import RulesOverlay from './overlays/RulesOverlay.js';
+import MulliganModal from './MulliganModal.js'; // マリガンモーダルをインポート
 import useAnimationManager from '../hooks/useAnimationManager.js';
 import usePresentedCards from '../hooks/usePresentedCards.js'; // 新しいフックをインポート
 import '../App.css';
-import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
+import { HUMAN_PLAYER_ID, NPC_PLAYER_ID, GamePhase } from '../gameLogic/constants.js'; // GamePhaseをインポート
 import { produce } from 'immer'; // immerをインポート
 
-const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSurrender, onGameStateUpdate, effectMonitor, enhancedLog }) => {
+const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSurrender, onGameStateUpdate, effectMonitor, enhancedLog, onConfirmMulligan }) => {
     const [selectedCard, setSelectedCard] = useState(null);
     const [actionMenuCard, setActionMenuCard] = useState(null);
     const [showGameLog, setShowGameLog] = useState(false);
@@ -303,12 +304,23 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
 
     return (
         <div className="game-board">
+            {/* マリガンモーダル */}
+            {gameState.phase === GamePhase.MULLIGAN && (
+                <MulliganModal
+                    hand={humanPlayer.hand}
+                    onConfirmMulligan={(selectedCardIds) => onConfirmMulligan(HUMAN_PLAYER_ID, selectedCardIds)}
+                    cardDefs={cardDefs}
+                    mulliganState={gameState.mulligan_state}
+                />
+            )}
+
             {/* NPCController - 表示要素なし、バックグラウンドで動作 */}
             <NPCController
                 gameState={gameState}
                 onPlayCard={onPlayCard}
                 onEndTurn={onEndTurn}
                 onProvideInput={onProvideInput}
+                onPerformMulligan={(selectedCardIds) => onConfirmMulligan(NPC_PLAYER_ID, selectedCardIds)}
             />
             
             {renderChoicePrompt()}

@@ -13,7 +13,6 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
     if (!player || !player.modify_parameter_corrections || player.modify_parameter_corrections.length === 0) {
         return amount;
     }
-    console.log(`[補正値] start find corrections`);
 
     let limit = null;
     let amplification = 0;
@@ -22,7 +21,6 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
 
     // 1. Collect all applicable corrections and mark them for removal
     player.modify_parameter_corrections.forEach((correction, index) => {
-        console.log(`[補正値(${index})] find correction: ${correction.source_card_id} type: ${correction.correct_type} for target:${correction.correct_target}, direction:${correction.correct_direction}`);
         if (correction.correct_target === correctTarget && correction.correct_direction === correctDirection) {
             usedCorrections.push(index);
             switch (correction.correct_type) {
@@ -44,7 +42,6 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
         }
     });
     player.modify_parameter_corrections.length = 0; // Clear all corrections; will re-add unused ones later
-    console.log(`[補正値] end find corrections`);
 
     if (usedCorrections.length === 0) {
         return amount;
@@ -492,7 +489,6 @@ const effectHandlers = {
             if (originalAmount < 0) {
                 const tempKey = `${player_id}_last_consciousness_decrease`;
                 gameState.temp_effect_data[tempKey] = Math.abs(finalAmount);
-                console.log(`[孤立主義] Stored last consciousness decrease for ${player_id}: ${gameState.temp_effect_data[tempKey]} tempKey:${tempKey}`);
             }
             
             gameState.players[player_id].consciousness += finalAmount;
@@ -515,7 +511,6 @@ const effectHandlers = {
                             message: '意識変化が軽減により無効化されました'
                         }
                     }, sourceCard]);
-                    console.log(`[孤立主義] 意識変化が軽減により無効化されました originalAmount:${originalAmount}, finalAmount:${finalAmount}`);
                 }
                 
                 const changeArgs = {
@@ -805,12 +800,9 @@ const effectHandlers = {
         const new_limit = player.field_limit + amount;
         const current_field_cards = player.field.length;
 
-        console.log(`[フィールド制限変更] 現在の制限: ${player.field_limit}, 変更量: ${amount}, 新しい制限: ${new_limit}, フィールド上のカード数: ${current_field_cards}`);
         if (amount < 0) { // This is a decrease
             if (new_limit < current_field_cards) { // If new limit is less than current cards on field, it's a failure
-                console.log(`[フィールド制限変更] フィールド制限の減少が無効化されました。new_limit: ${new_limit}, current_field_cards: ${current_field_cards}`);
                 if (sourceCard) {
-                console.log(`[フィールド制限変更] FAILED_PROCESS 発行`);
                     effectsQueue.unshift([{
                         effect_type: TriggerType.FAILED_PROCESS,
                         args: { player_id: sourceCard.owner, card_id: sourceCard.instance_id, target_card_id: sourceCard.instance_id }
@@ -852,7 +844,7 @@ const effectHandlers = {
             } else {
                 // If deck is empty, this draw effect has no target, so return early.
                 // Log a warning or handle gracefully if this state is unexpected.
-                console.warn(`[EffectHandler] Attempted to draw from an empty deck for player ${player_id}.`);
+                //console.warn(`[EffectHandler] Attempted to draw from an empty deck for player ${player_id}.`);
                 return; 
             }
         }
@@ -2238,7 +2230,7 @@ const checkAllReactions = (processedEffect, sourceCard, gameState) => {
 
 export const setEffectLogger = (logger) => {
     globalEffectLogger = logger;
-    console.log('🎬ANIM [effectHandler] EffectLogger has been set.');
+    //console.log('🎬ANIM [effectHandler] EffectLogger has been set.');
 };
 
 /**
@@ -2336,7 +2328,7 @@ export const processEffects = (gameState) => {
                     
                     while (draftState.effect_queue.length > 0 && !draftState.awaiting_input && !draftState.game_over && safetyBreak < 500) {
                         const [effect, sourceCard] = draftState.effect_queue.shift();
-                        console.log(`[DEBUG] Processing effect in queue: Type=${effect?.effect_type}, Args=${JSON.stringify(effect?.args)}, SourceCard=${sourceCard?.name || 'N/A'}`);
+                        //console.log(`[DEBUG] Processing effect in queue: Type=${effect?.effect_type}, Args=${JSON.stringify(effect?.args)}, SourceCard=${sourceCard?.name || 'N/A'}`);
             if (globalEffectLogger) {
                 globalEffectLogger.recordEffect(draftState, effect, sourceCard);
             }

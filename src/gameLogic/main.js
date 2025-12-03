@@ -84,7 +84,11 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
             }
         },
         current_turn: null,
-        phase: GamePhase.START_TURN,
+        phase: GamePhase.MULLIGAN,
+        mulligan_state: {
+            [HUMAN_PLAYER_ID]: { status: 'undecided', count: 0 },
+            [NPC_PLAYER_ID]: { status: 'undecided', count: 0 },
+        },
         effect_queue: [],
         awaiting_input: null,
         effects_to_skip: {},
@@ -159,8 +163,62 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         }
     });
 
-    return startTurn(gameState);
+    return gameState;
 };
+
+export const performMulligan = (gameState, playerId, selectedCardIds) => {
+    return produce(gameState, draftState => {
+        const player = draftState.players[playerId];
+        if (!player) return;
+
+        draftState.mulligan_state[playerId].status = 'decided'; // Update status regardless
+        draftState.mulligan_state[playerId].count = selectedCardIds.length; // Store count
+
+        // If no cards to mulligan, just update status and return
+        if (!selectedCardIds || selectedCardIds.length === 0) {
+            return;
+        }
+
+        // 1. 手札からマリガン対象のカードを隔離
+        const cardsToReturn = [];
+        const remainingHand = [];
+        player.hand.forEach(card => {
+            if (selectedCardIds.includes(card.instance_id)) {
+                cardsToReturn.push(card);
+            } else {
+                remainingHand.push(card);
+            }
+        });
+
+        // 2. 新しいカードをデッキからドロー
+        const numToDraw = cardsToReturn.length;
+        const newCards = player.deck.splice(0, numToDraw);
+        
+        // Add a flag to the new cards
+        newCards.forEach(card => {
+            card.isNew = true;
+        });
+        
+        // 新しい手札をセット
+        player.hand = [...remainingHand, ...newCards];
+
+        // 3. 隔離したカードをデッキに戻してシャッフル
+        player.deck.push(...cardsToReturn);
+        player.deck = shuffle(player.deck);
+
+        // 4. マリガン状態を更新 (status and count already updated)
+    });
+};
+
+export const resolveMulliganPhase = (gameState) => {
+    const { mulligan_state } = gameState;
+    if (mulligan_state[HUMAN_PLAYER_ID].status === 'decided' && mulligan_state[NPC_PLAYER_ID].status === 'decided') {
+        // startTurn will produce the new state, including setting the phase to START_TURN
+        return startTurn(gameState);
+    }
+    return gameState;
+};
+
 
 export const playCard = (gameState, playerId, cardInstanceId, options = {}) => {
     return produce(gameState, draftState => {
@@ -233,6 +291,7 @@ export const _proceedToNextTurn = (gameState) => {
     const nextState = produce(currentGameState, draftState => {
         const currentPlayerId = draftState.current_turn;
         const nextPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        
         const currentPlayer = draftState.players[currentPlayerId];
         currentPlayer.cards_played_this_turn = 0;
         
@@ -258,8 +317,18 @@ export const _proceedToNextTurn = (gameState) => {
 
 export const startTurn = (gameState) => {
     return produce(gameState, draftState => {
+        // Clean up isNew flag from all cards from previous mulligan phase
+        Object.values(draftState.players).forEach(player => {
+            player.hand.forEach(card => {
+                if (card.isNew) {
+                    delete card.isNew;
+                }
+            });
+        });
+
+        draftState.phase = GamePhase.START_TURN;
         const currentPlayerId = draftState.current_turn;
-        const opponentPlayerId = currentPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+        const opponentPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
         const currentPlayer = draftState.players[currentPlayerId];
 
         const isFirstPlayer = currentPlayerId === draftState.first_player;

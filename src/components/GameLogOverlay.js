@@ -79,7 +79,6 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
     // ログエントリーからカード情報を取得
     const getCardFromLogEntry = (entry) => {
         if (!entry || !gameState) {
-            console.log('No entry or gameState');
             return null;
         }
         
@@ -259,7 +258,6 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
                         </div>
                     ) : (
                         <div className="log-entries">
-                            {console.log('DEBUG: GameLogOverlay - filteredEntries before map:', filteredEntries)}
                             {filteredEntries.map((entry, index) => {
                                 const card = getCardFromLogEntry(entry);
                                 const isClickable = !!card;

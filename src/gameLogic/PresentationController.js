@@ -414,13 +414,10 @@ class PresentationController {
         
         // ドロー演出（デッキから手札）
         if (sourcePile === 'deck' && destPile === 'hand') {
-            const target = document.querySelector(`[data-card-id="${cardId}"]`);
-            
-            
-            
-            
-            await this.animationManager.triggerTransientEffect('CARD_DRAW', target, { effect, sourceCard });
-            
+            setTimeout(async () => {
+                const target = document.querySelector(`[data-card-id="${cardId}"]`);
+                await this.animationManager.triggerTransientEffect('CARD_DRAW', target, { effect, sourceCard });
+            }, 50);
         }
         // 手札から場への移動（財カード配置演出 - プレイヤー・NPC両方）
         else if (sourcePile === 'hand' && destPile === 'field') {

@@ -104,6 +104,23 @@ export const NPCActions = {
         });
         
         return selectedCards;
+    },
+
+    // マリガンするカードの選択ロジック
+    decideMulligan: (player, gameState) => {
+        const cardsToMulligan = [];
+        // 現在の規模より2大きいカードをマリガン対象とする（仮のロジック）
+        // 例えば、規模5で手札に規模8のカードがあったらマリガン
+        const mulliganThreshold = player.scale + 2; 
+
+        player.hand.forEach(card => {
+            if (card.required_scale > mulliganThreshold) {
+                cardsToMulligan.push(card);
+            }
+        });
+
+        console.log(`[NPCActions] NPC deciding mulligan. Player scale: ${player.scale}, Threshold: ${mulliganThreshold}. Cards to mulligan:`, cardsToMulligan.map(c => c.name));
+        return cardsToMulligan;
     }
 };
 

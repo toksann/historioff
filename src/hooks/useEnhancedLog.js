@@ -30,7 +30,7 @@ const useEnhancedLog = (gameState, effectMonitor) => {
         // ログのクリアはinitializeGameでgameState.game_logがリセットされることに依存するか、
         // もしApp.jsからログクリアのdispatchが渡されるならそれを呼び出す
         // 現時点では、ここで直接gameStateを変更しない
-        console.log('DEBUG: clearLog called. Log state is reset via initializeGame or external dispatch.');
+        //console.log('DEBUG: clearLog called. Log state is reset via initializeGame or external dispatch.');
     }, []);
 
     /**

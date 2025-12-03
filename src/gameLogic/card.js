@@ -365,7 +365,6 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             // Check if the final decrease meets the threshold (1 or more)
             const tempKey = `${owner.id}_last_consciousness_decrease`;
             const actualDecrease = gameState.temp_effect_data[tempKey];
-            console.log(`[孤立主義] 実際の意識減少量: ${actualDecrease} ソース: ${sourceCardId} tempKey :${tempKey}`);
             if (!actualDecrease || actualDecrease < 1) {
                 continue;
             }

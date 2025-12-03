@@ -1,7 +1,28 @@
-WARNING in [eslint]
-src\gameLogic\LogEntryGenerator.js
-  Line 168:19:  'sourceCardName' is assigned a value but never used  no-unused-vars
-  Line 176:21:  'cardName' is constant                               no-const-assign
-
-src\gameLogic\effectHandler.js
-  Line 100:7:  'enforceFieldLimit' is assigned a value but never used  no-unused-vars
+Uncaught runtime errors:
+×
+ERROR
+_NPCActions_js__WEBPACK_IMPORTED_MODULE_3__.default.decideMulligan is not a function
+TypeError: _NPCActions_js__WEBPACK_IMPORTED_MODULE_3__.default.decideMulligan is not a function
+    at http://localhost:3000/static/js/bundle.js:31601:86
+    at Object.react_stack_bottom_frame (http://localhost:3000/static/js/bundle.js:20818:18)
+    at runWithFiberInDEV (http://localhost:3000/static/js/bundle.js:8736:68)
+    at commitHookEffectListMount (http://localhost:3000/static/js/bundle.js:13727:618)
+    at commitHookPassiveMountEffects (http://localhost:3000/static/js/bundle.js:13764:56)
+    at commitPassiveMountOnFiber (http://localhost:3000/static/js/bundle.js:14666:25)
+    at recursivelyTraversePassiveMountEffects (http://localhost:3000/static/js/bundle.js:14657:104)
+    at commitPassiveMountOnFiber (http://localhost:3000/static/js/bundle.js:14706:9)
+    at recursivelyTraversePassiveMountEffects (http://localhost:3000/static/js/bundle.js:14657:104)
+    at commitPassiveMountOnFiber (http://localhost:3000/static/js/bundle.js:14665:9)
+ERROR
+_NPCActions_js__WEBPACK_IMPORTED_MODULE_3__.default.decideMulligan is not a function
+TypeError: _NPCActions_js__WEBPACK_IMPORTED_MODULE_3__.default.decideMulligan is not a function
+    at http://localhost:3000/static/js/bundle.js:31601:86
+    at Object.react_stack_bottom_frame (http://localhost:3000/static/js/bundle.js:20818:18)
+    at runWithFiberInDEV (http://localhost:3000/static/js/bundle.js:8736:68)
+    at commitHookEffectListMount (http://localhost:3000/static/js/bundle.js:13727:618)
+    at commitHookPassiveMountEffects (http://localhost:3000/static/js/bundle.js:13764:56)
+    at reconnectPassiveEffects (http://localhost:3000/static/js/bundle.js:14720:9)
+    at recursivelyTraverseReconnectPassiveEffects (http://localhost:3000/static/js/bundle.js:14711:66)
+    at reconnectPassiveEffects (http://localhost:3000/static/js/bundle.js:14734:9)
+    at recursivelyTraverseReconnectPassiveEffects (http://localhost:3000/static/js/bundle.js:14711:66)
+    at reconnectPassiveEffects (http://localhost:3000/static/js/bundle.js:14719:9)

@@ -1237,7 +1237,7 @@
         "name": "資本主義",
         "card_type": "イデオロギー",
         "required_scale": 35,
-        "description": "ターン終了時、場のマネーの耐久値と同じ回数ランダムな財の耐久値を+1し、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に6ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。",
+        "description": "ターン終了時、場のマネーの耐久値と同じ回数ランダムな財の耐久値を+1し、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に6ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。さらに自分の意識をこのときの場の財の数だけプラスする。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1273,6 +1273,13 @@
                         "card_template_name": "マネー",
                         "destination_pile": "hand",
                         "initial_durability": "self_all_wealth_on_field"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_field_wealth_count": true
                     }
                 }
             ]
