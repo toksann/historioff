@@ -20,6 +20,9 @@ const MenuSystem = ({
       case 'start':
         onScreenChange('deckSelection');
         break;
+      case 'deckBuilder':
+        onScreenChange('deckBuilder');
+        break;
       case 'rules':
         setShowRulesOverlay(true);
         break;

@@ -34,6 +34,13 @@ const TitleScreen = ({ onMenuSelect }) => {
           
           <button 
             className="menu-button"
+            onClick={() => onMenuSelect('deckBuilder')}
+          >
+            デッキ構築
+          </button>
+
+          <button 
+            className="menu-button"
             onClick={() => onMenuSelect('rules')}
           >
             ルール

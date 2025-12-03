@@ -9,6 +9,7 @@ import { HUMAN_PLAYER_ID, NPC_PLAYER_ID, GamePhase } from './gameLogic/constants
 import { processEffects } from './gameLogic/effectHandler.js'; // Import processEffects
 import useEnhancedLog from './hooks/useEnhancedLog.js'; // Import useEnhancedLog
 import GameOverScreen from './components/GameOverScreen.js'; // Import GameOverScreen
+import DeckBuilderScreen from './components/DeckBuilderScreen.js';
 import { effectMonitor } from './gameLogic/EffectMonitor.js'; // Import effectMonitor
 
 function App() {
@@ -342,6 +343,8 @@ function App() {
           }}
           onMainMenu={handleGameEnd}
         />
+      ) : currentScreen === 'deckBuilder' ? (
+        <DeckBuilderScreen gameData={gameData} onExit={() => handleScreenChange('title')} />
       ) : (
         <MenuSystem
           gameData={gameData}

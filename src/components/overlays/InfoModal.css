@@ -1,0 +1,64 @@
+.info-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 12000; /* Higher than card detail */
+}
+
+.info-modal-content {
+  background: #282c34;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border: 1px solid #61dafb;
+}
+
+.info-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.info-modal-header h3 {
+  margin: 0;
+  color: #61dafb;
+}
+
+.info-modal-close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.info-modal-body {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.info-modal-footer {
+  text-align: right;
+}
+
+.info-modal-ok-button {
+  background-color: #61dafb;
+  color: #282c34;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
