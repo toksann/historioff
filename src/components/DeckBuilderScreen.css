@@ -326,7 +326,7 @@
   flex-grow: 1;    /* この要素が伸びてスペースを埋めるようにする */
   overflow-y: auto; /* 内容がはみ出たらスクロールバーを表示 */
   min-height: 0;     /* Flexboxが正しく伸縮するための重要な設定 */
-  max-height: 350px; /* 必要に応じて最大高さを設定 */
+  max-height: 400px; /* 必要に応じて最大高さを設定 */
 }
 
 /* 下部の要素が押し出されたり縮んだりしないようにする */
@@ -402,4 +402,51 @@
 .deck-name-input {
   padding: 8px 10px; /* パディングを小さく */
   font-size: 0.9em;  /* 文字サイズを小さく */
+}
+
+/* --- Responsive Adjustments for Deck Builder --- */
+
+@media (max-width: 768px) {
+
+  /* ライブラリのソート・フィルターコントロールを縦に並べる */
+  .library-controls {
+    flex-direction: column;
+    align-items: flex-start; /* 各グループを左揃えにする */   
+  }
+
+ /* デッキアクションの要素（入力欄、ボタン）を縦に並べる */  
+  .deck-actions {
+    flex-direction: column;
+    align-items: stretch; /* 各要素の幅を親要素に合わせる */  
+  }
+}
+
+
+/* --- Enhanced Responsive Adjustments for Library Controls --- */        
+
+@media (max-width: 768px) {
+
+  /* ライブラリコントロールのグループを縦に並べ、幅をいっぱいにする */    
+  .library-controls {
+    flex-direction: column;
+    align-items: stretch; 
+  }
+
+  /* 各コントロールグループ内の要素も縦に並べる */
+  .library-controls .sort-controls,
+  .library-controls .filter-controls {
+    flex-direction: column;
+    align-items: stretch; /* ラベルとセレクトボックスを親の幅に合わせる */
+    gap: 5px;             /* 縦に並んだ要素間の隙間 */
+  }
+  
+  /* セレクトボックスが利用可能な幅全体に広がるようにする */
+  .library-controls select {
+    width: 100%;
+  }
+
+  /* 「カードタイプ」と「必要規模」のフィルター間に少しスペースを追加 */  
+  .library-controls .filter-controls > label:nth-of-type(2) {
+      margin-top: 10px;
+  }
 }

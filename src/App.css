@@ -2875,11 +2875,11 @@ button:disabled {
   color: #fff;
 }
 
-.deck-list {
+.deck-selection-area {
   padding: 20px;
 }
 
-.deck-list h2 {
+.deck-selection-area h2 {
   text-align: center;
   margin-bottom: 30px;
   color: #fff;

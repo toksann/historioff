@@ -86,6 +86,7 @@ const MenuSystem = ({
             cardDefs={gameData.cardDefs}
             onDeckSelected={handleDeckSelected}
             onBack={handleBackToTitle}
+            onScreenChange={onScreenChange}
           />
         );
       

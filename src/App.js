@@ -29,6 +29,7 @@ function App() {
 
   // メニューシステム用の状態
   const [currentScreen, setCurrentScreen] = useState('title'); // 'title', 'deckSelection', 'cardLibrary', 'game', 'gameOver'
+  const [deckToEdit, setDeckToEdit] = useState(null);
 
   
   const isTransitioningRef = useRef(false); // ターン遷移処理中フラグ
@@ -304,7 +305,8 @@ function App() {
   };
 
   // 画面遷移の処理
-  const handleScreenChange = (screen) => {
+  const handleScreenChange = (screen, data = {}) => {
+    setDeckToEdit(data.deckToEdit || null);
     setCurrentScreen(screen);
   };
 
@@ -344,7 +346,11 @@ function App() {
           onMainMenu={handleGameEnd}
         />
       ) : currentScreen === 'deckBuilder' ? (
-        <DeckBuilderScreen gameData={gameData} onExit={() => handleScreenChange('title')} />
+        <DeckBuilderScreen 
+          gameData={gameData} 
+          onExit={() => handleScreenChange('title')} 
+          deckToEdit={deckToEdit}
+        />
       ) : (
         <MenuSystem
           gameData={gameData}

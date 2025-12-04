@@ -63,9 +63,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
 
   const handleEditDeck = (deck, event) => {
     event.stopPropagation();
-    // This part is not fully implemented yet, as it requires passing the deck to the builder
-    alert(`「${deck.name}」の編集機能はまだ実装されていません。`);
-    // onScreenChange('deckBuilder', { deckToEdit: deck });
+    onScreenChange('deckBuilder', { deckToEdit: deck });
   };
 
   const renderDeckPreview = () => {
@@ -167,7 +165,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
       </div>
 
       {!showDeckPreview ? (
-        <div className="deck-list">
+        <div className="deck-selection-area">
           <h2>デッキを選択</h2>
           <div className="deck-grid">
             {allDecks.map((deck) => (

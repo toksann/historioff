@@ -7,7 +7,7 @@ import './DeckBuilderScreen.css';
 import './CostCurveChart.css';
 import './overlays/InfoModal.css';
 
-const DeckBuilderScreen = ({ gameData, onExit }) => {
+const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit prop added
   const { cardDefs } = gameData;
   const [deck, setDeck] = useState([]);
   const [deckName, setDeckName] = useState('');
@@ -23,6 +23,18 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
   useEffect(() => {
     const customDecks = getFromStorage('customDecks') || {};
     setAllDecks(customDecks);
+  }, []);
+
+  // This new useEffect handles loading the deck for editing
+  useEffect(() => {
+    if (deckToEdit && cardDefs) {
+      const newDeckCards = deckToEdit.cards.map(cardName => {
+        return Object.values(cardDefs).find(def => def.name === cardName);
+      }).filter(Boolean); // Filter out any cards that might not be found
+
+      setDeckName(deckToEdit.name);
+      setDeck(newDeckCards.sort((a, b) => a.required_scale - b.required_scale));
+    }
   }, []);
 
   const filteredAndSortedCards = useMemo(() => {
