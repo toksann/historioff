@@ -162,15 +162,35 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const importedDeck = JSON.parse(e.target.result);
-        if (importedDeck && importedDeck.name && Array.isArray(importedDeck.cards)) {
-          const newDeckCards = importedDeck.cards.map(cardName => {
+        const importedDeckData = JSON.parse(e.target.result);
+        if (importedDeckData && importedDeckData.name && Array.isArray(importedDeckData.cards)) {
+          // Check for duplicates and ask for confirmation
+          if (allDecks[importedDeckData.name]) {
+            if (!window.confirm(`デッキ「${importedDeckData.name}」は既に存在します。上書きしますか？`)) {
+              event.target.value = ''; // Reset file input
+              return;
+            }
+          }
+
+          const newDeckCards = importedDeckData.cards.map(cardName => {
             return Object.values(cardDefs).find(def => def.name === cardName);
           }).filter(Boolean); // Filter out any undefined cards
 
-          setDeckName(importedDeck.name);
+          setDeckName(importedDeckData.name);
           setDeck(newDeckCards.sort((a, b) => a.required_scale - b.required_scale));
-          setModalInfo({ isOpen: true, message: `デッキ「${importedDeck.name}」をインポートしました！` });
+
+          // Also save the imported deck to localStorage
+          const newCustomDecks = {
+            ...allDecks,
+            [importedDeckData.name]: {
+              name: importedDeckData.name,
+              cards: importedDeckData.cards,
+            }
+          };
+          saveToStorage('customDecks', newCustomDecks);
+          setAllDecks(newCustomDecks); // Update the state for the deck list
+
+          setModalInfo({ isOpen: true, message: `デッキ「${importedDeckData.name}」をインポートして保存しました！` });
         } else {
           throw new Error('無効なデッキファイル形式です。');
         }
@@ -249,11 +269,11 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
                 </div>
               </div>
             </div>
-            <div className="card-grid">
+            <div className="deck-builder-card-grid">
               {filteredAndSortedCards.map((card) => (
                 <div 
                   key={card.name} 
-                  className={`library-card card-type-${card.card_type}`}
+                  className={`deck-builder-library-card card-type-${card.card_type}`}
                   onClick={() => handleCardClick(card)}
                   draggable
                   onDragStart={(e) => onDragStart(e, card)}

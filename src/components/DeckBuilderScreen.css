@@ -105,7 +105,207 @@
   color: white;
 }
 
-.card-grid {
+.deck-builder-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: white;
+  display: flex;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.deck-builder-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.exit-button {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  background-color: #00ff00;
+  border: none;
+  border-radius: 5px;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.exit-button:hover {
+  background-color: #fff;
+}
+
+.deck-builder-layout {
+  display: flex;
+  flex-grow: 1;
+  gap: 20px;
+  height: calc(100% - 50px);
+}
+
+.card-library-section,
+.deck-building-section {
+  display: flex;
+  flex-direction: column;
+  background: #282c34;
+  padding: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-library-section {
+  flex: 2;
+}
+
+.deck-building-section {
+  flex: 1;
+}
+
+.library-header {
+  margin-bottom: 15px;
+}
+
+.library-header h2 {
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.library-controls {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  background: #333;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.library-controls .sort-controls,
+.library-controls .filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.library-controls label {
+  font-weight: bold;
+}
+
+.library-controls select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+}
+
+.deck-builder-card-grid {
+
+
+h2 {
+  text-align: center;
+  color: #00ff00;
+}
+
+.deck-list {
+  flex-grow: 1;
+  background: #333;
+  border-radius: 6px;
+  padding: 10px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.deck-card {
+  background: #4a4f5a;
+  margin-bottom: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.deck-card:hover {
+  background-color: #5a5f6a;
+}
+
+.cost-curve-wrapper {
+  margin-bottom: 15px;
+}
+
+.cost-curve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cost-curve-header h3 {
+  margin: 0;
+  color: #00ff00;
+}
+
+.cost-curve-header button {
+  background: #4a4f5a;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deck-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.deck-name-input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background: #333;
+  color: white;
+}
+
+.deck-actions button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: #00ff00;
+  color: #1a1a1a;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.deck-actions .secondary-action {
+  background-color: #4a4f5a;
+  color: #fff;
+  border: 1px solid #00ff00;
+  font-size: 0.9em;
+}
+
+
+
+
+
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -114,7 +314,7 @@
   padding-right: 10px;
 }
 
-.library-card {
+.deck-builder-library-card {
   background: #3a3f4a;
   border: 1px solid #4a4f5a;
   border-radius: 5px;
@@ -126,21 +326,21 @@
   color: #fff;
 }
 
-.library-card:hover {
+.deck-builder-library-card:hover {
   transform: scale(1.05);
   border-color: #8bc34a;
 }
 
 /* カードタイプ別ボ�Eダーカラー */
-.library-card.card-type-財 {
+.deck-builder-library-card.card-type-財 {
   border-color: #8bc34a;
 }
 
-.library-card.card-type-事象 {
+.deck-builder-library-card.card-type-事象 {
   border-color: #ff9800;
 }
 
-.library-card.card-type-イデオロギー {
+.deck-builder-library-card.card-type-イデオロギー {
   border-color: #9c27b0;
 }
 

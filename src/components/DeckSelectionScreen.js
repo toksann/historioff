@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import CardDetail from './CardDetail.js';
 import { getFromStorage, saveToStorage } from '../utils/localStorage.js';
+import CostCurveChart from './CostCurveChart.js';
+import './CostCurveChart.css';
 
 const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, onScreenChange }) => {
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [showDeckPreview, setShowDeckPreview] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [customDecks, setCustomDecks] = useState({});
+  const [costCurveMode, setCostCurveMode] = useState('single'); // 'single' or 'grouped'
 
   useEffect(() => {
     setCustomDecks(getFromStorage('customDecks') || {});
@@ -73,6 +76,41 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
       return acc;
     }, {});
 
+    const costCurveData = (() => {
+      if (costCurveMode === 'single') {
+        const counts = {};
+        selectedDeck.cards.forEach(cardName => {
+          const cardDef = Object.values(cardDefs).find(def => def.name === cardName);
+          if (cardDef) {
+            const cost = cardDef.required_scale;
+            counts[cost] = (counts[cost] || 0) + 1;
+          }
+        });
+        const maxCost = Math.max(...Object.keys(counts).map(Number), 0);
+        const data = [];
+        for (let i = 0; i <= maxCost; i++) {
+          if (counts[i] > 0) {
+            data.push({ label: `${i}`, count: counts[i] });
+          }
+        }
+        return data;
+      } else { // grouped
+        const groups = { '0-4': 0, '5-9': 0, '10-14': 0, '15-19': 0, '20+': 0 };
+        selectedDeck.cards.forEach(cardName => {
+          const cardDef = Object.values(cardDefs).find(def => def.name === cardName);
+          if (cardDef) {
+            const cost = cardDef.required_scale;
+            if (cost <= 4) groups['0-4']++;
+            else if (cost <= 9) groups['5-9']++;
+            else if (cost <= 14) groups['10-14']++;
+            else if (cost <= 19) groups['15-19']++;
+            else groups['20+']++;
+          }
+        });
+        return Object.entries(groups).map(([label, count]) => ({ label, count }));
+      }
+    })();
+
     return (
       <div className="deck-preview">
         <h3>{selectedDeck.name} {!selectedDeck.isValid && '(枚数不足)'}</h3>
@@ -99,6 +137,16 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
               );
             })}
           </div>
+        </div>
+
+        <div className="cost-curve-wrapper">
+          <div className="cost-curve-header">
+            <h3>コストカーブ</h3>
+            <button onClick={() => setCostCurveMode(costCurveMode === 'single' ? 'grouped' : 'single')}>
+              表示切替 ({costCurveMode === 'single' ? '1区切り' : '5区切り'})
+            </button>
+          </div>
+          <CostCurveChart data={costCurveData} />
         </div>
         
         <div className="deck-actions">

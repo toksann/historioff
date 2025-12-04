@@ -100,8 +100,8 @@
   left: 10px;
   padding: 6px 16px; /* 少し大きくする */
   background-color: #333; /* 暗い背景色 */
-  color: #f44336; /* 赤ぁE��E�E�E�E��E�E�E�字色 */
-  border: 2px solid #f44336; /* 赤ぁE��E�E�E�E��E�E�E�緁E��E*/
+  color: #f44336; /* 赤字色 */
+  border: 2px solid #f44336; /* 赤線 */
   border-radius: 8px; /* 角を少し丸める */
   font-size: 0.9em; /* 少し大きくする */
   font-weight: bold;
@@ -112,10 +112,10 @@
 }
 
 .surrender-button:hover {
-  background-color: #f44336; /* ホバーで赤ぁE��E�E�E�E��E�E�E�景 */
-  color: white; /* 白ぁE��E�E�E�E��E�E�E�孁E��E*/
+  background-color: #f44336; /* ホバーで赤背景 */
+  color: white; /* 白文字 */
   box-shadow: 0 4px 8px rgba(244, 67, 54, 0.5); /* ホバーで影を強調 */
-  transform: translateY(-1px); /* 少し浮き上がめE��E*/
+  transform: translateY(-1px); /* 少し浮き上がる */
 }
 
 .surrender-confirm-yes {
@@ -125,12 +125,12 @@
 }
 
 .surrender-confirm-yes:hover {
-  background-color: #c62828 !important; /* 濁E��E�E�E�E��E�E�E�赤 */
+  background-color: #c62828 !important; /* 濃い赤 */
   border-color: #c62828 !important;
   box-shadow: 0 4px 8px rgba(211, 47, 47, 0.5); /* ホバーで影を強調 */
 }
 
-/* ゲーム惁E��E�E�E�E��E�E�E�エリア冁E��E�E�E�E�のスタイル */
+/* ゲーム情報エリア内のスタイル */
 .game-info {
   display: flex;
   flex-direction: column;
@@ -310,7 +310,7 @@
   color: #fff;
 }
 
-/* 手札の横スクロール対忁E��E*/
+/* 手札の横スクロール対応 */
 .hand-cards-scrollable {
   display: flex;
   gap: 5px;
@@ -355,7 +355,7 @@
   border-radius: 5px;
 }
 
-/* 新しいフィールドレイアウチE��E*/
+/* 新しいフィールドレイアウト */
 .field {
   display: flex;
   flex-direction: column;
@@ -452,7 +452,7 @@
   position: relative;
 }
 
-/* スクロール可能であることを示すヒンチE��E*/
+/* スクロール可能であることを示すヒント */
 .wealth-cards-scrollable::after {
   content: "→";
   position: sticky;
@@ -473,7 +473,7 @@
   opacity: 1;
 }
 
-/* スクロールバ�ののスタイリング */
+/* スクロールバーのスタイリング */
 .wealth-cards-scrollable::-webkit-scrollbar {
   height: 8px;
 }
@@ -529,13 +529,13 @@
   border: 3px solid #888;
   border-radius: 4px;
   padding: 2px;
-  width: 80px;
-  height: 105px;
+  width: 150px;
+  height: 200px;
   background-color: white;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  font-size: 0.7em;
+  font-size: 1em; /* Increased font size */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -547,14 +547,14 @@
   box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
-/* 選択征E��E�E�E�E��E�E�E�状態でもカード�の詳細表示は可能であることを示ぁE��E*/
+/* 選択中でもカードの詳細表示は可能であることを示す */
 .awaiting-input .card:hover {
   transform: scale(1.03);
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
 }
 
-/* カードタイプ別の色刁E��E�E�E�E��E�E�E� */
+/* カードタイプ別の色分け */
 .card-type-財 {
   border-color: #00ff00;
   background-color: #f1f8e9;
@@ -570,7 +570,7 @@
   background-color: #f3e5f5;
 }
 
-/* カード�の部レイアウチE��E*/
+/* カードの各部レイアウト */
 .card-header {
   text-align: center;
   border-bottom: 1px solid #ddd;
@@ -669,7 +669,7 @@ button {
     font-size: 1.1em;
     font-weight: bold;
 }
-/* プレイヤースチE��E�E�E�E�のタスのスタイル */
+/* プレイヤーステータスのスタイル */
 .player-stats {
   font-size: 0.9em;
   display: flex;
@@ -750,7 +750,7 @@ button {
   font-size: 1.5em;
   font-weight: bold;
   color: #333;
-  /* 数字が長ぁE��E�E�E�E��E�E�E�合�の対忁E��E*/
+  /* 数字が長い場合の対応 */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -759,7 +759,7 @@ button {
   font-size: clamp(1.0em, 4vw, 1.5em);
 }
 
-/* プレイヤー詳細オーバ�のレイ */
+/* プレイヤー詳細オーバーレイ */
 .player-details-overlay {
   position: fixed;
   top: 0;
@@ -856,7 +856,7 @@ button {
   font-weight: normal;
 }
 
-/* 重要な値のハイライチE��E*/
+/* 重要な値のハイライト */
 .opponent-stats-area .stat-value {
   color: #d32f2f;
 }
@@ -865,7 +865,7 @@ button {
   color: #388e3c;
 }
 
-/* カード詳細オーバ�のレイ */
+/* カード詳細オーバーレイ */
 .card-detail-overlay {
   position: fixed;
   top: 0;
@@ -1083,7 +1083,7 @@ button {
   text-align: center;
 }
 
-/* ゲームログオーバ�のレイ */
+/* ゲームログオーバーレイ */
 .game-log-overlay {
   position: fixed;
   top: 0;
@@ -1220,7 +1220,7 @@ button {
 }
 
 .current-turn-indicator::before {
-  content: "▶ あなた�のターン";
+  content: "▶ あなたのターン";
   position: absolute;
   top: -8px;
   right: -8px;
@@ -1236,7 +1236,7 @@ button {
 }
 
 .opponent-turn-indicator::before {
-  content: "▶ 相手�のターン";
+  content: "▶ 相手のターン";
   position: absolute;
   top: -8px;
   right: -8px;
@@ -1257,7 +1257,7 @@ button {
   100% { opacity: 1; }
 }
 
-/* クリチE��E�E�E�E��E�E�E�可能要素の改喁E��E*/
+/* クリック可能要素の改善 */
 .clickable {
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1273,7 +1273,7 @@ button {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* selectableクラスを完�のに削除 - オーバ�のレイ選択に変更したため不要E��E*/
+/* selectableクラスを完全に削除 - オーバーレイ選択に変更したため不要 */
 /* 
 .selectable {
   border: 3px solid #00b0ff !important;
@@ -1288,7 +1288,7 @@ button {
 }
 */
 
-/* ボタンの改喁E��E*/
+/* ボタンの改善 */
 button {
   transition: all 0.2s ease;
   font-family: inherit;
@@ -1309,7 +1309,7 @@ button:disabled {
 }
 
 /* レスポンシブデザイン */
-/* タブレチE��E�E�E�E��E�E�E�用調整 */
+/* タブレット用調整 */
 @media (max-width: 1024px) and (min-width: 769px) {
   .game-board {
     grid-template-columns: 1fr auto;
@@ -1330,7 +1330,7 @@ button:disabled {
   }
 }
 
-/* スマ�の・小タブレチE��E�E�E�E��E�E�E�用 */
+/* スマホ・小タブレット用 */
 @media (max-width: 768px) {
   .game-board {
     grid-template-columns: 1fr 1fr;
@@ -1352,7 +1352,7 @@ button:disabled {
     max-width: none;
   }
   
-  /* モバイル用ゲーム惁E��E�E�E�E��E�E�E�エリア調整 */
+  /* モバイル用ゲーム情報エリア調整 */
   .log-section {
     flex-direction: column;
     gap: 6px;
@@ -1403,9 +1403,9 @@ button:disabled {
   }
   
   .card {
-    width: 70px;
-    height: 95px;
-    font-size: 0.65em;
+    width: 120px; /* Adjusted */
+    height: 160px; /* Adjusted */
+    font-size: 0.9em; /* Adjusted */
     padding: 3px;
   }
   
@@ -1413,7 +1413,7 @@ button:disabled {
     gap: 5px;
   }
   
-  /* モバイル用フィールドレイアウト調整 - 横並び維持E��E*/
+  /* モバイル用フィールドレイアウト調整 - 横並び維持 */
   .field-cards-container {
     flex-direction: row;
     gap: 4px;
@@ -1473,7 +1473,7 @@ button:disabled {
     gap: 5px;
   }
   
-  /* 小画面用ゲーム惁E��E�E�E�E��E�E�E�エリア */
+  /* 小画面用ゲーム情報エリア */
   .game-info h3 {
     font-size: 1em;
     margin-bottom: 6px;
@@ -1510,7 +1510,7 @@ button:disabled {
     max-height: 60px;
   }
   
-  /* 小画面用プレイヤー統訁E��E*/
+  /* 小画面用プレイヤー統計 */
   .player-name-button {
     font-size: 0.9em;
     padding: 4px 6px;
@@ -1529,7 +1529,7 @@ button:disabled {
     padding: 10px;
   }
   
-  /* 小画面用フィールド�の手札調整 */
+  /* 小画面用フィールドと手札調整 */
   .field-cards-container {
     height: 100px;
     min-height: 100px;
@@ -1541,7 +1541,7 @@ button:disabled {
   }
   
   .hand-cards-scrollable {
-    height: 100px;
+    height: 85px;
   }
   
   .empty-ideology-slot,
@@ -1576,9 +1576,9 @@ button:disabled {
   
   /* 小画面用カード調整 */
   .card {
-    width: 60px;
-    height: 80px;
-    font-size: 0.6em;
+    width: 100px; /* Adjusted */
+    height: 130px; /* Adjusted */
+    font-size: 0.7em; /* Adjusted */
     padding: 2px;
   }
   
@@ -1589,7 +1589,7 @@ button:disabled {
   }
 }
 
-/* ターン終亁E��E�E�E�E�のタンの改喁E��E*/
+/* ターン終了ボタンの改善 */
 .end-turn-button {
   width: 100%;
   margin-top: 10px;
@@ -1618,13 +1618,13 @@ button:disabled {
   box-shadow: none;
 }
 
-/* 征E��E�E�E�E��E�E�E�状態�の視覚的フィードバチE��E�E�E�E��E�E�E� */
+/* 選択中の視覚的フィードバック */
 .awaiting-input {
   position: relative;
 }
 
 .awaiting-input::after {
-  content: "選択征E��E�E�E�E��E�E�E�... (カード詳細は表示可能)";
+  content: "選択中... (カード詳細は表示可能)";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1641,7 +1641,7 @@ button:disabled {
   white-space: nowrap;
 }
 
-/* 選択�のロンプトオーバ�のレイ */
+/* 選択のプロンプトオーバーレイ */
 .choice-prompt-overlay {
   position: fixed;
   top: 0;
@@ -1727,7 +1727,7 @@ button:disabled {
   padding: 5px;
 }
 
-/* 既存�のボタンスタイル�E�E�E�の�E�E�E�他�の選択肢用�E�E�E�の�E�E�E�の*/
+/* 既存のボタンスタイルとの他の選択肢用のもの*/
 .choice-options-scrollable > button {
   padding: 10px 15px;
   border: 1px solid #ddd;
@@ -1879,7 +1879,7 @@ button:disabled {
 
 
 
-/* ターン開始演�の - 右から左へのスライチE��E*/
+/* ターン開始演出 - 右から左へのスライド */
 @keyframes turnStartSlide {
   0% {
     transform: translateX(100%);
@@ -1891,7 +1891,7 @@ button:disabled {
   }
 }
 
-/* ターン終亁E��E�E�E�E��E�E�E��E�E�E�の - 中央フェードイン→左スライドアウチE��E*/
+/* ターン終了演出 - 中央フェードイン→左スライドアウド */
 @keyframes turnのndFadeIn {
   0% {
     transform: translateX(0) scale(0.8);
@@ -1907,7 +1907,7 @@ button:disabled {
   }
 }
 
-/* 勝利演�の - 上から中央→上へのスライチE��E*/
+/* 勝利演出 - 上から中央→上へのスライド */
 @keyframes victorySlide {
   0% {
     transform: translateY(-100%);
@@ -1923,7 +1923,7 @@ button:disabled {
   }
 }
 
-/* 敗北演�の - 上から中央→下へのスライチE��E*/
+/* 敗北演出 - 上から中央→下へのスライド */
 @keyframes defeatSlide {
   0% {
     transform: translateY(-100%);
@@ -1939,7 +1939,7 @@ button:disabled {
   }
 }
 
-/* 先攻/後攻決定演�の - 段階的フェードイン */
+/* 先攻/後攻決定演出 - 段階的フェードイン */
 @keyframes turnOrderReveal {
   0% {
     opacity: 0;
@@ -1955,7 +1955,7 @@ button:disabled {
   }
 }
 
-/* ゲーム進行演�の用のクラス */
+/* ゲーム進行演出用のクラス */
 .turn-start-animation {
   animation: turnStartSlide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -1976,7 +1976,7 @@ button:disabled {
   animation: turnOrderReveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ゲーム進行演�の用のオーバ�のレイ */
+/* ゲーム進行演出用のオーバーレイ */
 .game-progress-overlay {
   position: fixed;
   top: 0;
@@ -2051,7 +2051,7 @@ button:disabled {
   color: white;
 }
 
-/* フィルターバ�の */
+/* フィルターバー */
 .log-filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -2172,7 +2172,7 @@ button:disabled {
   font-size: 0.9em;
 }
 
-/* レスポンシブ対忁E��E*/
+/* レスポンシブ対応 */
 @media (max-width: 768px) {
   .log-filter-bar {
     padding: 8px 15px;
@@ -2205,7 +2205,7 @@ button:disabled {
   }
 }
 
-/* アニメーションロチE��E�E�E�E��E�E�E�中のオーバ�のレイ */
+/* アニメーションロック中のオーバーレイ */
 .animation-lock-overlay {
   position: fixed;
   top: 20px;
@@ -2226,7 +2226,7 @@ button:disabled {
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-/* 上限到達警告演�の */
+/* 上限到達警告演出 */
 @keyframes limitWarningFlash {
   0%, 100% {
     background-color: transparent;
@@ -2243,7 +2243,7 @@ button:disabled {
   animation: limitWarningFlash 0.6s ease-in-out 3;
 }
 
-/* 効果無効化演�の */
+/* 効果無効化演出 */
 @keyframes effectNullified {
   0% {
     transform: scale(1);
@@ -2278,7 +2278,7 @@ button:disabled {
   position: relative;
 }
 
-/* 無効化パーチE��E�E�E�E��E�E�E�クル */
+/* 無効化パーティクル */
 .nullified-particle {
   position: fixed;
   width: 8px;
@@ -2304,7 +2304,7 @@ button:disabled {
   }
 }
 
-/* ログエントリーのクリチE��E�E�E�E��E�E�E�可能スタイル */
+/* ログエントリーのクリック可能スタイル */
 .enhanced-log-entry {
   display: flex;
   align-items: center;
@@ -2357,7 +2357,7 @@ button:disabled {
   color: #2196f3;
 }
 
-/* クリチE��E�E�E�E��E�E�E�可能なログエントリー全体�のスタイル */
+/* クリック可能なログエントリー全体スタイル */
 .clickable-log-entry {
   cursor: pointer !important;
   transition: all 0.2s ease;
@@ -2390,7 +2390,7 @@ button:disabled {
   opacity: 1;
 }
 
-/* ログエントリーの基本スタイルを確俁E��E*/
+/* ログエントリーの基本スタイルを確保 */
 .log-entry {
   position: relative;
   margin: 2px 0;
@@ -2406,12 +2406,12 @@ button:disabled {
   border-left-color: #ff9800;
 }
 
-/* ターン終亁E��E�E�E�E��E�E�E�のプレイログ点滁E��E�E�E�E��E�E�E�ニメーション */
+/* ターン終了プレイログ点滅アニメーション */
 .log-flash-turn {
   animation: logFlashTurn 0.6s ease-in-out;
 }
 
-/* ターン終亁E��E- 黁E��E�E�E�E��E�E�E�点滁E��E*/
+/* ターン終了 - 黄色点滅 */
 @keyframes logFlashTurn {
   0% {
     background-color: transparent;
@@ -2430,7 +2430,7 @@ button:disabled {
   }
 }
 
-/* ホバー時�の効果を少し調整 */
+/* ホバー時の効果を少し調整 */
 .clickable-log:hover {
   background-color: rgba(33, 150, 243, 0.15) !important;
   transform: translateY(-1px);
@@ -2439,7 +2439,7 @@ button:disabled {
 
 
 
-/* 継続演�の: 規模不足カーチE��E*/
+/* 継続演出: 規模不足カード */
 .card-insufficient-scale {
   opacity: 0.5 !important;
   filter: grayscale(100%) !important;
@@ -2447,12 +2447,12 @@ button:disabled {
   
 }
 
-/* 継続演�のが解除された時の復帰アニメーション */
+/* 継続演出が解除された時の復帰アニメーション */
 .card:not(.card-insufficient-scale) {
   transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* チE��E�E�E�E��E�E�E�ト用演�の */
+/* テスト用演出 */
 .test-flash {
   animation: testFlash 1s ease-in-out;
 }
@@ -2468,7 +2468,7 @@ button:disabled {
   }
 }
 
-/* カード�のレイ演�の�E�E�E�の�E�E�E�基本版！E��E*/
+/* カードのプレイ演出の基本版！ */
 .card-play-animation {
   animation: cardPlayBasic 0.8s ease-out;
 }
@@ -2490,7 +2490,7 @@ button:disabled {
   }
 }
 
-/* カードダメージ演�の�E�E�E�の�E�E�E�基本版！E��E*/
+/* カードダメージ演出の基本版！ */
 .card-damage-animation {
   animation: cardDamageBasic 0.5s ease-in-out;
 }
@@ -2510,7 +2510,7 @@ button:disabled {
   }
 }
 
-/* リソース変化演�の�E�E�E�の�E�E�E�基本版！E��E*/
+/* リソース変化演出の基本版！ */
 .resource-increase-animation {
   animation: resourceIncrease 0.6s ease-out;
 }
@@ -2541,13 +2541,13 @@ button:disabled {
   }
 }
 
-/* 演�の中の要素が他�の要素に影響しなぁE��E�E�E�E��E�E�E�ぁE��E�E�E�E��E�E�E�する */
+/* 演出中の要素が他の要素に影響しないようにする */
 .animating {
   position: relative;
   z-index: 10;
 }
 
-/* 演�のシスチE��E�E�E�E��E�E�E�が無効化されてぁE��E�E�E�E��E�E�E�場合�のフォールバック */
+/* 演出システムが無効化されている場合のフォールバック */
 .animations-disabled * {
   animation: none !important;
   transition: none !important;
@@ -2567,7 +2567,7 @@ button:disabled {
    アニメーション関連のCSS
    ======================================== */
 
-/* カード演�のの基本クラス */
+/* カード演出の基本クラス */
 .card-animation-hidden {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -2578,7 +2578,7 @@ button:disabled {
   user-select: none;
 }
 
-/* カード演�の用CSSクラス */
+/* カード演出用CSSクラス */
 .card-damage-animation {
   animation: cardDamage 1.2s ease-in-out;
 }
@@ -2599,7 +2599,7 @@ button:disabled {
   animation: resourceDecrease 0.8s ease-in-out;
 }
 
-/* カード破壊�の除去演�の */
+/* カード破壊の除去演出 */
 @keyframes cardDestroy {
   0% {
     opacity: 1;
@@ -2619,7 +2619,7 @@ button:disabled {
   animation: cardDestroy 0.6s ease-out forwards;
 }
 
-/* パ�のチE��E�E�E�E��E�E�E�クル演�の */
+/* パーティクル演出 */
 @keyframes particleのxplosion {
   0% {
     opacity: 1;
@@ -2642,7 +2642,7 @@ button:disabled {
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
-  /* JavaScriptで制御するためCSSアニメーションは無効匁E��E*/
+  /* JavaScriptで制御するためCSSアニメーションは無効化 */
 }
 
 .particle-wealth {
@@ -2655,7 +2655,7 @@ button:disabled {
   box-shadow: 0 0 12px rgba(156, 39, 176, 0.8), 0 0 6px rgba(156, 39, 176, 1);
 }
 
-/* カード回復演�の - 強化版 */
+/* カード回復演出 - 強化版 */
 @keyframes cardHeal {
   0% {
     transform: translateY(0) scale(1);
@@ -2680,7 +2680,7 @@ button:disabled {
   z-index: 1000 !important;
 }
 
-/* カードダメージ演�の - 趁E��E�E�E�E��E�E�E�化版 */
+/* カードダメージ演出 - 強化版 */
 @keyframes cardDamage {
   0%, 100% {
     transform: translateX(0) scale(1);
@@ -2707,7 +2707,7 @@ button:disabled {
   z-index: 1000 !important;
 }
 
-/* リソース変化演�の */
+/* リソース変化演出 */
 @keyframes resourceIncrease {
   0%, 100% {
     color: inherit;
@@ -2773,7 +2773,7 @@ button:disabled {
   }
 }
 /* メ
-ニューシスチE��E�E�E�E��E�E�E�のスタイル */
+ニューシステムのスタイル */
 .menu-system {
   min-height: 100vh;
   background-color: #1a1a1a;
@@ -2868,7 +2868,7 @@ button:disabled {
   background-color: #888;
 }
 
-/* チE��E�E�E�E��E�E�E�キ選択画面 */
+/* デッキ選択画面 */
 .deck-selection-screen {
   min-height: 100vh;
   background-color: #1a1a1a;
@@ -2912,7 +2912,7 @@ button:disabled {
 
 .deck-card h3 {
   margin: 0 0 10px 0;
-  color: #00ff00; /* 黁E�E��E�E*/
+  color: #00ff00; /* 黄緑 */
   font-size: 16px;
   white-space: normal; /* Added */
   word-break: break-word; /* Added */
@@ -2931,7 +2931,7 @@ button:disabled {
   color: #888;
 }
 
-/* チE��E�E�E�E��E�E�E�キプレビュー */
+/* デッキプレビュー */
 .deck-preview {
   padding: 20px;
   max-width: 800px;
@@ -3068,16 +3068,16 @@ button:disabled {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 15px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 10px;
 }
 
 .library-card {
   background-color: #2a2a2a;
   border: 1px solid #444;
   border-radius: 5px;
-  padding: 15px;
+  padding: 20px; /* Adjusted padding */
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -3129,7 +3129,7 @@ button:disabled {
   border-top: 1px solid #444;
 }
 
-/* オーバ�のレイ */
+/* オーバーレイ */
 .overlay {
   position: fixed;
   top: 0;
@@ -3204,7 +3204,7 @@ button:disabled {
   text-align: left;
 }
 
-/* レスポンシブ対忁E��E*/
+/* レスポンシブ対応 */
 @media (max-width: 768px) {
   .ascii-art pre {
     font-size: 8px;
@@ -3274,7 +3274,7 @@ button:disabled {
 .rules-button:active {
   transform: scale(0.95);
 }/* ス
-ムーズな画面遷移効极E��E*/
+ムーズな画面遷移効果 */
 .menu-system {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -3339,7 +3339,7 @@ button:disabled {
   }
 }
 
-/* ボタンホバー効果�の改喁E��E*/
+/* ボタンホバー効果の改善 */
 .menu-button,
 .back-button,
 .deck-actions button {
@@ -3356,7 +3356,7 @@ button:disabled {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }/* ダークモ
-ード統一 - ゲーム終亁E��E�E�E�E��E�E�E�面 */
+ード統一 - ゲーム終了画面 */
 .game-over-container-dark {
   display: flex;
   flex-direction: column;
@@ -3407,10 +3407,10 @@ button:disabled {
 
 .card.destroying {
   animation: cardDestroy 0.7s ease-out forwards;
-  /* アニメーション中に他�の要素に影響を与えなぁE��E�E�E�E��E�E�E�ぁE��E�E�E�E��E�E�E�する */
+  /* アニメーション中に他の要素に影響を与えないようにする */
   position: absolute; 
-  z-index: 100; /* 他�のカード�の上に表示されるよぁE��E�E�E�E��E�E�E�調整 */
-  pointer-events: none; /* アニメーション中のクリチE��E�E�E�E��E�E�E�を無効匁E��E*/
+  z-index: 100; /* 他のカードの上に表示されるよう調整 */
+  pointer-events: none; /* アニメーション中のクリックを無効化 */
 }
 
 
@@ -3451,7 +3451,7 @@ button:disabled {
 
 .deck-selection-screen .deck-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 20px;
 }
 .deck-selection-screen .deck-card {
@@ -3467,7 +3467,7 @@ button:disabled {
   display: flex; /* Added */
   flex-direction: column; /* Added */
   justify-content: space-between; /* Adjusted to push actions to bottom */
-  position: relative; /* badgeのために忁E�E��E�E*/
+  position: relative; /* badgeのために対応 */
   overflow: hidden;
   background-color: #2a2a2a; /* 暗めのグレーに統一 */}
 .deck-selection-screen .deck-card:hover {
@@ -3541,19 +3541,19 @@ button:disabled {
 
 
 .deck-selection-screen .deck-card:hover {
-  border-color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  border-color: #00ff00; /* 緑のアクセント */
 }
 
 .deck-selection-screen .invalid-tag {
-  color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  color: #00ff00; /* 緑のアクセント */
 }
 
 .deck-selection-screen .custom-deck-actions .edit-button {
-  background-color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  background-color: #00ff00; /* 緑のアクセント */
   color: #1a1a1a;
 }
 .deck-selection-screen .custom-deck-actions .delete-button {
-  background-color: #f44336; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  background-color: #f44336; /* 赤のアクセント */
   color: white;
 }
 
@@ -3565,26 +3565,56 @@ button:disabled {
 
   background-color: #2a2a2a; /* 暗めのグレーに統一 */
   border: 1px solid #444;
-  color: white; /* チE�E��E�スト色を白に */}
+  color: white; /* テキスト色を白に */}
 
 .card-library-screen .library-card:hover {
-  border-color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  border-color: #00ff00; /* 緑のアクセント */
 }
 
 
 .info-modal-content {
   background: #1a1a1a;
-  border: 1px solid #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  border: 1px solid #00ff00; /* 緑のアクセント */
 }
 
 .info-modal-header h3 {
-  color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  color: #00ff00; /* 緑のアクセント */
 }
 
 .info-modal-ok-button {
-  background-color: #00ff00; /* �E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E��E�E�E�の�E�E�E� */
+  background-color: #00ff00; /* 緑のアクセント */
   color: #1a1a1a;
 }
 
+.cost-curve-wrapper {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #444;
+  border-radius: 8px;
+}
 
+.cost-curve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
+.cost-curve-header h3 {
+  margin: 0;
+  color: #333; /* Match the dark text color of the preview */
+}
+
+.cost-curve-header button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.cost-curve-header button:hover {
+    background: #e0e0e0;
+}
