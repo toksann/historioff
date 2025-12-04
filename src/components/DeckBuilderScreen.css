@@ -25,135 +25,11 @@
   overflow: hidden;
 }
 
-.exit-button {
-  position: absolute;
-  top: 25px;
-  right: 30px;
-  background-color: #00ff00;
-  border: none;
-  border-radius: 5px;
-  color: #1a1a1a;
-  cursor: pointer;
-  font-weight: bold;
-  z-index: 10;
-}
-
-.exit-button:hover {
-  background-color: #fff;
-}
-
 .deck-builder-layout {
   display: flex;
   flex-grow: 1;
   gap: 20px;
-  height: calc(100% - 50px);
-}
-
-.card-library-section,
-.deck-building-section {
-  display: flex;
-  flex-direction: column;
-  background: #282c34;
-  padding: 15px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.card-library-section {
-  flex: 2;
-}
-
-.deck-building-section {
-  flex: 1;
-}
-
-.library-header {
-  margin-bottom: 15px;
-}
-
-.library-header h2 {
-  margin: 0 0 10px 0;
-  text-align: center;
-}
-
-.library-controls {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  background: #333;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 0.9em;
-}
-
-.library-controls .sort-controls,
-.library-controls .filter-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.library-controls label {
-  font-weight: bold;
-}
-
-.library-controls select {
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #444;
-  color: white;
-}
-
-.deck-builder-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
-  color: white;
-  display: flex;
-  z-index: 1000;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.deck-builder-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #1a1a1a;
-  border: 1px solid #00ff00;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.exit-button {
-  position: absolute;
-  top: 25px;
-  right: 30px;
-  background-color: #00ff00;
-  border: none;
-  border-radius: 5px;
-  color: #1a1a1a;
-  cursor: pointer;
-  font-weight: bold;
-  z-index: 10;
-}
-
-.exit-button:hover {
-  background-color: #fff;
-}
-
-.deck-builder-layout {
-  display: flex;
-  flex-grow: 1;
-  gap: 20px;
-  height: calc(100% - 50px);
+  height: calc(100% - 350px);
 }
 
 .card-library-section,
@@ -213,102 +89,96 @@
 }
 
 .deck-builder-card-grid {
+  h2 {
+    text-align: center;
+    color: #00ff00;
+  }
 
+  .deck-list {
+    flex-grow: 1;
+    background: #333;
+    border-radius: 6px;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
 
-h2 {
-  text-align: center;
-  color: #00ff00;
-}
+  .deck-card {
+    background: #4a4f5a;
+    margin-bottom: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+  }
 
-.deck-list {
-  flex-grow: 1;
-  background: #333;
-  border-radius: 6px;
-  padding: 10px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
+  .deck-card:hover {
+    background-color: #5a5f6a;
+  }
 
-.deck-card {
-  background: #4a4f5a;
-  margin-bottom: 5px;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  justify-content: space-between;
-  color: #fff;
-}
+  .cost-curve-wrapper {
+    margin-bottom: 15px;
+  }
 
-.deck-card:hover {
-  background-color: #5a5f6a;
-}
+  .cost-curve-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-.cost-curve-wrapper {
-  margin-bottom: 15px;
-}
+  .cost-curve-header h3 {
+    margin: 0;
+    color: #00ff00;
+  }
 
-.cost-curve-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
+  .cost-curve-header button {
+    background: #4a4f5a;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.cost-curve-header h3 {
-  margin: 0;
-  color: #00ff00;
-}
+  .deck-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+  }
 
-.cost-curve-header button {
-  background: #4a4f5a;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  .deck-name-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background: #333;
+    color: white;
+  }
 
-.deck-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: auto;
-}
+  .deck-actions button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: #00ff00;
+    color: #1a1a1a;
+    font-weight: bold;
+    cursor: pointer;
+  }
 
-.deck-name-input {
-  flex-grow: 1;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #555;
-  background: #333;
-  color: white;
-}
-
-.deck-actions button {
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: none;
-  background-color: #00ff00;
-  color: #1a1a1a;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.deck-actions .secondary-action {
-  background-color: #4a4f5a;
-  color: #fff;
-  border: 1px solid #00ff00;
-  font-size: 0.9em;
-}
-
-
-
-
+  .deck-actions .secondary-action {
+    background-color: #4a4f5a;
+    color: #fff;
+    border: 1px solid #00ff00;
+    font-size: 0.9em;
+  }
 
   flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 10px;
   overflow-y: auto;
   padding-right: 10px;
@@ -344,93 +214,192 @@ h2 {
   border-color: #9c27b0;
 }
 
-h2 {
-  text-align: center;
-  color: #00ff00;
+
+
+/* Consistent Font & Theming on Main Container */
+.deck-builder-screen {
+  font-family: 'Courier New', monospace;
+}
+.deck-builder-container {
+  border: 1px solid #444;
 }
 
-.deck-list {
-  flex-grow: 1;
-  background: #333;
-  border-radius: 6px;
-  padding: 10px;
-  overflow-y: auto;
-  margin-bottom: 10px;
+/* Themed Panels */
+.card-library-section,
+.deck-building-section {
+  background: #2a2a2a;
+  border: 1px solid #444;
 }
 
-.deck-card {
-  background: #4a4f5a;
-  margin-bottom: 5px;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
-  justify-content: space-between;
+/* Themed Headers */
+.library-header h2, .deck-building-section h2, .cost-curve-header h3 {
   color: #fff;
 }
-
-.deck-card:hover {
-  background-color: #5a5f6a;
+.deck-building-section h2, .library-header h2 {
+    font-family: 'Courier New', monospace;
 }
 
-.cost-curve-wrapper {
-  margin-bottom: 15px;
-}
 
-.cost-curve-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.cost-curve-header h3 {
-  margin: 0;
-  color: #00ff00;
-}
-
-.cost-curve-header button {
-  background: #4a4f5a;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.deck-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: auto;
-}
-
-.deck-name-input {
-  flex-grow: 1;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #555;
-  background: #333;
-  color: white;
-}
-
+/* General Action Button Styling */
 .deck-actions button {
   padding: 10px 15px;
   border-radius: 5px;
-  border: none;
-  background-color: #00ff00;
-  color: #1a1a1a;
+  border: 2px solid #555;
+  background-color: #333;
+  color: #fff;
   font-weight: bold;
   cursor: pointer;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
 }
 
+.deck-actions button:hover {
+  background-color: #555;
+  border-color: #777;
+}
+
+/* Primary (Save) Button */
+.deck-actions button.primary-action {
+  background-color: #4caf50;
+  border-color: #66bb6a;
+  color: white;
+}
+.deck-actions button.primary-action:hover {
+  background-color: #66bb6a;
+}
+
+/* Secondary (Import/Export) Buttons */
 .deck-actions .secondary-action {
   background-color: #4a4f5a;
+  border-color: #666;
+}
+.deck-actions .secondary-action:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
+/* Unify Cost Curve Toggle Button */
+.cost-curve-header button {
+  background: #4a4f5a;
+  border: 1px solid #555;
   color: #fff;
-  border: 1px solid #00ff00;
-  font-size: 0.9em;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+}
+.cost-curve-header button:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
+/* Unify text input */
+.deck-name-input {
+  border: 1px solid #555;
+  background: #333;
+  font-family: 'Courier New', monospace;
 }
 
 
+/* --- Layout and Font Size Adjustments --- */
 
+/* Reduce font size for action buttons */
+.deck-actions button {
+  font-size: 14px;
+}
 
+.empty-deck-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 2px dashed #555;
+  border-radius: 6px;
+  color: #777;
+  text-align: center;
+  font-style: italic;
+  padding: 20px;
+}
+
+/* --- Deck Building Section Layout Refinements --- */
+
+/* デッキリストが利用可能なスペースを埋め、スクロールするようにする */
+.deck-list {
+  flex-grow: 1;    /* この要素が伸びてスペースを埋めるようにする */
+  overflow-y: auto; /* 内容がはみ出たらスクロールバーを表示 */
+  min-height: 0;     /* Flexboxが正しく伸縮するための重要な設定 */
+  max-height: 350px; /* 必要に応じて最大高さを設定 */
+}
+
+/* 下部の要素が押し出されたり縮んだりしないようにする */
+.cost-curve-wrapper,
+ .deck-actions {
+  flex-shrink: 0;
+}
+
+/* 古いレイアウトのためのマージンをリセット */
+.deck-actions {
+  margin-top: 10px; /* 以前のautoから固定値に変更 */
+}
+
+/* --- Panel Width Ratio Adjustment --- */      
+
+/* 左パネル（カードプール）の幅を1に */
+.card-library-section {
+  flex: 1;
+}
+
+/* 右パネル（現在のデッキ）の幅を2に */
+.deck-building-section {
+  flex: 2;
+}
+
+/* --- Deck List Grid and Card Count Styles --- */
+
+.deck-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  align-content: flex-start; /* アイテムが縦に伸びるのを防ぐ */
+}
+
+.deck-card {
+  position: relative; /* 枚数カウンターの位置基準にする */     
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-height: 60px; /* カードの最小の高さを確保 */
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.deck-card-count {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background-color: #00ff00;
+  color: #1a1a1a;
+  border-radius: 0 4px 0 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+/* --- Adjust Deck Actions Section Vertical Size --- */
+
+/* デッキアクションコンテナのパディングと要素間の間隔を調整 */
+.deck-actions {
+  padding: 5px 0; /* 縦方向のパディングを調整 */
+  gap: 5px;       /* 要素間の間隔を狭める */
+}
+
+/* デッキアクション内のボタンのパディングと文字サイズを調整 */
+.deck-actions button {
+  padding: 8px 12px; /* パディングを小さく */
+  font-size: 0.8em;  /* 文字サイズを小さく */
+}
+
+/* デッキ名入力フィールドのパディングと文字サイズを調整 */
+.deck-name-input {
+  padding: 8px 10px; /* パディングを小さく */
+  font-size: 0.9em;  /* 文字サイズを小さく */
+}

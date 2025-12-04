@@ -236,12 +236,15 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
         onClose={() => setModalInfo({ isOpen: false, message: '' })}
       />
       <div className="deck-builder-container">
-        <button onClick={onExit} className="exit-button">メニューに戻る</button>
+        <div className="screen-header">
+          <h1>デッキ構築</h1>
+          <button onClick={onExit} className="back-button">← タイトルに戻る</button>
+        </div>
         <div className="deck-builder-layout">
           {/* Card Library Section */}
           <div className="card-library-section">
             <div className="library-header">
-              <h2>カードプール</h2>
+              <h2>カード</h2>
               <div className="library-controls">
                 <div className="sort-controls">
                   <label>ソート:</label>
@@ -251,7 +254,7 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
                   </select>
                 </div>
                 <div className="filter-controls">
-                  <label>カードタイプ:</label>
+                  <label>タイプ:</label>
                   <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
                     <option value="all">すべて</option>
                     <option value="財">財</option>
@@ -289,16 +292,29 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
           <div className="deck-building-section" onDragOver={onDragOver} onDrop={onDrop}>
             <h2>現在のデッキ ({deck.length}/{deck.length <= 30 ? 30 : 100})</h2>
             <div className="deck-list">
-              {deck.map((card, index) => (
-                <div 
-                  key={index} 
-                  className="deck-card"
-                  onClick={() => removeCardFromDeck(card, index)}
-                  title="クリックでデッキから削除"
-                >
-                  <span>{card.name} ({card.required_scale})</span>
+              {deck.length === 0 ? (
+                <div className="empty-deck-placeholder">
+                  <p>ドラッグ＆ドロップで<br/>カードを追加</p>
                 </div>
-              ))}
+              ) : (
+                Object.values(deck.reduce((acc, card) => {
+                  if (!acc[card.name]) {
+                  acc[card.name] = { card: card, count: 0 };
+                }
+                acc[card.name].count++;
+                return acc;
+              }, {})).map(({ card, count }) => (
+                <div 
+                  key={card.name} 
+                  className="deck-card"
+                  onClick={() => removeCardFromDeck(card, deck.findIndex(c => c.name === card.name))}
+                  title="クリックでデッキから1枚削除"
+                >
+                {count > 1 && <div className="deck-card-count">x{count}</div>}
+                <span>{card.name} ({card.required_scale})</span>
+                </div>
+              ))
+              )}
             </div>
             <div className="cost-curve-wrapper">
               <div className="cost-curve-header">
@@ -317,7 +333,7 @@ const DeckBuilderScreen = ({ gameData, onExit }) => {
                 placeholder="デッキ名を入力"
                 className="deck-name-input"
               />
-              <button onClick={handleSaveDeck}>保存</button>
+              <button onClick={handleSaveDeck} className="primary-action">保存</button>
               <button onClick={handleExportDeck} className="secondary-action">エクスポート</button>
               <button onClick={handleImportClick} className="secondary-action">インポート</button>
               <input 

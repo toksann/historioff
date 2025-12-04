@@ -83,7 +83,7 @@
         "card_type": "財",
         "required_scale": 10,
         "durability": 4,
-        "description": "自分の意識+3。ターン終了ごとに、自分の手札から事象カードを1枚選び、その必要規模を-1する（最小0）。",
+        "description": "自分の意識+3。ターン終了ごとに、自分の手札から事象カードを1枚選び、その必要規模を-3する（最小0）。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -104,7 +104,7 @@
                         "card_type": "事象",
                         "count": 1,
                         "selection_method": "choice",
-                        "amount": -1,
+                        "amount": -3,
                         "min_value": 0
                     }
                 }
