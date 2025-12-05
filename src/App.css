@@ -525,47 +525,73 @@
   font-weight: bold;
 }
 
-.card {
+/* ========================================
+   Unified Card Styles
+   ======================================== */
+
+/* .card-game: ゲーム内で使用するカード（手札、場） */
+.card-game {
   border: 3px solid #888;
   border-radius: 4px;
-  padding: 2px;
-  width: 150px;
-  height: 200px;
+  padding: 1px; /* 内側の余白を少し調整 */
   background-color: white;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  font-size: 1em; /* Increased font size */
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: visible;
+  width: 80px;
+  height: 105px;
+  font-size: 0.6em; /* 全体的にフォントを縮小 */
 }
 
-.card:hover {
+.card-game:hover {
   transform: scale(1.05);
   box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
-/* 選択中でもカードの詳細表示は可能であることを示す */
-.awaiting-input .card:hover {
+.awaiting-input .card-game:hover {
   transform: scale(1.03);
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
 }
 
-/* カードタイプ別の色分け */
-.card-type-財 {
+/* .card-library: カード一覧やデッキ構築画面で使うカード */
+.card-library {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 15px; /* 説明文などが入るため余白を大きく */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 親要素に高さを合わせる */
+}
+
+.card-library:hover {
+  border-color: #666;
+  transform: translateY(-2px);
+}
+
+/* カードタイプ別の色分け（共通化） */
+.card-game.card-type-財,
+.card-library.card-type-財 {
   border-color: #00ff00;
   background-color: #f1f8e9;
 }
 
-.card-type-事象 {
+.card-game.card-type-事象,
+.card-library.card-type-事象 {
   border-color: #ff9800;
   background-color: #fff3e0;
 }
 
-.card-type-イデオロギー {
+.card-game.card-type-イデオロギー,
+.card-library.card-type-イデオロギー {
   border-color: #9c27b0;
   background-color: #f3e5f5;
 }
@@ -574,42 +600,77 @@
 .card-header {
   text-align: center;
   border-bottom: 1px solid #ddd;
-  padding: 3px 2px;
+  padding: 2px;
   margin-bottom: 3px;
-  min-height: 22px;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  z-index: 50;
+  z-index: 1;
+}
+
+.card-game .card-header {
+  padding: 1px;
+  margin-bottom: 1px;
+}
+
+.card-library .card-header {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.card-library .card-header h3 {
+  margin: 0;
+  color: #00ff00;
+  font-size: 16px;
 }
 
 .card-name {
   font-weight: bold;
-  font-size: 0.9em;
-  color: #000 !important;
-  line-height: 1.2;
+  line-height: 1.1;
   text-align: center;
-  z-index: 100;
+  z-index: 2;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.6);
-  padding: 1px 2px;
-  border-radius: 2px;
   display: block;
   width: 100%;
   box-sizing: border-box;
 }
 
+.card-game .card-name {
+  font-size: 0.9em;
+  color: #000 !important;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+.card-library .card-name {
+  font-size: 1em;
+  color: #00ff00;
+}
+
+
 .card-type {
   font-style: italic;
-  color: #666;
-  font-size: 0.55em;
+  font-size: 0.8em;
+}
+
+.card-game .card-type {
+  display: none; /* ゲーム中は非表示 */
+}
+
+.card-library .card-type {
+  background-color: #444;
+  color: #ccc;
+  padding: 2px 8px;
+  border-radius: 3px;
 }
 
 .card-center {
   position: absolute;
-  top: 30px;
-  bottom: 25px;
+  top: 20px;
+  bottom: 20px;
   left: 2px;
   right: 2px;
   display: flex;
@@ -617,36 +678,73 @@
   justify-content: center;
 }
 
+.card-game .card-center {
+  top: 22px;
+  bottom: 15px;
+}
+
 .card-durability {
-  font-size: 0.95em;
   font-weight: bold;
-  color: #d32f2f;
   text-align: center;
-  padding: 4px;
-  border: 2px solid #d32f2f;
   border-radius: 50%;
-  min-width: 24px;
-  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card-game .card-durability {
+  font-size: 0.9em;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  padding: 2px;
+  min-width: 18px;
+  min-height: 18px;
+}
+
+.card-library .card-info {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.card-library .card-description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ccc;
+  flex-grow: 1;
 }
 
 .card-footer {
   text-align: center;
   border-top: 1px solid #ddd;
-  padding: 2px;
+  padding: 1px;
   position: absolute;
-  bottom: 2px;
-  left: 2px;
-  right: 2px;
+  bottom: 1px;
+  left: 1px;
+  right: 1px;
   background-color: rgba(255, 255, 255, 0.9);
 }
 
+.card-game .card-footer {
+  padding: 1px;
+  bottom: 1px;
+  left: 1px;
+  right: 1px;
+}
+
+.card-library .card-footer {
+ display: none; /* ライブラリでは info に表示するためフッターは非表示 */
+}
+
 .card-cost {
+  font-weight: bold;
+}
+
+.card-game .card-cost {
   font-size: 0.8em;
   color: #555;
-  font-weight: bold;
 }
 
 button {
@@ -3406,7 +3504,7 @@ button:disabled {
   }
 }
 
-.card.destroying {
+.card-game.destroying, .card-library.destroying {
   animation: cardDestroy 0.7s ease-out forwards;
   /* アニメーション中に他の要素に影響を与えないようにする */
   position: absolute; 

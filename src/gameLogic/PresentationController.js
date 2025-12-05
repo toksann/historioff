@@ -446,16 +446,6 @@ class PresentationController {
             this.hideCardImmediately(cardId);
             const playerId = effect.args.player_id;
             
-            
-            
-            // 即座にカードを隠してから演出開始
-            const immediateTarget = document.querySelector(`[data-card-id="${cardId}"]`);
-            if (immediateTarget) {
-                // 即座に隠す
-                immediateTarget.style.visibility = 'hidden';
-                immediateTarget.style.opacity = '0';
-            }
-            
             // DOM更新を待ってから要素を検索
             setTimeout(async () => {
                 const target = document.querySelector(`[data-card-id="${cardId}"]`);
@@ -474,16 +464,6 @@ class PresentationController {
             // 配置演出対象の場合、即座にカードを隠す（DOM更新前）
             this.hideCardImmediately(cardId);
             const playerId = effect.args.player_id;
-            
-            
-            
-            // 即座にカードを隠してから演出開始
-            const immediateTarget = document.querySelector(`[data-card-id="${cardId}"]`);
-            if (immediateTarget) {
-                // 即座に隠す
-                immediateTarget.style.visibility = 'hidden';
-                immediateTarget.style.opacity = '0';
-            }
             
             // DOM更新を待ってから要素を検索
             setTimeout(async () => {
@@ -638,8 +618,7 @@ class PresentationController {
         // 複数の方法でカードを検索・隠蔽
         const selectors = [
             `[data-card-id="${cardId}"]`,
-            `#${cardId}`,
-            `.card[data-card-id="${cardId}"]`
+            `#${cardId}`
         ];
         
         for (const selector of selectors) {

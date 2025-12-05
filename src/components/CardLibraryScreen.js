@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import Card from './Card.js';
 import CardDetail from './CardDetail.js';
 
 const CardLibraryScreen = ({ cardDefs, onBack }) => {
@@ -84,25 +85,12 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
 
       <div className="card-grid">
         {filteredAndSortedCards.map((card) => (
-          <div 
+          <Card 
             key={card.name} 
-            className="library-card"
+            card={card}
+            mode="library"
             onClick={() => handleCardClick(card)}
-          >
-            <div className="card-header">
-              <h3>{card.name}</h3>
-              <span className="card-type">{card.card_type}</span>
-            </div>
-            <div className="card-info">
-              <div>必要規模: {card.required_scale}</div>
-              {card.card_type === '財' && (
-                <div>耐久値: {card.durability}</div>
-              )}
-            </div>
-            <div className="card-description">
-              {card.description}
-            </div>
-          </div>
+          />
         ))}
       </div>
 

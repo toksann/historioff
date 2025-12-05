@@ -39,7 +39,7 @@ const Hand = ({ player, onPlayCard, onProvideInput, awaiting_input, onCardClick 
                                        (isAwaitingCardOperation && awaiting_input.options.some(option => option.instance_id === card.instance_id));
                     return (
                         <div key={card.instance_id} className="hand-card-slot" onClick={() => handleClick(card)}>
-                            <Card card={card} isSelectable={isSelectable} />
+                            <Card card={card} mode="game" isSelectable={isSelectable} />
                         </div>
                     );
                 })}

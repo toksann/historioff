@@ -50,6 +50,7 @@ const Field = ({ playerName, cards, fieldLimit, onProvideInput, awaiting_input, 
                         {activeIdeology && (
                             <Card 
                                 card={activeIdeology} 
+                                mode="game"
                                 isSelectable={selectableCardIds.has(activeIdeology.instance_id)}
                                 onClick={() => handleCardClick(activeIdeology)}
                                 onAnimationEnd={onAnimationEnd}
@@ -58,6 +59,7 @@ const Field = ({ playerName, cards, fieldLimit, onProvideInput, awaiting_input, 
                         {animatingIdeology && (
                              <Card 
                                 card={animatingIdeology} 
+                                mode="game"
                                 isSelectable={false} // Cannot interact with a card that is being destroyed
                                 onClick={() => {}}
                                 onAnimationEnd={onAnimationEnd}
@@ -76,6 +78,7 @@ const Field = ({ playerName, cards, fieldLimit, onProvideInput, awaiting_input, 
                             <div key={card.instance_id} className="wealth-card-slot">
                                 <Card 
                                     card={card} 
+                                    mode="game"
                                     isSelectable={selectableCardIds.has(card.instance_id)}
                                     onClick={() => handleCardClick(card)}
                                     onAnimationEnd={onAnimationEnd}

@@ -645,10 +645,21 @@ class AnimationManager {
                                 
                                 // 複製要素を削除
                                 document.body.removeChild(animationCard);
+
+                                // トランジションを一時的に無効にして、即座に表示
+                                const originalTransition = target.style.transition;
+                                target.style.transition = 'none';
                                 
                                 // 本体カードを表示
                                 target.classList.remove('card-animation-hidden');
-                                target.style.visibility = ''; // visibility も復元
+                                target.style.visibility = '';
+                                target.style.opacity = '';
+                                target.style.transform = 'scale(1.0)';
+
+                                // ブラウザがスタイルを適用するのを待ってからトランジションを戻す
+                                setTimeout(() => {
+                                    target.style.transition = originalTransition;
+                                }, 50); // わずかな遅延
                                 
                                 // CSSルールも削除とアニメーション状態をクリア
                                 const cardId = target.dataset.cardId;
@@ -663,9 +674,6 @@ class AnimationManager {
                                 if (cardId) {
                                     animationStateManager.setAnimationCompleted(cardId);
                                 }
-                                
-                                // 演出完了時にすべてのカードの可視化を復元
-                                this.restoreAllCardVisibility();
                                 
                                 console.log('🔥ANIM_DEBUG [CardPlay] Animation completed');
                                 resolve({ success: true, duration: 1250 }); // 総時間を調整
@@ -727,9 +735,15 @@ class AnimationManager {
     
                 // Create a virtual card element
                 animationCard = document.createElement('div');
-                animationCard.className = `card card-type-${cardData.card_type}`;
+                animationCard.className = `card-game card-type-${cardData.card_type}`;
                 animationCard.innerHTML = `
-                    <div class="card-name">${cardData.name}</div>
+                    <div class="card-header">
+                      <div class="card-name">${cardData.name}</div>
+                    </div>
+                    <div class="card-center"></div>
+                    <div class="card-footer">
+                      <div class="card-cost">規模: ${cardData.required_scale}</div>
+                    </div>
                 `;
                 console.log(`[DEBUG] animateEventCardPlay: Virtual card created for ${cardData.name}`);
             }
@@ -787,9 +801,15 @@ class AnimationManager {
 
             // Create a virtual card element
             const animationCard = document.createElement('div');
-            animationCard.className = `card card-type-${cardData.card_type}`;
+            animationCard.className = `card-game card-type-${cardData.card_type}`;
             animationCard.innerHTML = `
-                <div class="card-name">${cardData.name}</div>
+                <div class="card-header">
+                  <div class="card-name">${cardData.name}</div>
+                </div>
+                <div class="card-center"></div>
+                <div class="card-footer">
+                  <div class="card-cost">規模: ${cardData.required_scale}</div>
+                </div>
             `;
 
             const playerId = params.effect?.args?.player_id || null;
@@ -1037,10 +1057,9 @@ class AnimationManager {
         
         // 仮想カード要素を作成
         const virtualCard = document.createElement('div');
-        virtualCard.className = 'card card-type-財 card-animation-clone';
+        virtualCard.className = 'card-game card-type-財 card-animation-clone'; // Use card-game for correct styling
         virtualCard.style.position = 'fixed';
-        virtualCard.style.width = '80px';
-        virtualCard.style.height = '120px';
+        // Do not set width/height, as it's now handled by the 'card-game' class
         virtualCard.style.backgroundColor = '#f0f0f0';
         virtualCard.style.border = '2px solid #ccc';
         virtualCard.style.borderRadius = '8px';
@@ -1139,8 +1158,7 @@ class AnimationManager {
                 // アニメーション状態をクリア
                 const cardId = target.dataset.cardId;
 
-                // 演出完了時にすべてのカードの可視化を復元（破壊されたカード以外）
-                this.restoreAllCardVisibility();
+                // Removed: this.restoreAllCardVisibility(); // <-- THIS WAS THE BUG
                 
                 console.log('🎬ANIM [CardDestroy] Animation completed, card hidden');
                 resolve({ success: true, duration: 600 });
@@ -2120,7 +2138,7 @@ class AnimationManager {
         console.log('🎬ANIM [Restore] Restoring visibility for all cards on screen');
         
         // すべてのカード要素を取得
-        const allCards = document.querySelectorAll('.card');
+        const allCards = document.querySelectorAll('.card-game, .card-library'); // 新しいクラス名に対応
         let restoredCount = 0;
         
         allCards.forEach(card => {
@@ -2129,17 +2147,6 @@ class AnimationManager {
             // card-animation-hiddenクラスを削除
             if (card.classList.contains('card-animation-hidden')) {
                 card.classList.remove('card-animation-hidden');
-                wasHidden = true;
-            }
-            
-            // インラインスタイルでの隠蔽を削除
-            if (card.style.visibility === 'hidden') {
-                card.style.visibility = '';
-                wasHidden = true;
-            }
-            
-            if (card.style.opacity === '0') {
-                card.style.opacity = '';
                 wasHidden = true;
             }
             
@@ -2152,6 +2159,10 @@ class AnimationManager {
                     wasHidden = true;
                 }
             }
+            
+            // Note: card.style.visibility = '' や card.style.opacity = '' は、
+            // 意図しない再表示を引き起こすため削除しました。
+            // visibilityやopacityの制御はクラス名またはアニメーションで管理されるべきです。
             
             if (wasHidden) {
                 restoredCount++;
