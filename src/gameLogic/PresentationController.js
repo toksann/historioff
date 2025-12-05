@@ -363,6 +363,27 @@ class PresentationController {
         } catch (error) {
             console.error('🎭 [Presentation] Error delegating to AnimationManager:', error);
         }
+
+        // After processing an effect, check if it could have impacted player scale
+        // and update the persistent animations (like the grayscale effect).
+        const scaleAffectingEffects = [
+            'MOVE_CARD',
+            'CARD_DURABILITY_CHANGED',
+            'SCALE_CHANGED',
+            'MODIFY_SCALE_RESERVE',
+            'TURN_START',
+            'WEALTH_DURABILITY_ZERO_THIS',
+            'CARD_DESTROYED'
+        ];
+
+        if (scaleAffectingEffects.includes(effect.effect_type)) {
+            if (this.animationManager) {
+                // Use a minimal timeout to allow the main animation to start, then update the persistent state.
+                setTimeout(() => {
+                    this.animationManager.updatePersistentAnimations(this.gameState);
+                }, 50);
+            }
+        }
     }
 
     /**
