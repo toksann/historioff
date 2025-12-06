@@ -581,19 +581,19 @@
 .card-game.card-type-財,
 .card-library.card-type-財 {
   border-color: #00ff00;
-  background-color: #f1f8e9;
+  background-color: #333;
 }
 
 .card-game.card-type-事象,
 .card-library.card-type-事象 {
   border-color: #ff9800;
-  background-color: #fff3e0;
+  background-color: #333;
 }
 
 .card-game.card-type-イデオロギー,
 .card-library.card-type-イデオロギー {
   border-color: #9c27b0;
-  background-color: #f3e5f5;
+  background-color: #333;
 }
 
 /* カードの各部レイアウト */
