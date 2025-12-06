@@ -56,10 +56,10 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                         const cardDef = cardDefs[card.name];
                         const isSelected = !isConfirmed && selectedCardIds.includes(card.instance_id);
                         return (
-                            <div 
-                                key={card.instance_id} 
+                            <div
+                                key={card.instance_id}
                                 className={`mulligan-card ${isSelected ? 'selected' : ''}`}
-                                data-card-id={card.instance_id} // Add data-card-id for querySelector
+                                data-card-id={card.instance_id}
                                 onClick={() => handleCardClick(card.instance_id)}
                             >
                                 <div className="mulligan-card-name">{card.name}</div>
@@ -69,6 +69,11 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                         );
                     })}
                 </div>
+                {isConfirmed && (
+                    <div className="mulligan-progress-bar-container">
+                        <div className="mulligan-progress-bar"></div>
+                    </div>
+                )}
                 {!isConfirmed && (
                     <div className="mulligan-actions">
                         <button onClick={handleConfirm}>

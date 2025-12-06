@@ -103,3 +103,30 @@
     cursor: not-allowed;
     color: #888;
 }
+
+/* Mulligan Progress Bar Styles */
+.mulligan-progress-bar-container {
+    width: 80%;
+    height: 10px;
+    background-color: #1a1a1a;
+    border-radius: 5px;
+    margin: 20px auto 0;
+    overflow: hidden;
+}
+
+.mulligan-progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #00ff00; /* User specified color */
+    border-radius: 5px;
+    animation: fill-progress 3s linear forwards;
+}
+
+@keyframes fill-progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}

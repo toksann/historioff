@@ -1,4 +1,6 @@
 import AnimationManager from './AnimationManager.js';
+import { current, isDraft } from 'immer'; // Import current and isDraft from immer
+import { EffectType } from './constants.js'; // Import EffectType
 
 /**
  * プレゼンテーション制御システム
@@ -35,9 +37,11 @@ class PresentationController {
      * @param {Object} gameState - ゲーム状態オブジェクト
      */
     setGameState(gameState) {
-        this.gameState = gameState;
+        // Ensure gameState is a plain object from immer draft, or keep as is if already plain
+        const processedGameState = isDraft(gameState) ? current(gameState) : gameState;
+        this.gameState = processedGameState; 
         if (this.animationManager) {
-            this.animationManager.setGameState(gameState);
+            this.animationManager.setGameState(processedGameState); // Also pass a plain object to AnimationManager
         }
         
     }
@@ -373,7 +377,8 @@ class PresentationController {
             'MODIFY_SCALE_RESERVE',
             'TURN_START',
             'WEALTH_DURABILITY_ZERO_THIS',
-            'CARD_DESTROYED'
+            'CARD_DESTROYED',
+            EffectType.DRAW_CARD // Add DRAW_CARD to scaleAffectingEffects
         ];
 
         if (scaleAffectingEffects.includes(effect.effect_type)) {
@@ -381,7 +386,7 @@ class PresentationController {
                 // Use a minimal timeout to allow the main animation to start, then update the persistent state.
                 setTimeout(() => {
                     this.animationManager.updatePersistentAnimations(this.gameState);
-                }, 50);
+                }, 50); // Restore flat 50ms delay
             }
         }
     }

@@ -2538,15 +2538,16 @@ button:disabled {
 
 
 /* 継続演出: 規模不足カード */
-.card-insufficient-scale {
+.card-game.card-insufficient-scale,
+.card-library.card-insufficient-scale {
   opacity: 0.5 !important;
   filter: grayscale(100%) !important;
   transition: opacity 0.3s ease, filter 0.3s ease !important;
-  
 }
 
 /* 継続演出が解除された時の復帰アニメーション */
-.card:not(.card-insufficient-scale) {
+.card-game:not(.card-insufficient-scale),
+.card-library:not(.card-insufficient-scale) {
   transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
