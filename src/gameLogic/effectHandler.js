@@ -2196,7 +2196,29 @@ const effectHandlers = {
 const checkAllReactions = (processedEffect, sourceCard, gameState) => {
     const newEffects = [];
     const allCards = [];
-    Object.values(gameState.players).forEach(player => {
+
+    const currentPlayerId = gameState.current_turn;
+    const playerIds = Object.keys(gameState.players);
+    const otherPlayerId = playerIds.find(id => id !== currentPlayerId);
+
+    const orderedPlayers = [];
+    if (currentPlayerId && gameState.players[currentPlayerId]) {
+        orderedPlayers.push(gameState.players[currentPlayerId]);
+    }
+    if (otherPlayerId && gameState.players[otherPlayerId]) {
+        orderedPlayers.push(gameState.players[otherPlayerId]);
+    }
+    
+    // Fallback if current player isn't found, process in default order
+    if (orderedPlayers.length < playerIds.length) {
+        playerIds.forEach(id => {
+            if (!orderedPlayers.some(p => p.id === id)) {
+                orderedPlayers.push(gameState.players[id]);
+            }
+        });
+    }
+
+    orderedPlayers.forEach(player => {
         if (player.ideology) {
             allCards.push(player.ideology);
         }
