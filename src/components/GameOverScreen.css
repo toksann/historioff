@@ -25,8 +25,25 @@
 
 .game-over-screen h2 {
   color: #fff;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   font-size: 1.5em;
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+  background-color: #222;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.chart-container h3 {
+  text-align: center;
+  color: #00ff00;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-shadow: 0 0 5px #00ff00;
 }
 
 .game-over-buttons {

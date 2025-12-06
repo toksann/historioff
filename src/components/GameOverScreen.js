@@ -1,11 +1,18 @@
 import React from 'react';
-import './GameOverScreen.css'; // 専用のCSSファイルを作成します
+import './GameOverScreen.css';
+import ConsciousnessTrendChart from './ConsciousnessTrendChart.js';
 
-function GameOverScreen({ winnerName, onNewGame, onMainMenu }) {
+function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameState }) {
   return (
     <div className="game-over-screen">
       <h1>ゲーム終了</h1>
       <h2>勝者: {winnerName}</h2>
+      
+      <div className="chart-container">
+        <h3>意識推移チャート</h3>
+        <ConsciousnessTrendChart turnHistory={turnHistory} gameState={gameState} />
+      </div>
+
       <div className="game-over-buttons">
         <button className="menu-button" onClick={onNewGame}>
           新しいゲームを始める

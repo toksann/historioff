@@ -1,0 +1,113 @@
+.consciousness-chart {
+    background-color: #2c2c2c;
+    border: 1px solid #555;
+    border-radius: 8px;
+    font-family: sans-serif;
+    margin: 20px 0;
+}
+
+.axis-line {
+    stroke: #888;
+    stroke-width: 2;
+}
+
+.grid-line {
+    stroke: #555;
+    stroke-dasharray: 2, 2;
+}
+
+.axis-label, .legend-label, .ideology-label {
+    fill: #ccc;
+    font-size: 12px;
+}
+
+.ideology-label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.line {
+    stroke-width: 2;
+}
+
+.player-line {
+    stroke: #007bff;
+}
+
+.npc-line {
+    stroke: #dc3545;
+}
+
+.point {
+    stroke-width: 2;
+    stroke: #2c2c2c;
+}
+
+.player-point {
+    fill: #007bff;
+}
+
+.npc-point {
+    fill: #dc3545;
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.chart-toggle-buttons button {
+    background-color: #444;
+    border: 1px solid #666;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.2s;
+}
+
+.chart-toggle-buttons button:hover {
+    background-color: #555;
+}
+
+.chart-toggle-buttons button:disabled {
+    background-color: #007bff;
+    cursor: not-allowed;
+    border-color: #007bff;
+}
+
+.tooltip {
+    transition: opacity 0.2s;
+    pointer-events: none; /* Allows mouse events to pass through */
+}
+
+.tooltip-bg {
+    fill: rgba(0, 0, 0, 0.8);
+    stroke: #aaa;
+    stroke-width: 1px;
+}
+
+.tooltip-title {
+    font-size: 14px;
+    font-weight: bold;
+    fill: #fff;
+}
+
+.tooltip-text {
+    font-size: 12px;
+    fill: #ddd;
+}
+
+.player-text {
+    fill: #007bff;
+    font-weight: bold;
+}
+
+.npc-text {
+    fill: #dc3545;
+    font-weight: bold;
+}
+

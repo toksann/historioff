@@ -1,14 +1,9 @@
-Uncaught runtime errors:
+Compiled with problems:
 ×
-ERROR
-[Immer] 'current' expects a draft, got: [object Object]
-    at die (http://localhost:3000/static/js/bundle.js:7385:11)
-    at current (http://localhost:3000/static/js/bundle.js:8011:24)
-    at PresentationController.setGameState (http://localhost:3000/static/js/bundle.js:38759:68)
-    at http://localhost:3000/static/js/bundle.js:44478:29
-    at Object.react_stack_bottom_frame (http://localhost:3000/static/js/bundle.js:21741:18)
-    at runWithFiberInDEV (http://localhost:3000/static/js/bundle.js:9659:68)
-    at commitHookEffectListMount (http://localhost:3000/static/js/bundle.js:14650:618)
-    at commitHookPassiveMountEffects (http://localhost:3000/static/js/bundle.js:14687:56)
-    at commitPassiveMountOnFiber (http://localhost:3000/static/js/bundle.js:15589:25)
-    at recursivelyTraversePassiveMountEffects (http://localhost:3000/static/js/bundle.js:15580:104)
+ERROR in ./src/components/GameOverScreen.js 7:0-64
+Module not found: Error: Can't resolve './ConsciousnessTrendChart' in 'C:\Users\user\Desktop\historio\historio-web\src\components'
+Did you mean 'ConsciousnessTrendChart.js'?
+BREAKING CHANGE: The request './ConsciousnessTrendChart' failed to resolve only because it was resolved as fully specified
+(probably because the origin is strict EcmaScript Module, e. g. a module with javascript mimetype, a '*.mjs' file, or a '*.js' file where the package.json contains '"type": "module"').
+The extension in the request is mandatory for it to be fully specified.
+Add the extension to the request.

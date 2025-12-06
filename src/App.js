@@ -339,6 +339,8 @@ function App() {
       ) : currentScreen === 'gameOver' && gameState ? (
         <GameOverScreen
           winnerName={gameState.players[gameState.winner]?.name || 'Unknown'}
+          turnHistory={gameState.turnHistory}
+          gameState={gameState}
           onNewGame={() => {
             setGameState(null);
             handleScreenChange('deckSelection');

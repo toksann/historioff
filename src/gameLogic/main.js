@@ -112,7 +112,8 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         firstTurnStarted: false,
         lastUpdate: null,
         isAnimationLocked: false,
-        animation_queue: []
+        animation_queue: [],
+        turnHistory: [],
     };
 
     Object.values(gameState.players).forEach(player => {
@@ -289,6 +290,18 @@ export const _proceedToNextTurn = (gameState) => {
     let currentGameState = gameState;
 
     const nextState = produce(currentGameState, draftState => {
+        // Record history for the turn that just ended
+        const playerIdeology = draftState.players[HUMAN_PLAYER_ID].ideology;
+        const npcIdeology = draftState.players[NPC_PLAYER_ID].ideology;
+
+        draftState.turnHistory.push({
+            turnNumber: draftState.turn_number,
+            playerConsciousness: draftState.players[HUMAN_PLAYER_ID].consciousness,
+            npcConsciousness: draftState.players[NPC_PLAYER_ID].consciousness,
+            playerIdeologies: playerIdeology ? [playerIdeology.name] : [],
+            npcIdeologies: npcIdeology ? [npcIdeology.name] : [],
+        });
+
         const currentPlayerId = draftState.current_turn;
         const nextPlayerId = (currentPlayerId === PlayerId.PLAYER1) ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
         
