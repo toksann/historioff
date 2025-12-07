@@ -3,6 +3,7 @@ import CardDetail from './CardDetail.js';
 import CostCurveChart from './CostCurveChart.js';
 import { saveToStorage, getFromStorage } from '../utils/localStorage.js';
 import InfoModal from './overlays/InfoModal.js';
+import { MIN_DECK_SIZE, MAX_DECK_SIZE } from '../gameLogic/constants.js';
 import './DeckBuilderScreen.css';
 import './CostCurveChart.css';
 import './overlays/InfoModal.css';
@@ -104,8 +105,8 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
   }, [deck, costCurveMode]);
 
   const addCardToDeck = (card) => {
-    if (deck.length >= 100) {
-      setModalInfo({ isOpen: true, message: "デッキは100枚までです。" });
+    if (deck.length >= MAX_DECK_SIZE) {
+      setModalInfo({ isOpen: true, message: `デッキは${MAX_DECK_SIZE}枚までです。` });
       return;
     }
     const newDeck = [...deck, card].sort((a, b) => a.required_scale - b.required_scale);
@@ -302,7 +303,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
 
           {/* Deck Building Section */}
           <div className="deck-building-section" onDragOver={onDragOver} onDrop={onDrop}>
-            <h2>現在のデッキ ({deck.length}/{deck.length <= 30 ? 30 : 100})</h2>
+            <h2>現在のデッキ ({deck.length}/{deck.length <= MIN_DECK_SIZE ? MIN_DECK_SIZE : MAX_DECK_SIZE})</h2>
             <div className="deck-list">
               {deck.length === 0 ? (
                 <div className="empty-deck-placeholder">

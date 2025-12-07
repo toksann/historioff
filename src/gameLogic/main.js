@@ -4,7 +4,8 @@ import { produce } from "immer";
 import { _updateGameOverState } from './gameOver.js';
 import {
     INITIAL_HAND_SIZE,
-    INITIAL_CONSCIOUSNESS,
+    BASE_CONSCIOUSNESS,
+    FIRST_PLAYER_CONSCIOUSNESS_MODIFIER,
     INITIAL_SCALE,
     INITIAL_FIELD_LIMIT,
     MAX_HAND_SIZE,
@@ -54,7 +55,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
                 id: HUMAN_PLAYER_ID,
                 name: 'あなた',
                 isNPC: false,
-                consciousness: INITIAL_CONSCIOUSNESS,
+                consciousness: BASE_CONSCIOUSNESS,
                 scale: INITIAL_SCALE,
                 field_limit: INITIAL_FIELD_LIMIT,
                 deck: p1Deck,
@@ -70,7 +71,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
                 id: NPC_PLAYER_ID,
                 name: 'NPC',
                 isNPC: true,
-                consciousness: INITIAL_CONSCIOUSNESS,
+                consciousness: BASE_CONSCIOUSNESS,
                 scale: INITIAL_SCALE,
                 field_limit: INITIAL_FIELD_LIMIT,
                 deck: p2Deck,
@@ -149,8 +150,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         sourceCard: null
     });
     
-    const firstPlayerDebuff = -3;
-    gameState.players[firstPlayerId].consciousness += firstPlayerDebuff;
+    gameState.players[firstPlayerId].consciousness += FIRST_PLAYER_CONSCIOUSNESS_MODIFIER;
     
     gameState.game_log.push({
         id: `game_start_${Date.now()}`,
@@ -160,7 +160,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         details: {
             first_player_id: firstPlayerId,
             first_player_name: gameState.players[firstPlayerId].name,
-            debuff_applied: firstPlayerDebuff
+            debuff_applied: FIRST_PLAYER_CONSCIOUSNESS_MODIFIER
         }
     });
 

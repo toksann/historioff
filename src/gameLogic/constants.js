@@ -178,7 +178,8 @@ export const EffectType = {
 // Game settings
 export const INITIAL_HAND_SIZE = 3;
 export const MAX_HAND_SIZE = 10;
-export const INITIAL_CONSCIOUSNESS = 15;
+export const BASE_CONSCIOUSNESS = 15;
+export const FIRST_PLAYER_CONSCIOUSNESS_MODIFIER = -3;
 export const MAX_CONSCIOUSNESS = 100;
 export const MIN_CONSCIOUSNESS = 0;
 export const INITIAL_SCALE = 5;
@@ -186,6 +187,8 @@ export const MAX_SCALE = 1000;
 export const MIN_SCALE = 0;
 export const INITIAL_FIELD_LIMIT = 5;
 export const MAX_FIELD_LIMIT = 10;
+export const MIN_DECK_SIZE = 30;
+export const MAX_DECK_SIZE = 100;
 
 export const Location = {
     HAND: 'hand',
