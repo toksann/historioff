@@ -442,6 +442,7 @@ const effectHandlers = {
                     card_to_move: newCard,
                     source_pile: 'game_source', // Conceptual pile for newly created cards
                     destination_pile: last_destination_pile,
+                    maintain: true, // To avoid shuffling into deck immediately
                     position: position, // For deck placement
                     source_card_id: sourceCard ? sourceCard.instance_id : null
                 }
