@@ -29,7 +29,7 @@
 .line {
     stroke-width: 2;
     /* stroke-dashoffset is controlled by JavaScript */
-    opacity: 1; /* Lines are always visible, their drawing is handled by strokeDashoffset */
+    opacity: 1; /* Always visible, drawing effect handled by strokeDashoffset */
 }
 
 .player-line {
@@ -44,7 +44,19 @@
     stroke-width: 2;
     stroke: #2c2c2c;
     opacity: 0; /* Points are initially hidden by CSS */
-    transition: opacity 0.2s ease-out; /* Smooth fade for points */
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Smooth fade for points and transform */
+    transform-origin: 50% 50%; /* Ensure scaling is from the center */
+    transform-box: fill-box; /* Crucial for correct SVG transform-origin */
+}
+
+.point.point-pop {
+    animation: pointPop 0.3s ease-out forwards; /* Adjust duration and easing */
+}
+
+@keyframes pointPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(2.0); } /* Expand to 2.0 times size */
+    100% { transform: scale(1); } /* Return to original size */
 }
 
 .player-point {

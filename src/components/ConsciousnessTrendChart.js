@@ -12,6 +12,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     const npcLineInitialLength = useRef(0);     // Store actual total length
     const [pointsVisibleIndex, setPointsVisibleIndex] = useState(-1); // Index of the last visible point
     const latestPointsVisibleIndexRef = useRef(pointsVisibleIndex); // Ref to track latest pointsVisibleIndex without triggering useEffect
+    const [poppingPointIndex, setPoppingPointIndex] = useState(null); // State to trigger point pop animation
 
     const width = 800;
     const height = 400;
@@ -60,7 +61,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
             playerLineInitialLength.current = length;
             node.style.strokeDasharray = length;
             node.style.strokeDashoffset = length; // Ensure hidden from first render
-            console.log("[CTCDebug] Player Line DOM Initialized. Length:", length);
+            // console.log("[CTCDebug] Player Line DOM Initialized. Length:", length); // Removed debug log
         }
     }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
 
@@ -72,7 +73,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
             npcLineInitialLength.current = length;
             node.style.strokeDasharray = length;
             node.style.strokeDashoffset = length; // Ensure hidden from first render
-            console.log("[CTCDebug] NPC Line DOM Initialized. Length:", length);
+            // console.log("[CTCDebug] NPC Line DOM Initialized. Length:", length); // Removed debug log
         }
     }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
 
@@ -85,10 +86,11 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     useEffect(() => {
         let animationFrameId;
         let startTime;
+
         // let currentPointsVisibleIndexInternal = -1; // This is now handled by latestPointsVisibleIndexRef
 
         const chartWidth = width - padding * 2;
-        console.log("[CTCDebug] useEffect triggered. Chart width:", chartWidth);
+        // console.log("[CTCDebug] useEffect triggered. Chart width:", chartWidth); // Removed debug log
 
         const animateLine = (timestamp) => {
             if (!startTime) startTime = timestamp;
@@ -126,10 +128,11 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
             if (newPointsVisibleIndex !== latestPointsVisibleIndexRef.current) {
                 latestPointsVisibleIndexRef.current = newPointsVisibleIndex; // Update ref
                 setPointsVisibleIndex(newPointsVisibleIndex); // Trigger React re-render for points
-                console.log("[CTCDebug] Points Visible Index updated (via ref):", newPointsVisibleIndex);
+                setPoppingPointIndex(newPointsVisibleIndex); // Trigger pop animation for this point
+                // console.log("[CTCDebug] Points Visible Index updated (via ref):", newPointsVisibleIndex); // Removed debug log
             }
 
-            console.log(`[CTCDebug] Frame: ${Math.floor(progress)}, Eased: ${easedProgress.toFixed(2)}, Player Offset (DOM): ${playerLineRef.current?.style.strokeDashoffset}, NPC Offset (DOM): ${npcLineRef.current?.style.strokeDashoffset}, Points Index (state): ${pointsVisibleIndex}, Points Index (ref): ${latestPointsVisibleIndexRef.current}`);
+            // console.log(`[CTCDebug] Frame: ${Math.floor(progress)}, Eased: ${easedProgress.toFixed(2)}, Player Offset (DOM): ${playerLineRef.current?.style.strokeDashoffset}, NPC Offset (DOM): ${npcLineRef.current?.style.strokeDashoffset}, Points Index (state): ${pointsVisibleIndex}, Points Index (ref): ${latestPointsVisibleIndexRef.current}`); // Removed debug log
 
 
             if (animationProgress < 1) {
@@ -148,18 +151,19 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
             
             setPointsVisibleIndex(-1); // Ensure points are hidden initially
             latestPointsVisibleIndexRef.current = -1; // Reset ref as well
-            console.log("[CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.");
+            setPoppingPointIndex(null); // Reset popping point index
+            // console.log("[CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden."); // Removed debug log
 
 
             const timer = setTimeout(() => {
-                console.log("[CTCDebug] Starting requestAnimationFrame loop after delay.");
+                // console.log("[CTCDebug] Starting requestAnimationFrame loop after delay."); // Removed debug log
                 animationFrameId = requestAnimationFrame(animateLine);
             }, 1000); // 1 second delay before animation starts
 
             return () => {
                 clearTimeout(timer);
                 cancelAnimationFrame(animationFrameId);
-                console.log("[CTCDebug] Animation cleanup.");
+                // console.log("[CTCDebug] Animation cleanup."); // Removed debug log
             };
         }
     }, [displayHistory, getX, width, padding, playerLineRef, npcLineRef, playerLineInitialLength, npcLineInitialLength]);
@@ -305,8 +309,22 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                     />
                     {displayHistory.map((h, i) => (
                         <g key={`point-group-${i}`}>
-                            <circle cx={getX(h.turnNumber)} cy={getY(h.playerConsciousness)} r="4" className="point player-point" style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }} />
-                            <circle cx={getX(h.turnNumber)} cy={getY(h.npcConsciousness)} r="4" className="point npc-point" style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }} />
+                            <circle
+                                cx={getX(h.turnNumber)}
+                                cy={getY(h.playerConsciousness)}
+                                r="4"
+                                className={`point player-point ${i === poppingPointIndex ? 'point-pop' : ''}`}
+                                style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }}
+                                onAnimationEnd={() => setPoppingPointIndex(null)}
+                            />
+                            <circle
+                                cx={getX(h.turnNumber)}
+                                cy={getY(h.npcConsciousness)}
+                                r="4"
+                                className={`point npc-point ${i === poppingPointIndex ? 'point-pop' : ''}`}
+                                style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }}
+                                onAnimationEnd={() => setPoppingPointIndex(null)}
+                            />
                         </g>
                     ))}
                 </g>
