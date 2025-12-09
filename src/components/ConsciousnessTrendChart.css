@@ -28,6 +28,8 @@
 
 .line {
     stroke-width: 2;
+    /* stroke-dashoffset is controlled by JavaScript */
+    opacity: 1; /* Lines are always visible, their drawing is handled by strokeDashoffset */
 }
 
 .player-line {
@@ -41,6 +43,8 @@
 .point {
     stroke-width: 2;
     stroke: #2c2c2c;
+    opacity: 0; /* Points are initially hidden by CSS */
+    transition: opacity 0.2s ease-out; /* Smooth fade for points */
 }
 
 .player-point {

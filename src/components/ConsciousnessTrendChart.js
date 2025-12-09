@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import './ConsciousnessTrendChart.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 
@@ -6,6 +6,23 @@ import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     const [hoveredTurnIndex, setHoveredTurnIndex] = useState(null);
     const [ideologyView, setIdeologyView] = useState('player'); // 'player' or 'npc'
+    const playerLineRef = useRef(null); // Ref to polyline DOM element
+    const npcLineRef = useRef(null);     // Ref to polyline DOM element
+    const playerLineInitialLength = useRef(0); // Store actual total length
+    const npcLineInitialLength = useRef(0);     // Store actual total length
+    const [pointsVisibleIndex, setPointsVisibleIndex] = useState(-1); // Index of the last visible point
+
+    const width = 800;
+    const height = 400;
+    const padding = 60; // Increased padding for labels
+
+    const getX = useCallback((turn) => padding + ((turn - 1) / (maxTurn > 1 ? maxTurn - 1 : 1)) * (width - padding * 2), [width, padding]);
+    const getY = useCallback((consciousness) => {
+        const span = maxConsciousness - minConsciousness;
+        if (span === 0) return height - padding;
+        return height - padding - ((consciousness - minConsciousness) / span) * (height - padding * 2);
+    }, [height, padding]);
+
 
     // Memoize the calculation for the display history
     const displayHistory = useMemo(() => {
@@ -34,14 +51,116 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
         return newHistory;
     }, [turnHistory, gameState]);
 
+    // Callback ref for player line to calculate and store its length, and set initial DOM style
+    const setPlayerLineRef = useCallback(node => { // Renamed for clarity, using local var playerLineRef as the actual React ref
+        playerLineRef.current = node;
+        if (node !== null) {
+            const length = node.getTotalLength();
+            playerLineInitialLength.current = length;
+            node.style.strokeDasharray = length;
+            node.style.strokeDashoffset = length; // Ensure hidden from first render
+            console.log("[CTCDebug] Player Line DOM Initialized. Length:", length);
+        }
+    }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
+
+    // Callback ref for NPC line to calculate and store its length, and set initial DOM style
+    const setNpcLineRef = useCallback(node => { // Renamed for clarity, using local var npcLineRef as the actual React ref
+        npcLineRef.current = node;
+        if (node !== null) {
+            const length = node.getTotalLength();
+            npcLineInitialLength.current = length;
+            node.style.strokeDasharray = length;
+            node.style.strokeDashoffset = length; // Ensure hidden from first render
+            console.log("[CTCDebug] NPC Line DOM Initialized. Length:", length);
+        }
+    }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
+
+
+    // Effect to trigger the animation AFTER lengths are known and DOM refs are set
+    useEffect(() => {
+        let animationFrameId;
+        let startTime;
+        let currentPointsVisibleIndexInternal = -1; // Internal variable for points to prevent useEffect re-trigger
+
+        const chartWidth = width - padding * 2;
+        console.log("[CTCDebug] useEffect triggered. Chart width:", chartWidth);
+
+        const animateLine = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const duration = 3000; // Animation duration in milliseconds
+
+            const easeOutQuad = t => t * (2 - t); // Easing function
+
+            const animationProgress = Math.min(1, progress / duration);
+            const easedProgress = easeOutQuad(animationProgress);
+
+            // Calculate current drawn distance based on full chart width
+            const currentDrawnDistance = easedProgress * chartWidth;
+
+            // Update line offsets by directly manipulating DOM
+            if (playerLineRef.current && playerLineInitialLength.current > 0) {
+                playerLineRef.current.style.strokeDashoffset = playerLineInitialLength.current * (1 - easedProgress);
+            }
+            if (npcLineRef.current && npcLineInitialLength.current > 0) {
+                npcLineRef.current.style.strokeDashoffset = npcLineInitialLength.current * (1 - easedProgress);
+            }
+
+            // Update points visibility
+            let newPointsVisibleIndex = -1;
+            for (let i = 0; i < displayHistory.length; i++) {
+                const pointXRelativeToChartStart = getX(displayHistory[i].turnNumber) - padding;
+                if (currentDrawnDistance >= pointXRelativeToChartStart) {
+                    newPointsVisibleIndex = i;
+                } else {
+                    break;
+                }
+            }
+            
+            // Only update state if there's an actual change to trigger render
+            if (newPointsVisibleIndex !== currentPointsVisibleIndexInternal) {
+                currentPointsVisibleIndexInternal = newPointsVisibleIndex; // Update internal ref
+                setPointsVisibleIndex(newPointsVisibleIndex); // Trigger React re-render for points
+                console.log("[CTCDebug] Points Visible Index updated (via internal var):", newPointsVisibleIndex);
+            }
+
+            console.log(`[CTCDebug] Frame: ${Math.floor(progress)}, Eased: ${easedProgress.toFixed(2)}, Player Offset (DOM): ${playerLineRef.current?.style.strokeDashoffset}, NPC Offset (DOM): ${npcLineRef.current?.style.strokeDashoffset}, Points Index (state): ${pointsVisibleIndex}, Points Index (internal): ${currentPointsVisibleIndexInternal}`);
+
+
+            if (animationProgress < 1) {
+                animationFrameId = requestAnimationFrame(animateLine);
+            }
+        };
+
+        // Only start animation if displayHistory has data AND line refs are populated
+        if (displayHistory.length > 0 && playerLineRef.current && npcLineRef.current) {
+            // Set initial dasharray and offset directly on DOM for lines to be hidden
+            playerLineRef.current.style.strokeDasharray = playerLineInitialLength.current;
+            playerLineRef.current.style.strokeDashoffset = playerLineInitialLength.current;
+            npcLineRef.current.style.strokeDasharray = npcLineInitialLength.current;
+            npcLineRef.current.style.strokeDashoffset = npcLineInitialLength.current;
+            
+            setPointsVisibleIndex(-1); // Ensure points are hidden initially
+            currentPointsVisibleIndexInternal = -1; // Reset internal ref as well
+            console.log("[CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.");
+
+
+            const timer = setTimeout(() => {
+                console.log("[CTCDebug] Starting requestAnimationFrame loop after delay.");
+                animationFrameId = requestAnimationFrame(animateLine);
+            }, 1000); // 1 second delay before animation starts
+
+            return () => {
+                clearTimeout(timer);
+                cancelAnimationFrame(animationFrameId);
+                console.log("[CTCDebug] Animation cleanup.");
+            };
+        }
+    }, [displayHistory, getX, width, padding]); // Removed playerLineLength, npcLineLength, pointsVisibleIndex
 
     if (displayHistory.length === 0) {
         return <div>チャートデータがありません。</div>;
     }
-
-    const width = 800;
-    const height = 400;
-    const padding = 60; // Increased padding for labels
 
     const maxTurn = Math.max(...displayHistory.map(h => h.turnNumber), 1);
     const allConsciousness = displayHistory.flatMap(h => [h.playerConsciousness, h.npcConsciousness]);
@@ -50,17 +169,10 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     const maxConsciousness = maxDataY + 5;
     const minConsciousness = 0;
 
-    const getX = (turn) => padding + ((turn - 1) / (maxTurn > 1 ? maxTurn - 1 : 1)) * (width - padding * 2);
-    const getY = (consciousness) => {
-        const span = maxConsciousness - minConsciousness;
-        if (span === 0) return height - padding;
-        return height - padding - ((consciousness - minConsciousness) / span) * (height - padding * 2);
-    };
+    const playerLinePoints = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.playerConsciousness)}`).join(' ');
+    const npcLinePoints = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.npcConsciousness)}`).join(' ');
 
-    const playerLine = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.playerConsciousness)}`).join(' ');
-    const npcLine = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.npcConsciousness)}`).join(' ');
-
-    const colorPalette = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075'];
+    const colorPalette = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#800000', '#ffd8b1', '#000075'];
     
     const getDeterministicColor = (name) => {
         if (!name) return '#555'; // For "イデオロギーなし"
@@ -162,12 +274,30 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                 {xAxisLabels}
                 <g clipPath="url(#chart-area)">
                     {ideologyBlocks}
-                    <polyline points={playerLine} className="line player-line" fill="none" />
-                    <polyline points={npcLine} className="line npc-line" fill="none" />
+                    <polyline
+                        ref={setPlayerLineRef} // Use the callback ref
+                        points={playerLinePoints}
+                        className="line player-line"
+                        fill="none"
+                        style={{
+                            strokeDasharray: playerLineInitialLength.current,
+                            opacity: 1, // Line opacity is always 1, strokeDashoffset controls drawing
+                        }}
+                    />
+                    <polyline
+                        ref={setNpcLineRef} // Use the callback ref
+                        points={npcLinePoints}
+                        className="line npc-line"
+                        fill="none"
+                        style={{
+                            strokeDasharray: npcLineInitialLength.current,
+                            opacity: 1, // Line opacity is always 1, strokeDashoffset controls drawing
+                        }}
+                    />
                     {displayHistory.map((h, i) => (
                         <g key={`point-group-${i}`}>
-                            <circle cx={getX(h.turnNumber)} cy={getY(h.playerConsciousness)} r="4" className="point player-point" />
-                            <circle cx={getX(h.turnNumber)} cy={getY(h.npcConsciousness)} r="4" className="point npc-point" />
+                            <circle cx={getX(h.turnNumber)} cy={getY(h.playerConsciousness)} r="4" className="point player-point" style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }} />
+                            <circle cx={getX(h.turnNumber)} cy={getY(h.npcConsciousness)} r="4" className="point npc-point" style={{ opacity: i <= pointsVisibleIndex ? 1 : 0 }} />
                         </g>
                     ))}
                 </g>
