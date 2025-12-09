@@ -1,4 +1,5 @@
 import animationStateManager from './AnimationStateManager.js';
+import { HUMAN_PLAYER_ID } from './constants.js';
 
 /**
  * ゲーム演出を管理するクラス
@@ -2052,39 +2053,56 @@ class AnimationManager {
      * 継続演出の状態を更新
      * @param {Object} gameState - 現在のゲーム状態
      */
-    updatePersistentAnimations(gameState) {
-        if (!gameState) return;
-        
-        console.log('🎮GAME_ANIM [Persistent] Updating persistent animations');
-        
-        // 全プレイヤーの手札をチェック
-        Object.values(gameState.players).forEach(player => {
-            if (!player.hand) return;
-            
-            const playerScale = this.getEffectiveScale(player);
-            
-            player.hand.forEach(card => {
-                const cardElement = document.querySelector(`[data-card-id="${card.instance_id}"]`);
-                if (!cardElement) return;
-                
-                const isInsufficientScale = playerScale < card.required_scale;
-                const hasAnimation = this.persistentAnimations.has(card.instance_id);
-                
-                if (isInsufficientScale && !hasAnimation) {
-                    // 規模不足演出を開始
-                    console.log('🎮GAME_ANIM [Persistent] Starting insufficient scale animation for card:', card.name);
+    updatePersistentAnimations(currentGameState) {
+        console.log('[GrayOutDebug] AnimationManager.updatePersistentAnimations called.');
+        if (!currentGameState || !currentGameState.players || !currentGameState.all_card_instances) {
+            console.log('[GrayOutDebug] updatePersistentAnimations: currentGameState or players/cards missing. Skipping.');
+            return;
+        }
+
+        const humanPlayer = currentGameState.players[HUMAN_PLAYER_ID];
+        const humanPlayerScale = this.getEffectiveScale(humanPlayer); // Use getEffectiveScale
+        console.log(`[GrayOutDebug] Current Human Player Effective Scale: ${humanPlayerScale}`);
+
+        // プレイヤーの手札カードを走査し、規模不足カードにクラスを適用/解除
+        humanPlayer.hand.forEach(cardInstance => {
+            console.log(`[GrayOutDebug] Processing card: ${cardInstance.name} (ID: ${cardInstance.instance_id})`);
+            const cardElement = document.querySelector(`[data-card-id="${cardInstance.instance_id}"]`);
+            if (!cardElement) {
+                console.warn(`[GrayOutDebug] updatePersistentAnimations: Card DOM element not found for card: ${cardInstance.name} (ID: ${cardInstance.instance_id}). This card might not be rendered yet or data-card-id is missing.`);
+                return;
+            }
+            console.log(`[GrayOutDebug] Found DOM element for card: ${cardInstance.name} (ID: ${cardInstance.instance_id})`);
+
+            // カード定義からrequired_scaleを取得
+            const cardDefinition = currentGameState.cardDefs[cardInstance.name];
+            // 優先的にカードインスタンスのrequired_scaleを使用し、なければカード定義から取得
+            const requiredScale = cardInstance.required_scale !== undefined ? cardInstance.required_scale : (cardDefinition ? cardDefinition.required_scale : 0);
+            console.log(`[GrayOutDebug] Card: ${cardInstance.name}, Required Scale: ${requiredScale}`);
+
+            // 規模が不足しているかチェック
+            const isInsufficientScale = humanPlayerScale < requiredScale;
+            console.log(`[GrayOutDebug] Card: ${cardInstance.name}, Is Insufficient Scale? ${isInsufficientScale} (Player Scale: ${humanPlayerScale}, Required Scale: ${requiredScale})`);
+
+            if (isInsufficientScale) {
+                if (!cardElement.classList.contains('card-insufficient-scale')) {
                     cardElement.classList.add('card-insufficient-scale');
-                    this.persistentAnimations.set(card.instance_id, 'insufficient-scale');
-                } else if (!isInsufficientScale && hasAnimation && this.persistentAnimations.get(card.instance_id) === 'insufficient-scale') {
-                    // 規模不足演出を終了
-                    console.log('🎮GAME_ANIM [Persistent] Ending insufficient scale animation for card:', card.name);
-                    cardElement.classList.remove('card-insufficient-scale');
-                    this.persistentAnimations.delete(card.instance_id);
+                    console.log(`[GrayOutDebug] ADDED 'card-insufficient-scale' to card: ${cardInstance.name}`);
+                } else {
+                    console.log(`[GrayOutDebug] Card already has 'card-insufficient-scale': ${cardInstance.name}`);
                 }
-            });
+            } else {
+                if (cardElement.classList.contains('card-insufficient-scale')) {
+                    cardElement.classList.remove('card-insufficient-scale');
+                    console.log(`[GrayOutDebug] REMOVED 'card-insufficient-scale' from card: ${cardInstance.name}`);
+                } else {
+                    console.log(`[GrayOutDebug] Card does not have 'card-insufficient-scale' and is sufficient: ${cardInstance.name}`);
+                }
+            }
         });
-        
-        this.lastGameState = gameState;
+
+        // 以前のゲーム状態を保存
+        this.lastGameState = currentGameState;
     }
 
     /**

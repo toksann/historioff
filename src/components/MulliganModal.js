@@ -58,7 +58,7 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                         return (
                             <div
                                 key={card.instance_id}
-                                className={`mulligan-card ${isSelected ? 'selected' : ''}`}
+                                className={`mulligan-card card-game ${isSelected ? 'selected' : ''}`}
                                 data-card-id={card.instance_id}
                                 onClick={() => handleCardClick(card.instance_id)}
                             >

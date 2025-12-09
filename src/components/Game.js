@@ -74,7 +74,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
     // 継続演出の更新（規模や手札の変更を監視）
     React.useEffect(() => {
         if (gameState && presentationController && presentationController.animationManager) {
-            
+            console.log('[DEBUG] Game.js: Calling updatePersistentAnimations due to gameState change.'); // Add this log
             presentationController.animationManager.updatePersistentAnimations(gameState);
         }
     }, [

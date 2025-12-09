@@ -1,9 +1,7 @@
-Compiled with problems:
-×
-ERROR in ./src/components/GameOverScreen.js 7:0-64
-Module not found: Error: Can't resolve './ConsciousnessTrendChart' in 'C:\Users\user\Desktop\historio\historio-web\src\components'
-Did you mean 'ConsciousnessTrendChart.js'?
-BREAKING CHANGE: The request './ConsciousnessTrendChart' failed to resolve only because it was resolved as fully specified
-(probably because the origin is strict EcmaScript Module, e. g. a module with javascript mimetype, a '*.mjs' file, or a '*.js' file where the package.json contains '"type": "module"').
-The extension in the request is mandatory for it to be fully specified.
-Add the extension to the request.
+AnimationManager.js:2057 [GrayOutDebug] AnimationManager.updatePersistentAnimations called.
+AnimationManager.js:2065 [GrayOutDebug] Current Human Player Scale: 5
+AnimationManager.js:2069 [GrayOutDebug] Processing card: 啓蒙時代 (ID: PLAYER1-啓蒙時代-43198fe7-6ae8-4a7b-945d-f7f7b3b997b9)
+AnimationManager.js:2075 [GrayOutDebug] Found DOM element for card: 啓蒙時代 (ID: PLAYER1-啓蒙時代-43198fe7-6ae8-4a7b-945d-f7f7b3b997b9)
+AnimationManager.js:2084 [GrayOutDebug] Card: 啓蒙時代, Required Scale: 15
+AnimationManager.js:2088 [GrayOutDebug] Card: 啓蒙時代, Is Insufficient Scale? true (Player Scale: 5, Required Scale: 15)
+AnimationManager.js:2095 [GrayOutDebug] Card already has 'card-insufficient-scale': 啓蒙時代
