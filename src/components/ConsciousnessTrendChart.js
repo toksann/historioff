@@ -11,6 +11,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     const playerLineInitialLength = useRef(0); // Store actual total length
     const npcLineInitialLength = useRef(0);     // Store actual total length
     const [pointsVisibleIndex, setPointsVisibleIndex] = useState(-1); // Index of the last visible point
+    const latestPointsVisibleIndexRef = useRef(pointsVisibleIndex); // Ref to track latest pointsVisibleIndex without triggering useEffect
 
     const width = 800;
     const height = 400;
@@ -75,12 +76,16 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
         }
     }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
 
+    // Keep latestPointsVisibleIndexRef up-to-date with pointsVisibleIndex state
+    useEffect(() => {
+        latestPointsVisibleIndexRef.current = pointsVisibleIndex;
+    }, [pointsVisibleIndex]);
 
     // Effect to trigger the animation AFTER lengths are known and DOM refs are set
     useEffect(() => {
         let animationFrameId;
         let startTime;
-        let currentPointsVisibleIndexInternal = -1; // Internal variable for points to prevent useEffect re-trigger
+        // let currentPointsVisibleIndexInternal = -1; // This is now handled by latestPointsVisibleIndexRef
 
         const chartWidth = width - padding * 2;
         console.log("[CTCDebug] useEffect triggered. Chart width:", chartWidth);
@@ -118,13 +123,13 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
             }
             
             // Only update state if there's an actual change to trigger render
-            if (newPointsVisibleIndex !== currentPointsVisibleIndexInternal) {
-                currentPointsVisibleIndexInternal = newPointsVisibleIndex; // Update internal ref
+            if (newPointsVisibleIndex !== latestPointsVisibleIndexRef.current) {
+                latestPointsVisibleIndexRef.current = newPointsVisibleIndex; // Update ref
                 setPointsVisibleIndex(newPointsVisibleIndex); // Trigger React re-render for points
-                console.log("[CTCDebug] Points Visible Index updated (via internal var):", newPointsVisibleIndex);
+                console.log("[CTCDebug] Points Visible Index updated (via ref):", newPointsVisibleIndex);
             }
 
-            console.log(`[CTCDebug] Frame: ${Math.floor(progress)}, Eased: ${easedProgress.toFixed(2)}, Player Offset (DOM): ${playerLineRef.current?.style.strokeDashoffset}, NPC Offset (DOM): ${npcLineRef.current?.style.strokeDashoffset}, Points Index (state): ${pointsVisibleIndex}, Points Index (internal): ${currentPointsVisibleIndexInternal}`);
+            console.log(`[CTCDebug] Frame: ${Math.floor(progress)}, Eased: ${easedProgress.toFixed(2)}, Player Offset (DOM): ${playerLineRef.current?.style.strokeDashoffset}, NPC Offset (DOM): ${npcLineRef.current?.style.strokeDashoffset}, Points Index (state): ${pointsVisibleIndex}, Points Index (ref): ${latestPointsVisibleIndexRef.current}`);
 
 
             if (animationProgress < 1) {
@@ -135,13 +140,14 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
         // Only start animation if displayHistory has data AND line refs are populated
         if (displayHistory.length > 0 && playerLineRef.current && npcLineRef.current) {
             // Set initial dasharray and offset directly on DOM for lines to be hidden
+            // This is already handled in the useCallback refs, but re-asserting here for clarity
             playerLineRef.current.style.strokeDasharray = playerLineInitialLength.current;
             playerLineRef.current.style.strokeDashoffset = playerLineInitialLength.current;
             npcLineRef.current.style.strokeDasharray = npcLineInitialLength.current;
             npcLineRef.current.style.strokeDashoffset = npcLineInitialLength.current;
             
             setPointsVisibleIndex(-1); // Ensure points are hidden initially
-            currentPointsVisibleIndexInternal = -1; // Reset internal ref as well
+            latestPointsVisibleIndexRef.current = -1; // Reset ref as well
             console.log("[CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.");
 
 
@@ -156,7 +162,8 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                 console.log("[CTCDebug] Animation cleanup.");
             };
         }
-    }, [displayHistory, getX, width, padding]); // Removed playerLineLength, npcLineLength, pointsVisibleIndex
+    }, [displayHistory, getX, width, padding, playerLineRef, npcLineRef, playerLineInitialLength, npcLineInitialLength]);
+
 
     if (displayHistory.length === 0) {
         return <div>チャートデータがありません。</div>;
@@ -281,6 +288,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                         fill="none"
                         style={{
                             strokeDasharray: playerLineInitialLength.current,
+                            // strokeDashoffset is directly manipulated via DOM, not via React state for lines
                             opacity: 1, // Line opacity is always 1, strokeDashoffset controls drawing
                         }}
                     />
@@ -291,6 +299,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                         fill="none"
                         style={{
                             strokeDasharray: npcLineInitialLength.current,
+                            // strokeDashoffset is directly manipulated via DOM, not via React state for lines
                             opacity: 1, // Line opacity is always 1, strokeDashoffset controls drawing
                         }}
                     />

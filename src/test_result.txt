@@ -1,203 +1,205 @@
-ConsciousnessTrendChart.js:62 [CTCDebug] Player Line DOM Initialized. Length: 684.3245239257812
-ConsciousnessTrendChart.js:74 [CTCDebug] NPC Line DOM Initialized. Length: 766.8958740234375
-ConsciousnessTrendChart.js:86 [CTCDebug] useEffect triggered. Chart width: 680
-ConsciousnessTrendChart.js:145 [CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.
-ConsciousnessTrendChart.js:156 [CTCDebug] Animation cleanup.
-ConsciousnessTrendChart.js:62 [CTCDebug] Player Line DOM Initialized. Length: 684.3245239257812
-ConsciousnessTrendChart.js:74 [CTCDebug] NPC Line DOM Initialized. Length: 766.8958740234375
-ConsciousnessTrendChart.js:86 [CTCDebug] useEffect triggered. Chart width: 680
-ConsciousnessTrendChart.js:145 [CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.
-ConsciousnessTrendChart.js:149 [CTCDebug] Starting requestAnimationFrame loop after delay.
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 0, Eased: 0.00, Player Offset (DOM): 684.325, NPC Offset (DOM): 766.896, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 16, Eased: 0.01, Player Offset (DOM): 676.753, NPC Offset (DOM): 758.411, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 33, Eased: 0.02, Player Offset (DOM): 669.198, NPC Offset (DOM): 749.944, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 49, Eased: 0.03, Player Offset (DOM): 661.73, NPC Offset (DOM): 741.575, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 66, Eased: 0.04, Player Offset (DOM): 654.214, NPC Offset (DOM): 733.153, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 83, Eased: 0.05, Player Offset (DOM): 646.786, NPC Offset (DOM): 724.828, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 99, Eased: 0.07, Player Offset (DOM): 639.489, NPC Offset (DOM): 716.65, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 116, Eased: 0.08, Player Offset (DOM): 632.145, NPC Offset (DOM): 708.42, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 133, Eased: 0.09, Player Offset (DOM): 624.844, NPC Offset (DOM): 700.238, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 149, Eased: 0.10, Player Offset (DOM): 617.628, NPC Offset (DOM): 692.152, Points Index (state): -1, Points Index (internal): 0
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 166, Eased: 0.11, Player Offset (DOM): 610.411, NPC Offset (DOM): 684.064, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 183, Eased: 0.12, Player Offset (DOM): 603.237, NPC Offset (DOM): 676.024, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 199, Eased: 0.13, Player Offset (DOM): 596.147, NPC Offset (DOM): 668.079, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 216, Eased: 0.14, Player Offset (DOM): 589.015, NPC Offset (DOM): 660.086, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 233, Eased: 0.15, Player Offset (DOM): 582.01, NPC Offset (DOM): 652.236, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 249, Eased: 0.16, Player Offset (DOM): 575.047, NPC Offset (DOM): 644.433, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 266, Eased: 0.17, Player Offset (DOM): 568.043, NPC Offset (DOM): 636.583, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 283, Eased: 0.18, Player Offset (DOM): 561.164, NPC Offset (DOM): 628.874, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 300, Eased: 0.19, Player Offset (DOM): 554.245, NPC Offset (DOM): 621.12, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 316, Eased: 0.20, Player Offset (DOM): 547.491, NPC Offset (DOM): 613.552, Points Index (state): -1, Points Index (internal): 1
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 333, Eased: 0.21, Player Offset (DOM): 540.697, NPC Offset (DOM): 605.938, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 350, Eased: 0.22, Player Offset (DOM): 533.946, NPC Offset (DOM): 598.373, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 366, Eased: 0.23, Player Offset (DOM): 527.278, NPC Offset (DOM): 590.9, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 383, Eased: 0.24, Player Offset (DOM): 520.611, NPC Offset (DOM): 583.429, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 400, Eased: 0.25, Player Offset (DOM): 513.987, NPC Offset (DOM): 576.005, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 416, Eased: 0.26, Player Offset (DOM): 507.445, NPC Offset (DOM): 568.674, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 433, Eased: 0.27, Player Offset (DOM): 500.944, NPC Offset (DOM): 561.389, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 450, Eased: 0.28, Player Offset (DOM): 494.408, NPC Offset (DOM): 554.064, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 466, Eased: 0.29, Player Offset (DOM): 487.915, NPC Offset (DOM): 546.787, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 483, Eased: 0.30, Player Offset (DOM): 481.58, NPC Offset (DOM): 539.687, Points Index (state): -1, Points Index (internal): 2
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 500, Eased: 0.31, Player Offset (DOM): 475.171, NPC Offset (DOM): 532.506, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 516, Eased: 0.31, Player Offset (DOM): 468.919, NPC Offset (DOM): 525.5, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 533, Eased: 0.32, Player Offset (DOM): 462.634, NPC Offset (DOM): 518.456, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 550, Eased: 0.33, Player Offset (DOM): 456.391, NPC Offset (DOM): 511.459, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 566, Eased: 0.34, Player Offset (DOM): 450.227, NPC Offset (DOM): 504.552, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 583, Eased: 0.35, Player Offset (DOM): 444.032, NPC Offset (DOM): 497.609, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 600, Eased: 0.36, Player Offset (DOM): 437.952, NPC Offset (DOM): 490.796, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 616, Eased: 0.37, Player Offset (DOM): 431.915, NPC Offset (DOM): 484.03, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 633, Eased: 0.38, Player Offset (DOM): 425.883, NPC Offset (DOM): 477.271, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 650, Eased: 0.39, Player Offset (DOM): 419.894, NPC Offset (DOM): 470.559, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 666, Eased: 0.40, Player Offset (DOM): 413.947, NPC Offset (DOM): 463.895, Points Index (state): -1, Points Index (internal): 3
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 683, Eased: 0.40, Player Offset (DOM): 408.078, NPC Offset (DOM): 457.317, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 700, Eased: 0.41, Player Offset (DOM): 402.216, NPC Offset (DOM): 450.748, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 716, Eased: 0.42, Player Offset (DOM): 396.396, NPC Offset (DOM): 444.226, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 733, Eased: 0.43, Player Offset (DOM): 390.653, NPC Offset (DOM): 437.79, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 750, Eased: 0.44, Player Offset (DOM): 384.884, NPC Offset (DOM): 431.324, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 766, Eased: 0.45, Player Offset (DOM): 379.259, NPC Offset (DOM): 425.021, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 783, Eased: 0.45, Player Offset (DOM): 373.609, NPC Offset (DOM): 418.689, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 799, Eased: 0.46, Player Offset (DOM): 368.034, NPC Offset (DOM): 412.441, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 816, Eased: 0.47, Player Offset (DOM): 362.468, NPC Offset (DOM): 406.204, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 833, Eased: 0.48, Player Offset (DOM): 356.944, NPC Offset (DOM): 400.013, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 850, Eased: 0.49, Player Offset (DOM): 351.463, NPC Offset (DOM): 393.871, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 866, Eased: 0.49, Player Offset (DOM): 346.057, NPC Offset (DOM): 387.812, Points Index (state): -1, Points Index (internal): 4
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 883, Eased: 0.50, Player Offset (DOM): 340.66, NPC Offset (DOM): 381.764, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 900, Eased: 0.51, Player Offset (DOM): 335.306, NPC Offset (DOM): 375.764, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 916, Eased: 0.52, Player Offset (DOM): 329.994, NPC Offset (DOM): 369.811, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 933, Eased: 0.53, Player Offset (DOM): 324.756, NPC Offset (DOM): 363.941, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 950, Eased: 0.53, Player Offset (DOM): 319.497, NPC Offset (DOM): 358.048, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 966, Eased: 0.54, Player Offset (DOM): 314.344, NPC Offset (DOM): 352.273, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 983, Eased: 0.55, Player Offset (DOM): 309.232, NPC Offset (DOM): 346.544, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1000, Eased: 0.56, Player Offset (DOM): 304.131, NPC Offset (DOM): 340.828, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1016, Eased: 0.56, Player Offset (DOM): 299.074, NPC Offset (DOM): 335.16, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1033, Eased: 0.57, Player Offset (DOM): 294.058, NPC Offset (DOM): 329.539, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1050, Eased: 0.58, Player Offset (DOM): 289.115, NPC Offset (DOM): 324, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1066, Eased: 0.58, Player Offset (DOM): 284.213, NPC Offset (DOM): 318.507, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1083, Eased: 0.59, Player Offset (DOM): 279.324, NPC Offset (DOM): 313.028, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1099, Eased: 0.60, Player Offset (DOM): 274.507, NPC Offset (DOM): 307.629, Points Index (state): -1, Points Index (internal): 5
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1116, Eased: 0.61, Player Offset (DOM): 269.674, NPC Offset (DOM): 302.213, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1133, Eased: 0.61, Player Offset (DOM): 264.913, NPC Offset (DOM): 296.877, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1150, Eased: 0.62, Player Offset (DOM): 260.222, NPC Offset (DOM): 291.62, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1166, Eased: 0.63, Player Offset (DOM): 255.545, NPC Offset (DOM): 286.379, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1183, Eased: 0.63, Player Offset (DOM): 250.91, NPC Offset (DOM): 281.185, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1200, Eased: 0.64, Player Offset (DOM): 246.345, NPC Offset (DOM): 276.07, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1216, Eased: 0.65, Player Offset (DOM): 241.795, NPC Offset (DOM): 270.971, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1233, Eased: 0.65, Player Offset (DOM): 237.315, NPC Offset (DOM): 265.949, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1250, Eased: 0.66, Player Offset (DOM): 232.849, NPC Offset (DOM): 260.945, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1266, Eased: 0.67, Player Offset (DOM): 228.426, NPC Offset (DOM): 255.988, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1283, Eased: 0.67, Player Offset (DOM): 224.072, NPC Offset (DOM): 251.109, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1300, Eased: 0.68, Player Offset (DOM): 219.733, NPC Offset (DOM): 246.247, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1316, Eased: 0.69, Player Offset (DOM): 215.437, NPC Offset (DOM): 241.432, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1333, Eased: 0.69, Player Offset (DOM): 211.158, NPC Offset (DOM): 236.637, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1350, Eased: 0.70, Player Offset (DOM): 206.998, NPC Offset (DOM): 231.974, Points Index (state): -1, Points Index (internal): 6
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1366, Eased: 0.70, Player Offset (DOM): 202.853, NPC Offset (DOM): 227.33, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1383, Eased: 0.71, Player Offset (DOM): 198.677, NPC Offset (DOM): 222.65, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1400, Eased: 0.72, Player Offset (DOM): 194.618, NPC Offset (DOM): 218.101, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1416, Eased: 0.72, Player Offset (DOM): 190.6, NPC Offset (DOM): 213.598, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1433, Eased: 0.73, Player Offset (DOM): 186.624, NPC Offset (DOM): 209.142, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1450, Eased: 0.73, Player Offset (DOM): 182.667, NPC Offset (DOM): 204.707, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1466, Eased: 0.74, Player Offset (DOM): 178.752, NPC Offset (DOM): 200.32, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1483, Eased: 0.74, Player Offset (DOM): 174.879, NPC Offset (DOM): 195.98, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1500, Eased: 0.75, Player Offset (DOM): 171.072, NPC Offset (DOM): 191.713, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1516, Eased: 0.76, Player Offset (DOM): 167.261, NPC Offset (DOM): 187.443, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1533, Eased: 0.76, Player Offset (DOM): 163.56, NPC Offset (DOM): 183.295, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1550, Eased: 0.77, Player Offset (DOM): 159.857, NPC Offset (DOM): 179.145, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1566, Eased: 0.77, Player Offset (DOM): 156.195, NPC Offset (DOM): 175.042, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1583, Eased: 0.78, Player Offset (DOM): 152.577, NPC Offset (DOM): 170.987, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1600, Eased: 0.78, Player Offset (DOM): 149, NPC Offset (DOM): 166.979, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1616, Eased: 0.79, Player Offset (DOM): 145.488, NPC Offset (DOM): 163.042, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1633, Eased: 0.79, Player Offset (DOM): 141.996, NPC Offset (DOM): 159.129, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1650, Eased: 0.80, Player Offset (DOM): 138.567, NPC Offset (DOM): 155.287, Points Index (state): -1, Points Index (internal): 7
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1666, Eased: 0.80, Player Offset (DOM): 135.16, NPC Offset (DOM): 151.468, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1683, Eased: 0.81, Player Offset (DOM): 131.815, NPC Offset (DOM): 147.72, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1700, Eased: 0.81, Player Offset (DOM): 128.473, NPC Offset (DOM): 143.975, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1716, Eased: 0.82, Player Offset (DOM): 125.232, NPC Offset (DOM): 140.343, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1733, Eased: 0.82, Player Offset (DOM): 121.994, NPC Offset (DOM): 136.714, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1750, Eased: 0.83, Player Offset (DOM): 118.779, NPC Offset (DOM): 133.111, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1766, Eased: 0.83, Player Offset (DOM): 115.645, NPC Offset (DOM): 129.599, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1783, Eased: 0.84, Player Offset (DOM): 112.534, NPC Offset (DOM): 126.113, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1800, Eased: 0.84, Player Offset (DOM): 109.484, NPC Offset (DOM): 122.695, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1816, Eased: 0.84, Player Offset (DOM): 106.458, NPC Offset (DOM): 119.303, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1833, Eased: 0.85, Player Offset (DOM): 103.492, NPC Offset (DOM): 115.979, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1850, Eased: 0.85, Player Offset (DOM): 100.533, NPC Offset (DOM): 112.663, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1866, Eased: 0.86, Player Offset (DOM): 97.6511, NPC Offset (DOM): 109.434, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1883, Eased: 0.86, Player Offset (DOM): 94.7943, NPC Offset (DOM): 106.232, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1900, Eased: 0.87, Player Offset (DOM): 91.9632, NPC Offset (DOM): 103.06, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1916, Eased: 0.87, Player Offset (DOM): 89.2244, NPC Offset (DOM): 99.9903, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1933, Eased: 0.87, Player Offset (DOM): 86.4945, NPC Offset (DOM): 96.931, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1950, Eased: 0.88, Player Offset (DOM): 83.823, NPC Offset (DOM): 93.9372, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1966, Eased: 0.88, Player Offset (DOM): 81.1778, NPC Offset (DOM): 90.9728, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 1983, Eased: 0.89, Player Offset (DOM): 78.5749, NPC Offset (DOM): 88.0559, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2000, Eased: 0.89, Player Offset (DOM): 76.0297, NPC Offset (DOM): 85.2035, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2016, Eased: 0.89, Player Offset (DOM): 73.5114, NPC Offset (DOM): 82.3813, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2033, Eased: 0.90, Player Offset (DOM): 71.0502, NPC Offset (DOM): 79.6232, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2050, Eased: 0.90, Player Offset (DOM): 68.602, NPC Offset (DOM): 76.8796, Points Index (state): -1, Points Index (internal): 8
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2066, Eased: 0.90, Player Offset (DOM): 66.2252, NPC Offset (DOM): 74.216, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2083, Eased: 0.91, Player Offset (DOM): 63.8902, NPC Offset (DOM): 71.5993, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2100, Eased: 0.91, Player Offset (DOM): 61.5698, NPC Offset (DOM): 68.9989, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2116, Eased: 0.91, Player Offset (DOM): 59.3326, NPC Offset (DOM): 66.4917, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2133, Eased: 0.92, Player Offset (DOM): 57.1104, NPC Offset (DOM): 64.0014, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2150, Eased: 0.92, Player Offset (DOM): 54.9306, NPC Offset (DOM): 61.5586, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2166, Eased: 0.92, Player Offset (DOM): 52.7806, NPC Offset (DOM): 59.1492, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2183, Eased: 0.93, Player Offset (DOM): 50.6983, NPC Offset (DOM): 56.8156, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2200, Eased: 0.93, Player Offset (DOM): 48.658, NPC Offset (DOM): 54.5291, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2216, Eased: 0.93, Player Offset (DOM): 46.6595, NPC Offset (DOM): 52.2895, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2233, Eased: 0.93, Player Offset (DOM): 44.6796, NPC Offset (DOM): 50.0707, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2250, Eased: 0.94, Player Offset (DOM): 42.7655, NPC Offset (DOM): 47.9256, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2266, Eased: 0.94, Player Offset (DOM): 40.8933, NPC Offset (DOM): 45.8275, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2283, Eased: 0.94, Player Offset (DOM): 39.0411, NPC Offset (DOM): 43.7519, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2300, Eased: 0.95, Player Offset (DOM): 37.2426, NPC Offset (DOM): 41.7363, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2316, Eased: 0.95, Player Offset (DOM): 35.4968, NPC Offset (DOM): 39.7799, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2333, Eased: 0.95, Player Offset (DOM): 33.7828, NPC Offset (DOM): 37.8591, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2349, Eased: 0.95, Player Offset (DOM): 32.131, NPC Offset (DOM): 36.0079, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2366, Eased: 0.96, Player Offset (DOM): 30.482, NPC Offset (DOM): 34.16, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2383, Eased: 0.96, Player Offset (DOM): 28.914, NPC Offset (DOM): 32.4028, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2400, Eased: 0.96, Player Offset (DOM): 27.3691, NPC Offset (DOM): 30.6715, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2416, Eased: 0.96, Player Offset (DOM): 25.8756, NPC Offset (DOM): 28.9977, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2433, Eased: 0.96, Player Offset (DOM): 24.4067, NPC Offset (DOM): 27.3516, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2450, Eased: 0.97, Player Offset (DOM): 22.989, NPC Offset (DOM): 25.7629, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2466, Eased: 0.97, Player Offset (DOM): 21.6219, NPC Offset (DOM): 24.2309, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2483, Eased: 0.97, Player Offset (DOM): 20.2889, NPC Offset (DOM): 22.7369, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2500, Eased: 0.97, Player Offset (DOM): 19.0058, NPC Offset (DOM): 21.2991, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2516, Eased: 0.97, Player Offset (DOM): 17.7573, NPC Offset (DOM): 19.9, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2533, Eased: 0.98, Player Offset (DOM): 16.5583, NPC Offset (DOM): 18.5563, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2550, Eased: 0.98, Player Offset (DOM): 15.3876, NPC Offset (DOM): 17.2443, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2566, Eased: 0.98, Player Offset (DOM): 14.2729, NPC Offset (DOM): 15.9951, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2583, Eased: 0.98, Player Offset (DOM): 13.2002, NPC Offset (DOM): 14.7929, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2600, Eased: 0.98, Player Offset (DOM): 12.1571, NPC Offset (DOM): 13.624, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2616, Eased: 0.98, Player Offset (DOM): 11.1687, NPC Offset (DOM): 12.5163, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2633, Eased: 0.99, Player Offset (DOM): 10.2166, NPC Offset (DOM): 11.4493, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2650, Eased: 0.99, Player Offset (DOM): 9.31218, NPC Offset (DOM): 10.4358, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2666, Eased: 0.99, Player Offset (DOM): 8.43957, NPC Offset (DOM): 9.45789, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2683, Eased: 0.99, Player Offset (DOM): 7.61949, NPC Offset (DOM): 8.53887, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2700, Eased: 0.99, Player Offset (DOM): 6.83677, NPC Offset (DOM): 7.6617, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2716, Eased: 0.99, Player Offset (DOM): 6.10076, NPC Offset (DOM): 6.83688, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2733, Eased: 0.99, Player Offset (DOM): 5.4026, NPC Offset (DOM): 6.05449, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2750, Eased: 0.99, Player Offset (DOM): 4.74306, NPC Offset (DOM): 5.31536, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2766, Eased: 0.99, Player Offset (DOM): 4.13707, NPC Offset (DOM): 4.63625, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2783, Eased: 0.99, Player Offset (DOM): 3.56589, NPC Offset (DOM): 3.99616, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2800, Eased: 1.00, Player Offset (DOM): 3.03713, NPC Offset (DOM): 3.40359, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2816, Eased: 1.00, Player Offset (DOM): 2.55356, NPC Offset (DOM): 2.86167, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2833, Eased: 1.00, Player Offset (DOM): 2.10936, NPC Offset (DOM): 2.36388, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2850, Eased: 1.00, Player Offset (DOM): 1.70985, NPC Offset (DOM): 1.91617, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2866, Eased: 1.00, Player Offset (DOM): 1.35023, NPC Offset (DOM): 1.51314, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2883, Eased: 1.00, Player Offset (DOM): 1.03478, NPC Offset (DOM): 1.15964, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2900, Eased: 1.00, Player Offset (DOM): 0.758203, NPC Offset (DOM): 0.849688, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2916, Eased: 1.00, Player Offset (DOM): 0.527074, NPC Offset (DOM): 0.590671, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2933, Eased: 1.00, Player Offset (DOM): 0.336837, NPC Offset (DOM): 0.37748, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2950, Eased: 1.00, Player Offset (DOM): 0.189012, NPC Offset (DOM): 0.211818, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2966, Eased: 1.00, Player Offset (DOM): 0.0841031, NPC Offset (DOM): 0.094251, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 2983, Eased: 1.00, Player Offset (DOM): 0.0208466, NPC Offset (DOM): 0.023362, Points Index (state): -1, Points Index (internal): 9
-ConsciousnessTrendChart.js:124 [CTCDebug] Points Visible Index updated (via internal var): 10
-ConsciousnessTrendChart.js:127 [CTCDebug] Frame: 3000, Eased: 1.00, Player Offset (DOM): 0, NPC Offset (DOM): 0, Points Index (state): -1, Points Index (internal): 10
-ConsciousnessTrendChart.js:156 [CTCDebug] Animation cleanup.
+ConsciousnessTrendChart.js:63 [CTCDebug] Player Line DOM Initialized. Length: 697.7483520507812
+ConsciousnessTrendChart.js:75 [CTCDebug] NPC Line DOM Initialized. Length: 738.48974609375
+ConsciousnessTrendChart.js:91 [CTCDebug] useEffect triggered. Chart width: 680
+ConsciousnessTrendChart.js:151 [CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.
+ConsciousnessTrendChart.js:162 [CTCDebug] Animation cleanup.
+ConsciousnessTrendChart.js:63 [CTCDebug] Player Line DOM Initialized. Length: 697.7483520507812
+ConsciousnessTrendChart.js:75 [CTCDebug] NPC Line DOM Initialized. Length: 738.48974609375
+ConsciousnessTrendChart.js:91 [CTCDebug] useEffect triggered. Chart width: 680
+ConsciousnessTrendChart.js:151 [CTCDebug] Initial DOM state for lines set: Offsets to full length. Points hidden.
+ConsciousnessTrendChart.js:155 [CTCDebug] Starting requestAnimationFrame loop after delay.
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 0, Eased: 0.00, Player Offset (DOM): 697.748, NPC Offset (DOM): 738.49, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 16, Eased: 0.01, Player Offset (DOM): 690.044, NPC Offset (DOM): 730.336, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 33, Eased: 0.02, Player Offset (DOM): 682.341, NPC Offset (DOM): 722.182, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 49, Eased: 0.03, Player Offset (DOM): 674.726, NPC Offset (DOM): 714.123, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 66, Eased: 0.04, Player Offset (DOM): 667.109, NPC Offset (DOM): 706.061, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 83, Eased: 0.05, Player Offset (DOM): 659.489, NPC Offset (DOM): 697.997, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 99, Eased: 0.07, Player Offset (DOM): 652.048, NPC Offset (DOM): 690.121, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 116, Eased: 0.08, Player Offset (DOM): 644.516, NPC Offset (DOM): 682.149, Points Index (state): -1, Points Index (ref): 0
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 133, Eased: 0.09, Player Offset (DOM): 637.116, NPC Offset (DOM): 674.317, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 149, Eased: 0.10, Player Offset (DOM): 629.759, NPC Offset (DOM): 666.53, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 166, Eased: 0.11, Player Offset (DOM): 622.4, NPC Offset (DOM): 658.742, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 183, Eased: 0.12, Player Offset (DOM): 615.129, NPC Offset (DOM): 651.046, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 199, Eased: 0.13, Player Offset (DOM): 607.856, NPC Offset (DOM): 643.349, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 216, Eased: 0.14, Player Offset (DOM): 600.627, NPC Offset (DOM): 635.698, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 233, Eased: 0.15, Player Offset (DOM): 593.442, NPC Offset (DOM): 628.092, Points Index (state): -1, Points Index (ref): 1
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 250, Eased: 0.16, Player Offset (DOM): 586.299, NPC Offset (DOM): 620.533, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 266, Eased: 0.17, Player Offset (DOM): 579.2, NPC Offset (DOM): 613.019, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 283, Eased: 0.18, Player Offset (DOM): 572.186, NPC Offset (DOM): 605.596, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 299, Eased: 0.19, Player Offset (DOM): 565.215, NPC Offset (DOM): 598.217, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 316, Eased: 0.20, Player Offset (DOM): 558.161, NPC Offset (DOM): 590.752, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 333, Eased: 0.21, Player Offset (DOM): 551.318, NPC Offset (DOM): 583.509, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 349, Eased: 0.22, Player Offset (DOM): 544.475, NPC Offset (DOM): 576.267, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 366, Eased: 0.23, Player Offset (DOM): 537.635, NPC Offset (DOM): 569.027, Points Index (state): -1, Points Index (ref): 2
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 383, Eased: 0.24, Player Offset (DOM): 530.837, NPC Offset (DOM): 561.833, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 399, Eased: 0.25, Player Offset (DOM): 524.124, NPC Offset (DOM): 554.727, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 416, Eased: 0.26, Player Offset (DOM): 517.372, NPC Offset (DOM): 547.582, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 433, Eased: 0.27, Player Offset (DOM): 510.745, NPC Offset (DOM): 540.567, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 450, Eased: 0.28, Player Offset (DOM): 504.12, NPC Offset (DOM): 533.555, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 466, Eased: 0.29, Player Offset (DOM): 497.578, NPC Offset (DOM): 526.631, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 483, Eased: 0.30, Player Offset (DOM): 491.04, NPC Offset (DOM): 519.711, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 499, Eased: 0.31, Player Offset (DOM): 484.583, NPC Offset (DOM): 512.878, Points Index (state): -1, Points Index (ref): 3
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 516, Eased: 0.31, Player Offset (DOM): 478.131, NPC Offset (DOM): 506.049, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 533, Eased: 0.32, Player Offset (DOM): 471.722, NPC Offset (DOM): 499.266, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 549, Eased: 0.33, Player Offset (DOM): 465.394, NPC Offset (DOM): 492.569, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 566, Eased: 0.34, Player Offset (DOM): 459.072, NPC Offset (DOM): 485.877, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 583, Eased: 0.35, Player Offset (DOM): 452.83, NPC Offset (DOM): 479.27, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 600, Eased: 0.36, Player Offset (DOM): 446.556, NPC Offset (DOM): 472.63, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 616, Eased: 0.37, Player Offset (DOM): 440.363, NPC Offset (DOM): 466.076, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 633, Eased: 0.38, Player Offset (DOM): 434.25, NPC Offset (DOM): 459.606, Points Index (state): -1, Points Index (ref): 4
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 649, Eased: 0.39, Player Offset (DOM): 428.18, NPC Offset (DOM): 453.181, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 666, Eased: 0.40, Player Offset (DOM): 422.08, NPC Offset (DOM): 446.725, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 683, Eased: 0.40, Player Offset (DOM): 416.059, NPC Offset (DOM): 440.353, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 699, Eased: 0.41, Player Offset (DOM): 410.154, NPC Offset (DOM): 434.103, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 716, Eased: 0.42, Player Offset (DOM): 404.219, NPC Offset (DOM): 427.822, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 733, Eased: 0.43, Player Offset (DOM): 398.328, NPC Offset (DOM): 421.587, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 750, Eased: 0.44, Player Offset (DOM): 392.481, NPC Offset (DOM): 415.398, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 766, Eased: 0.45, Player Offset (DOM): 386.745, NPC Offset (DOM): 409.327, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 783, Eased: 0.45, Player Offset (DOM): 380.949, NPC Offset (DOM): 403.193, Points Index (state): -1, Points Index (ref): 5
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 800, Eased: 0.46, Player Offset (DOM): 375.197, NPC Offset (DOM): 397.104, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 816, Eased: 0.47, Player Offset (DOM): 369.59, NPC Offset (DOM): 391.17, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 833, Eased: 0.48, Player Offset (DOM): 363.924, NPC Offset (DOM): 385.173, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 850, Eased: 0.49, Player Offset (DOM): 358.369, NPC Offset (DOM): 379.294, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 866, Eased: 0.49, Player Offset (DOM): 352.823, NPC Offset (DOM): 373.424, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 883, Eased: 0.50, Player Offset (DOM): 347.321, NPC Offset (DOM): 367.601, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 900, Eased: 0.51, Player Offset (DOM): 341.894, NPC Offset (DOM): 361.857, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 916, Eased: 0.52, Player Offset (DOM): 336.478, NPC Offset (DOM): 356.125, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 933, Eased: 0.53, Player Offset (DOM): 331.105, NPC Offset (DOM): 350.438, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 950, Eased: 0.53, Player Offset (DOM): 325.807, NPC Offset (DOM): 344.831, Points Index (state): -1, Points Index (ref): 6
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 966, Eased: 0.54, Player Offset (DOM): 320.521, NPC Offset (DOM): 339.236, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 983, Eased: 0.55, Player Offset (DOM): 315.308, NPC Offset (DOM): 333.719, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 999, Eased: 0.56, Player Offset (DOM): 310.139, NPC Offset (DOM): 328.248, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1016, Eased: 0.56, Player Offset (DOM): 304.951, NPC Offset (DOM): 322.757, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1033, Eased: 0.57, Player Offset (DOM): 299.867, NPC Offset (DOM): 317.376, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1049, Eased: 0.58, Player Offset (DOM): 294.826, NPC Offset (DOM): 312.041, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1066, Eased: 0.58, Player Offset (DOM): 289.769, NPC Offset (DOM): 306.688, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1083, Eased: 0.59, Player Offset (DOM): 284.814, NPC Offset (DOM): 301.444, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1100, Eased: 0.60, Player Offset (DOM): 279.872, NPC Offset (DOM): 296.214, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1116, Eased: 0.61, Player Offset (DOM): 275.003, NPC Offset (DOM): 291.061, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1133, Eased: 0.61, Player Offset (DOM): 270.148, NPC Offset (DOM): 285.922, Points Index (state): -1, Points Index (ref): 7
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1149, Eased: 0.62, Player Offset (DOM): 265.365, NPC Offset (DOM): 280.859, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1166, Eased: 0.63, Player Offset (DOM): 260.596, NPC Offset (DOM): 275.812, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1183, Eased: 0.63, Player Offset (DOM): 255.842, NPC Offset (DOM): 270.78, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1200, Eased: 0.64, Player Offset (DOM): 251.187, NPC Offset (DOM): 265.854, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1216, Eased: 0.65, Player Offset (DOM): 246.548, NPC Offset (DOM): 260.944, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1233, Eased: 0.65, Player Offset (DOM): 241.952, NPC Offset (DOM): 256.079, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1250, Eased: 0.66, Player Offset (DOM): 237.426, NPC Offset (DOM): 251.289, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1266, Eased: 0.67, Player Offset (DOM): 232.943, NPC Offset (DOM): 246.545, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1283, Eased: 0.67, Player Offset (DOM): 228.476, NPC Offset (DOM): 241.817, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1299, Eased: 0.68, Player Offset (DOM): 224.079, NPC Offset (DOM): 237.163, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1316, Eased: 0.69, Player Offset (DOM): 219.698, NPC Offset (DOM): 232.527, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1333, Eased: 0.69, Player Offset (DOM): 215.361, NPC Offset (DOM): 227.936, Points Index (state): -1, Points Index (ref): 8
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1350, Eased: 0.70, Player Offset (DOM): 211.067, NPC Offset (DOM): 223.391, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1366, Eased: 0.70, Player Offset (DOM): 206.841, NPC Offset (DOM): 218.919, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1383, Eased: 0.71, Player Offset (DOM): 202.633, NPC Offset (DOM): 214.465, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1400, Eased: 0.72, Player Offset (DOM): 198.469, NPC Offset (DOM): 210.057, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1416, Eased: 0.72, Player Offset (DOM): 194.372, NPC Offset (DOM): 205.721, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1433, Eased: 0.73, Player Offset (DOM): 190.293, NPC Offset (DOM): 201.405, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1450, Eased: 0.73, Player Offset (DOM): 186.234, NPC Offset (DOM): 197.108, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1466, Eased: 0.74, Player Offset (DOM): 182.266, NPC Offset (DOM): 192.909, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1483, Eased: 0.74, Player Offset (DOM): 178.317, NPC Offset (DOM): 188.729, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1500, Eased: 0.75, Player Offset (DOM): 174.435, NPC Offset (DOM): 184.62, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1516, Eased: 0.76, Player Offset (DOM): 170.573, NPC Offset (DOM): 180.532, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1533, Eased: 0.76, Player Offset (DOM): 166.753, NPC Offset (DOM): 176.49, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1550, Eased: 0.77, Player Offset (DOM): 163, NPC Offset (DOM): 172.518, Points Index (state): -1, Points Index (ref): 9
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1566, Eased: 0.77, Player Offset (DOM): 159.267, NPC Offset (DOM): 168.567, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1583, Eased: 0.78, Player Offset (DOM): 155.599, NPC Offset (DOM): 164.685, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1599, Eased: 0.78, Player Offset (DOM): 151.974, NPC Offset (DOM): 160.848, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1616, Eased: 0.79, Player Offset (DOM): 148.349, NPC Offset (DOM): 157.011, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1633, Eased: 0.79, Player Offset (DOM): 144.81, NPC Offset (DOM): 153.265, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1649, Eased: 0.80, Player Offset (DOM): 141.313, NPC Offset (DOM): 149.565, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1666, Eased: 0.80, Player Offset (DOM): 137.818, NPC Offset (DOM): 145.865, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1683, Eased: 0.81, Player Offset (DOM): 134.387, NPC Offset (DOM): 142.234, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1699, Eased: 0.81, Player Offset (DOM): 131.04, NPC Offset (DOM): 138.692, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1716, Eased: 0.82, Player Offset (DOM): 127.656, NPC Offset (DOM): 135.109, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1733, Eased: 0.82, Player Offset (DOM): 124.394, NPC Offset (DOM): 131.657, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1749, Eased: 0.83, Player Offset (DOM): 121.155, NPC Offset (DOM): 128.229, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1766, Eased: 0.83, Player Offset (DOM): 117.92, NPC Offset (DOM): 124.806, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1783, Eased: 0.84, Player Offset (DOM): 114.748, NPC Offset (DOM): 121.448, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1800, Eased: 0.84, Player Offset (DOM): 111.638, NPC Offset (DOM): 118.157, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1816, Eased: 0.84, Player Offset (DOM): 108.534, NPC Offset (DOM): 114.872, Points Index (state): -1, Points Index (ref): 10
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1833, Eased: 0.85, Player Offset (DOM): 105.528, NPC Offset (DOM): 111.69, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1850, Eased: 0.85, Player Offset (DOM): 102.529, NPC Offset (DOM): 108.515, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1866, Eased: 0.86, Player Offset (DOM): 99.5902, NPC Offset (DOM): 105.405, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1883, Eased: 0.86, Player Offset (DOM): 96.677, NPC Offset (DOM): 102.322, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1899, Eased: 0.87, Player Offset (DOM): 93.8241, NPC Offset (DOM): 99.3025, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1916, Eased: 0.87, Player Offset (DOM): 90.9803, NPC Offset (DOM): 96.2926, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1933, Eased: 0.87, Player Offset (DOM): 88.2134, NPC Offset (DOM): 93.3641, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1949, Eased: 0.88, Player Offset (DOM): 85.4892, NPC Offset (DOM): 90.4808, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1966, Eased: 0.88, Player Offset (DOM): 82.7756, NPC Offset (DOM): 87.6089, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 1983, Eased: 0.89, Player Offset (DOM): 80.1374, NPC Offset (DOM): 84.8166, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2000, Eased: 0.89, Player Offset (DOM): 77.5264, NPC Offset (DOM): 82.0531, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2016, Eased: 0.89, Player Offset (DOM): 74.9586, NPC Offset (DOM): 79.3354, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2033, Eased: 0.90, Player Offset (DOM): 72.434, NPC Offset (DOM): 76.6634, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2049, Eased: 0.90, Player Offset (DOM): 69.9822, NPC Offset (DOM): 74.0685, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2066, Eased: 0.90, Player Offset (DOM): 67.5292, NPC Offset (DOM): 71.4722, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2083, Eased: 0.91, Player Offset (DOM): 65.1341, NPC Offset (DOM): 68.9373, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2100, Eased: 0.91, Player Offset (DOM): 62.7823, NPC Offset (DOM): 66.4481, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2116, Eased: 0.91, Player Offset (DOM): 60.4874, NPC Offset (DOM): 64.0192, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2133, Eased: 0.92, Player Offset (DOM): 58.2218, NPC Offset (DOM): 61.6214, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2149, Eased: 0.92, Player Offset (DOM): 56.0258, NPC Offset (DOM): 59.2971, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2166, Eased: 0.92, Player Offset (DOM): 53.8203, NPC Offset (DOM): 56.9629, Points Index (state): -1, Points Index (ref): 11
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2183, Eased: 0.93, Player Offset (DOM): 51.6971, NPC Offset (DOM): 54.7157, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2200, Eased: 0.93, Player Offset (DOM): 49.6167, NPC Offset (DOM): 52.5138, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2216, Eased: 0.93, Player Offset (DOM): 47.5546, NPC Offset (DOM): 50.3313, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2233, Eased: 0.93, Player Offset (DOM): 45.5601, NPC Offset (DOM): 48.2204, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2250, Eased: 0.94, Player Offset (DOM): 43.6083, NPC Offset (DOM): 46.1546, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2266, Eased: 0.94, Player Offset (DOM): 41.6879, NPC Offset (DOM): 44.1221, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2283, Eased: 0.94, Player Offset (DOM): 39.8218, NPC Offset (DOM): 42.147, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2300, Eased: 0.95, Player Offset (DOM): 37.9877, NPC Offset (DOM): 40.2057, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2316, Eased: 0.95, Player Offset (DOM): 36.1967, NPC Offset (DOM): 38.3102, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2333, Eased: 0.95, Player Offset (DOM): 34.449, NPC Offset (DOM): 36.4605, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2350, Eased: 0.95, Player Offset (DOM): 32.7546, NPC Offset (DOM): 34.6671, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2366, Eased: 0.96, Player Offset (DOM): 31.0931, NPC Offset (DOM): 32.9086, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2383, Eased: 0.96, Player Offset (DOM): 29.4844, NPC Offset (DOM): 31.206, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2400, Eased: 0.96, Player Offset (DOM): 27.9092, NPC Offset (DOM): 29.5388, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2416, Eased: 0.96, Player Offset (DOM): 26.3681, NPC Offset (DOM): 27.9078, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2433, Eased: 0.96, Player Offset (DOM): 24.8972, NPC Offset (DOM): 26.3509, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2450, Eased: 0.97, Player Offset (DOM): 23.4514, NPC Offset (DOM): 24.8207, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2466, Eased: 0.97, Player Offset (DOM): 22.0571, NPC Offset (DOM): 23.3451, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2483, Eased: 0.97, Player Offset (DOM): 20.6976, NPC Offset (DOM): 21.9061, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2500, Eased: 0.97, Player Offset (DOM): 19.3735, NPC Offset (DOM): 20.5047, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2516, Eased: 0.97, Player Offset (DOM): 18.1007, NPC Offset (DOM): 19.1576, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2533, Eased: 0.98, Player Offset (DOM): 16.8784, NPC Offset (DOM): 17.8639, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2550, Eased: 0.98, Player Offset (DOM): 15.6988, NPC Offset (DOM): 16.6154, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2566, Eased: 0.98, Player Offset (DOM): 14.5552, NPC Offset (DOM): 15.4051, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2583, Eased: 0.98, Player Offset (DOM): 13.4548, NPC Offset (DOM): 14.2405, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2599, Eased: 0.98, Player Offset (DOM): 12.4101, NPC Offset (DOM): 13.1347, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2616, Eased: 0.98, Player Offset (DOM): 11.3898, NPC Offset (DOM): 12.0548, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2633, Eased: 0.99, Player Offset (DOM): 10.4246, NPC Offset (DOM): 11.0333, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2650, Eased: 0.99, Player Offset (DOM): 9.4967, NPC Offset (DOM): 10.0512, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2666, Eased: 0.99, Player Offset (DOM): 8.61204, NPC Offset (DOM): 9.1149, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2683, Eased: 0.99, Player Offset (DOM): 7.77063, NPC Offset (DOM): 8.22435, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2700, Eased: 0.99, Player Offset (DOM): 6.97711, NPC Offset (DOM): 7.3845, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2716, Eased: 0.99, Player Offset (DOM): 6.22193, NPC Offset (DOM): 6.58522, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2733, Eased: 0.99, Player Offset (DOM): 5.50585, NPC Offset (DOM): 5.82734, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2750, Eased: 0.99, Player Offset (DOM): 4.84516, NPC Offset (DOM): 5.12807, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2766, Eased: 0.99, Player Offset (DOM): 4.21945, NPC Offset (DOM): 4.46582, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2783, Eased: 0.99, Player Offset (DOM): 3.63362, NPC Offset (DOM): 3.84579, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2800, Eased: 1.00, Player Offset (DOM): 3.10086, NPC Offset (DOM): 3.28191, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2816, Eased: 1.00, Player Offset (DOM): 2.60177, NPC Offset (DOM): 2.75369, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2833, Eased: 1.00, Player Offset (DOM): 2.15162, NPC Offset (DOM): 2.27725, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2850, Eased: 1.00, Player Offset (DOM): 1.74186, NPC Offset (DOM): 1.84357, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2866, Eased: 1.00, Player Offset (DOM): 1.37741, NPC Offset (DOM): 1.45784, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2883, Eased: 1.00, Player Offset (DOM): 1.0557, NPC Offset (DOM): 1.11734, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2900, Eased: 1.00, Player Offset (DOM): 0.775152, NPC Offset (DOM): 0.820413, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2916, Eased: 1.00, Player Offset (DOM): 0.537852, NPC Offset (DOM): 0.569257, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2933, Eased: 1.00, Player Offset (DOM): 0.342764, NPC Offset (DOM): 0.362778, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2950, Eased: 1.00, Player Offset (DOM): 0.193757, NPC Offset (DOM): 0.20507, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2966, Eased: 1.00, Player Offset (DOM): 0.0864453, NPC Offset (DOM): 0.0914928, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 2983, Eased: 1.00, Player Offset (DOM): 0.0213429, NPC Offset (DOM): 0.0225891, Points Index (state): -1, Points Index (ref): 12
+ConsciousnessTrendChart.js:129 [CTCDebug] Points Visible Index updated (via ref): 13
+ConsciousnessTrendChart.js:132 [CTCDebug] Frame: 3000, Eased: 1.00, Player Offset (DOM): 0, NPC Offset (DOM): 0, Points Index (state): -1, Points Index (ref): 13
