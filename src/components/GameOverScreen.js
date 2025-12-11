@@ -9,7 +9,7 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
       <h2>勝者: {winnerName}</h2>
       
       <div className="chart-container">
-        <h3>意識推移チャート</h3>
+        <h3>あなたの"歴史"</h3>
         <ConsciousnessTrendChart turnHistory={turnHistory} gameState={gameState} />
       </div>
 
