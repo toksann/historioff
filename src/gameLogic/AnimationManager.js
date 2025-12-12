@@ -9,6 +9,7 @@ class AnimationManager {
     constructor() {
         // 演出キュー（変化演出用）
         this.animationQueue = [];
+        this.isProcessingTransientAnimation = false;
         
         // 現在実行中の演出
         this.activeAnimations = new Set();
@@ -136,44 +137,26 @@ class AnimationManager {
 
         const animationId = Date.now() + Math.random();
         
-        try {
-            // 演出をキューに追加
-            const animation = {
-                id: animationId,
-                type: 'transient',
-                effectType,
-                target,
-                params,
-                timestamp: Date.now()
-            };
-            
-            console.log('🎮GAME_ANIM [AnimationManager] Creating animation object:', animation);
-            
-            // システム演出かどうかで処理を分岐
-            if (this.isSystemAnimation(effectType)) {
-                console.log('🎮GAME_ANIM [AnimationManager] System animation detected:', effectType);
-                return await this.queueSystemAnimation(animation);
-            } else {
-                // 通常の演出
-                this.animationQueue.push(animation);
-                console.log('🎮GAME_ANIM [AnimationManager] Animation queued:', effectType, 'Queue length:', this.animationQueue.length);
-                
-                // 演出を実行
-                console.log('🎮GAME_ANIM [AnimationManager] About to call executeAnimation...');
-                try {
-                    const result = await this.executeAnimation(animation);
-                    console.log('🎮GAME_ANIM [AnimationManager] executeAnimation returned:', result);
-                    return result;
-                } catch (executeError) {
-                    console.error('🎮GAME_ANIM [AnimationManager] executeAnimation threw error:', executeError);
-                    console.error('🎮GAME_ANIM [AnimationManager] Error stack:', executeError.stack);
-                    throw executeError;
-                }
-            }
-        } catch (error) {
-            console.error('🎬ANIM [Error] Failed to trigger effect:', effectType, error);
-            this.errors.push({ effectType, error, timestamp: Date.now() });
-            return { success: false, error: error.message };
+        // 演出をキューに追加
+        const animation = {
+            id: animationId,
+            type: 'transient',
+            effectType,
+            target,
+            params,
+            timestamp: Date.now()
+        };
+        
+        console.log('🎮GAME_ANIM [AnimationManager] Creating animation object:', animation);
+        
+        // システム演出かどうかで処理を分岐
+        if (this.isSystemAnimation(effectType)) {
+            console.log('🎮GAME_ANIM [AnimationManager] System animation detected:', effectType);
+            return this.queueSystemAnimation(animation);
+        } else {
+            // 通常の演出
+            return this.queueTransientAnimation(animation);
+
         }
     }
 
@@ -195,6 +178,40 @@ class AnimationManager {
             // キューの処理を開始
             this.processSystemAnimationQueue();
         });
+    }
+
+    async queueTransientAnimation(animation) {
+        return new Promise((resolve) => {
+            this.animationQueue.push({ animation, resolve });
+            this.processTransientAnimationQueue();
+        });
+    }
+
+    async processTransientAnimationQueue() {
+        if (this.isProcessingTransientAnimation) return;
+        if (this.animationQueue.length === 0) return;
+
+        this.isProcessingTransientAnimation = true;
+
+        while (this.animationQueue.length > 0) {
+            const { animation, resolve } = this.animationQueue.shift();
+            try {
+                // アニメーションの完了を待たずに実行し、Promiseの解決を呼び出し元に任せる
+                this.executeAnimation(animation).then(resolve);
+
+                // アニメーション開始直後に遅延を適用
+                const delay = animation.params?.delay > 0 ? animation.params.delay : 0;
+                if (delay > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                }
+                console.log('🎮GAME_ANIM [AnimationManager] Processing transient animation:', animation.effectType, 'Remaining in queue:', this.animationQueue.length, 'delay:',delay);
+            } catch (error) {
+                console.error('Error processing transient animation:', error);
+                resolve({ success: false, error: error.message });
+            }
+        }
+
+        this.isProcessingTransientAnimation = false;
     }
 
     /**
@@ -224,8 +241,15 @@ class AnimationManager {
             console.log('🎮GAME_ANIM [SystemQueue] Processing system animation:', animation.effectType, 'Remaining in queue:', this.systemAnimationQueue.length);
             
             try {
-                const result = await this.executeAnimation(animation);
-                resolve(result);
+                // アニメーションの完了を待たずに実行
+                this.executeAnimation(animation).then(resolve);
+    
+                // アニメーション開始直後に遅延を適用
+                const delay = animation.params?.delay > 0 ? animation.params.delay : 0;
+                if (delay > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                }
+
             } catch (error) {
                 console.error('🎮GAME_ANIM [SystemQueue] Error processing system animation:', error);
                 resolve({ success: false, error: error.message });
@@ -468,6 +492,13 @@ class AnimationManager {
             
             try {
                 const result = await this.animateCardDraw(animation.target, animation.params);
+
+                // アニメーション完了後に指定されたディレイを適用 (デフォルト0ms)
+                const delay = animation.params?.delay > 0 ? animation.params.delay : 0;
+                if (delay > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                }
+
                 animation.resolve(result);
             } catch (error) {
                 console.error('🎬ANIM [Queue] Error processing draw animation:', error);
@@ -506,6 +537,13 @@ class AnimationManager {
             
             try {
                 const result = await this.animateCardPlay(animation.target, animation.params);
+
+                // アニメーション完了後に指定されたディレイを適用 (デフォルト0ms)
+                const delay = animation.params?.delay > 0 ? animation.params.delay : 0;
+                if (delay > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                }
+
                 animation.resolve(result);
             } catch (error) {
                 console.error('🎬ANIM [Queue] Error processing animation:', error);
@@ -524,7 +562,6 @@ class AnimationManager {
      * @returns {Promise<Object>} 実行結果
      */
     async animateCardPlay(target, params = {}) {
-        console.log('🔥ANIM_DEBUG [CardPlay] Starting "ドンッと置く" card play animation');
         console.log('🔥ANIM_DEBUG [CardPlay] Target element:', target);
         
         return new Promise((resolve) => {
@@ -1232,51 +1269,18 @@ class AnimationManager {
      * @param {Object} params - パラメータ
      * @returns {Promise<Object>} 実行結果
      */
-    async animateCardDamage(target, params = {}) {
-        // 強制ログ - 必ず出力される
-        console.log('🚨 FORCE_LOG: animateCardDamage method called!');
-        console.log('🚨 FORCE_LOG: target:', !!target);
-        console.log('🚨 FORCE_LOG: params:', params);
-        
-        // 戦士と略奪を区別するログ
-        const sourceCardName = params.sourceCard ? params.sourceCard.name : 'Unknown';
-        const debugPrefix = sourceCardName === '戦士' ? '🔥WARRIOR_DAMAGE' : sourceCardName === '略奪' ? '🔥LOOTING_DAMAGE' : '🎬ANIM';
-        
-        console.log('🚨 FORCE_LOG: sourceCardName:', sourceCardName);
-        console.log('🚨 FORCE_LOG: debugPrefix:', debugPrefix);
-        
-        console.log(`${debugPrefix} [CardDamage] *** STARTING DAMAGE ANIMATION ***`);
-        console.log(`${debugPrefix} [CardDamage] Source card:`, sourceCardName);
-        console.log(`${debugPrefix} [CardDamage] Target element:`, target);
-        console.log(`${debugPrefix} [CardDamage] Target tagName:`, target ? target.tagName : 'null');
-        console.log(`${debugPrefix} [CardDamage] Target className:`, target ? target.className : 'null');
-        console.log(`${debugPrefix} [CardDamage] Target cardId:`, target ? target.dataset.cardId : 'null');
-        console.log(`${debugPrefix} [CardDamage] Params:`, params);
-        
+    async animateCardDamage(target, params = {}) {        
         return new Promise((resolve) => {
             if (!target) {
-                console.warn(`${debugPrefix} [CardDamage] Target element not found`);
                 resolve({ success: false, reason: 'Element not found' });
                 return;
             }
-            
-            // DOM要素の詳細状態をログ
-            console.log(`${debugPrefix} [CardDamage] Target computed style display:`, window.getComputedStyle(target).display);
-            console.log(`${debugPrefix} [CardDamage] Target computed style visibility:`, window.getComputedStyle(target).visibility);
-            console.log(`${debugPrefix} [CardDamage] Target computed style opacity:`, window.getComputedStyle(target).opacity);
-            console.log(`${debugPrefix} [CardDamage] Target offsetWidth:`, target.offsetWidth);
-            console.log(`${debugPrefix} [CardDamage] Target offsetHeight:`, target.offsetHeight);
             
             // 重複演出チェック
             const cardId = target.dataset.cardId;
             const elementKey = `card-${cardId}`;
             
-            console.log(`${debugPrefix} [CardDamage] Card ID:`, cardId);
-            console.log(`${debugPrefix} [CardDamage] Element key:`, elementKey);
-            console.log(`${debugPrefix} [CardDamage] Active animations:`, this.activeElementAnimations);
-            
             if (this.activeElementAnimations.has(elementKey)) {
-                console.log(`${debugPrefix} [CardDamage] Animation already running for card, extending duration:`, cardId);
                 const existingAnimation = this.activeElementAnimations.get(elementKey);
                 if (existingAnimation && existingAnimation.type === 'damage') {
                     resolve({ success: true, reason: 'Extended existing animation' });
@@ -1286,39 +1290,20 @@ class AnimationManager {
             
             // 実行中演出として記録
             this.activeElementAnimations.set(elementKey, { type: 'damage' });
-            console.log(`${debugPrefix} [CardDamage] Added to active animations:`, elementKey);
             
             // 既存のアニメーションクラスをクリア
-            console.log(`${debugPrefix} [CardDamage] Classes before clear:`, target.className);
             target.classList.remove('card-damage-animation', 'card-heal-animation');
-            console.log(`${debugPrefix} [CardDamage] Classes after clear:`, target.className);
-            
-            console.log(`${debugPrefix} [CardDamage] *** ADDING DAMAGE ANIMATION CLASS ***`);
             
             // 振動・点滅演出を開始
             target.classList.add('card-damage-animation');
-            console.log(`${debugPrefix} [CardDamage] Classes after add:`, target.className);
-            
-            // CSSアニメーションが適用されているかチェック
-            setTimeout(() => {
-                const computedStyle = window.getComputedStyle(target);
-                console.log(`${debugPrefix} [CardDamage] Animation name:`, computedStyle.animationName);
-                console.log(`${debugPrefix} [CardDamage] Animation duration:`, computedStyle.animationDuration);
-                console.log(`${debugPrefix} [CardDamage] Animation play state:`, computedStyle.animationPlayState);
-            }, 50);
             
             // アニメーション完了を待つ
             setTimeout(() => {
-                console.log(`${debugPrefix} [CardDamage] *** ANIMATION TIMEOUT REACHED ***`);
-                console.log(`${debugPrefix} [CardDamage] About to remove animation class`);
-                
                 // アニメーションクラスを削除
                 target.classList.remove('card-damage-animation');
-                console.log(`${debugPrefix} [CardDamage] Classes after remove:`, target.className);
                 
                 // 実行中演出から削除
                 this.activeElementAnimations.delete(elementKey);
-                console.log(`${debugPrefix} [CardDamage] Removed from active animations:`, elementKey);
                 
                 // カードの演出完了を記録し、待機中の破壊演出があれば実行
                 const cardId = target.dataset?.cardId;
@@ -1328,8 +1313,6 @@ class AnimationManager {
                 
                 // 演出完了時にすべてのカードの可視化を復元
                 this.restoreAllCardVisibility();
-                
-                console.log(`${debugPrefix} [CardDamage] *** ANIMATION COMPLETED SUCCESSFULLY ***`);
                 resolve({ success: true, duration: 800 });
             }, 800); // CSS animationの時間と合わせる
         });

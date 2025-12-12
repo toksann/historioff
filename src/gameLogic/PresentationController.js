@@ -172,7 +172,7 @@ class PresentationController {
             setTimeout(() => {
                 element.classList.remove('card-damage-animation');
                 resolve();
-            }, 1200);
+            }, 800);
         });
     }
 
@@ -295,9 +295,9 @@ class PresentationController {
                 case 'MOVE_CARD':
                     await this.handleCardMove(effect, sourceCard);
                     break;
-                    
-                case 'CARD_DURABILITY_CHANGED':
-                    // 最終的な耐久値変化結果で演出を実行（重複防止）
+                
+                case 'DAMAGE_THIS':
+                case 'BOOST_THIS':
                     await this.handleCardDurabilityChange(effect, sourceCard);
                     break;
                     
@@ -458,7 +458,7 @@ class PresentationController {
                 
                 if (target) {
                     
-                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
+                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard, delay: 500 });
                 } else {
 
                 }
@@ -477,7 +477,7 @@ class PresentationController {
                 
                 if (target) {
                     
-                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
+                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard, delay: 500 });
                 } else {
                     
                 }
@@ -489,7 +489,7 @@ class PresentationController {
             setTimeout(async () => {
                 const target = document.querySelector(`[data-card-id="${cardId}"]`);
                 if (target) {
-                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard });
+                    await this.animationManager.triggerTransientEffect('CARD_PLAY', target, { effect, sourceCard, delay: 500 });
                 }
             }, 50);
         }
@@ -521,19 +521,19 @@ class PresentationController {
      */
     async handleCardDurabilityChange(effect, sourceCard) {
         try {
-            const cardId = effect.args.card_id;
+            const cardId = effect.args.damaged_card_id || effect.args.boosted_card_id;
             const target = document.querySelector(`[data-card-id="${cardId}"]`);
         
         
         
         
-        // 変化量を取得（複数のフィールドから）
-        const changeAmount = effect.args.amount || effect.args.actual_amount || effect.args.original_amount || 0;
+            // 変化量を取得（複数のフィールドから）
+            const changeAmount = effect.args.damage_amount || effect.args.boost_amount || 0;
         
         
-        if (target) {
+            if (target) {
             
-            const result = await this.animationManager.triggerTransientEffect('CARD_DAMAGE', target, { effect, sourceCard });
+                const result = await this.animationManager.triggerTransientEffect('CARD_DAMAGE', target, { effect: { ...effect, args: { ...effect.args, amount: changeAmount } }, sourceCard, delay: 500 });
             
             // ゲームロジックを再開
             if (this.gameLogicPaused) {
@@ -548,273 +548,282 @@ class PresentationController {
         } catch (error) {
         }
     }
-
-    /**
-     * カード破壊演出を処理
-     */
-    async handleCardDestroy(effect, sourceCard) {
-        const cardId = effect.args.card_id;
-        const target = document.querySelector(`[data-card-id="${cardId}"]`);
-        
-        
-        
-        
-        if (target) {
-            await this.animationManager.triggerTransientEffect('CARD_DESTROY', target, { effect, sourceCard });
-        } else {
-            console.warn('🎭 [Presentation] Card element not found for destroy:', cardId);
+    
+        /**
+         * カード破壊演出を処理
+         */
+        async handleCardDestroy(effect, sourceCard) {
+            const cardId = effect.args.card_id;
+            const target = document.querySelector(`[data-card-id="${cardId}"]`);
+            
+            
+            
+            
+            if (target) {
+                await this.animationManager.triggerTransientEffect('CARD_DESTROY', target, { effect, sourceCard, delay: 500 });
+            } else {
+                console.warn('🎭 [Presentation] Card element not found for destroy:', cardId);
+            }
         }
-    }
-
-    /**
-     * リソース変化演出を処理
-     */
-    async handleResourceChange(effect, sourceCard) {
-        const playerId = effect.args.player_id;
-        const resourceType = effect.effect_type.includes('CONSCIOUSNESS') ? 'consciousness' : 'scale';
-        
-        
-        
-        
-        // 変化量を取得（複数のフィールドから）
-        const changeAmount = effect.args.amount || effect.args.actual_amount || effect.args.original_amount || 0;
-        
-        
-        // プレイヤーのリソース表示要素を取得
-        const playerElement = document.querySelector(`[data-player-id="${playerId}"]`);
-        
-        
-        if (playerElement) {
-            // より具体的なセレクターを試行
-            const resourceSelectors = [
-                `.${resourceType}`,
-                `.player-${resourceType}`,
-                `[data-resource="${resourceType}"]`,
-                `.resource-${resourceType}`,
-                `.stat-${resourceType}`
+    
+        /**
+         * リソース変化演出を処理
+         */
+        async handleResourceChange(effect, sourceCard) {
+            const playerId = effect.args.player_id;
+            const resourceType = effect.effect_type.includes('CONSCIOUSNESS') ? 'consciousness' : 'scale';
+            
+            
+            
+            
+            // 変化量を取得（複数のフィールドから）
+            const changeAmount = effect.args.amount || effect.args.actual_amount || effect.args.original_amount || 0;
+            
+            
+            // プレイヤーのリソース表示要素を取得
+            const playerElement = document.querySelector(`[data-player-id="${playerId}"]`);
+            
+            
+            if (playerElement) {
+                // より具体的なセレクターを試行
+                const resourceSelectors = [
+                    `.${resourceType}`,
+                    `.player-${resourceType}`,
+                    `[data-resource="${resourceType}"]`,
+                    `.resource-${resourceType}`,
+                    `.stat-${resourceType}`
+                ];
+                
+                let resourceElement = null;
+                for (const selector of resourceSelectors) {
+                    resourceElement = playerElement.querySelector(selector);
+                    
+                    if (resourceElement) break;
+                }
+                
+                if (resourceElement) {
+                    const effectType = effect.effect_type.includes('CONSCIOUSNESS') ? 'CONSCIOUSNESS_CHANGE_RESULT' : 'SCALE_CHANGE_RESULT';
+                    
+                    await this.animationManager.triggerTransientEffect(effectType, resourceElement, { effect, sourceCard });
+                } else {
+                    console.warn('🔥ANIM_DEBUG [Presentation] Resource element not found with any selector');
+                    
+                    
+                }
+            } else {
+                console.warn('🔥ANIM_DEBUG [Presentation] Player element not found:', playerId);
+            }
+        }
+    
+        /**
+         * カードを即座に隠す（DOM更新前）
+         * @param {string} cardId - カードID
+         */
+        hideCardImmediately(cardId) {
+            // 複数の方法でカードを検索・隠蔽
+            const selectors = [
+                `[data-card-id="${cardId}"]`,
+                `#${cardId}`
             ];
             
-            let resourceElement = null;
-            for (const selector of resourceSelectors) {
-                resourceElement = playerElement.querySelector(selector);
-                
-                if (resourceElement) break;
+            for (const selector of selectors) {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(element => {
+                    
+                    // より強力な隠蔽
+                    element.style.setProperty('visibility', 'hidden', 'important');
+                    element.style.setProperty('opacity', '0', 'important');
+                    element.style.setProperty('transform', 'scale(0)', 'important');
+                    element.classList.add('card-animation-hidden');
+                    
+                    // 親要素も隠す（必要に応じて）
+                    const parent = element.parentElement;
+                    if (parent && parent.classList.contains('card-container')) {
+                        parent.style.setProperty('visibility', 'hidden', 'important');
+                    }
+                });
             }
             
-            if (resourceElement) {
-                const effectType = effect.effect_type.includes('CONSCIOUSNESS') ? 'CONSCIOUSNESS_CHANGE_RESULT' : 'SCALE_CHANGE_RESULT';
-                
-                await this.animationManager.triggerTransientEffect(effectType, resourceElement, { effect, sourceCard });
-            } else {
-                console.warn('🔥ANIM_DEBUG [Presentation] Resource element not found with any selector');
-                
-                
-            }
-        } else {
-            console.warn('🔥ANIM_DEBUG [Presentation] Player element not found:', playerId);
+            // さらに、CSSルールを動的に追加
+            this.addHidingCSSRule(cardId);
         }
-    }
-
-    /**
-     * カードを即座に隠す（DOM更新前）
-     * @param {string} cardId - カードID
-     */
-    hideCardImmediately(cardId) {
-        // 複数の方法でカードを検索・隠蔽
-        const selectors = [
-            `[data-card-id="${cardId}"]`,
-            `#${cardId}`
-        ];
-        
-        for (const selector of selectors) {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(element => {
-                
-                // より強力な隠蔽
-                element.style.setProperty('visibility', 'hidden', 'important');
-                element.style.setProperty('opacity', '0', 'important');
-                element.style.setProperty('transform', 'scale(0)', 'important');
-                element.classList.add('card-animation-hidden');
-                
-                // 親要素も隠す（必要に応じて）
-                const parent = element.parentElement;
-                if (parent && parent.classList.contains('card-container')) {
-                    parent.style.setProperty('visibility', 'hidden', 'important');
+    
+        /**
+         * カード隠蔽用のCSSルールを動的に追加
+         * @param {string} cardId - カードID
+         */
+        addHidingCSSRule(cardId) {
+            const styleId = `hide-${cardId}`;
+            
+            // 既存のスタイルを削除
+            const existingStyle = document.getElementById(styleId);
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            // 新しいスタイルを追加
+            const style = document.createElement('style');
+            style.id = styleId;
+            style.textContent = `
+                [data-card-id="${cardId}"]:not(.card-animation-clone) {
+                    visibility: hidden !important;
+                    opacity: 0 !important;
+                    transform: scale(0) !important;
                 }
-            });
+            `;
+            document.head.appendChild(style);
+            
+            
         }
-        
-        // さらに、CSSルールを動的に追加
-        this.addHidingCSSRule(cardId);
-    }
-
-    /**
-     * カード隠蔽用のCSSルールを動的に追加
-     * @param {string} cardId - カードID
-     */
-    addHidingCSSRule(cardId) {
-        const styleId = `hide-${cardId}`;
-        
-        // 既存のスタイルを削除
-        const existingStyle = document.getElementById(styleId);
-        if (existingStyle) {
-            existingStyle.remove();
-        }
-        
-        // 新しいスタイルを追加
-        const style = document.createElement('style');
-        style.id = styleId;
-        style.textContent = `
-            [data-card-id="${cardId}"]:not(.card-animation-clone) {
-                visibility: hidden !important;
-                opacity: 0 !important;
-                transform: scale(0) !important;
+    
+        /**
+         * ターン開始演出を処理
+         */
+        async handleTurnStart(effect, sourceCard) {
+            const playerName = effect.args.player_name || 'プレイヤー';
+            const turnNumber = effect.args.turn_number || 1;
+            
+            
+            
+            
+            if (this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('TURN_START', null, { 
+                    playerName, 
+                    turnNumber,
+                    delay: 750
+                });
+                
             }
-        `;
-        document.head.appendChild(style);
-        
-        
-    }
-
-    /**
-     * ターン開始演出を処理
-     */
-    async handleTurnStart(effect, sourceCard) {
-        const playerName = effect.args.player_name || 'プレイヤー';
-        const turnNumber = effect.args.turn_number || 1;
-        
-        
-        
-        
-        if (this.animationManager) {
-            
-            await this.animationManager.triggerTransientEffect('TURN_START', null, { 
-                playerName, 
-                turnNumber 
-            });
-            
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_START');
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_START');
+            }
         }
-    }
-
-    /**
-     * ターン終了演出を処理
-     */
-    async handleTurnEnd(effect, sourceCard) {
-        const playerName = effect.args.player_name || 'プレイヤー';
-        
-        
-        
-        
-        if (this.animationManager) {
+    
+        /**
+         * ターン終了演出を処理
+         */
+        async handleTurnEnd(effect, sourceCard) {
+            const playerName = effect.args.player_name || 'プレイヤー';
             
-            await this.animationManager.triggerTransientEffect('TURN_END', null, { 
-                playerName 
-            });
             
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_END');
+            
+            
+            if (this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('TURN_END', null, { 
+                    playerName,
+                    delay: 750
+                });
+                
+            }
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_END');
+            }
         }
-    }
-
-    /**
-     * 勝敗決定演出を処理
-     */
-    async handleGameResult(effect, sourceCard) {
-        const isVictory = effect.args.is_victory || false;
-        const message = effect.args.message || '';
-        
-        
-        
-        
-        if (this.animationManager) {
+    
+        /**
+         * 勝敗決定演出を処理
+         */
+        async handleGameResult(effect, sourceCard) {
+            const isVictory = effect.args.is_victory || false;
+            const message = effect.args.message || '';
             
-            await this.animationManager.triggerTransientEffect('GAME_RESULT', null, { 
-                isVictory, 
-                message 
-            });
             
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for GAME_RESULT');
+            
+            
+            if (this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('GAME_RESULT', null, { 
+                    isVictory, 
+                    message 
+                });
+                
+            }
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for GAME_RESULT');
+            }
         }
-    }
-
-    /**
-     * 上限到達警告演出を処理
-     */
-    async handleLimitWarning(effect, sourceCard) {
-        const { player_id, limit_type, message } = effect.args;
-        
-        
-        
-        
-        
-        // 対象エリアを特定
-        let targetSelector = '';
-        if (limit_type === 'hand') {
-            targetSelector = player_id === 'PLAYER1' ? '.player-hand-area' : '.opponent-hand-area';
-        } else if (limit_type === 'field') {
-            targetSelector = player_id === 'PLAYER1' ? '.player-field-area' : '.opponent-field-area';
+    
+        /**
+         * 上限到達警告演出を処理
+         */
+        async handleLimitWarning(effect, sourceCard) {
+            const { player_id, limit_type, message } = effect.args;
+            
+            
+            
+            
+            
+            // 対象エリアを特定
+            let targetSelector = '';
+            if (limit_type === 'hand') {
+                targetSelector = player_id === 'PLAYER1' ? '.player-hand-area' : '.opponent-hand-area';
+            } else if (limit_type === 'field') {
+                targetSelector = player_id === 'PLAYER1' ? '.player-field-area' : '.opponent-field-area';
+            }
+            
+            const target = document.querySelector(targetSelector);
+            
+            
+            if (target && this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('LIMIT_WARNING', target, { 
+                    limitType: limit_type,
+                    message: message
+                });
+                
+            }
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] Target element or AnimationManager not found for limit warning');
+            }
         }
-        
-        const target = document.querySelector(targetSelector);
-        
-        
-        if (target && this.animationManager) {
+    
+        /**
+         * 効果無効化演出を処理
+         */
+        async handleEffectNullified(effect, sourceCard) {
+            const { target_card_id } = effect.args;
             
-            await this.animationManager.triggerTransientEffect('LIMIT_WARNING', target, { 
-                limitType: limit_type,
-                message: message
-            });
             
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] Target element or AnimationManager not found for limit warning');
+            
+            
+            const target = document.querySelector(`[data-card-id="${target_card_id}"]`);
+            
+            
+            if (target && this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('EFFECT_NULLIFIED', target, {});
+                
+            }
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] Target element or AnimationManager not found for effect nullified');
+            }
         }
-    }
-
-    /**
-     * 効果無効化演出を処理
-     */
-    async handleEffectNullified(effect, sourceCard) {
-        const { target_card_id } = effect.args;
-        
-        
-        
-        
-        const target = document.querySelector(`[data-card-id="${target_card_id}"]`);
-        
-        
-        if (target && this.animationManager) {
+    
+        /**
+         * 先攻/後攻決定演出を処理
+         */
+        async handleTurnOrderDecision(effect, sourceCard) {
+            const firstPlayer = effect.args.first_player || '先攻プレイヤー';
+            const secondPlayer = effect.args.second_player || '後攻プレイヤー';
             
-            await this.animationManager.triggerTransientEffect('EFFECT_NULLIFIED', target, {});
             
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] Target element or AnimationManager not found for effect nullified');
+            
+            
+            if (this.animationManager) {
+                
+                await this.animationManager.triggerTransientEffect('TURN_ORDER_DECISION', null, { 
+                    firstPlayer, 
+                    secondPlayer,
+                    delay: 1000
+                });
+                
+            }
+            else {
+                console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_ORDER_DECISION');
+            }
         }
-    }
-
-    /**
-     * 先攻/後攻決定演出を処理
-     */
-    async handleTurnOrderDecision(effect, sourceCard) {
-        const firstPlayer = effect.args.first_player || '先攻プレイヤー';
-        const secondPlayer = effect.args.second_player || '後攻プレイヤー';
-        
-        
-        
-        
-        if (this.animationManager) {
-            
-            await this.animationManager.triggerTransientEffect('TURN_ORDER_DECISION', null, { 
-                firstPlayer, 
-                secondPlayer 
-            });
-            
-        } else {
-            console.warn('🎮GAME_ANIM [Presentation] AnimationManager not available for TURN_ORDER_DECISION');
-        }
-    }
 
     /**
      * 演出システムの状態を取得

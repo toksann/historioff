@@ -696,6 +696,40 @@ const effectHandlers = {
                 
                 effectsQueue.unshift([{ effect_type: EffectType.CARD_DURABILITY_CHANGED, args: changeArgs }, sourceCard]);
             }
+            if (newDurability <= 0) {
+                const ownerPlayerId = targetCardRef.owner;
+            
+                // 論理的なカードの移動 (field -> discard) を即座に行う
+                // targetCardRefがフィールドにあることを確認
+                const fieldIndex = gameState.players[ownerPlayerId].field.findIndex(c => c.instance_id === resolved_card_id);
+                if (fieldIndex !== -1) {
+                    const [removedCard] = gameState.players[ownerPlayerId].field.splice(fieldIndex, 1);
+                    gameState.players[ownerPlayerId].discard.push(removedCard);
+                    removedCard.location = 'discard';
+                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
+                } else if (gameState.players[ownerPlayerId].ideology && gameState.players[ownerPlayerId].ideology.instance_id === resolved_card_id) {
+                    // イデオロギーカードの場合
+                    const removedCard = gameState.players[ownerPlayerId].ideology;
+                    gameState.players[ownerPlayerId].ideology = null;
+                    gameState.players[ownerPlayerId].discard.push(removedCard);
+                    removedCard.location = 'discard';
+                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
+                }
+            
+                // WEALTH_DURABILITY_ZERO トリガーを即座にeffectsQueueに追加
+                const baseArgs = {
+                    player_id: ownerPlayerId,
+                    card_id: resolved_card_id,
+                    target_card_id: resolved_card_id,
+                };
+                const ownerArgs = { ...baseArgs, target_player_id: ownerPlayerId };
+
+                effectsQueue.unshift(
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO, args: ownerArgs }, targetCardRef],
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OWNER, args: ownerArgs }, targetCardRef],
+                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_THIS, args: ownerArgs }, targetCardRef]
+                );
+            }
 
             if (finalAmount < 0) {
                 effectsQueue.unshift([{ 
@@ -719,49 +753,6 @@ const effectHandlers = {
                     }, 
                     target_card_id: resolved_card_id 
                 }, sourceCard]);
-            }
-            if (newDurability <= 0) {
-                const ownerPlayerId = targetCardRef.owner;
-            
-                // 論理的なカードの移動 (field -> discard) を即座に行う
-                // targetCardRefがフィールドにあることを確認
-                const fieldIndex = gameState.players[ownerPlayerId].field.findIndex(c => c.instance_id === resolved_card_id);
-                if (fieldIndex !== -1) {
-                    const [removedCard] = gameState.players[ownerPlayerId].field.splice(fieldIndex, 1);
-                    gameState.players[ownerPlayerId].discard.push(removedCard);
-                    removedCard.location = 'discard';
-                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
-                } else if (gameState.players[ownerPlayerId].ideology && gameState.players[ownerPlayerId].ideology.instance_id === resolved_card_id) {
-                    // イデオロギーカードの場合
-                    const removedCard = gameState.players[ownerPlayerId].ideology;
-                    gameState.players[ownerPlayerId].ideology = null;
-                    gameState.players[ownerPlayerId].discard.push(removedCard);
-                    removedCard.location = 'discard';
-                    syncCardDataInAllPiles(gameState, resolved_card_id, { location: 'discard' });
-                }
-
-                // 破壊アニメーションをanimation_queueに追加
-                gameState.animation_queue.push({
-                    effect: {
-                        effect_type: EffectType.CARD_DESTROYED, // CARD_DESTROYED はアニメーション専用のEffectType
-                        args: { card_id: resolved_card_id }
-                    },
-                    sourceCard: sourceCard
-                });
-            
-                // WEALTH_DURABILITY_ZERO トリガーを即座にeffectsQueueに追加
-                const baseArgs = {
-                    player_id: ownerPlayerId,
-                    card_id: resolved_card_id,
-                    target_card_id: resolved_card_id,
-                };
-                const ownerArgs = { ...baseArgs, target_player_id: ownerPlayerId };
-
-                effectsQueue.unshift(
-                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO, args: ownerArgs }, targetCardRef],
-                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_OWNER, args: ownerArgs }, targetCardRef],
-                    [{ effect_type: TriggerType.WEALTH_DURABILITY_ZERO_THIS, args: ownerArgs }, targetCardRef]
-                );
             }
             if (sourceCard) {
                 effectsQueue.unshift([{
