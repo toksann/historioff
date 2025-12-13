@@ -25,6 +25,48 @@
   overflow: hidden;
 }
 
+/* New styles for header layout */
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically center items */
+  margin-bottom: 20px;
+}
+
+.screen-header h1 {
+  margin: 0;
+  color: #00ff00; /* Assuming the main title is green */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between h1 and help button */
+}
+
+.help-button {
+  background-color: #4a4f5a; /* Secondary action background */
+  color: #fff; /* White text */
+  border: 1px solid #00ff00; /* Green border for theme */
+  border-radius: 50%; /* Make it round */
+  width: 28px; /* Fixed width for round button */
+  height: 28px; /* Fixed height for round button */
+  font-size: 0.9em; /* Smaller font size */
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0; /* Remove default padding for tighter circle */
+  box-sizing: border-box; /* Include padding/border in width/height */
+}
+
+.help-button:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
 .deck-builder-layout {
   display: flex;
   flex-grow: 1;

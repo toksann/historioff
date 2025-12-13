@@ -3,6 +3,7 @@ import CardDetail from './CardDetail.js';
 import CostCurveChart from './CostCurveChart.js';
 import { saveToStorage, getFromStorage } from '../utils/localStorage.js';
 import InfoModal from './overlays/InfoModal.js';
+import DeckBuilderHelpOverlay from './overlays/DeckBuilderHelpOverlay.js'; // Import the new component
 import { MIN_DECK_SIZE, MAX_DECK_SIZE } from '../gameLogic/constants.js';
 import './DeckBuilderScreen.css';
 import './CostCurveChart.css';
@@ -20,6 +21,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
   const [costCurveMode, setCostCurveMode] = useState('single'); // 'single' or 'grouped'
   const fileInputRef = useRef(null);
   const [modalInfo, setModalInfo] = useState({ isOpen: false, message: '' });
+  const [isHelpVisible, setHelpVisible] = useState(false); // State for the help overlay
 
   useEffect(() => {
     const customDecks = getFromStorage('customDecks') || {};
@@ -248,9 +250,16 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
         message={modalInfo.message}
         onClose={() => setModalInfo({ isOpen: false, message: '' })}
       />
+      <DeckBuilderHelpOverlay 
+        isOpen={isHelpVisible}
+        onClose={() => setHelpVisible(false)}
+      />
       <div className="deck-builder-container">
         <div className="screen-header">
-          <h1>デッキ構築</h1>
+          <div className="header-left">
+            <h1>デッキ構築</h1>
+            <button onClick={() => setHelpVisible(true)} className="help-button">?</button>
+          </div>
           <button onClick={onExit} className="back-button">← タイトルに戻る</button>
         </div>
         <div className="deck-builder-layout">
@@ -331,7 +340,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
             </div>
             <div className="cost-curve-wrapper">
               <div className="cost-curve-header">
-                <h3>コストカーブ</h3>
+                <h3>規模分布</h3>
                 <button onClick={() => setCostCurveMode(costCurveMode === 'single' ? 'grouped' : 'single')}>
                   表示切替 ({costCurveMode === 'single' ? '1区切り' : '5区切り'})
                 </button>

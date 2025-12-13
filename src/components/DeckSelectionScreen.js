@@ -139,7 +139,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
 
         <div className="cost-curve-wrapper">
           <div className="cost-curve-header">
-            <h3>コストカーブ</h3>
+            <h3>規模分布</h3>
             <button onClick={() => setCostCurveMode(costCurveMode === 'single' ? 'grouped' : 'single')}>
               表示切替 ({costCurveMode === 'single' ? '1区切り' : '5区切り'})
             </button>
