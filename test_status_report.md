@@ -126,6 +126,18 @@
 
 
 ## バグ分析と修正方針
+**モバイルUIの調整**
+ → デッキ構築画面 : ipad -> 縦横どちらでもデッキ領域は見えるがドラッグアンドドロップがフリックでは上手くいかず、カードを長押ししてから引っ張らないといけない
+                android -> デッキ領域は見えない。規模分布でつぶれている
+ → ゲーム画面： ipad -> 横向きのときは縦が足りない。縦向きのときは横が足りない。
+            android -> カードが空カードとサイズが合っておらず大きすぎる。
+ → 共通項：とにかく要素がデカい。領域もデカい。のでメディアクエリで小さくしていく必要がある。
+
+
+npm run build
+npx serve -s build
+っていうか鯖落としたら動かないが？スタンドアローンでは無くね？キャッシュだけで動くという話だったのでは？
+
 
 **(調整済み)一部のアニメーションを調整したい**
  → ディレイ仕様のお陰で一部のアニメーションが同時ではなく、連続再生されているように見えるようになった。
@@ -151,4 +163,5 @@ Maximum update depth exceeded. This can happen when a component repeatedly calls
     at dispatchSetStateInternal (http://localhost:3000/static/js/bundle.js:11843:16)
     at dispatchSetState (http://localhost:3000/static/js/bundle.js:11816:5)
     at processAnimation (http://localhost:3000/static/js/bundle.js:29021:9)
+
 
