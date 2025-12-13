@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.js';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration.js'; // Import service worker registration
 import reportWebVitals from './reportWebVitals.js';
 import { effectMonitor } from './gameLogic/EffectMonitor.js'; // Import the singleton instance
 import { setEffectLogger } from './gameLogic/effectHandler.js'; // Import the setter function
@@ -21,3 +22,8 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();
