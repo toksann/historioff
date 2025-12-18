@@ -162,14 +162,14 @@
   }
 
   .cost-curve-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
 
   .cost-curve-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   .cost-curve-header h3 {
@@ -181,20 +181,20 @@
     background: #4a4f5a;
     border: 1px solid #00ff00;
     color: #00ff00;
-    padding: 5px 10px;
+    padding: 5px 5px;
     border-radius: 5px;
     cursor: pointer;
   }
 
   .deck-actions {
     display: flex;
-    gap: 10px;
-    margin-top: auto;
+    gap: 5px;
+    margin-top: 5px;
   }
 
   .deck-name-input {
     flex-grow: 1;
-    padding: 10px;
+    padding: 5px;
     border-radius: 5px;
     border: 1px solid #555;
     background: #333;
@@ -202,7 +202,7 @@
   }
 
   .deck-actions button {
-    padding: 10px 15px;
+    padding: 0px 0px;
     border-radius: 5px;
     border: none;
     background-color: #00ff00;
@@ -379,7 +379,7 @@
 
 /* 古いレイアウトのためのマージンをリセット */
 .deck-actions {
-  margin-top: 10px; /* 以前のautoから固定値に変更 */
+  margin-top: 5px; /* 以前のautoから固定値に変更 */
 }
 
 /* --- Panel Width Ratio Adjustment --- */      
@@ -489,6 +489,686 @@
 
   /* 「カードタイプ」と「必要規模」のフィルター間に少しスペースを追加 */  
   .library-controls .filter-controls > label:nth-of-type(2) {
-      margin-top: 10px;
+    margin-top: 10px;
+  }
+}
+
+.deck-builder-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: white;
+  display: flex;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.deck-builder-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a1a;
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* New styles for header layout */
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically center items */
+  margin-bottom: 20px;
+}
+
+.screen-header h1 {
+  margin: 0;
+  color: #00ff00; /* Assuming the main title is green */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between h1 and help button */
+}
+
+.help-button {
+  background-color: #4a4f5a; /* Secondary action background */
+  color: #fff; /* White text */
+  border: 1px solid #00ff00; /* Green border for theme */
+  border-radius: 50%; /* Make it round */
+  width: 28px; /* Fixed width for round button */
+  height: 28px; /* Fixed height for round button */
+  font-size: 0.9em; /* Smaller font size */
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0; /* Remove default padding for tighter circle */
+  box-sizing: border-box; /* Include padding/border in width/height */
+}
+
+.help-button:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
+.deck-builder-layout {
+  display: flex;
+  flex-grow: 1;
+  gap: 20px;
+  height: calc(100% - 350px);
+}
+
+.card-library-section,
+.deck-building-section {
+  display: flex;
+  flex-direction: column;
+  background: #282c34;
+  padding: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-library-section {
+  flex: 2;
+}
+
+.deck-building-section {
+  flex: 1;
+}
+
+.library-header {
+  margin-bottom: 15px;
+}
+
+.library-header h2 {
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.library-controls {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  background: #333;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.library-controls .sort-controls,
+.library-controls .filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.library-controls label {
+  font-weight: bold;
+}
+
+.library-controls select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #444;
+  color: white;
+}
+
+.deck-builder-card-grid {
+  h2 {
+    text-align: center;
+    color: #00ff00;
+  }
+
+  .deck-list {
+    flex-grow: 1;
+    background: #333;
+    border-radius: 6px;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+
+  .deck-card {
+    background: #4a4f5a;
+    margin-bottom: 5px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+  }
+
+  .deck-card:hover {
+    background-color: #5a5f6a;
+  }
+
+  .cost-curve-wrapper {
+    margin-bottom: 15px;
+  }
+
+  .cost-curve-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .cost-curve-header h3 {
+    margin: 0;
+    color: #00ff00;
+  }
+
+  .cost-curve-header button {
+    background: #4a4f5a;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .deck-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .deck-name-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background: #333;
+    color: white;
+  }
+
+  .deck-actions button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: #00ff00;
+    color: #1a1a1a;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .deck-actions .secondary-action {
+    background-color: #4a4f5a;
+    color: #fff;
+    border: 1px solid #00ff00;
+    font-size: 0.9em;
+  }
+
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.deck-builder-library-card {
+  background: #3a3f4a;
+  border: 1px solid #4a4f5a;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9em;
+  text-align: center;
+  color: #fff;
+}
+
+.deck-builder-library-card:hover {
+  transform: scale(1.05);
+  border-color: #8bc34a;
+}
+
+/* カードタイプ別ボEダーカラー */
+.deck-builder-library-card.card-type-財 {
+  border-color: #8bc34a;
+}
+
+.deck-builder-library-card.card-type-事象 {
+  border-color: #ff9800;
+}
+
+.deck-builder-library-card.card-type-イデオロギー {
+  border-color: #9c27b0;
+}
+
+
+
+/* Consistent Font & Theming on Main Container */
+.deck-builder-screen {
+  font-family: 'Courier New', monospace;
+}
+.deck-builder-container {
+  border: 1px solid #444;
+}
+
+/* Themed Panels */
+.card-library-section,
+.deck-building-section {
+  background: #2a2a2a;
+  border: 1px solid #444;
+}
+
+/* Themed Headers */
+.library-header h2, .deck-building-section h2, .cost-curve-header h3 {
+  color: #fff;
+}
+.deck-building-section h2, .library-header h2 {
+    font-family: 'Courier New', monospace;
+}
+
+
+/* General Action Button Styling */
+.deck-actions button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 2px solid #555;
+  background-color: #333;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+}
+
+.deck-actions button:hover {
+  background-color: #555;
+  border-color: #777;
+}
+
+/* Primary (Save) Button */
+.deck-actions button.primary-action {
+  background-color: #4caf50;
+  border-color: #66bb6a;
+  color: white;
+}
+.deck-actions button.primary-action:hover {
+  background-color: #66bb6a;
+}
+
+/* Secondary (Import/Export) Buttons */
+.deck-actions .secondary-action {
+  background-color: #4a4f5a;
+  border-color: #666;
+}
+.deck-actions .secondary-action:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
+/* Unify Cost Curve Toggle Button */
+.cost-curve-header button {
+  background: #4a4f5a;
+  border: 1px solid #555;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+}
+.cost-curve-header button:hover {
+  background-color: #5a5f6a;
+  border-color: #777;
+}
+
+/* Unify text input */
+.deck-name-input {
+  border: 1px solid #555;
+  background: #333;
+  font-family: 'Courier New', monospace;
+}
+
+
+/* --- Layout and Font Size Adjustments --- */
+
+/* Reduce font size for action buttons */
+.deck-actions button {
+  font-size: 14px;
+}
+
+.empty-deck-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  border: 2px dashed #555;
+  border-radius: 6px;
+  color: #777;
+  text-align: center;
+  font-style: italic;
+  padding: 20px;
+}
+
+/* --- Deck Building Section Layout Refinements --- */
+
+/* デッキリストが利用可能なスペースを埋め、スクロールするようにする */
+.deck-list {
+  flex-grow: 1;    /* この要素が伸びてスペースを埋めるようにする */
+  overflow-y: auto; /* 内容がはみ出たらスクロールバーを表示 */
+  min-height: 0;     /* Flexboxが正しく伸縮するための重要な設定 */
+  max-height: 400px; /* 必要に応じて最大高さを設定 */
+}
+
+/* 下部の要素が押し出されたり縮んだりしないようにする */
+.cost-curve-wrapper,
+ .deck-actions {
+  flex-shrink: 0;
+}
+
+/* --- Panel Width Ratio Adjustment --- */      
+
+/* 左パネル（カードプール）の幅を1に */
+.card-library-section {
+  flex: 1;
+}
+
+/* 右パネル（現在のデッキ）の幅を2に */
+.deck-building-section {
+  flex: 2;
+}
+
+/* --- Deck List Grid and Card Count Styles --- */
+
+.deck-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  align-content: flex-start; /* アイテムが縦に伸びるのを防ぐ */
+}
+
+.deck-card {
+  position: relative; /* 枚数カウンターの位置基準にする */     
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-height: 60px; /* カードの最小の高さを確保 */
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.deck-card-count {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background-color: #00ff00;
+  color: #1a1a1a;
+  border-radius: 0 4px 0 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+/* --- Adjust Deck Actions Section Vertical Size --- */
+
+/* デッキアクションコンテナのパディングと要素間の間隔を調整 */
+.deck-actions {
+  padding: 5px 0; /* 縦方向のパディングを調整 */
+  gap: 5px;       /* 要素間の間隔を狭める */
+}
+
+/* デッキアクション内のボタンのパディングと文字サイズを調整 */
+.deck-actions button {
+  padding: 8px 12px; /* パディングを小さく */
+  font-size: 0.8em;  /* 文字サイズを小さく */
+}
+
+/* デッキ名入力フィールドのパディングと文字サイズを調整 */
+.deck-name-input {
+  padding: 8px 10px; /* パディングを小さく */
+  font-size: 0.9em;  /* 文字サイズを小さく */
+}
+
+/* --- Responsive Adjustments for Deck Builder --- */
+
+@media (max-width: 768px) {
+
+  /* ライブラリのソート・フィルターコントロールを縦に並べる */
+  .library-controls {
+    flex-direction: column;
+    align-items: flex-start; /* 各グループを左揃えにする */   
+  }
+
+ /* デッキアクションの要素（入力欄、ボタン）を縦に並べる */  
+  .deck-actions {
+    flex-direction: column;
+    align-items: stretch; /* 各要素の幅を親要素に合わせる */  
+  }
+}
+
+
+/* --- Enhanced Responsive Adjustments for Library Controls --- */        
+
+@media (max-width: 768px) {
+
+  /* ライブラリコントロールのグループを縦に並べ、幅をいっぱいにする */    
+  .library-controls {
+    flex-direction: column;
+    align-items: stretch; 
+  }
+
+  /* 各コントロールグループ内の要素も縦に並べる */
+  .library-controls .sort-controls,
+  .library-controls .filter-controls {
+    flex-direction: column;
+    align-items: stretch; /* ラベルとセレクトボックスを親の幅に合わせる */
+    gap: 5px;             /* 縦に並んだ要素間の隙間 */
+  }
+  
+  /* セレクトボックスが利用可能な幅全体に広がるようにする */
+  .library-controls select {
+    width: 100%;
+  }
+
+  /* 「カードタイプ」と「必要規模」のフィルター間に少しスペースを追加 */  
+  .library-controls .filter-controls > label:nth-of-type(2) {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 599px) {
+  .deck-builder-screen {
+    padding: 5px;
+    height: auto;
+  }
+
+  .deck-builder-container {
+    padding: 5px;
+  }
+
+  .screen-header {
+    margin-bottom: 5px;
+  }
+
+  .screen-header h1 {
+    font-size: 1.2em;
+  }
+
+  .help-button {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8em;
+  }
+
+  .back-button {
+    padding: 5px 10px;
+    font-size: 0.8em;
+  }
+
+  .deck-builder-layout {
+    flex-direction: column-reverse; /* Changed to reverse order for mobile */
+    gap: 10px;
+    height: calc(100vh - 12vh);
+    min-height: 0;
+  }
+
+  .card-library-section,
+  .deck-building-section {
+    flex: none;
+    height: 50%;
+    min-height: 0;
+    max-height: calc((80vh) * 0.5);
+    padding: 10px;
+  }
+
+  /* Adjustments for deck-building-section to arrange cost curve and deck actions side-by-side */
+  .deck-building-section {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* h2, deck-list, then a row for controls */
+    grid-template-columns: 2fr 1fr; /* For the controls at the bottom */
+    gap: 5px; /* Adjusted overall gap for smaller screens */
+    /* Remove flex-direction: column; if explicitly set before, as grid will handle it */
+    /* ensure h2 is still font-size 1.1em as previously */
+  }
+
+  .deck-building-section h2 {
+    grid-column: 1 / -1; /* Span all columns */
+    grid-row: 1;
+    font-size: 0.9em; /* Ensure it retains its size */
+    margin-bottom: 5px; /* Adjusted margin */
+  }
+  
+  .deck-list {
+    grid-column: 1 / -1; /* Span all columns */
+    grid-row: 3;
+    gap: 5px;
+    padding: 5px;
+    max-height: none;
+  }
+
+  .cost-curve-wrapper {
+    grid-column: 1; /* Left side of the bottom row */
+    grid-row: 2;
+    margin-bottom: 0; /* Remove bottom margin if any */
+    padding: 5px; /* Reduced padding */
+  }
+
+  .deck-actions {
+    grid-column: 2; /* Right side of the bottom row */
+    grid-row: 2;
+    gap: 3px; /* Smaller gap for buttons */
+    padding: 0;
+    flex-direction: column; /* Keep buttons stacked within their grid cell */
+    align-items: stretch;
+  }
+
+  .library-header {
+    margin-bottom: 5px;
+  }
+
+  .library-header h2 {
+    font-size: 1em;
+  }
+
+  .library-controls {
+    padding: 3px;
+    font-size: 0.6em; /* Further reduced font size */
+    gap: 3px;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Prevent wrapping for main groups */
+    justify-content: space-between; /* Distribute items across the main container */
+    align-items: center; /* Center vertically */
+  }
+
+  .library-controls .sort-controls,
+  .library-controls .filter-controls {
+    flex-direction: row; /* Changed to row */
+    flex-wrap: nowrap; /* Prevent wrapping for labels/selects */
+    justify-content: center; /* Center items within group */
+    gap: 3px;
+  }
+
+  .library-controls select {
+    padding: 1px; /* Reduced padding */
+    width: auto; /* Allow natural width, or specify max-width */
+    max-width: 65px; /* More aggressive width constraint */
+    font-size: 0.8em; /* Explicitly smaller font for select */
+  }
+
+  .library-controls label {
+    font-size: 0.8em; /* Explicitly smaller font for label */
+  }
+
+  .deck-builder-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Smaller cards */
+    gap: 5px;
+    padding-right: 5px; /* Adjust padding */
+  }
+
+  .deck-builder-library-card {
+    padding: 5px;
+    font-size: 0.7em;
+  }
+
+  /* Already handled above with .deck-building-section h2 */
+  /* .deck-building-section h2 {
+    font-size: 1.1em;
+  } */
+  
+  .deck-list {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Smaller deck cards */
+    gap: 5px;
+    padding: 5px;
+    max-height: none; /* Remove fixed max-height, let flex-grow handle it */
+  }
+
+  .deck-card {
+    padding: 5px;
+    min-height: 40px;
+    font-size: 0.7em;
+  }
+
+  .deck-card-count {
+    font-size: 0.7em;
+    padding: 1px 4px;
+  }
+
+  .cost-curve-header {
+    margin-bottom: 2px; /* Further reduced margin */
+  }
+
+  .cost-curve-header h3 {
+    font-size: 0.7em; /* Further reduced font size */
+  }
+
+  .cost-curve-header button {
+    padding: 1px 4px; /* Further reduced padding */
+    font-size: 0.5em; /* Further reduced font size */
+  }
+
+  /* Already handled above with .deck-actions */
+  /* .deck-actions {
+    gap: 5px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+  } */
+
+  .deck-actions button {
+    padding: 2px 4px; /* Further reduced padding for buttons */
+    font-size: 0.5em; /* Further reduced font size for buttons */
+    min-height: 20px; /* Explicitly set a smaller min-height */
+  }
+
+  .deck-name-input {
+    padding: 2px 4px; /* Further reduced padding for input */
+    font-size: 0.5em; /* Further reduced font size for input */
+    min-height: 20px; /* Explicitly set a smaller min-height */
   }
 }

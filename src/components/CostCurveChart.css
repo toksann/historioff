@@ -56,4 +56,23 @@
   color: white;
 }
 
+@media (max-width: 599px) {
+  .cost-curve-chart {
+    height: 80px; /* Reduced height for small screens */
+    padding: 5px; /* Adjust padding */
+    gap: 2px; /* Reduce gap */
+  }
 
+  .chart-bar {
+    height: 35px; /* Reduced bar height */
+  }
+
+  .chart-bar-label {
+    font-size: 0.7em; /* Smaller font for labels */
+  }
+
+  .chart-bar-label-count {
+    top: -14px; /* Adjust position to prevent overlap */
+    font-size: 0.7em; /* Smaller font for counts */
+  }
+}

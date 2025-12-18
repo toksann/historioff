@@ -93,13 +93,13 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
       }
       return data;
     } else { // grouped
-      const groups = { '0-4': 0, '5-9': 0, '10-14': 0, '15-19': 0, '20+': 0 };
+      const groups = { '0': 0, '5': 0, '10': 0, '15': 0, '20+': 0 };
       deck.forEach(card => {
         const cost = card.required_scale;
-        if (cost <= 4) groups['0-4']++;
-        else if (cost <= 9) groups['5-9']++;
-        else if (cost <= 14) groups['10-14']++;
-        else if (cost <= 19) groups['15-19']++;
+        if (cost <= 4) groups['0']++;
+        else if (cost <= 9) groups['5']++;
+        else if (cost <= 14) groups['10']++;
+        else if (cost <= 19) groups['15']++;
         else groups['20+']++;
       });
       return Object.entries(groups).map(([label, count]) => ({ label, count }));
@@ -316,7 +316,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
             <div className="deck-list">
               {deck.length === 0 ? (
                 <div className="empty-deck-placeholder">
-                  <p>ドラッグ＆ドロップで<br/>カードを追加</p>
+                  <p>プールから<br/>カードを追加</p>
                 </div>
               ) : (
                 Object.values(deck.reduce((acc, card) => {

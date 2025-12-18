@@ -1,5 +1,107 @@
+/* ========================================
+   CSS変数システム - モバイル対応
+   ======================================== */
+:root {
+  /* ベースサイズ定義 */
+  --base-card-width: 80px;
+  --base-card-height: 105px;
+  --base-font-size: 16px;
+  --base-padding: 8px;
+  --base-gap: 8px;
+  --base-border-radius: 6px;
+  
+  /* デスクトップ用サイズ（デフォルト） */
+  --card-width: var(--base-card-width);
+  --card-height: var(--base-card-height);
+  --font-base: var(--base-font-size);
+  --padding-base: var(--base-padding);
+  --gap-base: var(--base-gap);
+  --border-radius-base: var(--base-border-radius);
+  --touch-target: 32px;
+  
+  /* レイアウト用変数 */
+  --game-board-height: 900px;
+  --stats-area-width: 180px;
+}
+
+/* モバイル用CSS変数（600px未満） */
+@media (max-width: 599px) {
+  :root {
+    /* モバイル用比率ベースサイズ - より小さく調整 */
+    --card-width: clamp(50px, 12vw, 70px);
+    --card-height: clamp(65px, 15vh, 90px);
+    --font-base: clamp(11px, 2.2vw, 14px);
+    --touch-target: max(44px, 7vw);
+    
+    /* モバイル用レイアウト - より小さなパディング */
+    --padding-base: clamp(3px, 0.8vw, 6px);
+    --gap-base: clamp(2px, 0.5vw, 4px);
+    --border-radius-base: clamp(2px, 0.4vw, 4px);
+    
+    /* モバイル用ゲームボード - セーフエリア考慮 */
+    --game-board-height: calc(100vh - var(--safe-area-top) - var(--safe-area-bottom));
+    --stats-area-width: clamp(100px, 28vw, 130px);
+    
+    /* フォントサイズバリエーション */
+    --font-small: calc(var(--font-base) * 0.75);
+    --font-large: calc(var(--font-base) * 1.15);
+    --font-card: calc(var(--font-base) * 0.7);
+    
+    /* セーフエリア対応 */
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+  }
+}
+
+/* iPhone SE等の小画面用調整（480px未満） */
+@media (max-width: 479px) {
+  :root {
+    --card-width: clamp(45px, 11vw, 60px);
+    --card-height: clamp(58px, 13vh, 78px);
+    --font-base: clamp(10px, 2vw, 12px);
+    --stats-area-width: clamp(90px, 25vw, 120px);
+    --padding-base: clamp(2px, 0.6vw, 4px);
+    --gap-base: clamp(1px, 0.3vw, 3px);
+  }
+}
+
+/* iPhone SE (375px) 専用調整 */
+@media (max-width: 375px) {
+  :root {
+    --card-width: clamp(42px, 10vw, 55px);
+    --card-height: clamp(55px, 12vh, 72px);
+    --font-base: clamp(9px, 1.8vw, 11px);
+    --stats-area-width: clamp(80px, 22vw, 110px);
+    --padding-base: clamp(1px, 0.4vw, 3px);
+    --gap-base: clamp(1px, 0.2vw, 2px);
+  }
+}
+
+/* 極小画面用調整（360px未満） */
+@media (max-width: 359px) {
+  :root {
+    --card-width: clamp(40px, 9vw, 50px);
+    --card-height: clamp(52px, 11vh, 65px);
+    --font-base: clamp(8px, 1.6vw, 10px);
+    --stats-area-width: clamp(75px, 20vw, 100px);
+  }
+}
+
 .App {
   text-align: center;
+  overflow: hidden;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+/* モバイル用App調整 */
+@media (max-width: 599px) {
+  .App {
+    height: calc(100vh - var(--safe-area-top) - var(--safe-area-bottom));
+    max-height: calc(100vh - var(--safe-area-top) - var(--safe-area-bottom));
+  }
 }
 
 .game-board {
@@ -11,78 +113,233 @@
     "opponent-field opponent-field"
     "player-field player-field"
     "player-hand player-stats";
-  height: 900px;
-  gap: 8px;
-  padding: 8px;
+  height: var(--game-board-height);
+  gap: var(--gap-base);
+  padding: var(--padding-base);
   box-sizing: border-box;
   overflow: hidden;
+  background-color: #1a1a1a;
+}
+
+/* モバイル用ゲームボードレイアウト */
+@media (max-width: 599px) {
+  .game-board {
+    height: var(--game-board-height);
+    grid-template-columns: 1fr var(--stats-area-width);
+    grid-template-areas:
+      "game-info opponent-stats"
+      "opponent-field opponent-field"
+      "player-field player-field"
+      "player-hand player-stats";
+    grid-template-rows: 
+      minmax(45px, 7vh)    /* game-info + opponent-stats - 小さく */
+      minmax(125px, 30vh)  /* opponent-field - 大きく */
+      minmax(125px, 30vh)  /* player-field - 大きく */
+      minmax(90px, 18vh);  /* player-hand + player-stats - 小さく */
+    gap: var(--gap-base);
+    padding: var(--padding-base);
+    /* セーフエリア対応 */
+    padding-top: calc(var(--padding-base) + var(--safe-area-top));
+    padding-bottom: calc(var(--padding-base) + var(--safe-area-bottom));
+    padding-left: calc(var(--padding-base) + var(--safe-area-left));
+    padding-right: calc(var(--padding-base) + var(--safe-area-right));
+    /* 確実に画面内に収める */
+    max-height: calc(100vh - var(--safe-area-top) - var(--safe-area-bottom));
+    overflow: hidden;
+  }
+  
+  /* 横向き時の調整 */
+  @media (orientation: landscape) {
+    .game-board {
+      grid-template-rows: 
+        minmax(40px, 6vh)    /* game-info + opponent-stats */
+        minmax(110px, 26vh)  /* opponent-field */
+        minmax(110px, 26vh)  /* player-field */
+        minmax(80px, 16vh);  /* player-hand + player-stats */
+    }
+  }
+}
+
+/* iPhone SE等の小画面用追加調整 */
+@media (max-width: 479px) {
+  .game-board {
+    grid-template-rows: 
+      minmax(40px, 6vh)    /* game-info + opponent-stats - 小さく */
+      minmax(130px, 32vh)  /* opponent-field - 大きく */
+      minmax(130px, 32vh)  /* player-field - 大きく */
+      minmax(85px, 16vh);  /* player-hand + player-stats - 小さく */
+    /* より小さなパディングとギャップ */
+    padding: calc(var(--padding-base) * 0.75);
+    gap: calc(var(--gap-base) * 0.75);
+  }
+  
+  @media (orientation: landscape) {
+    .game-board {
+      grid-template-rows: 
+        minmax(35px, 5vh)
+        minmax(120px, 28vh)
+        minmax(120px, 28vh)
+        minmax(75px, 14vh);
+    }
+  }
+}
+
+/* iPhone SE (375px) 専用ゲームボード調整 */
+@media (max-width: 375px) {
+  .game-board {
+    grid-template-rows: 
+      minmax(35px, 5vh)    /* game-info + opponent-stats - 最小 */
+      minmax(135px, 34vh)  /* opponent-field - 最大 */
+      minmax(135px, 34vh)  /* player-field - 最大 */
+      minmax(80px, 15vh);  /* player-hand + player-stats - 最小 */
+    padding: 3px;
+    gap: 2px;
+    /* 確実に667px以下に収める */
+    max-height: calc(100vh - 20px);
+  }
+  
+  @media (orientation: landscape) {
+    .game-board {
+      grid-template-rows: 
+        minmax(30px, 4vh)
+        minmax(125px, 30vh)
+        minmax(125px, 30vh)
+        minmax(70px, 12vh);
+    }
+  }
 }
 
 /* エリア別スタイル */
 .opponent-stats-area {
   grid-area: opponent-stats;
   border: 2px solid #f44336;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #ffebee;
-  width: 180px;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #2a1a1a;
+  width: var(--stats-area-width);
   display: flex;
   flex-direction: column;
+  color: #fff;
 }
 
 .game-info-area {
   grid-area: game-info;
   border: 2px solid #2196f3;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #e3f2fd;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #1a2a3a;
   text-align: center;
   display: flex;
   flex-direction: column;
+  color: #fff;
 }
 
 .opponent-field-area {
   grid-area: opponent-field;
   border: 2px solid #f44336;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #ffebee;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #2a1a1a;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  color: #fff;
 }
 
 .player-field-area {
   grid-area: player-field;
   border: 2px solid #4caf50;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #e8f5e8;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #1a2a1a;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  color: #fff;
+}
+
+/* モバイル用プレイヤーフィールドエリア調整 */
+@media (max-width: 599px) {
+  .player-field-area {
+    min-height: 110px; /* 最小高さを確保 */
+  }
+}
+
+@media (max-width: 479px) {
+  .player-field-area {
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 375px) {
+  .player-field-area {
+    min-height: 100px;
+  }
 }
 
 .player-stats-area {
   grid-area: player-stats;
   border: 2px solid #4caf50;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #e8f5e8;
-  width: 180px;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #1a2a1a;
+  width: var(--stats-area-width);
   display: flex;
   flex-direction: column;
+  color: #fff;
 }
 
 .player-hand-area {
   grid-area: player-hand;
   border: 2px solid #4caf50;
-  border-radius: 6px;
-  padding: 8px;
-  background-color: #e8f5e8;
+  border-radius: var(--border-radius-base);
+  padding: var(--padding-base);
+  background-color: #1a2a1a;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  color: #fff;
+  position: relative;
+}
+
+
+.surrender-button {
+  position: absolute;
+  bottom: var(--padding-base);
+  left: var(--padding-base);
+  padding: calc(var(--padding-base) * 0.75) calc(var(--padding-base) * 2);
+  background-color: #333;
+  color: #f44336;
+  border: 2px solid #f44336;
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-small);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  min-width: var(--touch-target);
+  min-height: calc(var(--touch-target) * 0.8);
+  touch-action: manipulation;
+}
+
+.surrender-button:hover {
+  background-color: #f44336; /* ホバーで赤背景 */
+  color: white; /* 白文字 */
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.5); /* ホバーで影を強調 */
+  transform: translateY(-1px); /* 少し浮き上がる */
+}
+
+.surrender-confirm-yes {
+  background-color: #d32f2f !important;
+  color: white !important;
+  border-color: #d32f2f !important;
+}
+
+.surrender-confirm-yes:hover {
+  background-color: #c62828 !important; /* 濃い赤 */
+  border-color: #c62828 !important;
+  box-shadow: 0 4px 8px rgba(211, 47, 47, 0.5); /* ホバーで影を強調 */
 }
 
 /* ゲーム情報エリア内のスタイル */
@@ -99,6 +356,14 @@
   font-size: 0.95em;
 }
 
+/* モバイル用ゲーム情報調整 */
+@media (max-width: 599px) {
+  .game-info h3 {
+    margin: 0 0 2px 0;
+    font-size: 0.85em;
+  }
+}
+
 .turn-info-compact {
   margin-bottom: 4px;
 }
@@ -112,14 +377,14 @@
 .turn-number {
   font-size: 0.8em;
   font-weight: bold;
-  color: #333;
+  color: #fff;
 }
 
 .current-player {
   font-size: 0.8em;
-  color: #666;
+  color: #ccc;
   padding: 2px 6px;
-  background-color: rgba(33, 150, 243, 0.1);
+  background-color: rgba(33, 150, 243, 0.3);
   border-radius: 3px;
   border: 1px solid #2196f3;
   align-self: flex-start;
@@ -262,16 +527,24 @@
 .hand h4 {
   margin: 0 0 3px 0;
   font-size: 0.9em;
-  color: #333;
+  color: #fff;
+}
+
+/* モバイル用手札タイトル調整 */
+@media (max-width: 599px) {
+  .hand h4 {
+    margin: 0 0 2px 0;
+    font-size: 0.8em;
+  }
 }
 
 /* 手札の横スクロール対応 */
 .hand-cards-scrollable {
   display: flex;
-  gap: 5px;
+  gap: var(--gap-base);
   overflow-x: auto;
-  padding: 4px 0;
-  height: 110px;
+  padding: var(--padding-base) 0;
+  height: calc(var(--card-height) + var(--padding-base) * 2);
   align-items: flex-start;
   flex: 1;
 }
@@ -321,7 +594,22 @@
 .field h4 {
   margin: 0 0 3px 0;
   font-size: 0.9em;
-  color: #333;
+  color: #fff;
+}
+
+/* モバイル用フィールドタイトル調整 */
+@media (max-width: 599px) {
+  .field h4 {
+    margin: 0 0 2px 0;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 479px) {
+  .field h4 {
+    margin: 0 0 1px 0;
+    font-size: 0.75em;
+  }
 }
 
 .field-area {
@@ -341,6 +629,25 @@
   margin-bottom: 3px;
 }
 
+/* モバイル用フィールドラベル調整 */
+@media (max-width: 599px) {
+  .field-label {
+    gap: 6px;
+    font-size: 0.75em;
+    margin-bottom: 2px;
+    padding: 0 2px;
+  }
+}
+
+@media (max-width: 479px) {
+  .field-label {
+    gap: 4px;
+    font-size: 0.7em;
+    margin-bottom: 1px;
+    padding: 0 1px;
+  }
+}
+
 .ideology-indicator {
   min-width: 80px;
   text-align: center;
@@ -351,7 +658,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #8bc34a;
+  color: #00ff00;
 }
 
 .placement-order-hint {
@@ -363,12 +670,12 @@
 
 .field-cards-container {
   display: flex;
-  gap: 6px;
-  padding: 6px;
+  gap: var(--gap-base);
+  padding: var(--padding-base);
   background-color: rgba(0,0,0,0.03);
-  border-radius: 5px;
+  border-radius: var(--border-radius-base);
   border: 1px solid #e0e0e0;
-  height: 140px;
+  height: calc(var(--card-height) + var(--padding-base) * 4);
   align-items: flex-start;
   flex: 1;
 }
@@ -382,19 +689,20 @@
 }
 
 .empty-ideology-slot {
-  width: 80px;
-  height: 105px;
+  width: var(--card-width);
+  height: var(--card-height);
   border: 2px dashed #9c27b0;
-  border-radius: 4px;
+  border-radius: var(--border-radius-base);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(156, 39, 176, 0.05);
   color: #9c27b0;
-  font-size: 0.65em;
+  font-size: var(--font-small);
   text-align: center;
   font-style: italic;
   font-weight: bold;
+  touch-action: manipulation;
 }
 
 .wealth-cards-scrollable {
@@ -415,7 +723,7 @@
   top: 50%;
   transform: translateY(-50%);
   background: linear-gradient(to right, transparent, rgba(255,255,255,0.9));
-  color: #8bc34a;
+  color: #00ff00;
   font-weight: bold;
   font-size: 1.2em;
   padding: 5px 10px;
@@ -439,7 +747,7 @@
 }
 
 .wealth-cards-scrollable::-webkit-scrollbar-thumb {
-  background: #8bc34a;
+  background: #00ff00;
   border-radius: 4px;
 }
 
@@ -456,129 +764,249 @@
 }
 
 .empty-wealth-slot {
-  width: 80px;
-  height: 105px;
+  width: var(--card-width);
+  height: var(--card-height);
   border: 2px dashed #ddd;
-  border-radius: 4px;
+  border-radius: var(--border-radius-base);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(0,0,0,0.01);
   color: #bbb;
-  font-size: 0.65em;
+  font-size: var(--font-small);
   text-align: center;
   transition: all 0.2s ease;
+  touch-action: manipulation;
 }
 
 .empty-wealth-slot:hover {
-  border-color: #8bc34a;
+  border-color: #00ff00;
   background-color: rgba(139, 195, 74, 0.05);
-  color: #8bc34a;
+  color: #00ff00;
 }
 
 .slot-number {
   font-weight: bold;
 }
 
-.card {
-  border: 2px solid #888;
-  border-radius: 4px;
-  padding: 4px;
-  width: 80px;
-  height: 105px;
+/* ========================================
+   Unified Card Styles
+   ======================================== */
+
+/* .card-game: ゲーム内で使用するカード（手札、場） */
+.card-game {
+  border: 3px solid #888;
+  border-radius: var(--border-radius-base);
+  padding: calc(var(--padding-base) * 0.125);
   background-color: white;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  font-size: 0.7em;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  position: relative;
+  overflow: visible;
+  width: var(--card-width);
+  height: var(--card-height);
+  font-size: var(--font-card);
+  touch-action: manipulation;
 }
 
-.card:hover {
+.card-game:hover {
   transform: scale(1.05);
   box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 }
 
-/* 選択待ち状態でもカードの詳細表示は可能であることを示す */
-.awaiting-input .card:hover {
+.awaiting-input .card-game:hover {
   transform: scale(1.03);
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   cursor: pointer;
 }
 
-/* カードタイプ別の色分け */
-.card-type-財 {
-  border-color: #8bc34a;
-  background-color: #f1f8e9;
+/* .card-library: カード一覧やデッキ構築画面で使うカード */
+.card-library {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 15px; /* 説明文などが入るため余白を大きく */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 親要素に高さを合わせる */
 }
 
-.card-type-事象 {
+.card-library:hover {
+  border-color: #666;
+  transform: translateY(-2px);
+}
+
+/* カードタイプ別の色分け（共通化） */
+.card-game.card-type-財,
+.card-library.card-type-財 {
+  border-color: #00ff00;
+}
+
+.card-game.card-type-事象,
+.card-library.card-type-事象 {
   border-color: #ff9800;
-  background-color: #fff3e0;
 }
 
-.card-type-イデオロギー {
+.card-game.card-type-イデオロギー,
+.card-library.card-type-イデオロギー {
   border-color: #9c27b0;
-  background-color: #f3e5f5;
 }
 
-/* カード内部レイアウト */
+/* カードの各部レイアウト */
 .card-header {
   text-align: center;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 3px;
-  margin-bottom: 3px;
+  padding: calc(var(--padding-base) * 0.25);
+  margin-bottom: calc(var(--padding-base) * 0.375);
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.card-game .card-header {
+  padding: calc(var(--padding-base) * 0.125);
+  margin-bottom: calc(var(--padding-base) * 0.125);
+}
+
+.card-library .card-header {
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.card-library .card-header h3 {
+  margin: 0;
+  color: #00ff00;
+  font-size: 16px;
 }
 
 .card-name {
   font-weight: bold;
-  font-size: 0.85em;
-  margin-bottom: 2px;
-  color: #333;
   line-height: 1.1;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
+
+.card-game .card-name {
+  font-size: calc(var(--font-base) * 0.8);
+  color: #000 !important;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: calc(var(--padding-base) * 0.125) calc(var(--padding-base) * 0.25);
+  border-radius: calc(var(--border-radius-base) * 0.33);
+}
+
+.card-library .card-name {
+  font-size: 1em;
+  color: #00ff00;
+}
+
 
 .card-type {
   font-style: italic;
-  color: #666;
-  font-size: 0.7em;
+  font-size: 0.8em;
+}
+
+.card-game .card-type {
+  display: none; /* ゲーム中は非表示 */
+}
+
+.card-library .card-type {
+  background-color: #444;
+  color: #ccc;
+  padding: 2px 8px;
+  border-radius: 3px;
 }
 
 .card-center {
-  flex-grow: 1;
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 2px;
+  right: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.card-game .card-center {
+  top: 22px;
+  bottom: 15px;
+}
+
 .card-durability {
-  font-size: 0.95em;
   font-weight: bold;
-  color: #d32f2f;
   text-align: center;
-  padding: 4px;
-  border: 2px solid #d32f2f;
   border-radius: 50%;
-  min-width: 24px;
-  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card-game .card-durability {
+  font-size: calc(var(--font-base) * 0.7);
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  padding: calc(var(--padding-base) * 0.25);
+  min-width: calc(var(--touch-target) * 0.4);
+  min-height: calc(var(--touch-target) * 0.4);
+}
+
+.card-library .card-info {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.card-library .card-description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ccc;
+  flex-grow: 1;
 }
 
 .card-footer {
   text-align: center;
   border-top: 1px solid #ddd;
-  padding-top: 3px;
-  margin-top: 3px;
+  padding: calc(var(--padding-base) * 0.125);
+  position: absolute;
+  bottom: calc(var(--padding-base) * 0.125);
+  left: calc(var(--padding-base) * 0.125);
+  right: calc(var(--padding-base) * 0.125);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.card-game .card-footer {
+  padding: calc(var(--padding-base) * 0.125);
+  bottom: calc(var(--padding-base) * 0.125);
+  left: calc(var(--padding-base) * 0.125);
+  right: calc(var(--padding-base) * 0.125);
+}
+
+.card-library .card-footer {
+ display: none; /* ライブラリでは info に表示するためフッターは非表示 */
 }
 
 .card-cost {
-  font-size: 0.8em;
-  color: #555;
   font-weight: bold;
+}
+
+.card-game .card-cost {
+  font-size: calc(var(--font-base) * 0.7);
+  color: #555;
 }
 
 button {
@@ -588,10 +1016,7 @@ button {
   cursor: pointer;
 }
 
-.selectable {
-  border: 3px solid #00b0ff;
-  box-shadow: 0 0 15px #00b0ff;
-}
+
 
 .prompt {
     position: sticky;
@@ -621,7 +1046,7 @@ button {
   cursor: pointer;
   font-size: 1em;
   font-weight: bold;
-  color: #333;
+  color: #fff;
   text-align: left;
   transition: background-color 0.2s;
   border: 2px solid transparent;
@@ -629,8 +1054,8 @@ button {
 }
 
 .player-name-button:hover {
-  background-color: rgba(0,0,0,0.05);
-  border-color: #ddd;
+  background-color: rgba(255,255,255,0.1);
+  border-color: #666;
 }
 
 .player-name-line {
@@ -646,7 +1071,7 @@ button {
 
 .deck-count-line {
   font-size: 0.8em;
-  color: #666;
+  color: #ccc;
   font-weight: normal;
 }
 
@@ -783,11 +1208,11 @@ button {
 
 .stat-label {
   font-weight: bold;
-  color: #555;
+  color: #ccc;
 }
 
 .stat-value {
-  color: #333;
+  color: #fff;
   font-weight: normal;
 }
 
@@ -798,8 +1223,9 @@ button {
 
 .player-stats-area .stat-value {
   color: #388e3c;
-}/*
- カード詳細オーバーレイ */
+}
+
+/* カード詳細オーバーレイ */
 .card-detail-overlay {
   position: fixed;
   top: 0;
@@ -810,7 +1236,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2500;
+  z-index: 11000;
 }
 
 .card-detail-modal {
@@ -906,8 +1332,9 @@ button {
   margin: 0;
   line-height: 1.6;
   color: #555;
-}/* カ
-ードアクション選択メニュー */
+}
+
+/* カードアクション選択メニュー */
 .card-action-overlay {
   position: fixed;
   top: 0;
@@ -1014,8 +1441,9 @@ button {
   color: #d32f2f;
   font-size: 0.8em;
   text-align: center;
-}/* ゲーム
-ログオーバーレイ */
+}
+
+/* ゲームログオーバーレイ */
 .game-log-overlay {
   position: fixed;
   top: 0;
@@ -1026,7 +1454,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1001;
+  z-index: 10000;
 }
 
 .game-log-modal {
@@ -1038,6 +1466,8 @@ button {
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10001;
+  position: relative;
 }
 
 .game-log-header {
@@ -1054,6 +1484,27 @@ button {
   margin: 0;
   color: #333;
   font-size: 1.4em;
+}
+
+.log-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scroll-to-bottom-button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.scroll-to-bottom-button:hover {
+  background-color: #1976d2;
 }
 
 .game-log-content {
@@ -1182,17 +1633,20 @@ button {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 選択可能なカードの強調 */
+/* selectableクラスを完全に削除 - オーバーレイ選択に変更したため不要 */
+/* 
 .selectable {
   border: 3px solid #00b0ff !important;
   box-shadow: 0 0 15px rgba(0, 176, 255, 0.5) !important;
-  animation: glow 1.5s ease-in-out infinite alternate;
 }
+*/
 
+/* glowアニメーションも削除
 @keyframes glow {
   from { box-shadow: 0 0 15px rgba(0, 176, 255, 0.5); }
   to { box-shadow: 0 0 25px rgba(0, 176, 255, 0.8); }
 }
+*/
 
 /* ボタンの改善 */
 button {
@@ -1239,8 +1693,8 @@ button:disabled {
 /* スマホ・小タブレット用 */
 @media (max-width: 768px) {
   .game-board {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr 1fr auto;
+    grid-template-columns: 1fr var(--stats-area-width);
+    grid-template-rows: auto auto 1fr 1fr;
     grid-template-areas:
       "game-info opponent-stats"
       "opponent-field opponent-field"
@@ -1297,21 +1751,17 @@ button:disabled {
     font-size: 1em;
   }
   
-  /* モバイル用手札エリア調整 */
-  .hand-cards-scrollable {
-    height: 100px;
-    gap: 3px;
-  }
+  /* モバイル用手札エリア調整 - CSS変数で管理 */
   
   .hand-card-slot {
-    min-width: 70px;
+    min-width: var(--card-width);
     flex-shrink: 0;
   }
   
   .card {
-    width: 70px;
-    height: 95px;
-    font-size: 0.65em;
+    width: 120px; /* Adjusted */
+    height: 160px; /* Adjusted */
+    font-size: 0.9em; /* Adjusted */
     padding: 3px;
   }
   
@@ -1329,7 +1779,7 @@ button:disabled {
   
   .ideology-slot {
     align-self: flex-start;
-    min-width: 70px;
+    min-width: var(--card-width);
     flex-shrink: 0;
   }
   
@@ -1342,15 +1792,11 @@ button:disabled {
   }
   
   .wealth-card-slot {
-    min-width: 70px;
+    min-width: var(--card-width);
     flex-shrink: 0;
   }
   
-  .empty-ideology-slot,
-  .empty-wealth-slot {
-    width: 70px;
-    height: 95px;
-  }
+  /* 空スロットサイズはCSS変数で統一管理 */
   
   .field-label {
     flex-direction: row;
@@ -1360,7 +1806,7 @@ button:disabled {
   }
   
   .ideology-indicator {
-    min-width: 70px;
+    min-width: var(--card-width);
     text-align: center;
   }
   
@@ -1435,56 +1881,41 @@ button:disabled {
     padding: 10px;
   }
   
-  /* 小画面用フィールド・手札調整 */
-  .field-cards-container {
-    height: 100px;
-    min-height: 100px;
-  }
+  /* 小画面用フィールドと手札調整 - CSS変数で管理 */
   
   .wealth-cards-scrollable {
     height: 100px;
     min-height: 100px;
   }
   
-  .hand-cards-scrollable {
-    height: 100px;
-  }
+  /* 手札高さはCSS変数で管理 */
   
-  .empty-ideology-slot,
-  .empty-wealth-slot {
-    width: 60px;
-    height: 80px;
-  }
+  /* 空スロットサイズはCSS変数で統一管理 */
   
   .ideology-slot,
   .wealth-card-slot,
   .hand-card-slot {
-    min-width: 60px;
+    min-width: var(--card-width);
   }
   
   .ideology-indicator {
-    min-width: 60px;
+    min-width: var(--card-width);
   }
   
-  .field-cards-container {
-    height: 100px;
-    min-height: 100px;
-  }
+  /* フィールドコンテナ高さはCSS変数で管理 */
   
   .wealth-cards-scrollable {
     height: 100px;
     min-height: 100px;
   }
   
-  .hand-cards-scrollable {
-    height: 85px;
-  }
+  /* 手札高さはCSS変数で管理 */
   
   /* 小画面用カード調整 */
   .card {
-    width: 60px;
-    height: 80px;
-    font-size: 0.6em;
+    width: 100px; /* Adjusted */
+    height: 130px; /* Adjusted */
+    font-size: 0.7em; /* Adjusted */
     padding: 2px;
   }
   
@@ -1524,13 +1955,13 @@ button:disabled {
   box-shadow: none;
 }
 
-/* 待機状態の視覚的フィードバック */
+/* 選択中の視覚的フィードバック */
 .awaiting-input {
   position: relative;
 }
 
 .awaiting-input::after {
-  content: "選択待ち... (カード詳細は表示可能)";
+  content: "選択中... (カード詳細は表示可能)";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1547,7 +1978,7 @@ button:disabled {
   white-space: nowrap;
 }
 
-/* 選択プロンプトオーバーレイ */
+/* 選択のプロンプトオーバーレイ */
 .choice-prompt-overlay {
   position: fixed;
   top: 0;
@@ -1633,7 +2064,7 @@ button:disabled {
   padding: 5px;
 }
 
-/* 既存のボタンスタイル（他の選択肢用） */
+/* 既存のボタンスタイルとの他の選択肢用のもの*/
 .choice-options-scrollable > button {
   padding: 10px 15px;
   border: 1px solid #ddd;
@@ -1722,8 +2153,9 @@ button:disabled {
   font-size: 0.8em;
   color: #2196f3;
   font-weight: bold;
-}/* 
-先攻後攻表示 */
+}
+
+/* 先攻後攻表示 */
 .turn-order {
   font-size: 0.8em;
   font-weight: normal;
@@ -1741,8 +2173,9 @@ button:disabled {
 .second-player {
   background-color: #2196f3;
   color: white;
-}/* 統合され
-たカードアクションセクション */
+}
+
+/* 統合されたカードアクションセクション */
 .card-action-section {
   margin-top: 20px;
   padding-top: 15px;
@@ -1779,8 +2212,159 @@ button:disabled {
 
 .play-action-button:active:not(.disabled) {
   transform: translateY(0);
-}/* 強化された
-ゲームログのスタイル */
+}
+
+
+
+/* ターン開始演出 - 右から左へのスライド */
+@keyframes turnStartSlide {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ターン終了演出 - 中央フェードイン→左スライドアウド */
+@keyframes turnのndFadeIn {
+  0% {
+    transform: translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* 勝利演出 - 上から中央→上へのスライド */
+@keyframes victorySlide {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+/* 敗北演出 - 上から中央→下へのスライド */
+@keyframes defeatSlide {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* 先攻/後攻決定演出 - 段階的フェードイン */
+@keyframes turnOrderReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ゲーム進行演出用のクラス */
+.turn-start-animation {
+  animation: turnStartSlide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.turn-end-animation {
+  animation: turnのndFadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.victory-animation {
+  animation: victorySlide 2.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.defeat-animation {
+  animation: defeatSlide 2.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.turn-order-animation {
+  animation: turnOrderReveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ゲーム進行演出用のオーバーレイ */
+.game-progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.game-progress-message {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+}
+
+.game-progress-message.victory {
+  background-color: rgba(76, 175, 80, 0.9);
+  border: 3px solid #4caf50;
+}
+
+.game-progress-message.defeat {
+  background-color: rgba(244, 67, 54, 0.9);
+  border: 3px solid #f44336;
+}
+
+.game-progress-message.turn-start {
+  background-color: rgba(33, 150, 243, 0.9);
+  border: 3px solid #2196f3;
+}
+
+.game-progress-message.turn-end {
+  background-color: rgba(255, 152, 0, 0.9);
+  border: 3px solid #ff9800;
+}
+
+.game-progress-message.turn-order {
+  background-color: rgba(156, 39, 176, 0.9);
+  border: 3px solid #9c27b0;
+}
+
+/* 強化されたゲームログのスタイル */
 
 /* ログヘッダーの制御ボタン */
 .log-controls {
@@ -1958,6 +2542,105 @@ button:disabled {
   }
 }
 
+/* アニメーションロック中のオーバーレイ */
+.animation-lock-overlay {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 8000;
+  pointer-events: none;
+}
+
+.animation-lock-message {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 上限到達警告演出 */
+@keyframes limitWarningFlash {
+  0%, 100% {
+    background-color: transparent;
+    border-color: inherit;
+  }
+  50% {
+    background-color: rgba(244, 67, 54, 0.3);
+    border-color: #f44336;
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+  }
+}
+
+.limit-warning-flash {
+  animation: limitWarningFlash 0.6s ease-in-out 3;
+}
+
+/* 効果無効化演出 */
+@keyframes effectNullified {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.05);
+    opacity: 0.8;
+    filter: brightness(0.7) contrast(1.2);
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+    filter: brightness(0.5) contrast(1.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  }
+  75% {
+    transform: scale(1.05);
+    opacity: 0.8;
+    filter: brightness(0.7) contrast(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+.effect-nullified {
+  animation: effectNullified 0.6s ease-in-out;
+  position: relative;
+}
+
+/* 無効化パーティクル */
+.nullified-particle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #333 0%, #000 70%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+@keyframes nullifiedParticleのxplosion {
+  0% {
+    opacity: 1;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.5) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2) rotate(360deg);
+  }
+}
+
 /* ログエントリーのクリック可能スタイル */
 .enhanced-log-entry {
   display: flex;
@@ -2009,8 +2692,9 @@ button:disabled {
 .clickable-entry:hover .card-detail-hint {
   opacity: 1;
   color: #2196f3;
-}/*
- クリック可能なログエントリー全体のスタイル */
+}
+
+/* クリック可能なログエントリー全体スタイル */
 .clickable-log-entry {
   cursor: pointer !important;
   transition: all 0.2s ease;
@@ -2059,7 +2743,7 @@ button:disabled {
   border-left-color: #ff9800;
 }
 
-/* ターン終了時のプレイログ点滅アニメーション */
+/* ターン終了プレイログ点滅アニメーション */
 .log-flash-turn {
   animation: logFlashTurn 0.6s ease-in-out;
 }
@@ -2089,21 +2773,20 @@ button:disabled {
   transform: translateY(-1px);
 }
 
-/* ========================================
-   ゲーム演出システム用CSS
-   🎬ANIM - Animation System Styles
-   ======================================== */
+
+
 
 /* 継続演出: 規模不足カード */
-.card-insufficient-scale {
+.card-game.card-insufficient-scale,
+.card-library.card-insufficient-scale {
   opacity: 0.5 !important;
   filter: grayscale(100%) !important;
   transition: opacity 0.3s ease, filter 0.3s ease !important;
-  pointer-events: none;
 }
 
 /* 継続演出が解除された時の復帰アニメーション */
-.card:not(.card-insufficient-scale) {
+.card-game:not(.card-insufficient-scale),
+.card-library:not(.card-insufficient-scale) {
   transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
@@ -2123,7 +2806,7 @@ button:disabled {
   }
 }
 
-/* カードプレイ演出（基本版） */
+/* カードのプレイ演出の基本版！ */
 .card-play-animation {
   animation: cardPlayBasic 0.8s ease-out;
 }
@@ -2145,7 +2828,7 @@ button:disabled {
   }
 }
 
-/* カードダメージ演出（基本版） */
+/* カードダメージ演出の基本版！ */
 .card-damage-animation {
   animation: cardDamageBasic 0.5s ease-in-out;
 }
@@ -2165,7 +2848,7 @@ button:disabled {
   }
 }
 
-/* リソース変化演出（基本版） */
+/* リソース変化演出の基本版！ */
 .resource-increase-animation {
   animation: resourceIncrease 0.6s ease-out;
 }
@@ -2202,139 +2885,1169 @@ button:disabled {
   z-index: 10;
 }
 
-/* デバッグ用: 演出対象要素のハイライト */
-.animation-debug-highlight {
-  outline: 2px dashed #ff9800 !important;
-  outline-offset: 2px !important;
-}
-
 /* 演出システムが無効化されている場合のフォールバック */
 .animations-disabled * {
   animation: none !important;
   transition: none !important;
 }
 
+/* アニメーション用クラス */
+.card-animation-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.card-animation-clone {
+  pointer-events: none !important;
+}
+
 /* ========================================
-   ゲーム演出システム用CSS
-   🎬ANIM - Animation System Styles
+   アニメーション関連のCSS
    ======================================== */
 
-/* 継続演出: 規模不足カード */
-.card-insufficient-scale {
-  opacity: 0.5 !important;
-  filter: grayscale(100%) !important;
-  transition: opacity 0.3s ease, filter 0.3s ease !important;
+/* カード演出の基本クラス */
+.card-animation-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.card-animation-clone {
   pointer-events: none;
+  user-select: none;
 }
 
-/* 継続演出が解除された時の復帰アニメーション */
-.card:not(.card-insufficient-scale) {
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-/* テスト用演出 */
-.test-flash {
-  animation: testFlash 1s ease-in-out;
-}
-
-@keyframes testFlash {
-  0%, 100% { 
-    background-color: transparent; 
-    transform: scale(1);
-  }
-  50% { 
-    background-color: #ffff00; 
-    transform: scale(1.05);
-  }
-}
-
-/* カードプレイ演出（基本版） */
-.card-play-animation {
-  animation: cardPlayBasic 0.8s ease-out;
-}
-
-@keyframes cardPlayBasic {
-  0% { 
-    opacity: 0; 
-    transform: scale(1.2); 
-  }
-  70% { 
-    opacity: 1; 
-    transform: scale(1.0); 
-  }
-  85% { 
-    transform: scale(1.0) translateX(-2px); 
-  }
-  100% { 
-    transform: scale(1.0) translateX(0); 
-  }
-}
-
-/* カードダメージ演出（基本版） */
+/* カード演出用CSSクラス */
 .card-damage-animation {
-  animation: cardDamageBasic 0.5s ease-in-out;
+  animation: cardDamage 1.2s ease-in-out;
 }
 
-@keyframes cardDamageBasic {
-  0%, 100% { 
-    transform: translateX(0); 
-    background-color: transparent;
-  }
-  25% { 
-    transform: translateX(-3px); 
-    background-color: rgba(244, 67, 54, 0.3);
-  }
-  75% { 
-    transform: translateX(3px); 
-    background-color: rgba(244, 67, 54, 0.3);
-  }
+.card-heal-animation {
+  animation: cardHeal 0.8s ease-in-out;
 }
 
-/* リソース変化演出（基本版） */
+.card-destroy-animation {
+  animation: cardDestroy 0.6s ease-in-out forwards;
+}
+
 .resource-increase-animation {
-  animation: resourceIncrease 0.6s ease-out;
+  animation: resourceIncrease 0.8s ease-in-out;
 }
 
 .resource-decrease-animation {
-  animation: resourceDecrease 0.6s ease-out;
+  animation: resourceDecrease 0.8s ease-in-out;
 }
 
-@keyframes resourceIncrease {
-  0%, 100% { 
-    color: inherit; 
-    transform: scale(1); 
+/* カード破壊の除去演出 */
+@keyframes cardDestroy {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
-  50% { 
-    color: #ffd700; 
-    transform: scale(1.1); 
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(10deg);
+  }
+}
+
+.card-destroy-animation {
+  animation: cardDestroy 0.6s ease-out forwards;
+}
+
+/* パーティクル演出 */
+@keyframes particleのxplosion {
+  0% {
+    opacity: 1;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+
+.particle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  /* JavaScriptで制御するためCSSアニメーションは無効化 */
+}
+
+.particle-wealth {
+  background: radial-gradient(circle, #66bb6a 0%, #4caf50 70%, #388e3c 100%);
+  box-shadow: 0 0 12px rgba(76, 175, 80, 0.8), 0 0 6px rgba(76, 175, 80, 1);
+}
+
+.particle-ideology {
+  background: radial-gradient(circle, #ba68c8 0%, #9c27b0 70%, #7b1fa2 100%);
+  box-shadow: 0 0 12px rgba(156, 39, 176, 0.8), 0 0 6px rgba(156, 39, 176, 1);
+}
+
+/* カード回復演出 - 強化版 */
+@keyframes cardHeal {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+  30% {
+    transform: translateY(-20px) scale(1.1);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+  }
+  60% {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
+  }
+}
+
+.card-heal-animation {
+  animation: cardHeal 0.8s ease-out;
+  z-index: 1000 !important;
+}
+
+/* カードダメージ演出 - 強化版 */
+@keyframes cardDamage {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-8px) scale(1.1);
+    background-color: rgba(244, 67, 54, 0.9);
+    box-shadow: 0 0 25px rgba(244, 67, 54, 1.0);
+    border: 3px solid #f44336;
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(8px) scale(1.1);
+    background-color: rgba(255, 0, 0, 0.9);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 1.0);
+    border: 3px solid #ff0000;
+  }
+}
+
+.card-damage-animation {
+  animation: cardDamage 0.4s ease-in-out !important;
+  z-index: 1000 !important;
+}
+
+/* リソース変化演出 */
+@keyframes resourceIncrease {
+  0%, 100% {
+    color: inherit;
+    transform: scale(1);
+  }
+  50% {
+    color: #ffd700;
+    transform: scale(1.15);
   }
 }
 
 @keyframes resourceDecrease {
-  0%, 100% { 
-    color: inherit; 
-    transform: scale(1); 
+  0%, 100% {
+    color: inherit;
+    transform: scale(1);
   }
-  50% { 
-    color: #2196f3; 
-    transform: scale(1.1); 
+  50% {
+    color: #2196f3;
+    transform: scale(1.15);
   }
 }
 
-/* 演出中の要素が他の要素に影響しないようにする */
-.animating {
+.resource-increase-animation {
+  animation: resourceIncrease 0.8s ease-in-out;
+}
+
+.resource-decrease-animation {
+  animation: resourceDecrease 0.8s ease-in-out;
+}
+
+/* 変化量表示 */
+.resource-change-indicator {
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 1000;
+  animation: changeIndicatorFade 1.5s ease-out forwards;
+}
+
+.resource-change-increase {
+  color: #ffd700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.resource-change-decrease {
+  color: #2196f3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes changeIndicatorFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.8);
+  }
+}
+/* メ
+ニューシステムのスタイル */
+.menu-system {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+}
+
+/* タイトル画面 */
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.title-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.ascii-art {
+  margin-bottom: 40px;
+}
+
+.ascii-art pre {
+  font-size: 12px;
+  line-height: 1.2;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+  margin: 0;
+  white-space: pre;
+  overflow-x: auto;
+  text-align: left;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.menu-button {
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #555;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.menu-button:hover {
+  background-color: #555;
+  border-color: #777;
+  transform: translateY(-2px);
+}
+
+/* 画面共通要素 */
+.screen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-bottom: 2px solid #444;
+}
+
+.screen-header h1 {
+  color: #fff;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.back-button {
+  background-color: #666;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #888;
+}
+
+/* デッキ選択画面 */
+.deck-selection-screen {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #fff;
+  overflow-y: auto;
+}
+
+/* モバイル用デッキ選択画面調整 */
+@media (max-width: 599px) {
+  .deck-selection-screen {
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+.deck-selection-area {
+  padding: 20px;
+  height: calc(100vh - 80px); /* ヘッダー分を除く */
+  overflow-y: auto;
+}
+
+/* モバイル用デッキ選択エリア調整 */
+@media (max-width: 599px) {
+  .deck-selection-area {
+    padding: 10px;
+    height: calc(100vh - 60px);
+  }
+}
+
+@media (max-width: 479px) {
+  .deck-selection-area {
+    padding: 8px;
+    height: calc(100vh - 50px);
+  }
+}
+
+.deck-selection-area h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* モバイル用デッキグリッド調整 */
+@media (max-width: 599px) {
+  .deck-grid {
+    grid-template-columns: 1fr; /* 1カラムレイアウト */
+    gap: 10px;
+    padding: 10px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .deck-grid {
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
+.deck-card {
+  background-color: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  touch-action: manipulation;
+}
+
+/* モバイル用デッキカード調整 */
+@media (max-width: 599px) {
+  .deck-card {
+    padding: 15px;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 479px) {
+  .deck-card {
+    padding: 12px;
+  }
+}
+
+.deck-card:hover {
+  border-color: #666;
+  transform: translateY(-2px);
+}
+
+.deck-card h3 {
+  margin: 0 0 10px 0;
+  color: #00ff00; /* 黄緑 */
+  font-size: 16px;
+  white-space: normal; /* Added */
+  word-break: break-word; /* Added */
+  flex-grow: 1; /* Added */
+}
+
+.deck-description {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+.deck-info {
+  font-size: 12px;
+  color: #888;
+}
+
+/* デッキプレビュー */
+.deck-preview {
+  padding: 20px;
+  max-width: 800px;
+  max-height: 90vh;
+  margin: 0 auto;
+}
+
+.deck-preview h3 {
+  color: #00ff00;
+  margin-bottom: 10px;
+}
+
+.deck-cards {
+  margin: 20px 0;
+}
+
+.deck-cards h4 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.card-list {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 5px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.deck-card-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deck-card-item:hover {
+  background-color: #333;
+}
+
+.deck-card-item:last-child {
+  border-bottom: none;
+}
+
+.card-count {
+  color: #888;
+  font-weight: bold;
+  min-width: 30px;
+}
+
+.card-name {
+  color: #fff;
+  flex: 1;
+}
+
+.card-type {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.card-scale {
+  color: #888;
+  font-size: 12px;
+}
+
+.deck-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* モバイル用デッキアクション調整 */
+@media (max-width: 599px) {
+  .deck-actions {
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 479px) {
+  .deck-actions {
+    gap: 8px;
+    margin-top: 10px;
+    flex-direction: column;
+  }
+}
+
+.deck-actions button {
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #555;
+  padding: 12px 24px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+}
+
+/* モバイル用デッキアクションボタン調整 */
+@media (max-width: 599px) {
+  .deck-actions button {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-height: 44px; /* タッチターゲット確保 */
+  }
+}
+
+@media (max-width: 479px) {
+  .deck-actions button {
+    padding: 12px 16px;
+    font-size: 13px;
+    width: 100%; /* 小画面では全幅 */
+  }
+}
+
+.deck-actions button:hover {
+  background-color: #555;
+}
+
+.confirm-button {
+  background-color: #4caf50 !important;
+  border-color: #66bb6a !important;
+}
+
+.confirm-button:hover {
+  background-color: #66bb6a !important;
+}
+
+/* カード一覧画面 */
+.card-library-screen {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.library-controls {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #444;
+  flex-wrap: wrap;
+}
+
+.sort-controls, .filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.library-controls label {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.library-controls select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.library-card {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 20px; /* Adjusted padding */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.library-card:hover {
+  border-color: #666;
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-header h3 {
+  margin: 0;
+  color: #00ff00;
+  font-size: 16px;
+}
+
+.card-type {
+  background-color: #444;
+  color: #ccc;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.card-info {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #888;
+}
+
+.card-description {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ccc;
+}
+
+.library-stats {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  border-top: 1px solid #444;
+}
+
+/* オーバーレイ */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.overlay-modal {
+  background-color: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 8px;
+  max-width: 800px;
+  max-height: 80vh;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.overlay-header h2 {
+  margin: 0;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+}
+
+.close-button {
+  background: #292929;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #444;
+}
+
+.overlay-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.rules-text, .credits-text {
+  color: #ccc;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+  text-align: left;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .ascii-art pre {
+    font-size: 8px;
+  }
+  
+  .menu-button {
+    font-size: 16px;
+    padding: 12px 24px;
+    min-width: 180px;
+  }
+  
+  .library-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .overlay-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .ascii-art pre {
+    font-size: 6px;
+  }
+  
+  .screen-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+.game-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.game-info-header h3 {
+  margin: 0;
+}
+
+.rules-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.rules-button:hover {
+  background-color: #66bb6a;
+  transform: scale(1.1);
+}
+
+.rules-button:active {
+  transform: scale(0.95);
+}/* ス
+ムーズな画面遷移効果 */
+.menu-system {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.title-screen {
+  animation: slideInFromTop 0.5s ease-out;
+}
+
+.deck-selection-screen,
+.card-library-screen {
+  animation: slideInFromRight 0.4s ease-out;
+}
+
+.overlay {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.overlay-modal {
+  animation: slideInFromCenter 0.3s ease-out;
+}
+
+/* アニメーション定義 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromCenter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ボタンホバー効果の改善 */
+.menu-button,
+.back-button,
+.deck-actions button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+}
+
+.deck-card:hover,
+.library-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}/* ダークモ
+ード統一 - ゲーム終了画面 */
+.game-over-container-dark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  padding: 20px;
+}
+
+.game-over-container-dark h1 {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+  margin-bottom: 20px;
+  font-size: 2.5em;
+}
+
+.game-over-container-dark h2 {
+  color: #fff;
+  margin-bottom: 40px;
+  font-size: 1.5em;
+}
+
+.game-over-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+/* カード破壊アニメーション */
+@keyframes cardDestroy {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05) rotate(-7deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) rotate(10deg) translateY(20px);
+  }
+}
+
+.card-game.destroying, .card-library.destroying {
+  animation: cardDestroy 0.7s ease-out forwards;
+  /* アニメーション中に他の要素に影響を与えないようにする */
+  position: absolute; 
+  z-index: 100; /* 他のカードの上に表示されるよう調整 */
+  pointer-events: none; /* アニメーション中のクリックを無効化 */
+}
+
+
+.particle-event {
+  background: radial-gradient(circle, #ffcc80 0%, #ff9800 70%, #f57c00 100%);
+  box-shadow: 0 0 12px rgba(255, 152, 0, 0.8), 0 0 6px rgba(255, 152, 0, 1);
+}
+
+
+@keyframes cardReveal {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+@keyframes slideUpAndFade {
+    to {
+        top: -200px;
+        opacity: 0;
+    }
+}
+
+@keyframes slideDownAndFade {
+    to {
+        top: 120vh;
+        opacity: 0;
+    }
+}
+
+.deck-selection-screen .deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+.deck-selection-screen .deck-card {
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background: #3a3f4a;
   position: relative;
-  z-index: 10;
+  overflow: hidden;
+
+  display: flex; /* Added */
+  flex-direction: column; /* Added */
+  justify-content: space-between; /* Adjusted to push actions to bottom */
+  position: relative; /* badgeのために対応 */
+  overflow: hidden;
+  background-color: #2a2a2a; /* 暗めのグレーに統一 */}
+.deck-selection-screen .deck-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-color: #00ff00;
+}
+.deck-selection-screen .deck-card.invalid {
+  background: #333;
+  border-color: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+.deck-selection-screen .deck-card.invalid:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #555;
+}
+.deck-type-badge {
+  position: absolute;
+  top: 0.5px;
+  right: 2px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.7em;
+  font-weight: bold;
+}
+.deck-type-badge.preset {
+  background-color: #00ff00;
+  color: #282c34;
+}
+.deck-type-badge.custom {
+  background-color: #f0ad4e;
+  color: #fff;
+}
+.deck-info {
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+.invalid-tag {
+  display: block;
+  color: #00ff00;
+  font-weight: bold;
+  margin-top: 5px;
+}
+.custom-deck-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+.custom-deck-actions button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.custom-deck-actions .edit-button {
+  background-color: #5bc0de;
+  color: white;
+}
+.custom-deck-actions .delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+.deck-preview .confirm-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
 }
 
-/* デバッグ用: 演出対象要素のハイライト */
-.animation-debug-highlight {
-  outline: 2px dashed #ff9800 !important;
-  outline-offset: 2px !important;
+
+.deck-selection-screen .deck-card:hover {
+  border-color: #00ff00; /* 緑のアクセント */
 }
 
-/* 演出システムが無効化されている場合のフォールバック */
-.animations-disabled * {
-  animation: none !important;
-  transition: none !important;
+.deck-selection-screen .invalid-tag {
+  color: #00ff00; /* 緑のアクセント */
+}
+
+.deck-selection-screen .custom-deck-actions .edit-button {
+  background-color: #00ff00; /* 緑のアクセント */
+  color: #1a1a1a;
+}
+.deck-selection-screen .custom-deck-actions .delete-button {
+  background-color: #f44336; /* 赤のアクセント */
+  color: white;
+}
+
+
+.card-library-screen .library-card {
+  background: #282c34;
+  border: 1px solid #4a4f5a;
+  color: white;
+
+  background-color: #2a2a2a; /* 暗めのグレーに統一 */
+  border: 1px solid #444;
+  color: white; /* テキスト色を白に */}
+
+.card-library-screen .library-card:hover {
+  border-color: #00ff00; /* 緑のアクセント */
+}
+
+
+.info-modal-content {
+  background: #1a1a1a;
+  border: 1px solid #00ff00; /* 緑のアクセント */
+}
+
+.info-modal-header h3 {
+  color: #00ff00; /* 緑のアクセント */
+}
+
+.info-modal-ok-button {
+  background-color: #00ff00; /* 緑のアクセント */
+  color: #1a1a1a;
+}
+
+.cost-curve-wrapper {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #444;
+  border-radius: 8px;
+}
+
+.cost-curve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cost-curve-header h3 {
+  margin: 0;
+  color: #333; /* Match the dark text color of the preview */
+}
+
+.cost-curve-header button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.cost-curve-header button:hover {
+    background: #e0e0e0;
 }
