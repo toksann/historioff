@@ -39,7 +39,7 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd }) => {
         <div className="card-center">
           {showDurability && (
             <div className="card-durability">
-              {durabilityValue}/{card.durability}
+              {durabilityValue}
             </div>
           )}
         </div>
