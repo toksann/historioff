@@ -62,3 +62,33 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+@media (max-width: 599px) {
+  .info-modal-content {
+    padding: 15px;
+    width: 85%; /* Make it slightly wider for very small screens */
+  }
+
+  .info-modal-header {
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .info-modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .info-modal-close-button {
+    font-size: 1.2rem;
+  }
+
+  .info-modal-body {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .info-modal-ok-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}

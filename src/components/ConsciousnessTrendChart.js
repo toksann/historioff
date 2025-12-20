@@ -3,7 +3,7 @@ import './ConsciousnessTrendChart.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 
 
-const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
+const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height = 400, padding = 60 }) => {
     const [hoveredTurnIndex, setHoveredTurnIndex] = useState(null);
     const [ideologyView, setIdeologyView] = useState('player'); // 'player' or 'npc'
     const playerLineRef = useRef(null); // Ref to polyline DOM element
@@ -14,9 +14,6 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
     const latestPointsVisibleIndexRef = useRef(pointsVisibleIndex); // Ref to track latest pointsVisibleIndex without triggering useEffect
     const [poppingPointIndex, setPoppingPointIndex] = useState(null); // State to trigger point pop animation
 
-    const width = 800;
-    const height = 400;
-    const padding = 60; // Increased padding for labels
 
     const getX = useCallback((turn) => padding + ((turn - 1) / (maxTurn > 1 ? maxTurn - 1 : 1)) * (width - padding * 2), [width, padding]);
     const getY = useCallback((consciousness) => {
@@ -268,6 +265,13 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
         );
     }
 
+    // Dynamic legend positioning
+    const legendWidth = width > 400 ? 80 : 60;
+    const legendX = width - padding - legendWidth;
+    const legendY = padding;
+    const legendRectSize = width > 400 ? 10 : 8;
+    const legendTextOffset = legendRectSize + 5;
+
     return (
         <div className="chart-wrapper">
             <div className="chart-toggle-buttons">
@@ -331,11 +335,11 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState }) => {
                 <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} className="axis-line" />
                 <line x1={padding} y1={padding} x2={padding} y2={height - padding} className="axis-line" />
                 
-                <g transform={`translate(${width - padding - 80}, ${padding + 10})`}>
-                    <rect x="0" y="0" width="10" height="10" fill="#007bff" />
-                    <text x="15" y="10" className="legend-label">あなた</text>
-                    <rect x="0" y="20" width="10" height="10" fill="#dc3545" />
-                    <text x="15" y="30" className="legend-label">NPC</text>
+                <g transform={`translate(${legendX}, ${legendY})`}>
+                    <rect x="0" y="0" width={legendRectSize} height={legendRectSize} fill="#007bff" />
+                    <text x={legendTextOffset} y={legendRectSize / 2 + 3} className="legend-label">あなた</text>
+                    <rect x="0" y={legendRectSize + 5} width={legendRectSize} height={legendRectSize} fill="#dc3545" />
+                    <text x={legendTextOffset} y={legendRectSize + 5 + legendRectSize / 2 + 3} className="legend-label">NPC</text>
                 </g>
 
                 {tooltip}

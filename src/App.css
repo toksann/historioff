@@ -935,6 +935,38 @@ button {
   gap: 20px;
 }
 
+/* Player Details Overlay Responsive Adjustments */
+@media (max-width: 599px) {
+  .player-details-modal {
+    padding: 15px;
+    width: 85%;
+    max-width: none;
+    max-height: 85vh;
+  }
+
+  .player-details-header h3 {
+    font-size: 1.1em;
+  }
+
+  .player-details-overlay .close-button {
+    font-size: 1.5em;
+    width: 30px;
+    height: 30px;
+  }
+
+  .detail-section {
+    padding: 10px;
+  }
+
+  .detail-section h4 {
+    font-size: 1em;
+  }
+
+  .detail-stat-line {
+    font-size: 0.8em;
+  }
+}
+
 .detail-section {
   background-color: #f9f9f9;
   padding: 15px;
@@ -1102,6 +1134,75 @@ button {
   margin: 0;
   line-height: 1.6;
   color: #555;
+}
+
+/* Card Detail Overlay Responsive Adjustments */
+@media (max-width: 599px) {
+  .card-detail-modal {
+    padding: 15px;
+    width: 90%;
+    max-width: none; /* Allow it to take more width on small screens */
+    max-height: 85vh; /* Allow it to take more height */
+  }
+
+  .card-detail-header h2 {
+    font-size: 1.2em; /* Smaller title */
+  }
+
+  .close-button {
+    font-size: 1.5em; /* Smaller close button */
+    width: 30px;
+    height: 30px;
+  }
+
+  .card-detail-info .info-row {
+    padding: 5px 0; /* Reduced padding */
+    font-size: 0.85em; /* Smaller text */
+  }
+
+  .card-detail-description {
+    padding: 10px; /* Reduced padding */
+  }
+
+  .card-detail-description h4 {
+    font-size: 1em; /* Smaller description header */
+  }
+
+  .card-detail-description p {
+    font-size: 0.85em; /* Smaller description text */
+  }
+}
+
+/* Player Details Overlay Responsive Adjustments */
+@media (max-width: 599px) {
+  .player-details-modal {
+    padding: 15px;
+    width: 90%;
+    max-width: none;
+    max-height: 85vh; /* Adjusted for more vertical margin */
+  }
+
+  .player-details-header h3 {
+    font-size: 1.1em;
+  }
+
+  .player-details-overlay .close-button {
+    font-size: 1.5em;
+    width: 30px;
+    height: 30px;
+  }
+
+  .detail-section {
+    padding: 10px;
+  }
+
+  .detail-section h4 {
+    font-size: 1em;
+  }
+
+  .detail-stat-line {
+    font-size: 0.8em;
+  }
 }
 
 /* カードアクション選択メニュー */
@@ -1342,6 +1443,87 @@ button {
   text-align: center;
   color: #666;
   font-size: 0.9em;
+}
+
+/* Game Log Overlay Responsive Adjustments */
+@media (max-width: 599px) {
+  .game-log-modal {
+    padding: 15px;
+    width: 85%;
+    max-width: none;
+    height: 85vh;
+    max-height: 85vh;
+  }
+
+  .game-log-header {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .game-log-header h2 {
+    font-size: 1.1em;
+  }
+
+  .log-controls .close-button {
+    font-size: 1.5em;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .log-controls .scroll-to-bottom-button {
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+
+  .log-filter-bar {
+    padding: 8px 10px;
+    gap: 5px;
+  }
+
+  .filter-button {
+    font-size: 0.7em;
+    padding: 4px 8px;
+  }
+
+  .game-log-content {
+    padding: 10px;
+  }
+
+  .log-entries {
+    gap: 6px;
+  }
+
+  .log-entry {
+    padding: 8px;
+    font-size: 0.8em;
+  }
+
+  .log-index {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7em;
+    margin-right: 8px;
+  }
+
+  .log-message {
+    font-size: 0.8em;
+  }
+  
+  .log-click-hint {
+    font-size: 0.5em;
+  }
+
+  .log-timestamp {
+    font-size: 0.6em;
+  }
+
+  .game-log-footer {
+    padding: 10px;
+  }
+
+  .log-stats {
+    font-size: 0.8em;
+  }
 }
 
 /* 現在のターンプレイヤーの視覚的識別 */

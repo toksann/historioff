@@ -1,8 +1,27 @@
 import React from 'react';
 import './GameOverScreen.css';
 import ConsciousnessTrendChart from './ConsciousnessTrendChart.js';
+import useWindowSize from '../hooks/useWindowSize.js'; // Import the new hook
 
 function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameState }) {
+  const { width } = useWindowSize();
+
+  // Conditionally set chart dimensions and padding based on screen width
+  let chartWidth, chartHeight, chartPadding;
+  if (width < 600) {
+    chartWidth = width * 0.9;
+    chartHeight = chartWidth * 0.6;
+    chartPadding = 40; // Smaller padding for mobile
+  } else if (width < 950) {
+    chartWidth = width * 0.8;
+    chartHeight = chartWidth * 0.5;
+    chartPadding = 50; // Medium padding
+  } else {
+    chartWidth = 800;
+    chartHeight = 400;
+    chartPadding = 60; // Default padding
+  }
+
   return (
     <div className="game-over-screen">
       <h1>ゲーム終了</h1>
@@ -10,7 +29,13 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
       
       <div className="chart-container">
         <h3>綴られし"歴史"</h3>
-        <ConsciousnessTrendChart turnHistory={turnHistory} gameState={gameState} />
+        <ConsciousnessTrendChart 
+          turnHistory={turnHistory} 
+          gameState={gameState}
+          width={chartWidth}
+          height={chartHeight}
+          padding={chartPadding} // Pass padding as a prop
+        />
       </div>
 
       <div className="game-over-buttons">

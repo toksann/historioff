@@ -28,7 +28,7 @@
 /* モバイル用マリガンモーダル調整 */
 @media (max-width: 599px) {
     .mulligan-modal {
-        width: 95vw;
+        width: 85vw;
         max-width: none;
         max-height: 85vh;
         padding: 15px;

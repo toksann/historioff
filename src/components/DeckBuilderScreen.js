@@ -4,6 +4,7 @@ import CostCurveChart from './CostCurveChart.js';
 import { saveToStorage, getFromStorage } from '../utils/localStorage.js';
 import InfoModal from './overlays/InfoModal.js';
 import DeckBuilderHelpOverlay from './overlays/DeckBuilderHelpOverlay.js'; // Import the new component
+import DeckBuilderLibraryCard from './DeckBuilderLibraryCard.js';
 import { MIN_DECK_SIZE, MAX_DECK_SIZE } from '../gameLogic/constants.js';
 import './DeckBuilderScreen.css';
 import './CostCurveChart.css';
@@ -120,7 +121,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
     setDeck(newDeck);
   };
 
-  const handleCardClick = (card) => {
+  const handleShowCardDetails = (card) => {
     setSelectedCard(card);
   };
 
@@ -216,20 +217,6 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
     reader.readAsText(file);
     event.target.value = ''; // Reset file input
   };
-  
-  const onDragStart = (e, card) => {
-    e.dataTransfer.setData("card", JSON.stringify(card));
-  };
-  
-  const onDragOver = (e) => {
-    e.preventDefault();
-  };
-  
-  const onDrop = (e) => {
-    e.preventDefault();
-    const card = JSON.parse(e.dataTransfer.getData("card"));
-    addCardToDeck(card);
-  };
 
   if (!cardDefs) {
     return (
@@ -296,22 +283,18 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
             </div>
             <div className="deck-builder-card-grid">
               {filteredAndSortedCards.map((card) => (
-                <div 
-                  key={card.name} 
-                  className={`deck-builder-library-card card-type-${card.card_type}`}
-                  onClick={() => handleCardClick(card)}
-                  draggable
-                  onDragStart={(e) => onDragStart(e, card)}
-                  title="クリックで詳細表示、ドラッグでデッキに追加"
-                >
-                  {card.name} ({card.required_scale})
-                </div>
+                <DeckBuilderLibraryCard
+                  key={card.name}
+                  card={card}
+                  onTap={() => addCardToDeck(card)}
+                  onSwipeLeft={() => handleShowCardDetails(card)}
+                />
               ))}
             </div>
           </div>
 
           {/* Deck Building Section */}
-          <div className="deck-building-section" onDragOver={onDragOver} onDrop={onDrop}>
+          <div className="deck-building-section">
             <h2>現在のデッキ ({deck.length}/{deck.length <= MIN_DECK_SIZE ? MIN_DECK_SIZE : MAX_DECK_SIZE})</h2>
             <div className="deck-list">
               {deck.length === 0 ? (
