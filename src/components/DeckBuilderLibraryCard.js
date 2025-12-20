@@ -10,6 +10,7 @@ const DeckBuilderLibraryCard = ({ card, onTap, onSwipeLeft }) => {
   const startX = useRef(0);
   const currentX = useRef(0);
   const isSwipe = useRef(false);
+  const lastTapTime = useRef(0);
 
   const handlePressStart = useCallback((e) => {
     // Prevent default drag behavior on some browsers
@@ -59,7 +60,9 @@ const DeckBuilderLibraryCard = ({ card, onTap, onSwipeLeft }) => {
       }
       // Check for tap (minimal movement)
       else if (Math.abs(movedX) < 10) {
-        if (onTap) {
+        const now = Date.now();
+        if (onTap && (now - lastTapTime.current > 100)) { // 100ms以内の連続タップは無視
+          lastTapTime.current = now;
           onTap(card);
         }
       }

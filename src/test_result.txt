@@ -1,19 +1,5 @@
-Compiled with problems:
-×
-ERROR
-[eslint] 
-src\components\ConsciousnessTrendChart.js
-  Line 331:44:  'legendX' is not defined           no-undef
-  Line 331:56:  'legendY' is not defined           no-undef
-  Line 332:46:  'legendRectSize' is not defined    no-undef
-  Line 332:70:  'legendRectSize' is not defined    no-undef
-  Line 333:30:  'legendTextOffset' is not defined  no-undef
-  Line 333:51:  'legendRectSize' is not defined    no-undef
-  Line 334:36:  'legendRectSize' is not defined    no-undef
-  Line 334:63:  'legendRectSize' is not defined    no-undef
-  Line 334:87:  'legendRectSize' is not defined    no-undef
-  Line 335:30:  'legendTextOffset' is not defined  no-undef
-  Line 335:51:  'legendRectSize' is not defined    no-undef
-  Line 335:72:  'legendRectSize' is not defined    no-undef
-
-Search for the keywords to learn more about each error.
+C:\Users\user\Desktop\historio\historio-web>npx cap sync android
+[error] Could not find the web assets directory: .\www.
+        Please create it and make sure it has an index.html file. You can change the path of this directory in
+        capacitor.config.js (webDir option). You may need to compile the web assets for your app (typically npm run
+        build). More info: https://capacitorjs.com/docs/basics/workflow#sync-your-project

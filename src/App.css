@@ -3783,6 +3783,10 @@ button:disabled {
     padding: 12px 24px;
     min-width: 180px;
   }
+
+  .ascii-art pre {
+    font-size: 7px;
+  }
   
   .library-controls {
     flex-direction: column;
@@ -4111,7 +4115,7 @@ button:disabled {
   }
   
   .ascii-art pre {
-    font-size: 6px;
+    font-size: 5px;
   }
   
   .screen-header {
@@ -4152,6 +4156,14 @@ button:disabled {
     --card-height: clamp(52px, 11vh, 65px);
     --font-base: clamp(8px, 1.6vw, 10px);
     --stats-area-width: clamp(75px, 20vw, 100px);
+  }
+
+  .ascii-art pre {
+    font-size: 4px;
+  }
+
+  .ascii-art pre {
+    font-size: 4px;
   }
 
   /* カードライブラリ画面のスクロール対応 */
