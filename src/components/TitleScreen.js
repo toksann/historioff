@@ -24,7 +24,7 @@ const TitleScreen = ({ onMenuSelect }) => {
           <pre>{ASCII_ART_TITLE}</pre>
         </div>
         <div className="version-info">
-          Version: 0.0.0
+          Version: 0.0.1
         </div>
         
         <div className="menu-options">
