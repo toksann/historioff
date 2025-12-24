@@ -1588,15 +1588,56 @@ const effectHandlers = {
         const moneyCard = player.field.find(c => c.name === 'マネー');
         if (!moneyCard || moneyCard.current_durability <= 0) return;
 
-        const count = moneyCard.current_durability;
-        const target_cards = target_player.field.filter(c => c.card_type === CardType.WEALTH);
-        if (target_cards.length === 0) return;
+        const totalDurabilityToAdd = moneyCard.current_durability;
+        
+        // 対象となる財カード（マネー自身を除く）
+        const wealthCards = target_player.field.filter(c => c.card_type === CardType.WEALTH && c.instance_id !== moneyCard.instance_id);
 
-        for (let i = 0; i < count; i++) {
-            const random_card = target_cards[Math.floor(Math.random() * target_cards.length)];
-            effectsQueue.unshift([{ effect_type: EffectType.MODIFY_CARD_DURABILITY_RESERVE, args: { card_id: random_card.instance_id, amount: amount, source_card_id: sourceCard ? sourceCard.instance_id : null } }, sourceCard]);
+        if (wealthCards.length > 0) {
+            let remainingDurability = totalDurabilityToAdd;
+            const allocations = new Array(wealthCards.length).fill(0);
+
+            // 耐久値をランダムに割り振る
+            for (let i = 0; i < wealthCards.length - 1; i++) {
+                const amountToAllocate = Math.floor(Math.random() * (remainingDurability + 1));
+                allocations[i] = amountToAllocate;
+                remainingDurability -= amountToAllocate;
+            }
+            allocations[wealthCards.length - 1] = remainingDurability;
+
+            // 割り振りをシャッフルして、どのカードにどれだけ割り振られるかをランダム化
+            for (let i = allocations.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allocations[i], allocations[j]] = [allocations[j], allocations[i]];
+            }
+
+            // 各財カードに割り振られた耐久値を加算するエフェクトを生成
+            allocations.forEach((allocatedAmount, index) => {
+                if (allocatedAmount > 0) {
+                    const targetCard = wealthCards[index];
+                    effectsQueue.unshift([{ 
+                        effect_type: EffectType.MODIFY_CARD_DURABILITY_RESERVE, 
+                        args: { 
+                            card_id: targetCard.instance_id, 
+                            amount: allocatedAmount, // amountの代わりに割り振られた値を使用
+                            source_card_id: sourceCard ? sourceCard.instance_id : null 
+                        } 
+                    }, sourceCard]);
+                }
+            });
         }
-        effectsQueue.push([{ effect_type: EffectType.MOVE_CARD, args: { player_id: player_id, card_id: moneyCard.instance_id, source_pile: 'field', destination_pile: 'discard', source_card_id: sourceCard ? sourceCard.instance_id : null } }, sourceCard]);
+        
+        // 場のマネーを捨て札にする
+        effectsQueue.push([{ 
+            effect_type: EffectType.MOVE_CARD, 
+            args: { 
+                player_id: player_id, 
+                card_id: moneyCard.instance_id, 
+                source_pile: 'field', 
+                destination_pile: 'discard', 
+                source_card_id: sourceCard ? sourceCard.instance_id : null 
+            } 
+        }, sourceCard]);
     },
     PROCESS_REDUCE_MONEY_DURABILITY_AND_GAIN_SCALE_RESOLVED: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         const { player_id, money_card_id, amount, source_card_id } = args;
