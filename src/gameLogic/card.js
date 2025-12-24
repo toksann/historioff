@@ -16,13 +16,12 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
         return [];
     }
 
-    let effectsToCheck = card.triggers[triggeredEffectType];
-
-
-
-    if (!effectsToCheck || effectsToCheck.length === 0) {
+    // Primero, verifica si el tipo de efecto activado existe en los gatillos de la carta.
+    if (!card.triggers[triggeredEffectType]) {
         return [];
     }
+
+    let effectsToCheck = card.triggers[triggeredEffectType];
 
     const owner = gameState.players[card.owner];
     const opponent = gameState.players[card.owner === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1];
