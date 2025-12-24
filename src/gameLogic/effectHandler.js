@@ -1590,8 +1590,8 @@ const effectHandlers = {
 
         const totalDurabilityToAdd = moneyCard.current_durability;
         
-        // 対象となる財カード（マネー自身を除く）
-        const wealthCards = target_player.field.filter(c => c.card_type === CardType.WEALTH && c.instance_id !== moneyCard.instance_id);
+        // 対象となる財カード（マネー自身を含む）
+        const wealthCards = target_player.field.filter(c => c.card_type === CardType.WEALTH);
 
         if (wealthCards.length > 0) {
             let remainingDurability = totalDurabilityToAdd;
