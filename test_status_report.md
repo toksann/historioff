@@ -144,19 +144,3 @@ vercelでやる
 **(調整済み)必要規模が足りていなくてもグレーアウトされていない**
  → 今んとこ大丈夫そう
 
-
-確認された未分析のエラー
-*   **確認状況**: 「資本主義」の「マネー」の耐久値と同じ回数だけ他の財の耐久値を+1する効果が重すぎたのか当該エラーが発生。
-*    **方針**: 「資本主義」の効果をランダムに割り振った計算後に加算するように変更することで軽減を図るかなどが考えられるが、以後強化回数に依存する効果を加える可能性を考えると仕様を変更したくない！
-
-Uncaught runtime errors:
-×
-ERROR
-Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-    at getRootForUpdatedFiber (http://localhost:3000/static/js/bundle.js:9886:167)
-    at enqueueConcurrentHookUpdate (http://localhost:3000/static/js/bundle.js:9872:12)
-    at dispatchSetStateInternal (http://localhost:3000/static/js/bundle.js:11843:16)
-    at dispatchSetState (http://localhost:3000/static/js/bundle.js:11816:5)
-    at processAnimation (http://localhost:3000/static/js/bundle.js:29021:9)
-
-

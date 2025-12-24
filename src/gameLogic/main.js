@@ -198,12 +198,16 @@ export const performMulligan = (gameState, playerId, selectedCardIds) => {
         // Add a flag to the new cards
         newCards.forEach(card => {
             card.isNew = true;
+            card.location = 'hand';
         });
         
         // 新しい手札をセット
         player.hand = [...remainingHand, ...newCards];
 
         // 3. 隔離したカードをデッキに戻してシャッフル
+        cardsToReturn.forEach(card => {
+            card.location = 'deck';
+        });
         player.deck.push(...cardsToReturn);
         player.deck = shuffle(player.deck);
 
