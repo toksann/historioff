@@ -1580,7 +1580,7 @@ const effectHandlers = {
         }
     },
     [EffectType.PROCESS_MONEY_DURABILITY_BASED_COUNT_MODIFY_CARD_DURABILITY]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        const { player_id, target_player_id, amount } = args;
+        const { player_id, target_player_id} = args;
         const player = gameState.players[player_id];
         const target_player = gameState.players[target_player_id];
         if (!player || !target_player) return;
