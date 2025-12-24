@@ -16,7 +16,7 @@ const ASCII_ART_TITLE = `
       :"                     \`~==R=~\`
 `;
 
-const TitleScreen = ({ onMenuSelect }) => {
+const TitleScreen = ({ onMenuSelect, onShowChangelog, version }) => {
   return (
     <div className="title-screen">
       <div className="title-content">
@@ -24,7 +24,9 @@ const TitleScreen = ({ onMenuSelect }) => {
           <pre>{ASCII_ART_TITLE}</pre>
         </div>
         <div className="version-info">
-          Version: 0.0.1
+          <button className="version-button" onClick={onShowChangelog}>
+            Version: {version}
+          </button>
         </div>
         
         <div className="menu-options">

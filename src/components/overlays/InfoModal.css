@@ -47,6 +47,7 @@
 .info-modal-body {
   margin-bottom: 20px;
   line-height: 1.6;
+  text-align: left; /* Ensure text is left-aligned */
 }
 
 .info-modal-footer {
@@ -83,7 +84,7 @@
   }
 
   .info-modal-body {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin-bottom: 15px;
   }
 

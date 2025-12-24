@@ -11,6 +11,7 @@ import useEnhancedLog from './hooks/useEnhancedLog.js'; // Import useEnhancedLog
 import GameOverScreen from './components/GameOverScreen.js'; // Import GameOverScreen
 import DeckBuilderScreen from './components/DeckBuilderScreen.js';
 import { effectMonitor } from './gameLogic/EffectMonitor.js'; // Import effectMonitor
+import packageJson from '../package.json'; // Import package.json to get version
 
 function App() {
   const [gameState, setGameState] = useState(null);
@@ -19,6 +20,9 @@ function App() {
   const [error, setError] = useState(null);
   const [playingGameResultAnimation, setPlayingGameResultAnimation] = useState(false);
   
+  // Get app version from package.json
+  const appVersion = packageJson.version;
+
   // Ref to hold the latest gameState
   const gameStateRef = useRef(gameState);
   // Update the ref whenever gameState changes
@@ -359,6 +363,7 @@ function App() {
           onStartGame={startGame}
           currentScreen={currentScreen}
           onScreenChange={handleScreenChange}
+          version={appVersion}
         />
       )}
     </div>

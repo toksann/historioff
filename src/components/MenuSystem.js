@@ -4,15 +4,18 @@ import DeckSelectionScreen from './DeckSelectionScreen.js';
 import CardLibraryScreen from './CardLibraryScreen.js';
 import RulesOverlay from './overlays/RulesOverlay.js';
 import CreditsOverlay from './overlays/CreditsOverlay.js';
+import ChangelogModal from './overlays/ChangelogModal.js'; // Import ChangelogModal
 
 const MenuSystem = ({
   gameData,
   onStartGame,
   currentScreen,
-  onScreenChange
+  onScreenChange,
+  version // Receive version prop from App.js
 }) => {
   const [showRulesOverlay, setShowRulesOverlay] = useState(false);
   const [showCreditsOverlay, setShowCreditsOverlay] = useState(false);
+  const [showChangelogOverlay, setShowChangelogOverlay] = useState(false); // State for ChangelogModal
   const [selectedPlayerDeck, setSelectedPlayerDeck] = useState(null);
 
   const handleMenuSelect = (option) => {
@@ -31,6 +34,9 @@ const MenuSystem = ({
         break;
       case 'credits':
         setShowCreditsOverlay(true);
+        break;
+      case 'changelog': // New case for changelog
+        setShowChangelogOverlay(true);
         break;
       default:
         break;
@@ -77,7 +83,7 @@ const MenuSystem = ({
   const renderCurrentScreen = () => {
     switch (currentScreen) {
       case 'title':
-        return <TitleScreen onMenuSelect={handleMenuSelect} />;
+        return <TitleScreen onMenuSelect={handleMenuSelect} onShowChangelog={() => setShowChangelogOverlay(true)} version={version} />; // Pass onShowChangelog and version
       
       case 'deckSelection':
         return (
@@ -99,7 +105,7 @@ const MenuSystem = ({
         );
       
       default:
-        return <TitleScreen onMenuSelect={handleMenuSelect} />;
+        return <TitleScreen onMenuSelect={handleMenuSelect} onShowChangelog={() => setShowChangelogOverlay(true)} version={version} />; // Also pass for default
     }
   };
 
@@ -116,6 +122,12 @@ const MenuSystem = ({
       <CreditsOverlay
         isOpen={showCreditsOverlay}
         onClose={() => setShowCreditsOverlay(false)}
+      />
+
+      <ChangelogModal // Render ChangelogModal
+        isOpen={showChangelogOverlay}
+        onClose={() => setShowChangelogOverlay(false)}
+        version={version}
       />
     </div>
   );
