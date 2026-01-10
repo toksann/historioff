@@ -6,6 +6,7 @@ const CREDITS_TEXT = `このゲームの作成には以下のツールが関わ�
  ・Google Gemini (https://gemini.google.com/)
  ・Claude (https://www.anthropic.com/claude)
  ・Kiro (https://kiro.dev/)
+※AIツールにソースコードの生成・修正の大部分を支援いただいていますが、ゲームロジック全般の構造設計及び細かな修正は手動で行いました。
 
 ■タイトルAA作成
  ・アスキーアート（AA）作成：テキスト、画像からASCII Artを生成 | ラッコツールズ (https://rakko.tools/tools/68/)

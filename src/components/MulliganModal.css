@@ -18,7 +18,7 @@
     padding: 20px;
     width: 80%;
     max-width: 900px;
-    max-height: 80vh;
+    max-height: 80dvh;
     overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     color: #fff;
@@ -30,7 +30,7 @@
     .mulligan-modal {
         width: 85vw;
         max-width: none;
-        max-height: 85vh;
+        max-height: 85dvh;
         padding: 15px;
         border-radius: 8px;
     }
@@ -39,7 +39,7 @@
 @media (max-width: 479px) {
     .mulligan-modal {
         width: 98vw;
-        max-height: 90vh;
+        max-height: 90dvh;
         padding: 10px;
     }
 }

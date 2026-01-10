@@ -36,7 +36,7 @@ const DeckBuilderHelpOverlay = ({ isOpen, onClose }) => {
     <div className="overlay" onClick={handleOverlayClick}>
       <div className="overlay-modal rules-overlay">
         <div className="overlay-header">
-          <h2>【国興し】</h2>
+          <h2>【ありうべき運命の選定】</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         

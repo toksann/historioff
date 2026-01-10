@@ -24,7 +24,7 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
 
   return (
     <div className="game-over-screen">
-      <h1>ゲーム終了</h1>
+      <h1>闘争ここに完成せり</h1>
       <h2>勝者: {winnerName}</h2>
       
       <div className="chart-container">
