@@ -36,16 +36,15 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd }) => {
           <div className="card-name">{card.name}</div>
         </div>
         
-        <div className="card-center">
-          {showDurability && (
-            <div className="card-durability">
-              {durabilityValue}
-            </div>
-          )}
-        </div>
-        
         <div className="card-footer">
-          <div className="card-cost">規模: {card.required_scale}</div>
+          <div className="card-cost">
+            <span>⭐ {card.required_scale}</span>
+            {showDurability && (
+              <span className="card-durability-value">
+                {' / '}🛡️ {durabilityValue}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     );
