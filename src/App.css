@@ -4242,6 +4242,6 @@ button:disabled {
     line-height: 1.3; /* 行の高さを調整 */
   }
 }.card-durability-value {
-  color: #d32f2f;
-  font-weight: bold;
+  color: #f44336; /* Red, consistent with opponent stats border */
+  font-weight: bolder; /* Make it even bolder */
 }

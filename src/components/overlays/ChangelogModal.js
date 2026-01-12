@@ -13,6 +13,10 @@ const ChangelogModal = ({ isOpen, onClose, version }) => {
         </div>
         <div className="info-modal-body">
           <p>現在のバージョン: {version}</p>
+          <h3>Version 0.0.4 (2026/01/13)</h3>
+          <ul>
+            <li>画面調整：カードUIの財カードの耐久値表示が見づらかったので調整</li>
+          </ul>
           <h3>Version 0.0.3 (2026/01/12)</h3>
           <ul>
             <li>画面調整：カードUIの規模と財カードの耐久値の表示を調整</li>
