@@ -1,0 +1,10 @@
+{
+  "TUT_DECK_PLAYER_BASIC": {
+    "name": "チュートリアル：基本操作デッキ",
+    "cards": [ "豊作", "農民", "移民", "予感" ]
+  },
+  "TUT_DECK_NPC_PASSIVE": {
+    "name": "チュートリアル：何もしないNPCデッキ",
+    "cards": [ "農民", "農民", "農民" ]
+  }
+}

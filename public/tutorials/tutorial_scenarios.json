@@ -1,0 +1,45 @@
+{
+  "SCENARIO_BASIC_FLOW": [
+    {
+      "step": 1,
+      "trigger": { 
+        "type": "TUTORIAL_START"
+      },
+      "text": "ようこそ！『Historio』の基本操作を学びます。「次へ」を押して進めてください。",
+      "completionCondition": { 
+        "type": "INPUT_REQUIRED" 
+      }
+    },
+    {
+      "step": 2,
+      "trigger": { 
+        "type": "PREVIOUS_STEP_COMPLETE" 
+      },
+      "text": "あなたの手札にある「豊作」というカードをハイライトしています。クリックして選択し、場に出してみましょう。",
+      "highlight": { "targetId": "card_豊作" },
+      "completionCondition": { 
+        "type": "PLAY_CARD", "cardName": "豊作" 
+      }
+    },
+    {
+      "step": 3,
+      "trigger": { 
+        "type": "TURN_START", "player": "human", "turn": 2 
+      },
+      "text": "あなたの2ターン目です。ターンが始まると、自動で山札からカードを1枚引きます。",
+      "highlight": { "targetId": "player-hand-area" },
+      "completionCondition": { 
+        "type": "AUTO_PROCEED", "delay": 4000 
+      }
+    },
+    {
+      "step": 4,
+      "trigger": { 
+        "type": "PREVIOUS_STEP_COMPLETE" 
+      },
+      "text": "素晴らしい！右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。これでチュートリアルは完了です。",
+      "highlight": { "targetId": "end_turn_button" },
+      "completionCondition": { "type": "END_TURN" }
+    }
+  ]
+}
