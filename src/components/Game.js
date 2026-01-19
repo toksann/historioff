@@ -348,7 +348,6 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                 </div>
             )}
             
-            {/* カードアクションメニュー */}
             {actionMenuCard && (
                 <CardActionMenu
                     card={actionMenuCard}
