@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const TutorialSelectionScreen = ({ onSelectTutorial, onBack }) => {
-    const [tutorials, setTutorials] = useState([]);
+const TutorialSelectionScreen = ({ gameData, onStartTutorial, onExit }) => {
+    // gameData がなければ何も表示しない
+    if (!gameData || !gameData.tutorialMaster) {
+        return <div>チュートリアルデータを読み込み中...</div>;
+    }
 
-    useEffect(() => {
-        fetch('/tutorials/tutorial_master.json')
-            .then(response => response.json())
-            .then(data => setTutorials(data))
-            .catch(error => console.error('Error fetching tutorials:', error));
-    }, []);
+    const tutorials = gameData.tutorialMaster;
 
     return (
         <div className="deck-selection-screen">
             <div className="screen-header">
                 <h1>チュートリアル選択</h1>
-                <button onClick={onBack} className="back-button">戻る</button>
+                <button onClick={onExit} className="back-button">戻る</button>
             </div>
             <div className="deck-selection-area">
                 <div className="deck-grid">
                     {tutorials.map(tutorial => (
-                        <div key={tutorial.id} className="deck-card" onClick={() => onSelectTutorial(tutorial)}>
+                        <div key={tutorial.tutorialId} className="deck-card" onClick={() => onStartTutorial(tutorial.tutorialId)}>
                             <h3>{tutorial.title}</h3>
                             <p className="deck-description">{tutorial.description}</p>
                         </div>

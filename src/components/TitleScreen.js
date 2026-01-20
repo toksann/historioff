@@ -16,7 +16,7 @@ const ASCII_ART_TITLE = `
       :"                     \`~==R=~\`
 `;
 
-const TitleScreen = ({ onMenuSelect, onShowChangelog, version }) => {
+const TitleScreen = ({ onScreenChange, onShowRules, onShowCredits, onShowChangelog, version }) => {
   return (
     <div className="title-screen">
       <div className="title-content">
@@ -32,35 +32,35 @@ const TitleScreen = ({ onMenuSelect, onShowChangelog, version }) => {
         <div className="menu-options">
           <button 
             className="menu-button"
-            onClick={() => onMenuSelect('start')}
+            onClick={() => onScreenChange('deckSelection')}
           >
             ゲーム開始
           </button>
           
           <button 
             className="menu-button"
-            onClick={() => onMenuSelect('deckBuilder')}
+            onClick={() => onScreenChange('deckBuilder')}
           >
             デッキ構築
           </button>
           
           <button 
             className="menu-button"
-            onClick={() => onMenuSelect('cardLibrary')}
+            onClick={() => onScreenChange('cardLibrary')}
           >
             ライブラリ
           </button>
 
           <button 
             className="menu-button"
-            onClick={() => onMenuSelect('rules')}
+            onClick={onShowRules}
           >
             ルール
           </button>
           
           <button 
             className="menu-button"
-            onClick={() => onMenuSelect('credits')}
+            onClick={onShowCredits}
           >
             開発ツール等
           </button>

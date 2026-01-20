@@ -105,7 +105,7 @@ const MenuSystem = ({
         );
       
       default:
-        return <TitleScreen onMenuSelect={handleMenuSelect} onShowChangelog={() => setShowChangelogOverlay(true)} version={version} />; // Also pass for default
+        return null;
     }
   };
 

@@ -1,6 +1,6 @@
 [
   {
-    "id": "TUTORIAL_01",
+    "tutorialId": "TUTORIAL_01",
     "title": "基本操作編",
     "description": "カードのプレイとターンの流れを学びます。",
     "playerDeckId": "TUT_DECK_PLAYER_BASIC",

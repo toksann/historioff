@@ -161,6 +161,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
     <div className="deck-selection-screen">
       <div className="screen-header">
         <h1>デッキ選択</h1>
+        <button className="tutorial-button" onClick={() => onScreenChange('tutorialSelection')}>チュートリアル</button>
         <button className="back-button" onClick={onBack}>← タイトルに戻る</button>
       </div>
 

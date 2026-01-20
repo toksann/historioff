@@ -1,60 +1,8 @@
 Compiled with problems:
 ×
-ERROR in ./src/components/Game.js
-Module build failed (from ./node_modules/babel-loader/lib/index.js):
-SyntaxError: C:\Users\user\Desktop\historio\historio-web\src\components\Game.js: 'return' outside of function. (568:8)
-
-  566 |
-  567 |     if (!gameState) {
-> 568 |         return <div>Loading Game...</div>;
-      |         ^
-  569 |     }
-  570 |
-  571 |     const { current_turn, awaiting_input } = gameState;
-    at constructor (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:367:19)
-    at FlowParserMixin.raise (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:6630:19)
-    at FlowParserMixin.parseReturnStatement (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13145:12)
-    at FlowParserMixin.parseStatementContent (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12807:21)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12776:17)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:2949:24)
-    at FlowParserMixin.parseStatementListItem (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12756:17)
-    at FlowParserMixin.parseBlockOrModuleBlockBody (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13325:61)
-    at FlowParserMixin.parseBlockBody (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13318:10)
-    at FlowParserMixin.parseBlock (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13306:10)
-    at FlowParserMixin.parseStatementContent (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12867:21)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12776:17)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:2949:24)
-    at FlowParserMixin.parseStatementOrSloppyAnnexBFunctionDeclaration (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12766:17)
-    at FlowParserMixin.parseIfStatement (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13139:28)
-    at FlowParserMixin.parseStatementContent (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12805:21)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12776:17)
-    at FlowParserMixin.parseStatementLike (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:2949:24)
-    at FlowParserMixin.parseModuleItem (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12753:17)
-    at FlowParserMixin.parseBlockOrModuleBlockBody (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13325:36)
-    at FlowParserMixin.parseBlockBody (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:13318:10)
-    at FlowParserMixin.parseProgram (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12634:10)
-    at FlowParserMixin.parseTopLevel (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:12624:25)
-    at FlowParserMixin.parseTopLevel (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:3718:28)
-    at FlowParserMixin.parse (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:14501:10)
-    at parse (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\parser\lib\index.js:14535:38)
-    at parser (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\core\lib\parser\index.js:41:34)
-    at parser.next (<anonymous>)
-    at normalizeFile (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\core\lib\transformation\normalize-file.js:64:37)
-    at normalizeFile.next (<anonymous>)
-    at run (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\core\lib\transformation\index.js:22:50)
-    at run.next (<anonymous>)
-    at transform (C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\core\lib\transform.js:22:33)
-    at transform.next (<anonymous>)
-    at step (C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:261:32)
-    at C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:273:13
-    at async.call.result.err.err (C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:223:11)
-    at C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:189:28
-    at C:\Users\user\Desktop\historio\historio-web\node_modules\@babel\core\lib\gensync-utils\async.js:67:7
-    at C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:113:33
-    at step (C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:287:14)
-    at C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:273:13
-    at async.call.result.err.err (C:\Users\user\Desktop\historio\historio-web\node_modules\gensync\index.js:223:11)
 ERROR
 [eslint] 
-src\components\Game.js
-  Line 568:8:  Parsing error: 'return' outside of function. (568:8)
+src\App.js
+  Line 265:35:  'card' is not defined  no-undef
+
+Search for the keywords to learn more about each error.
