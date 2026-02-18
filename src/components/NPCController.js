@@ -112,8 +112,22 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPer
     };
 
     const handleNPCTurn = (npcPlayer) => {
-        // カードプレイを試行
-        const cardPlayed = NPCActions.executeCardPlay(npcPlayer, gameStateRef.current, onPlayCard); // Use gameStateRef.current here
+        const currentGameState = gameStateRef.current;
+        
+        // チュートリアル用のスクリプトがあるかチェック
+        const npcScript = currentGameState.tutorial?.master?.npcScript;
+        const currentRound = currentGameState.round_number;
+        
+        if (npcScript && npcScript[currentRound]) {
+            const turnScript = npcScript[currentRound];
+            console.log(`[NPC] Following Tutorial Script for Round ${currentRound}`);
+            NPCActions.executeScriptedTurn(npcPlayer, currentGameState, turnScript, onPlayCard, onEndTurn);
+            return; // スクリプトがある場合はここで確実に終了し、通常のAIには渡さない
+        }
+
+        // スクリプトがない場合は通常の行動
+        console.log('[NPC] No Script found. Using Normal AI.');
+        const cardPlayed = NPCActions.executeCardPlay(npcPlayer, currentGameState, onPlayCard);
         
         if (!cardPlayed) {
             // プレイ可能なカードがない場合はターン終了

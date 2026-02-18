@@ -121,6 +121,39 @@ export const NPCActions = {
 
         console.log(`[NPCActions] NPC deciding mulligan. Player scale: ${player.scale}, Threshold: ${mulliganThreshold}. Cards to mulligan:`, cardsToMulligan.map(c => c.name));
         return cardsToMulligan;
+    },
+
+    // チュートリアル用のスクリプト実行
+    executeScriptedTurn: (player, gameState, script, onPlayCard, onEndTurn) => {
+        const playedThisTurn = player.cards_played_this_turn || 0;
+        const targetCount = script.count || 1;
+
+        console.log(`[NPCActions] Scripted Turn: played=${playedThisTurn}, target=${targetCount}`);
+        
+        if (script.command === 'PLAY_OLD_CARDS') {
+            // 指定枚数に達していない場合のみプレイを試行
+            if (playedThisTurn < targetCount) {
+                // 古い順にプレイ可能なものを探す
+                for (let i = 0; i < player.hand.length; i++) {
+                    const card = player.hand[i];
+                    if (card.required_scale <= player.scale) {
+                        console.log(`[NPCActions] Scripted Play (${playedThisTurn + 1}/${targetCount}): ${card.name}`);
+                        onPlayCard(card);
+                        return true; 
+                    }
+                }
+                // プレイ可能なものがない場合は、あきらめて次（ターン終了）へ
+                console.log('[NPCActions] No playable cards for script.');
+            }
+            
+            // 指定枚数終了、またはプレイ不能な場合
+            if (script.autoEndTurn) {
+                console.log('[NPCActions] Scripted Turn End triggered.');
+                onEndTurn();
+                return true;
+            }
+        }
+        return false;
     }
 };
 
