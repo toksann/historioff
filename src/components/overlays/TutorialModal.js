@@ -2,6 +2,8 @@ import React from 'react';
 import './InfoModal.css'; // InfoModalのCSSを流用
 
 const TutorialModal = ({ step, onNext }) => {
+    console.log('[DEBUG TutorialModal] Rendered. Step:', step ? step.step : 'null', 'onNext defined:', !!onNext); // ★ここにログを追加
+
     // stepやstep.textが存在しない場合はモーダルを表示しない
     if (!step || !step.text) {
         return null;

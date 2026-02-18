@@ -1,0 +1,47 @@
+.tutorial-highlight-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* コンテナ自体はスルー */
+    z-index: 2000;
+}
+
+.tutorial-mask {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+    pointer-events: auto; /* マスク部分はクリックをブロック */
+    transition: all 0.2s ease-out;
+}
+
+.tutorial-focus-frame {
+    position: fixed;
+    border: 4px solid #00f2ff;
+    box-shadow: 0 0 15px #00f2ff, inset 0 0 15px #00f2ff;
+    border-radius: 8px;
+    pointer-events: none; /* デフォルトはスルー */
+    animation: tutorial-pulse 1.5s infinite;
+    z-index: 2001;
+    transition: all 0.2s ease-out;
+}
+
+.tutorial-focus-frame.clickable {
+    pointer-events: auto; /* クリックを奪う */
+    cursor: pointer;
+}
+
+@keyframes tutorial-pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

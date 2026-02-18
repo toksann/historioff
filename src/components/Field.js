@@ -33,7 +33,7 @@ const Field = ({ playerName, cards, fieldLimit, onProvideInput, awaiting_input, 
 
     return (
         <div className="field">
-            <h4>{playerName}'s Field</h4>
+            <h4>{playerName}の場</h4>
             
             <div className="field-area">
                 <div className="field-label">

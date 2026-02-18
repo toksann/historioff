@@ -5,41 +5,37 @@ import '../App.css';
 const Hand = ({ player, onPlayCard, onProvideInput, awaiting_input, onCardClick }) => {
     if (!player) return <div className="hand">Loading hand...</div>;
 
-    const isAwaitingChoice = awaiting_input && awaiting_input.type === 'CHOOSE_CARD_FOR_EFFECT';
-    const isAwaitingCardOperation = awaiting_input && awaiting_input.type === 'CHOICE_CARDS_FOR_OPERATION';
+    // isSelectableはGame.jsで選択待ち状態にあるかどうかを示すフラグ。
+    // Hand.js内でのカード個別の選択可否判定は、awaiting_input.typeに応じて行う。
 
     const handleClick = (card) => {
         if (onCardClick) {
-            // Game.jsのhandleCardClickに処理を委譲
             onCardClick(card);
         } else {
-            // フォールバック処理
-            if (isAwaitingChoice && awaiting_input.valid_target_ids.includes(card.instance_id)) {
-                onProvideInput(card);
-            } else if (isAwaitingCardOperation && awaiting_input.options.some(option => option.instance_id === card.instance_id)) {
-                onProvideInput([card]);
-            } else {
-                // 選択待ち状態でも通常時でもカードの詳細表示は許可
-                // ただし、プレイ処理は選択待ち状態では無効
-                if (!isAwaitingChoice && !isAwaitingCardOperation) {
-                    onPlayCard(card);
-                }
-                // 選択待ち状態でも詳細表示のためのクリックは有効にする
-                // （実際の詳細表示処理はGame.jsで行われる）
+            // ここでのonPlayCardは、Game.jsにawaiting_inputがない場合にのみ実行されるべき
+            // awaits_inputがある場合のクリックはGame.jsのhandleCardClickで処理される
+            if (!awaiting_input) {
+                onPlayCard(card);
             }
         }
     };
 
     return (
         <div className="hand">
-            <h4>{player.name}'s Hand ({player.hand.length}枚)</h4>
+            <h4>{player.name}の手札 ({player.hand.length}枚)</h4>
             <div className="hand-cards-scrollable">
                 {player.hand.map(card => {
-                    const isSelectable = (isAwaitingChoice && awaiting_input.valid_target_ids.includes(card.instance_id)) ||
-                                       (isAwaitingCardOperation && awaiting_input.options.some(option => option.instance_id === card.instance_id));
+                    let isCardSelectable = false;
+                    if (awaiting_input) {
+                        if (awaiting_input.type === 'CHOICE_CARD_FOR_EFFECT') {
+                            isCardSelectable = awaiting_input.valid_target_ids && awaiting_input.valid_target_ids.includes(card.instance_id);
+                        } else if (awaiting_input.type === 'CHOICE_CARDS_FOR_OPERATION') {
+                            isCardSelectable = awaiting_input.options && awaiting_input.options.some(option => option.instance_id === card.instance_id);
+                        }
+                    }
                     return (
                         <div key={card.instance_id} className="hand-card-slot" onClick={() => handleClick(card)}>
-                            <Card card={card} mode="game" isSelectable={isSelectable} />
+                            <Card card={card} mode="game" isSelectable={isCardSelectable} id={`card_${card.name}`} />
                         </div>
                     );
                 })}

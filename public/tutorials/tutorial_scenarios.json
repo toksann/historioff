@@ -1,45 +1,133 @@
 {
-  "SCENARIO_BASIC_FLOW": [
-    {
-      "step": 1,
-      "trigger": { 
-        "type": "TUTORIAL_START"
+  "SCENARIO_BASIC_FLOW": {
+    "firstPlayer": "HUMAN",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "steps": [
+      {
+        "step": 1,
+        "trigger": {
+          "type": "TUTORIAL_START"
+        },
+        "action": {
+          "type": "SHOW_MODAL",
+          "text": "ようこそ！『Historio』の基本操作を学びます。「次へ」を押して進めてください。"
+        },
+        "completionCondition": {
+          "type": "INPUT_REQUIRED"
+        }
       },
-      "text": "ようこそ！『Historio』の基本操作を学びます。「次へ」を押して進めてください。",
-      "completionCondition": { 
-        "type": "INPUT_REQUIRED" 
+      {
+        "step": 2,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "SHOW_MODAL",
+          "text": "あなたの手札にある「豊作」というカードをクリックして選択してみましょう。"
+        },
+        "completionCondition": {
+          "type": "INPUT_REQUIRED"
+        }
+      },
+      {
+        "step": 3,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "HIGHLIGHT",
+          "targetId": "card_豊作"
+        },
+        "completionCondition": {
+          "type": "SELECT_CARD",
+          "cardName": "豊作"
+        }
+      },
+      {
+        "step": 3.5,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "HIGHLIGHT",
+          "targetId": "play_button"
+        },
+        "completionCondition": {
+          "type": "PLAY_CARD",
+          "cardName": "豊作"
+        }
+      },
+      {
+        "step": 4,
+        "trigger": {
+          "type": "TURN_START",
+          "player": "human",
+          "round": 2
+        },
+        "action": {
+          "type": "SHOW_MODAL",
+          "text": "あなたの2ターン目です。ターンが始まると、自動で山札からカードを1枚引きます。手札が1枚増えているはずです。"
+        },
+        "completionCondition": {
+          "type": "INPUT_REQUIRED"
+        }
+      },
+      {
+        "step": 5,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "HIGHLIGHT",
+          "targetId": "player-hand-area"
+        },
+        "completionCondition": {
+          "type": "CLICK_TARGET"
+        }
+      },
+      {
+        "step": 6,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "SHOW_MODAL",
+          "text": "素晴らしい！右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。これでチュートリアルは完了です。"
+        },
+        "completionCondition": {
+          "type": "INPUT_REQUIRED"
+        }
+      },
+      {
+        "step": 7,
+        "trigger": {
+          "type": "PREVIOUS_STEP_COMPLETE"
+        },
+        "action": {
+          "type": "HIGHLIGHT",
+          "targetId": "end_turn_button"
+        },
+        "completionCondition": {
+          "type": "END_TURN"
+        }
+      },
+      {
+        "step": 8,
+        "trigger": {
+          "type": "TURN_START",
+          "player": "npc",
+          "turn": "any"
+        },
+        "action": {
+          "type": "NPC_ACTION",
+          "command": "PLAY_CARDS",
+          "count": 1
+        },
+        "completionCondition": {
+          "type": "AUTO_PROCEED"
+        }
       }
-    },
-    {
-      "step": 2,
-      "trigger": { 
-        "type": "PREVIOUS_STEP_COMPLETE" 
-      },
-      "text": "あなたの手札にある「豊作」というカードをハイライトしています。クリックして選択し、場に出してみましょう。",
-      "highlight": { "targetId": "card_豊作" },
-      "completionCondition": { 
-        "type": "PLAY_CARD", "cardName": "豊作" 
-      }
-    },
-    {
-      "step": 3,
-      "trigger": { 
-        "type": "TURN_START", "player": "human", "turn": 2 
-      },
-      "text": "あなたの2ターン目です。ターンが始まると、自動で山札からカードを1枚引きます。",
-      "highlight": { "targetId": "player-hand-area" },
-      "completionCondition": { 
-        "type": "AUTO_PROCEED", "delay": 4000 
-      }
-    },
-    {
-      "step": 4,
-      "trigger": { 
-        "type": "PREVIOUS_STEP_COMPLETE" 
-      },
-      "text": "素晴らしい！右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。これでチュートリアルは完了です。",
-      "highlight": { "targetId": "end_turn_button" },
-      "completionCondition": { "type": "END_TURN" }
-    }
-  ]
+    ]
+  }
 }

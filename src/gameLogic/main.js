@@ -26,7 +26,7 @@ export const checkGameOver = (gameState) => produce(gameState, _updateGameOverSt
 /**
  * Initializes the entire game state for a new game.
  */
-export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2DeckName) => {
+export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2DeckName, tutorialScenario = null) => {
     const p1DeckObject = presetDecks.find(deck => deck.name === player1DeckName);
     const p2DeckObject = presetDecks.find(deck => deck.name === player2DeckName);
 
@@ -43,8 +43,14 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
     let p1Deck = p1DeckTemplates.map(t => createCardInstance(t, PlayerId.PLAYER1));
     let p2Deck = p2DeckTemplates.map(t => createCardInstance(t, PlayerId.PLAYER2));
 
-    p1Deck = shuffle(p1Deck);
-    p2Deck = shuffle(p2Deck);
+    // チュートリアルでシャッフル無効が指定されている場合はスキップ
+    if (!tutorialScenario || tutorialScenario.shuffleDeck !== false) {
+        p1Deck = shuffle(p1Deck);
+        p2Deck = shuffle(p2Deck);
+        console.log('[GAME] Decks shuffled.');
+    } else {
+        console.log('[TUTORIAL] Deck shuffling skipped as per scenario.');
+    }
 
     const p1Hand = p1Deck.splice(0, INITIAL_HAND_SIZE);
     const p2Hand = p2Deck.splice(0, INITIAL_HAND_SIZE);
@@ -85,7 +91,7 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
             }
         },
         current_turn: null,
-        phase: GamePhase.MULLIGAN,
+        phase: (tutorialScenario && tutorialScenario.enableMulligan === false) ? GamePhase.START_TURN : GamePhase.MULLIGAN,
         mulligan_state: {
             [HUMAN_PLAYER_ID]: { status: 'undecided', count: 0 },
             [NPC_PLAYER_ID]: { status: 'undecided', count: 0 },
@@ -128,8 +134,17 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
         });
     });
 
+    // チュートリアル設定に基づく先攻後攻の決定
     const playerIds = [PlayerId.PLAYER1, PlayerId.PLAYER2];
-    const firstPlayerId = playerIds[Math.floor(Math.random() * playerIds.length)];
+    let firstPlayerId;
+    
+    if (tutorialScenario && tutorialScenario.firstPlayer) {
+        firstPlayerId = tutorialScenario.firstPlayer === 'HUMAN' ? HUMAN_PLAYER_ID : NPC_PLAYER_ID;
+        console.log(`[TUTORIAL] Fixed First Player: ${firstPlayerId}`);
+    } else {
+        firstPlayerId = playerIds[Math.floor(Math.random() * playerIds.length)];
+    }
+
     const secondPlayerId = firstPlayerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
     gameState.current_turn = firstPlayerId;
     gameState.first_player = firstPlayerId;
@@ -163,6 +178,20 @@ export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2De
             debuff_applied: FIRST_PLAYER_CONSCIOUSNESS_MODIFIER
         }
     });
+
+    // マリガン無しの場合、即座に1ターン目の開始処理（ドロー等）を予約
+    if (tutorialScenario && tutorialScenario.enableMulligan === false) {
+        console.log('[TUTORIAL] Skipping Mulligan. Initializing Turn 1 Draw.');
+        gameState.effect_queue.push([{
+            effect_type: EffectType.DRAW_CARD,
+            args: { player_id: firstPlayerId }
+        }, null]);
+        
+        const ownerEventArgs = { player_id: firstPlayerId, target_player_id: firstPlayerId };
+        const opponentEventArgs = { player_id: firstPlayerId, target_player_id: secondPlayerId };
+        gameState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OWNER, args: ownerEventArgs }, null]);
+        gameState.effect_queue.push([{ effect_type: TriggerType.START_TURN_OPPONENT, args: opponentEventArgs }, null]);
+    }
 
     return gameState;
 };

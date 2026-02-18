@@ -1998,9 +1998,29 @@ button:disabled {
 
 /* Version button styling */
 .version-info {
+  /* No additional styling for .version-info was provided in the original text,
+     so it remains as is, or you can add specific styles if needed. */
   margin-top: 10px;
   font-size: 0.9em;
   color: #bbb;
+}
+
+/* チュートリアルハイライト用スタイル */
+.tutorial-highlight {
+  box-shadow: 0 0 0 5px yellow, 0 0 0 10px rgba(255, 255, 0, 0.5) !important;
+  border: 3px solid yellow !important;
+  z-index: 10000 !important; /* 最前面に表示 */
+  position: relative; /* z-indexを有効にするため */
+  animation: tutorial-highlight-pulse 1.5s infinite alternate; /* 点滅アニメーション */
+}
+
+@keyframes tutorial-highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 5px yellow, 0 0 0 10px rgba(255, 255, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 5px orange, 0 0 0 15px rgba(255, 165, 0, 0.7);
+  }
 }
 
 .title-screen {

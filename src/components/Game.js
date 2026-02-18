@@ -10,8 +10,11 @@ import GameLogOverlay from './GameLogOverlay.js';
 import NPCController from './NPCController.js';
 import RulesOverlay from './overlays/RulesOverlay.js';
 import MulliganModal from './MulliganModal.js'; // マリガンモーダルをインポート
+import TutorialModal from './overlays/TutorialModal.js'; // チュートリアルモーダル
+import TutorialHighlight from './TutorialHighlight.js'; // チュートリアルハイライト
 import useAnimationManager from '../hooks/useAnimationManager.js';
 import usePresentedCards from '../hooks/usePresentedCards.js'; // 新しいフックをインポート
+import useTutorialController from '../hooks/useTutorialController.js'; // チュートリアルフック
 import '../App.css';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID, GamePhase } from '../gameLogic/constants.js'; // GamePhaseをインポート
 import { produce } from 'immer'; // immerをインポート
@@ -23,6 +26,31 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
     const [showRulesOverlay, setShowRulesOverlay] = useState(false);
     const [showSurrenderConfirm, setShowSurrenderConfirm] = useState(false);
     
+    // チュートリアル・コントローラーの初期化
+    const tutorialData = gameState?.tutorial;
+    const {
+        activeStep,
+        isModalOpen,
+        activeHighlight,
+        handleModalCloseAction,
+        wrappedOnPlayCard,
+        wrappedOnEndTurn,
+        wrappedOnCardClick,
+        wrappedOnHighlightClick,
+        wrappedOnProvideInput
+    } = useTutorialController(
+        tutorialData?.master || null,
+        gameState,
+        onPlayCard,
+        onEndTurn,
+        onProvideInput
+    );
+
+    // チュートリアル中はラップされた関数を使用
+    const effectiveOnPlayCard = tutorialData ? wrappedOnPlayCard : onPlayCard;
+    const effectiveOnEndTurn = tutorialData ? wrappedOnEndTurn : onEndTurn;
+    const effectiveOnProvideInput = tutorialData ? wrappedOnProvideInput : onProvideInput;
+
     const humanPlayer = gameState?.players?.[HUMAN_PLAYER_ID];
     const npcPlayer = gameState?.players?.[NPC_PLAYER_ID];
     
@@ -121,6 +149,11 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
 
     // カードクリック処理
     const handleCardClick = (card) => {
+        // チュートリアル用のクリック検知
+        if (tutorialData) {
+            wrappedOnCardClick(card);
+        }
+
         // 選択待ち状態では詳細表示のみ許可（選択はオーバーレイから行う）
         if (awaiting_input && (awaiting_input.type === 'CHOICE_CARD_FOR_EFFECT' || awaiting_input.type === 'CHOICE_CARDS_FOR_OPERATION')) {
             // 選択はオーバーレイから行うため、ここでは詳細表示のみ
@@ -151,7 +184,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
     // アクションメニューからのプレイ処理
     const handlePlayFromMenu = () => {
         if (actionMenuCard) {
-            onPlayCard(actionMenuCard);
+            effectiveOnPlayCard(actionMenuCard); // ラップされた方を使用
             setActionMenuCard(null);
         }
     };
@@ -174,7 +207,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                     prompt={awaiting_input.prompt}
                     min={awaiting_input.min}
                     max={awaiting_input.max}
-                    onConfirm={onProvideInput}
+                    onConfirm={effectiveOnProvideInput}
                 />
             );
         }
@@ -187,7 +220,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                         <div className="choice-options">
                             {awaiting_input.options.map(option => (
                                 <div key={option} className="choice-card-container">
-                                    <button onClick={() => onProvideInput(option)}>
+                                    <button onClick={() => effectiveOnProvideInput(option)}>
                                         {option}
                                     </button>
                                     <button onClick={() => setSelectedCard(cardDefs[option])}>
@@ -208,7 +241,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                         <h3>カードを1枚選択してください</h3>
                         <div className="choice-options-scrollable">
                             {awaiting_input.options.map(card => (
-                                <button key={card.instance_id} onClick={() => onProvideInput(card)}>
+                                <button key={card.instance_id} onClick={() => effectiveOnProvideInput(card)}>
                                     {card.name}
                                 </button>
                             ))}
@@ -228,7 +261,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                         <div className="choice-options-scrollable">
                             {awaiting_input.options.map(card => (
                                 <div key={card.instance_id} className="choice-card-container">
-                                    <button className="choice-card-select" onClick={() => onProvideInput([card])}>
+                                    <button className="choice-card-select" onClick={() => effectiveOnProvideInput([card])}>
                                         <div className="choice-card-info">
                                             <span className="choice-card-name">{card.name}</span>
                                             <span className="choice-card-type">({card.card_type})</span>
@@ -265,7 +298,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                         <div className="choice-options-scrollable">
                             {awaiting_input.options.map(card => (
                                 <div key={card.instance_id} className="choice-card-container">
-                                    <button className="choice-card-select" onClick={() => onProvideInput(card)}>
+                                    <button className="choice-card-select" onClick={() => effectiveOnProvideInput(card)}>
                                         <div className="choice-card-info">
                                             <span className="choice-card-name">{card.name}</span>
                                             <span className="choice-card-type">({card.card_type})</span>
@@ -304,6 +337,22 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
 
     return (
         <div className="game-board">
+            {/* チュートリアルハイライト表示用オーバーレイ */}
+            {activeHighlight && (
+                <TutorialHighlight 
+                    targetId={activeHighlight.targetId} 
+                    onTargetClick={activeStep?.completionCondition?.type === 'CLICK_TARGET' ? wrappedOnHighlightClick : null}
+                />
+            )}
+
+            {/* チュートリアルモーダル */}
+            {isModalOpen && (
+                <TutorialModal
+                    step={activeStep?.action}
+                    onNext={handleModalCloseAction}
+                />
+            )}
+
             {/* マリガンモーダル */}
             {gameState.phase === GamePhase.MULLIGAN && (
                 <MulliganModal
@@ -317,9 +366,9 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             {/* NPCController - 表示要素なし、バックグラウンドで動作 */}
             <NPCController
                 gameState={gameState}
-                onPlayCard={onPlayCard}
-                onEndTurn={onEndTurn}
-                onProvideInput={onProvideInput}
+                onPlayCard={effectiveOnPlayCard} // ラップされた方を使用
+                onEndTurn={effectiveOnEndTurn} // ラップされた方を使用
+                onProvideInput={effectiveOnProvideInput} // ラップされた方を使用
                 onPerformMulligan={(selectedCardIds) => onConfirmMulligan(NPC_PLAYER_ID, selectedCardIds)}
             />
             
@@ -408,7 +457,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                     playerName={npcPlayer.name}
                     cards={npcPresentedCards}
                     fieldLimit={npcPlayer.field_limit}
-                    onProvideInput={onProvideInput} 
+                    onProvideInput={effectiveOnProvideInput} 
                     awaiting_input={awaiting_input}
                     onCardClick={handleCardClick}
                     onAnimationEnd={handleNpcAnimationEnd}
@@ -421,7 +470,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                     playerName={humanPlayer.name}
                     cards={humanPresentedCards}
                     fieldLimit={humanPlayer.field_limit}
-                    onProvideInput={onProvideInput} 
+                    onProvideInput={effectiveOnProvideInput} 
                     awaiting_input={awaiting_input}
                     onCardClick={handleCardClick}
                     onAnimationEnd={handleHumanAnimationEnd}
@@ -429,11 +478,11 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             </div>
             
             {/* 右下: 自分（人間）の手札 */}
-            <div className="player-hand-area">
+            <div id="player-hand-area" className="player-hand-area">
                 <Hand 
                     player={humanPlayer} 
-                    onPlayCard={onPlayCard} 
-                    onProvideInput={onProvideInput} 
+                    onPlayCard={effectiveOnPlayCard} 
+                    onProvideInput={effectiveOnProvideInput} 
                     awaiting_input={awaiting_input}
                     onCardClick={handleCardClick}
                 />
@@ -447,7 +496,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                 <PlayerStats 
                     player={humanPlayer} 
                     gameState={gameState} 
-                    onEndTurn={onEndTurn}
+                    onEndTurn={effectiveOnEndTurn}
                 />
             </div>
 

@@ -78,6 +78,7 @@ const CardActionMenu = ({ card, player, gameState, onPlay, onClose }) => {
                     
                     <div className="card-action-section">
                         <button 
+                            id="play_button"
                             className={`play-action-button ${!playable ? 'disabled' : ''}`}
                             onClick={playable ? onPlay : undefined}
                             disabled={!playable}

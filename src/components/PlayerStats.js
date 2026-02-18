@@ -158,6 +158,7 @@ const PlayerStats = ({ player, gameState, onEndTurn }) => {
                     onClick={onEndTurn} 
                     disabled={!!gameState?.awaiting_input || gameState?.current_turn !== HUMAN_PLAYER_ID}
                     className="end-turn-button"
+                    id="end_turn_button"
                 >
                     ターン終了
                 </button>

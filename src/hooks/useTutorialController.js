@@ -1,130 +1,157 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { produce } from 'immer';
 import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
 
-const useTutorialController = (scenario, gameState, onGameStateUpdate, onPlayCard, onEndTurn, onProvideInput) => {
+const useTutorialController = (scenario, gameState, onPlayCard, onEndTurn, onProvideInput, onTriggerNPCAction) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(null);
-  const [hasTriggered, setHasTriggered] = useState(false); // 現在のステップのトリガーが発動済みか
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeHighlight, setActiveHighlight] = useState(null);
 
-  // ゲームアクションをラップして、チュートリアル条件を監視できるようにする
-  const wrappedOnPlayCard = useCallback((card) => {
-    onPlayCard(card); // 元のonPlayCardを実行
-    if (activeStep && activeStep.completionCondition?.type === 'PLAY_CARD' && activeStep.completionCondition.cardName === card.name) {
-      proceedToNextStep();
-    }
-  }, [activeStep, onPlayCard]);
-
-  const wrappedOnEndTurn = useCallback(() => {
-    onEndTurn(); // 元のonEndTurnを実行
-    if (activeStep && activeStep.completionCondition?.type === 'END_TURN') {
-      proceedToNextStep();
-    }
-  }, [activeStep, onEndTurn]);
-
-  const wrappedOnProvideInput = useCallback((input) => {
-    onProvideInput(input); // 元のonProvideInputを実行
-    if (activeStep && activeStep.completionCondition?.type === 'MODAL_CLOSE') { // 仮: モーダルが閉じられる条件とする
-      proceedToNextStep();
-    }
-  }, [activeStep, onProvideInput]);
-
+  // ステップの二重実行防止用
+  const isProcessingStepRef = useRef(false);
 
   const proceedToNextStep = useCallback(() => {
+    console.log(`[TUTORIAL] Step ${currentStepIndex} complete. Proceeding to ${currentStepIndex + 1}`);
     setCurrentStepIndex(prev => prev + 1);
-    setHasTriggered(false); // 次のステップのトリガーを待つ
-    setActiveStep(null); // 次のステップのトリガーを待つために一旦クリア
-  }, []);
+    setActiveStep(null);
+    setIsModalOpen(false);
+    setActiveHighlight(null);
+    isProcessingStepRef.current = false;
+  }, [currentStepIndex]);
 
+  const handleModalCloseAction = useCallback(() => {
+    if (activeStep && activeStep.completionCondition?.type === 'INPUT_REQUIRED') {
+      proceedToNextStep();
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [activeStep, proceedToNextStep]);
+
+  const wrappedOnPlayCard = useCallback((card) => {
+    // チュートリアル中も実際のカードプレイを実行
+    onPlayCard(card);
+    
+    if (activeStep && activeStep.completionCondition?.type === 'PLAY_CARD') {
+      // 特定のカード名指定がある場合はチェック、なければ何でもOK
+      if (!activeStep.completionCondition.cardName || activeStep.completionCondition.cardName === card.name) {
+        console.log(`[TUTORIAL] Play card condition met: ${card.name}`);
+        proceedToNextStep();
+      }
+    }
+  }, [activeStep, onPlayCard, proceedToNextStep]);
+
+  const wrappedOnEndTurn = useCallback(() => {
+    onEndTurn();
+    if (activeStep && activeStep.completionCondition?.type === 'END_TURN') {
+      console.log('[TUTORIAL] End turn condition met.');
+      proceedToNextStep();
+    }
+  }, [activeStep, onEndTurn, proceedToNextStep]);
+
+  const wrappedOnCardClick = useCallback((card) => {
+    if (activeStep && activeStep.completionCondition?.type === 'SELECT_CARD') {
+      if (!activeStep.completionCondition.cardName || activeStep.completionCondition.cardName === card.name) {
+        console.log(`[TUTORIAL] Card selection condition met: ${card.name}`);
+        proceedToNextStep();
+      }
+    }
+  }, [activeStep, proceedToNextStep]);
+
+  const wrappedOnHighlightClick = useCallback(() => {
+    if (activeStep && activeStep.completionCondition?.type === 'CLICK_TARGET') {
+      console.log('[TUTORIAL] Highlight click condition met.');
+      proceedToNextStep();
+    }
+  }, [activeStep, proceedToNextStep]);
 
   useEffect(() => {
-    if (!scenario || !gameState || !onGameStateUpdate) {
+    // シナリオ、ゲーム状態がない場合、または既にステップ処理中の場合は何もしない
+    if (!scenario || !gameState || activeStep || isProcessingStepRef.current) {
       return;
     }
 
-    const currentScenarioStep = scenario[currentStepIndex];
+    // シナリオデータの取得（配列かオブジェクトのstepsプロパティか）
+    const steps = Array.isArray(scenario) ? scenario : (scenario.steps || []);
+    const currentScenarioStep = steps[currentStepIndex];
 
     if (!currentScenarioStep) {
-      // シナリオ終了
-      setActiveStep(null);
+      console.log('[TUTORIAL] Scenario finished or no step found at index:', currentStepIndex);
       return;
     }
 
-    // --- トリガー条件のチェック ---
     const checkTrigger = (trigger) => {
-      if (hasTriggered && activeStep && activeStep.step === currentScenarioStep.step) {
-          return true; // 既に発動済みなら再度チェックしない
-      }
+      const isHumanTurn = gameState.current_turn === HUMAN_PLAYER_ID;
+      const currentRound = gameState.round_number || 1;
+      const currentTurn = gameState.turn_number || 1;
 
       switch (trigger.type) {
         case 'TUTORIAL_START':
-          return currentStepIndex === 0 && gameState.turn_number === 1 && gameState.round_number === 1;
+          return currentStepIndex === 0;
         case 'PREVIOUS_STEP_COMPLETE':
-          // proceedToNextStepが呼ばれることでこのトリガーが満たされる
-          return true; 
+          return true;
         case 'TURN_START':
-          const playerMatches = (trigger.player === 'human' && gameState.current_turn === HUMAN_PLAYER_ID) ||
-                                (trigger.player === 'npc' && gameState.current_turn !== HUMAN_PLAYER_ID);
-          const turnMatches = (trigger.turn === 'any' || gameState.turn_number === trigger.turn); // round_numberではなくturn_numberで判断
-          return playerMatches && turnMatches;
-        // 他のトリガータイプ...
+          const playerMatches = (trigger.player === 'human' && isHumanTurn) ||
+                              (trigger.player === 'npc' && !isHumanTurn);
+          
+          // turn指定かround指定か、あるいは指定なし(any)か
+          const turnMatches = (!trigger.turn || trigger.turn === 'any' || currentTurn === trigger.turn);
+          const roundMatches = (!trigger.round || trigger.round === 'any' || currentRound === trigger.round);
+          
+          const result = playerMatches && turnMatches && roundMatches;
+          if (!result && (trigger.round || trigger.turn)) {
+            // 条件に合致しそうなタイミングでのみログを出す（ノイズ軽減）
+            // console.log(`[TUTORIAL] TURN_START check: playerMatch=${playerMatches}, turnMatch=${turnMatches}, roundMatch=${roundMatches}`);
+          }
+          return result;
         default:
           return false;
       }
     };
 
-    // 現在のステップがアクティブになるべきか判断し、必要であればアクティブにする
-    if (!activeStep && checkTrigger(currentScenarioStep.trigger)) {
-        setActiveStep(currentScenarioStep);
-        setHasTriggered(true);
-        // チュートリアルモードではマリガンを自動で承認する
-        if (gameState.phase === 'MULLIGAN') {
-            onGameStateUpdate(prevGameState => produce(prevGameState, draft => {
-                if (draft.mulligan_state[HUMAN_PLAYER_ID].status === 'undecided') {
-                    draft.mulligan_state[HUMAN_PLAYER_ID].status = 'decided';
-                    draft.mulligan_state[HUMAN_PLAYER_ID].count = 0; // マリガンしない
-                }
-                if (draft.mulligan_state[NPC_PLAYER_ID].status === 'undecided') {
-                    draft.mulligan_state[NPC_PLAYER_ID].status = 'decided';
-                    draft.mulligan_state[NPC_PLAYER_ID].count = 0; // マリガンしない
-                }
-            }));
-        }
-    }
+    if (checkTrigger(currentScenarioStep.trigger)) {
+      console.log(`[TUTORIAL] Trigger met for step ${currentScenarioStep.step}. Action: ${currentScenarioStep.action.type}`);
+      isProcessingStepRef.current = true;
+      setActiveStep(currentScenarioStep);
 
-    // --- 達成条件のチェック (activeStepが存在する場合のみ) ---
-    if (activeStep && activeStep.step === currentScenarioStep.step) {
-      const condition = activeStep.completionCondition;
-      if (condition) {
-        switch (condition.type) {
-          case 'AUTO_PROCEED':
-            const timer = setTimeout(() => {
-              proceedToNextStep();
-            }, condition.delay || 2000); // デフォルト2秒
-            return () => clearTimeout(timer); // クリーンアップ
-          case 'STATE_CHANGE':
-            // 例: プレイヤーの規模が特定の値になったら
-            if (condition.target === 'scale' && gameState.players[HUMAN_PLAYER_ID].scale >= condition.value) {
-              proceedToNextStep();
-            }
-            break;
-          // 'MODAL_CLOSE', 'PLAY_CARD', 'END_TURN', 'CLICK_TARGET' はラッパー関数やイベントハンドラで処理
-          default:
-            break;
-        }
+      // アクション実行
+      switch (currentScenarioStep.action.type) {
+        case 'SHOW_MODAL':
+          setIsModalOpen(true);
+          break;
+        case 'HIGHLIGHT':
+          setActiveHighlight({ targetId: currentScenarioStep.action.targetId });
+          break;
+        case 'NPC_ACTION':
+          // NPCへの指令は一旦飛ばすだけにする（NPC側の実装で対応）
+          if (onTriggerNPCAction) {
+            onTriggerNPCAction(currentScenarioStep.action);
+          }
+          break;
+        default:
+          break;
+      }
+
+      // 完了条件が AUTO_PROCEED の場合はタイマー起動
+      if (currentScenarioStep.completionCondition.type === 'AUTO_PROCEED') {
+        const timer = setTimeout(() => {
+          proceedToNextStep();
+        }, currentScenarioStep.completionCondition.delay || 0);
+        return () => clearTimeout(timer);
       }
     }
-
-  }, [currentStepIndex, gameState, scenario, activeStep, hasTriggered, onGameStateUpdate, proceedToNextStep]);
+  }, [currentStepIndex, gameState, scenario, activeStep, proceedToNextStep, onTriggerNPCAction]);
 
   return {
-    activeStep, // 現在アクティブなステップの情報（modal, highlightなど）
-    proceedToNextStep, // 次のステップに進むための関数
-    wrappedOnPlayCard, // チュートリアル監視機能付きのonPlayCard
-    wrappedOnEndTurn,  // チュートリアル監視機能付きのonEndTurn
-    wrappedOnProvideInput, // チュートリアル監視機能付きのonProvideInput
+    activeStep,
+    isModalOpen,
+    activeHighlight,
+    handleModalCloseAction,
+    wrappedOnPlayCard,
+    wrappedOnEndTurn,
+    wrappedOnCardClick,
+    wrappedOnHighlightClick,
+    wrappedOnProvideInput: onProvideInput,
   };
 };
 
 export default useTutorialController;
-

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-const Card = ({ card, mode = 'library', onClick, onAnimationEnd }) => {
+const Card = ({ card, mode = 'library', onClick, onAnimationEnd, id }) => {
   // modeに応じてベースとなるクラスを決定
   const baseClassName = mode === 'game' ? 'card-game' : 'card-library';
 
@@ -31,6 +31,7 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd }) => {
         onClick={handleClick}
         onAnimationEnd={handleAnimationEnd}
         data-card-id={card.instance_id}
+        id={id}
       >
         <div className="card-header">
           <div className="card-name">{card.name}</div>
@@ -57,6 +58,7 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd }) => {
       onClick={handleClick}
       onAnimationEnd={handleAnimationEnd}
       data-card-id={card.instance_id}
+      id={id}
     >
       <div className="card-header">
         <h3>{card.name}</h3>

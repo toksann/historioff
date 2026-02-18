@@ -149,6 +149,7 @@ function App() {
   }, [gameData]);
 
   const handleStartTutorial = useCallback((tutorialId) => {
+    console.log('[App] handleStartTutorial called with tutorialId:', tutorialId);
     if (!gameData.cardDefs || !gameData.tutorialDecks || !gameData.tutorialMaster || !gameData.tutorialScenarios) {
       setError('チュートリアルデータが読み込まれていません');
       return;
@@ -172,26 +173,132 @@ function App() {
         return;
     }
 
-    const tutorialDeckList = Object.values(gameData.tutorialDecks);
+        const tutorialDeckList = Object.values(gameData.tutorialDecks);
 
-    try {
-      const newGameState = initializeGame(gameData.cardDefs, tutorialDeckList, playerDeckName, npcDeckName);
-      if (!newGameState) {
-        throw new Error('チュートリアルゲーム状態の初期化に失敗しました');
-      }
+    
 
-      newGameState.tutorial = {
-        scenarioId: tutorialScenarioId,
-        currentStep: 0,
-        master: {
-            steps: gameData.tutorialScenarios[tutorialScenarioId]
-        }
-      };
-      
-      gameOverAnimationInitiatedRef.current = false;
-      setGameState(newGameState);
+            const scenarios = gameData.tutorialScenarios.default || gameData.tutorialScenarios;
+
+    
+
+            const tutorialScenario = scenarios[tutorialScenarioId];
+
+    
+
+            console.log('[App] tutorialScenario:', tutorialScenario);
+
+    
+
+        
+
+    
+
+            if (!tutorialScenario) {
+
+    
+
+              setError(`チュートリアルシナリオID "${tutorialScenarioId}" が見つかりません`);
+
+    
+
+              return;
+
+    
+
+            }
+
+    
+
+        
+
+    
+
+            try {
+
+    
+
+              console.log('[App] Calling initializeGame with tutorialScenario:', tutorialScenario);
+
+    
+
+              const newGameState = initializeGame(gameData.cardDefs, tutorialDeckList, playerDeckName, npcDeckName, tutorialScenario);
+
+    
+
+              console.log('[App] initializeGame returned newGameState:', newGameState);
+
+    
+
+        
+
+    
+
+                        if (!newGameState) {
+
+    
+
+        
+
+    
+
+                      throw new Error('チュートリアルゲーム状態の初期化に失敗しました');
+
+    
+
+        
+
+    
+
+                    }
+
+    
+
+        
+
+    
+
+              
+
+    
+
+        
+
+    
+
+                    const finalGameState = produce(newGameState, draftState => {
+                      draftState.tutorial = {
+                          scenarioId: tutorialScenarioId,
+                          currentStep: 0,
+                          master: tutorialScenario // シナリオ全体を渡す
+                      };
+                    });
+
+    
+
+        
+
+    
+
+                    
+
+    
+
+        
+
+    
+
+                    gameOverAnimationInitiatedRef.current = false;
+
+    
+
+        
+
+    
+
+                    setGameState(finalGameState);
       setCurrentScreen('game');
       setError(null);
+      console.log('[App] Setting gameState and currentScreen to "game"');
     } catch (error) {
       console.error('[App] Error initializing tutorial game:', error);
       setError(`チュートリアルゲーム初期化エラー: ${error.message}`);
