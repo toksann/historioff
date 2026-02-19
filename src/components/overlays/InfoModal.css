@@ -65,6 +65,7 @@
 .info-modal-body ul,
 .info-modal-body li {
   font-size: 0.9rem;
+  white-space: pre-wrap;
 }
 
 .info-modal-footer {
