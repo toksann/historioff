@@ -170,7 +170,7 @@ export const EffectType = {
 
   // Internal effects for sequencing
   _PLACE_IDEOLOGY: "_PLACE_IDEOLOGY",
-  EVENT_EFFECTS_COMPLETE: "EVENT_EFFECTS_COMPLETE", // Sentinel effect for event card animations
+  PRESENT_EVENT_CARD: "PRESENT_EVENT_CARD", // Sentinel effect to present event card before effect resolution
   EVENT_CARD_PLAYED: "EVENT_CARD_PLAYED", // Animation-specific effect for event card play
   CARD_REVEALED: "CARD_REVEALED", // Animation-specific effect for revealing a card
 };

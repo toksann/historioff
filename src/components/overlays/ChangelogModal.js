@@ -13,9 +13,10 @@ const ChangelogModal = ({ isOpen, onClose, version }) => {
         </div>
         <div className="info-modal-body">
           <p>現在のバージョン: {version}</p>
-          <h3>Version 0.1.x (2026/01/xx)</h3>
+          <h3>Version 0.1.x (2026/03/xx)</h3>
           <ul>
             <li>機能追加：チュートリアルの追加(ゲーム開始 ＞ チュートリアル)</li>
+            <li>仕様変更：事象カードプレイ時のカード表示を、効果発動<b>後</b>から効果発動<b>前</b>へ変更</li>
           </ul>
           <h3>Version 0.0.4 (2026/01/13)</h3>
           <ul>

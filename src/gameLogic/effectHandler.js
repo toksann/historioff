@@ -308,6 +308,9 @@ const effectHandlers = {
                 };
                 addEffect(TriggerType.PLAY_EVENT_THIS, playEventArgs, card);
                 
+                // Trigger event card animation BEFORE effects resolve
+                addEffect(EffectType.PRESENT_EVENT_CARD, { card_id: card.instance_id, player_id: player_id }, card);
+
                 addEffect(EffectType.MOVE_CARD, {
                     card_id: card.instance_id,
                     source_pile: 'hand',
@@ -325,9 +328,6 @@ const effectHandlers = {
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION, { player_id: player_id, action_type: 'card_played', card_id: card.instance_id, target_card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OWNER, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
                 addEffectToBack(TriggerType.PLAYER_PLAY_CARD_ACTION_OPPONENT, { player_id: ownerPlayerId, action_type: 'card_played', card_id: card.instance_id }, card);
-
-                // Add sentinel effect to mark the completion of event card's immediate effects
-                addEffectToBack(EffectType.EVENT_EFFECTS_COMPLETE, { card_id: card.instance_id, player_id: player_id }, card);
 
 
             } else { // Wealth & Ideology
@@ -2211,7 +2211,7 @@ const effectHandlers = {
             sourceCard: null // This effect is not directly tied to a source card
         });
     },
-    [EffectType.EVENT_EFFECTS_COMPLETE]: (gameState, args) => {
+    [EffectType.PRESENT_EVENT_CARD]: (gameState, args) => {
         // This sentinel effect triggers the deferred event card animation.
         // It's processed only after all other effects triggered by the event card have resolved.
         gameState.animation_queue.push({
