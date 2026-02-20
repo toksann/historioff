@@ -159,6 +159,16 @@
                         "player_id": "opponent",
                         "amount": 3
                     }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "operation": "move_card",
+                        "selection_method": "front",
+                        "destination_pile": "deck",
+                        "position": "random",
+                        "target_player_id": "opponent"
+                    }
                 }
             ]
         }
@@ -2234,7 +2244,7 @@
         "name": "官僚主義",
         "card_type": "事象",
         "required_scale": 12,
-        "description": "ターン終了時、このカードが自分の手札にあるならこれを公開して自分の意識-1。このカードを出したとき、これが相手の手札に加わる。自分のイデオロギーが捨て札になったとき、自分の手札のこのカードも捨て札になる。",
+        "description": "ターン終了時、このカードが自分の手札にあるならこれを公開して自分の意識-1、このカードを除く自分のすべての手札の必要規模-1。このカードを出したとき、これが相手の手札に加わる。自分のイデオロギーが捨て札になったとき、自分の手札のこのカードも捨て札になる。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -2251,6 +2261,17 @@
                     "args": {
                         "player_id": "self",
                         "amount": -1
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_piles": ["hand"],
+                        "selection_method": "all",
+                        "amount": -1,
+                        "min_value": 0
                     }
                 }
             ],
@@ -2894,7 +2915,7 @@
         "name": "多極主義",
         "card_type": "イデオロギー",
         "required_scale": 60,
-        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加える。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
+        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加えて自分の意識+2。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -2934,6 +2955,13 @@
                         "card_template_name": "ディアスポラ",
                         "destination_pile": "deck",
                         "position": "random"
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 2
                     }
                 }
             ],
