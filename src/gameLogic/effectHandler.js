@@ -188,6 +188,22 @@ const _selectCards = (gameState, player, available_cards, selection_method, coun
             return available_cards.slice(0, selectionCount);
         case 'bottom':
             return available_cards.slice(-selectionCount);
+        case 'front':
+            if (!sourceCard || !sourceCard.owner) return [];
+            const ownerId = sourceCard.owner;
+            const opponentId = ownerId === PlayerId.PLAYER1 ? PlayerId.PLAYER2 : PlayerId.PLAYER1;
+            const ownerField = gameState.players[ownerId].field;
+            const opponentField = gameState.players[opponentId].field;
+            
+            // sourceCardのインデックスを取得
+            const sourceIndex = ownerField.findIndex(c => c.instance_id === sourceCard.instance_id);
+            if (sourceIndex === -1) return [];
+            
+            // 正面の相手カードを取得
+            if (opponentField[sourceIndex]) {
+                return [opponentField[sourceIndex]];
+            }
+            return [];
         case 'choice':
             gameState.awaiting_input = {
                 type: 'CHOICE_CARDS_FOR_OPERATION',
