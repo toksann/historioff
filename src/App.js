@@ -165,63 +165,25 @@ function App() {
     const npcDeckId = tutorialMasterEntry.npcDeckId;
     const tutorialScenarioId = tutorialMasterEntry.scenarioId;
 
-    const playerDeckName = gameData.tutorialDecks[playerDeckId]?.name;
-    const npcDeckName = gameData.tutorialDecks[npcDeckId]?.name;
+    const playerDeck = gameData.tutorialDecks[playerDeckId];
+    const npcDeck = gameData.tutorialDecks[npcDeckId];
 
-    if (!playerDeckName || !npcDeckName) {
-        setError('チュートリアルのデッキ名が見つかりません。');
+    if (!playerDeck || !npcDeck) {
+        setError('チュートリアルのデッキデータが見つかりません。');
         return;
     }
 
-        const tutorialDeckList = Object.values(gameData.tutorialDecks);
+    const scenarios = gameData.tutorialScenarios.default || gameData.tutorialScenarios;
+    const tutorialScenario = scenarios[tutorialScenarioId];
 
-    
+    if (!tutorialScenario) {
+      setError(`チュートリアルシナリオID "${tutorialScenarioId}" が見つかりません`);
+      return;
+    }
 
-            const scenarios = gameData.tutorialScenarios.default || gameData.tutorialScenarios;
-
-    
-
-            const tutorialScenario = scenarios[tutorialScenarioId];
-
-    
-
-            console.log('[App] tutorialScenario:', tutorialScenario);
-
-    
-
-        
-
-    
-
-            if (!tutorialScenario) {
-
-    
-
-              setError(`チュートリアルシナリオID "${tutorialScenarioId}" が見つかりません`);
-
-    
-
-              return;
-
-    
-
-            }
-
-    
-
-        
-
-    
-
-            try {
-
-    
-
-              console.log('[App] Calling initializeGame with tutorialScenario:', tutorialScenario);
-
-    
-
-              const newGameState = initializeGame(gameData.cardDefs, tutorialDeckList, playerDeckName, npcDeckName, tutorialScenario);
+    try {
+      // 名前ではなくオブジェクトを直接渡す
+      const newGameState = initializeGame(gameData.cardDefs, null, playerDeck, npcDeck, tutorialScenario);
 
     
 

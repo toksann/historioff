@@ -64,6 +64,16 @@ const useTutorialController = (scenario, gameState, onPlayCard, onEndTurn, onPro
     }
   }, [activeStep, proceedToNextStep]);
 
+  const wrappedOnProvideInput = useCallback((value) => {
+    // ゲームロジックへの入力を実行
+    onProvideInput(value);
+    
+    if (activeStep && activeStep.completionCondition?.type === 'RESOLVE_CHOICE') {
+      console.log('[TUTORIAL] Choice resolution condition met.');
+      proceedToNextStep();
+    }
+  }, [activeStep, onProvideInput, proceedToNextStep]);
+
   useEffect(() => {
     // シナリオ、ゲーム状態がない場合、または既にステップ処理中の場合は何もしない
     if (!scenario || !gameState || activeStep || isProcessingStepRef.current) {
@@ -150,7 +160,7 @@ const useTutorialController = (scenario, gameState, onPlayCard, onEndTurn, onPro
     wrappedOnEndTurn,
     wrappedOnCardClick,
     wrappedOnHighlightClick,
-    wrappedOnProvideInput: onProvideInput,
+    wrappedOnProvideInput,
   };
 };
 

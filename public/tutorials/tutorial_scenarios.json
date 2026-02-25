@@ -13,219 +13,984 @@
     "steps": [
       {
         "step": 1,
-        "trigger": {
-          "type": "TUTORIAL_START"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "ようこそ！『Historio』の基本操作を学びます。\n「OK」を押して進めてください。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "TUTORIAL_START" },
+        "action": { "type": "SHOW_MODAL", "text": "ようこそ！\n『Historio』での生存の術をお教えします。\n\n「OK」を押して進めてください。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 2,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "あなたの手札にある「豊作」というカードを選択してプレイしてみましょう。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あなたの手札にある「豊作」というカードを選択してプレイしてみましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 3,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "card_豊作"
-        },
-        "completionCondition": {
-          "type": "SELECT_CARD",
-          "cardName": "豊作"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
       },
       {
         "step": 3.5,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "play_button"
-        },
-        "completionCondition": {
-          "type": "PLAY_CARD",
-          "cardName": "豊作"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
       },
       {
         "step": 4,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "それで大丈夫です！\nそれでは右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "それで大丈夫です！\nそれでは右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 5,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "end_turn_button"
-        },
-        "completionCondition": {
-          "type": "END_TURN"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
       },
       {
         "step": 6,
-        "trigger": {
-          "type": "TURN_START",
-          "player": "human",
-          "round": 2
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "あなたの2ターン目です。\nターンが始まると、自動で山札からカードを1枚引きます。\n手札が1枚増えているはずです。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "あなたの2ターン目です。\nターンが始まると、自動で山札からカードを1枚引きます。\n手札が1枚増えているはずです。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 7,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "player-hand-area"
-        },
-        "completionCondition": {
-          "type": "CLICK_TARGET"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "player-hand-area" },
+        "completionCondition": { "type": "CLICK_TARGET" }
       },
       {
         "step": 8,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "ところで、このゲームでは意識が高い方が勝利となります。\n意識は互いに15。このままではあなたは勝てません。\nしかし、意識を高めるカードもない……\n\n「予感」をプレイして運命を信じるべきでしょう。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "ところで、このゲームでは意識が高い方が勝利となります。\n意識は互いに15。このままではあなたは勝てません。\nしかし、意識を高めるカードもない……\n\n「予感」をプレイして運命を信じるべきでしょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 9,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "card_予感"
-        },
-        "completionCondition": {
-          "type": "SELECT_CARD",
-          "cardName": "予感"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_予感" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "予感" }
       },
       {
         "step": 9.5,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "play_button"
-        },
-        "completionCondition": {
-          "type": "PLAY_CARD",
-          "cardName": "予感"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "予感" }
       },
       {
         "step": 10,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "おっと！「覚醒」を引いたようですね。\nこのカードは効果で意識を1高めることができます。\nこれは勝機です！\n\n「覚醒」をプレイしましょう。"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あぁっ！「覚醒」を引いたようですね。\nこのカードは効果で意識を1高めることができます。\nこれは勝機です！\n\n「覚醒」をプレイしましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 11,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "card_覚醒"
-        },
-        "completionCondition": {
-          "type": "SELECT_CARD",
-          "cardName": "覚醒"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_覚醒" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "覚醒" }
       },
       {
         "step": 11.5,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "play_button"
-        },
-        "completionCondition": {
-          "type": "PLAY_CARD",
-          "cardName": "覚醒"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "覚醒" }
       },
       {
         "step": 12,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "SHOW_MODAL",
-          "text": "意識が16になりましたね。\nこのゲームはあなたか相手のデッキがなくなったときに意識が比較されます。次の相手のターンが始まると、相手はカードを引きデッキが0枚になります。\n\nあなたはもう待つだけで勝てるのですよ！\n\nさぁ、ターン終了を押して相手の逃れ得ぬ運命を見届けるのです！"
-        },
-        "completionCondition": {
-          "type": "INPUT_REQUIRED"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "意識が16になりましたね。\nこのゲームはあなたか相手のデッキがなくなったときに意識が比較されます。次の相手のターンが始まると、相手はカードを引きデッキが0枚になります。\n\nあなたはもう待つだけで勝てるのですよ！\n\nさぁ、ターン終了を押して相手の逃れ得ぬ運命を見届けるのです！" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 13,
-        "trigger": {
-          "type": "PREVIOUS_STEP_COMPLETE"
-        },
-        "action": {
-          "type": "HIGHLIGHT",
-          "targetId": "end_turn_button"
-        },
-        "completionCondition": {
-          "type": "END_TURN"
-        }
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      }
+    ]
+  },
+  "SCENARIO_CONSCIOUSNESS_ZERO": {
+    "firstPlayer": "HUMAN",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "npcScript": {
+      "1": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      },
+      "2": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "trigger": { "type": "TUTORIAL_START" },
+        "action": { "type": "SHOW_MODAL", "text": "このチュートリアルでは、カードの種類と「意識」を下げる方法をお教えします。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 2,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "まずは「戦士」を配置しましょう。これは「財」カード。\n場に残り、毎ターン相手の意識を下げます。\n\n耐久値(🛡️)がなくなると場からはいなくなりますがね。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 3,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_戦士" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "戦士" }
+      },
+      {
+        "step": 3.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "戦士" }
+      },
+      {
+        "step": 4,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "去年のように決着を待つのも悪くないですが、自らケリを付ける方が確実ですからね。\nもう一枚の「戦士」も並べてしまいましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_戦士" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "戦士" }
+      },
+      {
+        "step": 5.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "戦士" }
+      },
+      {
+        "step": 6,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "今はターンを終了し、相手の「意識」が下がるのを見届けましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 7,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 8,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "さて、人類らしい高度な戦いを展開しましょう。\n「イデオロギー」カードである「物質主義」を手に入れました。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "しかし「物質主義」をプレイするには規模が足りません。\nまずは「事象」カードである「豊作」を使い、自分の規模をプラスしましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 10,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 10.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 11,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "この「豊作」のように、事象カードは場に残ることはありません。\n出来事はすぐ過去に打ち捨てられてしまう……\n\nしかし、これで規模が確保できました。「物質主義」を使いましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 12,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_物質主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "物質主義" }
+      },
+      {
+        "step": 12.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "物質主義" }
+      },
+      {
+        "step": 13,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "完璧です。\n思想こそ、人類の人類たり得る理由なのです。\n\nモノは多ければ多いほど良い！\n強欲のままに我らの豊かさを誇示しようではありませんか！" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あぁ、そういえば。\n「物質主義」は場に財カードが3枚以上あると相手の意識を1減らせるのですよ。\n\nついでに「農民」でもプレイしましょうか。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 15,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_農民" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "農民" }
+      },
+      {
+        "step": 15.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "農民" }
+      },
+      {
+        "step": 16,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 17,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 3 },
+        "action": { "type": "SHOW_MODAL", "text": "段々と相手の意識も下がってきました。\n放っておいても負けることは無いでしょう……\n\nしかし、相手の運命に終止符を打つこともできる。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 18,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "後のことはあなたに任せましょう。\n闘争心に溢れたあなたと民ならば、きっと勝利を掴めるでしょうからね。\n\nそれではまた来年。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      }
+    ]
+  },
+  "SCENARIO_SCALE_UP": {
+    "firstPlayer": "NPC",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "npcScript": {
+      "1": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 1,
+        "autoEndTurn": true
+      },
+      "2": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      },
+      "3": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 1 },
+        "action": { "type": "SHOW_MODAL", "text": "今回は後攻。あなたの意識は15、相手は12で始まります。\nしかし、重要なのは意識ばかりではありません。\n\nここでは「規模」と「必要規模」の重要性についてお教えします。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 2,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "すべてのカードには「必要規模(⭐)」があります。\nこれをあなたの規模が超えていれば、そのカードをプレイすることができます。\n規模が多いほど様々なカードを使うことができるでしょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 3,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "であるなら規模は高めておくべき。\n\n富を増やすなら奪うのが簡単です。\n今こそ「略奪」をプレイし、相手から富を奪いましょう！" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 4,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_略奪" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "略奪" }
+      },
+      {
+        "step": 4.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "略奪" }
+      },
+      {
+        "step": 4.75,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "choice-prompt-container" },
+        "completionCondition": { "type": "RESOLVE_CHOICE" }
+      },
+      {
+        "step": 5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "素晴らしい。「豊作」も使ってさらに規模を上げましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 6,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 6.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 7,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "「多文化主義」をプレイすれば、規模をさらに倍増させることができます。\n\n意識は……半分になってしまいますがね。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 8,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_多文化主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "多文化主義" }
+      },
+      {
+        "step": 8.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "多文化主義" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "ターンを終了し、相手の動きを待ちましょうか。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 10,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 11,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "今年はチャンスを待つことにしましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 12,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "幸いあなたは大「豊作」に恵まれているようですし。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 13,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 13.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 15,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 15.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 16,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 17,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 3 },
+        "action": { "type": "SHOW_MODAL", "text": "相手も「多文化主義」なようです。民族の絆を代償に規模の拡大をとったということですね。\n\nこういった相手には「内部崩壊」です。\nこれを使えば、相手の規模の半分に相当する意識を減らせてしまいます。\n\nつけあがるのはほどほどに、ということですね。\n\n相手も――あなたも。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 18,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_内部崩壊" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "内部崩壊" }
+      },
+      {
+        "step": 18.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "内部崩壊" }
+      }
+    ]
+  },
+  "SCENARIO_TOKEN_CARDS": {
+    "firstPlayer": "HUMAN",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "npcScript": {
+      "1": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 1,
+        "autoEndTurn": true
+      },
+      "2": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      },
+      "3": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      },
+      "4": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 1,
+        "autoEndTurn": true
+      },
+      "5": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      },
+      "6": {
+        "command": "PLAY_OLD_CARDS",
+        "count": 2,
+        "autoEndTurn": true
+      }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "trigger": { "type": "TUTORIAL_START" },
+        "action": { "type": "SHOW_MODAL", "text": "今年はカードから生まれるカード――\n「トークンカード」の利用をお教えします。\n\n最初にいくつかお教えしますが、\n以後はデッキのカードを自由に使って構いません。\n\nそれでは進めましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 2,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "まずは「果実」でも出しましょうか。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 3,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_果実" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "果実" }
+      },
+      {
+        "step": 3.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "果実" }
+      },
+      {
+        "step": 6,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "「解体」を使ってみましょう。これは自分の財を壊して「マネー」を得るカードです。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 7,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_解体" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "解体" }
+      },
+      {
+        "step": 7.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "解体" }
+      },
+      {
+        "step": 7.75,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "choice-prompt-container" },
+        "completionCondition": { "type": "RESOLVE_CHOICE" }
+      },
+      {
+        "step": 8,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "手に入った「マネー」は、場に出すことで「規模」として機能します。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 9.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 10,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 11,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "相手は「理想主義」。\nこちらの意識の方が低ければ、規模拡大に協力してくれるようです。\n\nおとなしくしている方がいいでしょう……" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 12,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 13,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 3 },
+        "action": { "type": "SHOW_MODAL", "text": "おとなしくした甲斐あって規模も足りたことですし、\n「保守主義」を配置して「官僚主義」を手に入れてみましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_保守主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "保守主義" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "保守主義" }
+      },
+      {
+        "step": 15,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "「官僚主義」は手札にあると、ターン終了時に意識が減ってしまいます。\n\nプレイすると相手の手札に移るので、押し付けてしまいましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 16,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_官僚主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "官僚主義" }
+      },
+      {
+        "step": 16.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "官僚主義" }
+      },
+      {
+        "step": 17,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "しかし「官僚主義」も悪いことばかりではありません。\n持っていれば手札の必要規模が下がっていきます。\n\nこれも一つの効率性なのですよ。\n\nちなみにあなたのイデオロギーである「保守主義」は意識減少を抑える効果がありますので、実は持ち続けてもデメリットを打ち消せましたがね。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 18,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "効果を見るためにもターンを終了しましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 19,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 20,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 4 },
+        "action": { "type": "SHOW_MODAL", "text": "相手の意識が下がりましたね。\n\nこのようにトークンカードは特殊な効果を持つものも多いです。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 21,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "残りのデッキにもいくつかありますから試してみるのもいいでしょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 22,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "最後に「降伏」についてお教えして、後はおまかせするとしましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 23,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あなたがこの闘争に嫌気がさしたのなら、手札の左下にある「降伏」を選ぶとよいでしょう。\nもちろんやっぱりまだやりたいと思うのなら引き返せますのでご安心くださいね。\n\nそれではまた来年。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      }
+    ]
+  },
+  "SCENARIO_IDEOLOGY_SWAP": {
+    "firstPlayer": "HUMAN",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "npcScript": {
+      "1": { "command": "PLAY_OLD_CARDS", "count": 1, "autoEndTurn": true },
+      "2": { "command": "PLAY_OLD_CARDS", "count": 1, "autoEndTurn": true }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "trigger": { "type": "TUTORIAL_START" },
+        "action": { "type": "SHOW_MODAL", "text": "この年は「イデオロギー」についてより深く学びましょう。\n\nイデオロギーはあなたのデッキの核となる思想です。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 2,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "まずは「覚醒」を使い、デッキに眠る思想を呼び覚ましましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 3,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_覚醒" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "覚醒" }
+      },
+      {
+        "step": 3.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "覚醒" }
+      },
+      {
+        "step": 4,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "「現実主義」を引いたようですね。\nこの思想は相手の動きに対抗する、実に「現実的」な思想です。\n\n早速プレイして、あなたの思想として掲げましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_現実主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "現実主義" }
+      },
+      {
+        "step": 5.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "現実主義" }
+      },
+      {
+        "step": 6,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あなたの場の左側に、現在掲げているイデオロギーが表示されています。\n\nこれであなたの民族は現実主義を掲げることとなりました。\nターンを終了しましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 7,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 8,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "さて、人の心は移ろうもの。\n新しい思想「理想主義」が手に入りました。\n\nイデオロギーは、上書きすることができるのです。\n「理想主義」をプレイしてみましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_理想主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "理想主義" }
+      },
+      {
+        "step": 9.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "理想主義" }
+      },
+      {
+        "step": 10,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "場の左の表示が変わったのが分かりますか？\n古い「現実主義」は捨て札となり、\n今やあなたの民族は「理想主義」を掲げています。\n\n状況に応じて思想を乗り換える……賢い指導者の在り方ですね。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 11,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "では、手札にあるもう一枚の「理想主義」を使ったらどうなるでしょう？\n同じ思想を重ねて説くことで、人々の意識はより強固になります。\n\nプレイしてみましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 12,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_理想主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "理想主義" }
+      },
+      {
+        "step": 12.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "理想主義" }
+      },
+      {
+        "step": 13,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あなたの意識が+1されたのが確認できましたか？\n\n既に掲げているイデオロギーと同じカードをプレイすると、意識を高める効果があるのです。\n無駄にはならない、ということですね。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "あぁそれから。\n後はおまかせするんですが、このままだと負けてしまいますから何か手を打つことをお勧めしますよ。\n\nそれではまた来年。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      }
+    ]
+  },
+  "SCENARIO_MONEY_USAGE": {
+    "firstPlayer": "HUMAN",
+    "enableMulligan": false,
+    "shuffleDeck": false,
+    "npcScript": {
+      "1": { "command": "PLAY_OLD_CARDS", "count": 3, "autoEndTurn": true },
+      "2": { "command": "PLAY_OLD_CARDS", "count": 1, "autoEndTurn": true },
+      "3": { "command": "PLAY_OLD_CARDS", "count": 1, "autoEndTurn": true }
+    },
+    "steps": [
+      {
+        "step": 1,
+        "trigger": { "type": "TUTORIAL_START" },
+        "action": { "type": "SHOW_MODAL", "text": "今年は、重要なカード「マネー」を使いこなす術をお教えします。\n\nまずは基礎となる規模を蓄えましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 2,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 2.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 3,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_多文化主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "多文化主義" }
+      },
+      {
+        "step": 2.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "多文化主義" }
+      },
+      {
+        "step": 4,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 5,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
+        "action": { "type": "SHOW_MODAL", "text": "規模が十分に溜まりました。次は「重金主義」の思想を取り入れ、規模を「富」に変換する準備をします。\n\n「経済学の興り」から始めましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 6,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_経済学の興り" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "経済学の興り" }
+      },
+      {
+        "step": 6.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "経済学の興り" }
+      },
+      {
+        "step": 7,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_重金主義" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "重金主義" }
+      },
+      {
+        "step": 7.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "重金主義" }
+      },
+      {
+        "step": 8,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "「重金主義」が有効な間、あなたの規模増加はすべて「マネー」カードとして手札に加わります。\n\n「商人」を2枚並べて、毎ターンの収入を確保しましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_商人", "count": 2 },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "商人" }
+      },
+      {
+        "step": 9.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "商人" }
+      },
+      {
+        "step": 9,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_商人", "count": 2 },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "商人" }
+      },
+      {
+        "step": 9.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "商人" }
+      },
+      {
+        "step": 10,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 11,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 3 },
+        "action": { "type": "SHOW_MODAL", "text": "「重金主義」と「商人」の効果で、手札にマネーが集まりました。\nさらに「豊作」を使い、大量のマネーを獲得してください。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 12,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_豊作" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 2.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "豊作" }
+      },
+      {
+        "step": 13,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "ここが重要なところです。\nマネーは場に1枚以上あれば、重ねてプレイすることで耐久値が 加算 されます。\n\n手札にあるマネーをすべてプレイしてみましょう。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "card_マネー" },
+        "completionCondition": { "type": "SELECT_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 14.5,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "play_button" },
+        "completionCondition": { "type": "PLAY_CARD", "cardName": "マネー" }
+      },
+      {
+        "step": 15,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "HIGHLIGHT", "targetId": "end_turn_button" },
+        "completionCondition": { "type": "END_TURN" }
+      },
+      {
+        "step": 16,
+        "trigger": { "type": "TURN_START", "player": "human", "round": 4 },
+        "action": { "type": "SHOW_MODAL", "text": "蓄えたマネーを元手に、強力な産業カードを展開しましょう。\n\n「重金主義」が有効なうちに「マネー」の耐久値が10の状態でターン開始を迎えました。\nこれによりさらなる経済への造詣が深まるのです。\n\n「重商主義」か「重農主義」、あなたに合う方を選んでみてください。\n\nもちろん気分で選んでも構いませんよ。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
+      },
+      {
+        "step": 17,
+        "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
+        "action": { "type": "SHOW_MODAL", "text": "さて、ここからは自由行動です。\n\n「マネーの耐久値30」――。\nそれが達成されたとき、なじみ深くも強烈な思想「資本主義」への道が開かれるでしょう。\n興味があれば試してみてくださいね。\n\nそれと、相手の残りデッキ枚数にはご注意を。\nこれは基本ですからね。\n\nそれではまた来年。" },
+        "completionCondition": { "type": "INPUT_REQUIRED" }
       }
     ]
   }

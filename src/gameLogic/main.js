@@ -26,15 +26,21 @@ export const checkGameOver = (gameState) => produce(gameState, _updateGameOverSt
 /**
  * Initializes the entire game state for a new game.
  */
-export const initializeGame = (cardDefs, presetDecks, player1DeckName, player2DeckName, tutorialScenario = null) => {
-    const p1DeckObject = presetDecks.find(deck => deck.name === player1DeckName);
-    const p2DeckObject = presetDecks.find(deck => deck.name === player2DeckName);
+export const initializeGame = (cardDefs, presetDecks, player1DeckSource, player2DeckSource, tutorialScenario = null) => {
+    // 引数が文字列なら名前で検索（互換性維持）、オブジェクトならそのまま使用
+    const p1DeckObject = (typeof player1DeckSource === 'string') 
+        ? presetDecks.find(deck => deck.name === player1DeckSource)
+        : player1DeckSource;
+        
+    const p2DeckObject = (typeof player2DeckSource === 'string')
+        ? presetDecks.find(deck => deck.name === player2DeckSource)
+        : player2DeckSource;
 
     if (!p1DeckObject) {
-        throw new Error(`Preset deck named "${player1DeckName}" not found.`);
+        throw new Error(`Player 1 deck not found: ${player1DeckSource?.name || player1DeckSource}`);
     }
     if (!p2DeckObject) {
-        throw new Error(`Preset deck named "${player2DeckName}" not found.`);
+        throw new Error(`Player 2 deck not found: ${player2DeckSource?.name || player2DeckSource}`);
     }
 
     const p1DeckTemplates = p1DeckObject.cards.map(name => cardDefs[name]);

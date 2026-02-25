@@ -1,10 +1,44 @@
 [
   {
     "tutorialId": "TUTORIAL_01",
-    "title": "基本操作編",
-    "description": "カードのプレイとターンの流れを学びます。",
+    "title": "001年：闘争の掟を理解する",
     "playerDeckId": "TUT_DECK_PLAYER_BASIC",
     "npcDeckId": "TUT_DECK_NPC_PASSIVE",
     "scenarioId": "SCENARIO_BASIC_FLOW"
+  },
+  {
+    "tutorialId": "TUTORIAL_02",
+    "title": "002年：自ら勝利を掴む術を学ぶ",
+    "playerDeckId": "TUT_DECK_CONSCIOUSNESS",
+    "npcDeckId": "TUT_DECK_NPC_TRADE",
+    "scenarioId": "SCENARIO_CONSCIOUSNESS_ZERO"
+  },
+  {
+    "tutorialId": "TUTORIAL_03",
+    "title": "003年：富の拡大と内部崩壊",
+    "playerDeckId": "TUT_DECK_SCALE",
+    "npcDeckId": "TUT_DECK_NPC_TARGET",
+    "scenarioId": "SCENARIO_SCALE_UP"
+  },
+  {
+    "tutorialId": "TUTORIAL_04",
+    "title": "004年：副産物の有効利用について",
+    "playerDeckId": "TUT_DECK_TOKEN",
+    "npcDeckId": "TUT_DECK_NPC_IDEARISM",
+    "scenarioId": "SCENARIO_TOKEN_CARDS"
+  },
+  {
+    "tutorialId": "TUTORIAL_05",
+    "title": "005年：覚醒と啓蒙",
+    "playerDeckId": "TUT_DECK_IDEOLOGY",
+    "npcDeckId": "TUT_DECK_NPC_PASSIVE",
+    "scenarioId": "SCENARIO_IDEOLOGY_SWAP"
+  },
+  {
+    "tutorialId": "TUTORIAL_06",
+    "title": "006年：富の蓄積と活用",
+    "playerDeckId": "TUT_DECK_MONEY",
+    "npcDeckId": "TUT_DECK_NPC_MONEY",
+    "scenarioId": "SCENARIO_MONEY_USAGE"
   }
 ]

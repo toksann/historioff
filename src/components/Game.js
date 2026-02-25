@@ -215,7 +215,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
         if (awaiting_input.type === 'CHOICE_CARD_TO_ADD') {
             return (
                 <div className="choice-prompt-overlay">
-                    <div className="choice-prompt">
+                    <div id="choice-prompt-container" className="choice-prompt">
                         <h3>カードを選択してください</h3>
                         <div className="choice-options">
                             {awaiting_input.options.map(option => (
@@ -237,7 +237,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
         if (awaiting_input.type === 'CHOICE_CARD_FROM_PILE') {
             return (
                 <div className="choice-prompt-overlay">
-                    <div className="choice-prompt">
+                    <div id="choice-prompt-container" className="choice-prompt">
                         <h3>カードを1枚選択してください</h3>
                         <div className="choice-options-scrollable">
                             {awaiting_input.options.map(card => (
@@ -255,7 +255,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             const sourceCardName = awaiting_input.source_card_name || '不明なカード';
             return (
                 <div className="choice-prompt-overlay">
-                    <div className="choice-prompt">
+                    <div id="choice-prompt-container" className="choice-prompt">
                         <h3>{sourceCardName}の効果</h3>
                         <p>手札から財カードを1枚選択してください</p>
                         <div className="choice-options-scrollable">
@@ -292,7 +292,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             const sourceCardName = awaiting_input.source_card_name || '不明なカード';
             return (
                 <div className="choice-prompt-overlay">
-                    <div className="choice-prompt">
+                    <div id="choice-prompt-container" className="choice-prompt">
                         <h3>{sourceCardName}の効果</h3>
                         <p>{awaiting_input.prompt || 'カードを1枚選択してください'}</p>
                         <div className="choice-options-scrollable">
