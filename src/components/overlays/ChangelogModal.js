@@ -13,7 +13,7 @@ const ChangelogModal = ({ isOpen, onClose, version }) => {
         </div>
         <div className="info-modal-body">
           <p>現在のバージョン: {version}</p>
-          <h3>Version 0.1.4 (2026/03/xx)</h3>
+          <h3>Version 0.1.4 (2026/03/01)</h3>
           <ul>
             <li><font color="yellow">機能追加</font>：チュートリアルの追加(ゲーム開始 ＞ チュートリアル)</li>
             <li><font color="yellow">不具合修正</font>：「終末」「大地震」の効果が発動しない場合がある不具合を修正</li>
