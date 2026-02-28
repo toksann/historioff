@@ -3098,9 +3098,12 @@ button:disabled {
 
 /* カード一覧画面 */
 .card-library-screen {
-  min-height: 100dvh;
+  height: 100dvh;
   background-color: #1a1a1a;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .library-controls {
@@ -3110,6 +3113,7 @@ button:disabled {
   background-color: #2a2a2a;
   border-bottom: 1px solid #444;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 .sort-controls, .filter-controls {
@@ -3137,6 +3141,9 @@ button:disabled {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 10px;
   padding: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .library-card {
@@ -4236,6 +4243,7 @@ button:disabled {
   .card-grid {
     flex-grow: 1; /* 残りのスペースを埋める */
     overflow-y: auto; /* スクロール可能にする */
+    min-height: 0;
   }
 }
 

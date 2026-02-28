@@ -70,10 +70,9 @@ const modifyParameterCorrectionCalculation = (gameState, playerId, correctTarget
     return finalAmount;
 };
 
-const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard) => {
+const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard, sourcePile) => {
     if (player.hand.length >= player.hand_capacity) {
         // 手札の上限到達警告演出をトリガー
-        // Push to gameState.animation_queue instead of effectsQueue
         gameState.animation_queue.push({
             effect: {
                 effect_type: 'LIMIT_WARNING',
@@ -89,6 +88,24 @@ const enforceHandLimit = (gameState, player, cardToAdd, effectsQueue, sourceCard
         // 手札上限超過時は捨て札に移動
         player.discard.push(cardToAdd);
         cardToAdd.location = 'discard';
+
+        // 手札上限による破棄トリガーを明示的に発行
+        const ownerPlayerId = cardToAdd.owner;
+        const discardArgs = {
+            card_id: cardToAdd.instance_id,
+            target_card_id: cardToAdd.instance_id,
+            card_type: cardToAdd.card_type,
+            source_pile: sourcePile || 'hand',
+            destination_pile: 'discard',
+            player_id: ownerPlayerId,
+            target_player_id: ownerPlayerId
+        };
+
+        // キューの先頭に追加（ドロー関連トリガーの後に実行されるようにする）
+        effectsQueue.unshift([{ effect_type: TriggerType.CARD_DISCARDED_OWNER, args: discardArgs }, sourceCard || cardToAdd]);
+        effectsQueue.unshift([{ effect_type: TriggerType.CARD_DISCARDED, args: discardArgs }, sourceCard || cardToAdd]);
+        effectsQueue.unshift([{ effect_type: TriggerType.CARD_DISCARDED_THIS, args: discardArgs }, sourceCard || cardToAdd]);
+
         return false; // 手札に追加しない
     }
     return true; // 手札に追加可能
@@ -992,7 +1009,7 @@ const effectHandlers = {
             cardToMove.location = 'playing_event';
         } else if (destination_player[destination_pile] && Array.isArray(destination_player[destination_pile])) {
             if (destination_pile === 'hand') {
-                if (enforceHandLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard)) {
+                if (enforceHandLimit(gameState, destination_player, cardToMove, effectsQueue, sourceCard, source_pile)) {
                     destination_player.hand.push(cardToMove);
                 }
             } else {
