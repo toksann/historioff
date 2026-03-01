@@ -62,7 +62,7 @@ const RulesOverlay = ({ isOpen, onClose }) => {
     <div className="overlay" onClick={handleOverlayClick}>
       <div className="overlay-modal rules-overlay">
         <div className="overlay-header">
-          <h2>【世の理】</h2>
+          <h2>【闘争の掟】</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         

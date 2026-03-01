@@ -90,6 +90,12 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
         if (!entry || !gameState) {
             return null;
         }
+
+        // 伏せ字(" ---- ")が含まれている場合はカード情報を返さない（機密保持）
+        const description = entry.description || entry.message || "";
+        if (typeof description === 'string' && description.includes(" ---- ")) {
+            return null;
+        }
         
         // 1. details.cardIdから検索（最も確実）
         if (entry.details && entry.details.cardId && gameState.all_card_instances) {
