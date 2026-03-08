@@ -1,146 +1,163 @@
 .consciousness-chart {
-    background-color: #2c2c2c;
-    border: 1px solid #555;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
-    font-family: sans-serif;
-    margin: 0; /* Margin is handled by the container */
-    display: block; /* Helps with sizing */
-    max-width: 100%; /* Make SVG responsive */
-    height: auto; /* Maintain aspect ratio */
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .axis-line {
-    stroke: #888;
+    stroke: var(--color-border);
     stroke-width: 2;
 }
 
 .grid-line {
-    stroke: #555;
+    stroke: rgba(255, 255, 255, 0.05);
     stroke-dasharray: 2, 2;
 }
 
 .axis-label, .legend-label, .ideology-label {
-    fill: #ccc;
+    fill: var(--color-text-dim);
     font-size: 12px;
 }
 
 .ideology-label {
     font-weight: bold;
     font-size: 14px;
+    fill: var(--color-accent);
+    text-shadow: 0 0 5px var(--color-accent-glow);
 }
 
 .line {
-    stroke-width: 2;
-    /* stroke-dashoffset is controlled by JavaScript */
-    opacity: 1; /* Always visible, drawing effect handled by strokeDashoffset */
+    stroke-width: 3;
+    opacity: 1;
 }
 
 .player-line {
-    stroke: #007bff;
+    stroke: var(--color-accent);
+    filter: drop-shadow(0 0 5px var(--color-accent-glow));
 }
 
 .npc-line {
-    stroke: #dc3545;
+    stroke: #ff5252;
+    filter: drop-shadow(0 0 5px rgba(255, 82, 82, 0.4));
 }
 
 .point {
     stroke-width: 2;
-    stroke: #2c2c2c;
-    opacity: 0; /* Points are initially hidden by CSS */
-    transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Smooth fade for points and transform */
-    transform-origin: 50% 50%; /* Ensure scaling is from the center */
-    transform-box: fill-box; /* Crucial for correct SVG transform-origin */
+    stroke: var(--color-bg-surface);
+    opacity: 0;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
 }
 
 .point.point-pop {
-    animation: pointPop 0.3s ease-out forwards; /* Adjust duration and easing */
+    animation: pointPop 0.3s ease-out forwards;
 }
 
 @keyframes pointPop {
     0% { transform: scale(1); }
-    50% { transform: scale(2.0); } /* Expand to 2.0 times size */
-    100% { transform: scale(1); } /* Return to original size */
+    50% { transform: scale(2.0); }
+    100% { transform: scale(1); }
 }
 
 .player-point {
-    fill: #007bff;
+    fill: var(--color-accent);
 }
 
 .npc-point {
-    fill: #dc3545;
+    fill: #ff5252;
 }
 
 .chart-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* Reduced gap */
+    gap: 15px;
     width: 100%;
+    background-color: var(--color-bg-deep);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
 }
 
 .chart-toggle-buttons {
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
 }
 
 .chart-toggle-buttons button {
-    background-color: #444;
-    border: 1px solid #666;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-dim);
+    padding: 6px 14px;
+    border-radius: 4px;
     cursor: pointer;
-    margin: 0; /* Remove margin */
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
 }
 
 .chart-toggle-buttons button:hover {
-    background-color: #555;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 .chart-toggle-buttons button:disabled {
-    background-color: #007bff;
+    background-color: var(--color-accent);
+    color: #000;
+    border-color: var(--color-accent);
+    font-weight: bold;
     cursor: not-allowed;
-    border-color: #007bff;
+    box-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .tooltip {
     transition: opacity 0.2s;
-    pointer-events: none; /* Allows mouse events to pass through */
+    pointer-events: none;
 }
 
 .tooltip-bg {
-    fill: rgba(0, 0, 0, 0.8);
-    stroke: #aaa;
+    fill: rgba(10, 10, 10, 0.9);
+    stroke: var(--color-accent);
     stroke-width: 1px;
 }
 
 .tooltip-title {
     font-size: 14px;
     font-weight: bold;
-    fill: #fff;
+    fill: var(--color-accent);
 }
 
 .tooltip-text {
     font-size: 12px;
-    fill: #ddd;
+    fill: var(--color-text-main);
 }
 
 .player-text {
-    fill: #007bff;
+    fill: var(--color-accent);
     font-weight: bold;
 }
 
 .npc-text {
-    fill: #dc3545;
+    fill: #ff5252;
     font-weight: bold;
 }
 
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 599px) {
+    .chart-wrapper {
+        padding: 10px;
+    }
+
     .axis-label, .legend-label, .ideology-label {
         font-size: 10px;
     }
@@ -154,8 +171,7 @@
     }
     
     .chart-toggle-buttons button {
-        padding: 4px 8px;
-        font-size: 0.8em;
+        padding: 4px 10px;
+        font-size: 0.75em;
     }
 }
-

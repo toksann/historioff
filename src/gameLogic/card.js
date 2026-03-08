@@ -440,6 +440,13 @@ export const checkCardReaction = (card, triggeredEffect, gameState) => {
             }
         }
 
+        // 一神教の無限ループ防止: 手札が上限の場合は捨て札からの復帰を発動させない
+        if (card.name === '一神教' && triggeredEffectType === TriggerType.CARD_DISCARDED_THIS) {
+            if (owner.hand.length >= owner.hand_capacity) {
+                continue;
+            }
+        }
+
         if (current_args.condition_money_durability_ge_10) {
             const moneyCard = owner.field.find(c => c.name === 'マネー');
             if (!moneyCard || moneyCard.current_durability < 10) {

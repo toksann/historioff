@@ -61,7 +61,10 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd, id }) => {
       id={id}
     >
       <div className="card-header">
-        <h3>{card.name}</h3>
+        <div className="card-header-main">
+          <h3>{card.name}</h3>
+          {card.is_token && <span className="token-badge">TOKEN</span>}
+        </div>
         <span className="card-type">{card.card_type}</span>
       </div>
       <div className="card-info">

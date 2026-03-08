@@ -14,7 +14,7 @@
       {
         "step": 1,
         "trigger": { "type": "TUTORIAL_START" },
-        "action": { "type": "SHOW_MODAL", "text": "ようこそ！\n『Historio』での生存の術をお教えします。\n\n「OK」を押して進めてください。" },
+        "action": { "type": "SHOW_MODAL", "text": "よくぞお越しいただきました！\n『Historio』での生存の術をお教えします。\n\n「OK」を押して次へ行きましょう。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -38,7 +38,7 @@
       {
         "step": 4,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "それで大丈夫です！\nそれでは右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。" },
+        "action": { "type": "SHOW_MODAL", "text": "カードのプレイができましたね。\nそれでは右下にある「ターン終了」ボタンを押して、相手にターンを渡しましょう。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -80,7 +80,7 @@
       {
         "step": 10,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "あぁっ！「覚醒」を引いたようですね。\nこのカードは効果で意識を1高めることができます。\nこれは勝機です！\n\n「覚醒」をプレイしましょう。" },
+        "action": { "type": "SHOW_MODAL", "text": "ふむ。「覚醒」を引いたようですね。\nこのカードは効果で意識を1高めることができます。\nこれは勝機です！\n\n「覚醒」をプレイしましょう。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -98,7 +98,7 @@
       {
         "step": 12,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "意識が16になりましたね。\nこのゲームはあなたか相手のデッキがなくなったときに意識が比較されます。次の相手のターンが始まると、相手はカードを引きデッキが0枚になります。\n\nあなたはもう待つだけで勝てるのですよ！\n\nさぁ、ターン終了を押して相手の逃れ得ぬ運命を見届けるのです！" },
+        "action": { "type": "SHOW_MODAL", "text": "意識が16になりましたね。\nこのゲームはあなたか相手のデッキがなくなったときに意識が比較されます。次の相手のターンが始まると、相手はカードを引きデッキが0枚になります。\n\nあなたはもう待つだけで勝てますよ！\n\nさぁ、ターン終了を押して相手の逃れ得ぬ運命を見届けましょう！" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -225,13 +225,13 @@
       {
         "step": 13,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "完璧です。\n思想こそ、人類の人類たり得る理由なのです。\n\nモノは多ければ多いほど良い！\n強欲のままに我らの豊かさを誇示しようではありませんか！" },
+        "action": { "type": "SHOW_MODAL", "text": "完璧です。\n思想こそ、人類の人類たり得る理由と言えましょう。\n\nモノは多ければ多いほど良い！\n強欲のままに我らの豊かさを誇示しようではありませんか！" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
         "step": 14,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "あぁ、そういえば。\n「物質主義」は場に財カードが3枚以上あると相手の意識を1減らせるのですよ。\n\nついでに「農民」でもプレイしましょうか。" },
+        "action": { "type": "SHOW_MODAL", "text": "あぁ、そういえば。\n「物質主義」は場に財カードが3枚以上あると相手の意識を1減らせるんですよ。\n\nついでに「農民」でもプレイしましょうか。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -606,7 +606,7 @@
       {
         "step": 17,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "しかし「官僚主義」も悪いことばかりではありません。\n持っていれば手札の必要規模が下がっていきます。\n\nこれも一つの効率性なのですよ。\n\nちなみにあなたのイデオロギーである「保守主義」は意識減少を抑える効果がありますので、実は持ち続けてもデメリットを打ち消せましたがね。" },
+        "action": { "type": "SHOW_MODAL", "text": "しかし「官僚主義」も悪いことばかりではありません。\n持っていれば手札の必要規模が下がっていきます。\n\n効率の良さは賢さの証左でもあるのでしょう。\n\nちなみにあなたのイデオロギーである「保守主義」は意識減少を抑える効果がありますので、実は持ち続けてもデメリットを打ち消せましたがね。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -713,7 +713,7 @@
       {
         "step": 8,
         "trigger": { "type": "TURN_START", "player": "human", "round": 2 },
-        "action": { "type": "SHOW_MODAL", "text": "さて、人の心は移ろうもの。\n新しい思想「理想主義」が手に入りました。\n\nイデオロギーは、上書きすることができるのです。\n「理想主義」をプレイしてみましょう。" },
+        "action": { "type": "SHOW_MODAL", "text": "さて、人の心は移ろうもの。\n新しい思想「理想主義」が手に入りました。\n\nイデオロギーは、上書きすることができます。\n「理想主義」をプレイしてみましょう。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -755,7 +755,7 @@
       {
         "step": 13,
         "trigger": { "type": "PREVIOUS_STEP_COMPLETE" },
-        "action": { "type": "SHOW_MODAL", "text": "あなたの意識が+1されたのが確認できましたか？\n\n既に掲げているイデオロギーと同じカードをプレイすると、意識を高める効果があるのです。\n無駄にはならない、ということですね。" },
+        "action": { "type": "SHOW_MODAL", "text": "あなたの意識が+1されたのが確認できましたか？\n\n既に掲げているイデオロギーと同じカードをプレイすると、意識を高める効果があります。\n被りも無駄にはならない、ということですね。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {
@@ -983,7 +983,7 @@
       {
         "step": 16,
         "trigger": { "type": "TURN_START", "player": "human", "round": 4 },
-        "action": { "type": "SHOW_MODAL", "text": "蓄えたマネーを元手に、強力な産業カードを展開しましょう。\n\n「重金主義」が有効なうちに「マネー」の耐久値が10の状態でターン開始を迎えました。\nこれによりさらなる経済への造詣が深まるのです。\n\n「重商主義」か「重農主義」、あなたに合う方を選んでみてください。\n\nもちろん気分で選んでも構いませんよ。" },
+        "action": { "type": "SHOW_MODAL", "text": "蓄えたマネーを元手に、強力な産業カードを展開しましょう。\n\n「重金主義」が有効なうちに「マネー」の耐久値が10の状態でターン開始を迎えました。\nこれでさらなる経済への造詣が深まるというもの。\n\n「重商主義」か「重農主義」、あなたに合う方を選んでみてください。\n\nもちろん気分で選んでも構いませんよ。" },
         "completionCondition": { "type": "INPUT_REQUIRED" }
       },
       {

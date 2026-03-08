@@ -63,6 +63,12 @@ class LogEntryGenerator {
                 entry.timestamp = Date.now();
                 entry.type = 'effect';
                 entry.effectType = effectType;
+
+                // 行動主体（プレイヤーID）を特定して追加
+                entry.playerId = args.player_id || 
+                                sourceCard?.owner || 
+                                (effectType.includes('TURN_OWNER') ? args.player_id : null) ||
+                                'system';
             }
             
             return entry;
@@ -283,10 +289,12 @@ class LogEntryGenerator {
             const player = gameState.players[args.player_id];
             if (!player) return null;
 
-            const amount = args.amount;
+            const amount = args.amount || 0;
             const playerName = player.name;
+
+            const finalAmount = player.consciousness;
             
-            const description = `意識を${amount}に設定`;
+            const description = `意識を${finalAmount}に設定`;
 
             return {
                 playerName,
@@ -312,10 +320,12 @@ class LogEntryGenerator {
             const player = gameState.players[args.player_id];
             if (!player) return null;
 
-            const amount = args.amount;
+            const amount = args.amount || 0;
             const playerName = player.name;
+
+            const finalAmount = player.scale;
             
-            const description = `規模を${amount}に設定`;
+            const description = `規模を${finalAmount}に設定`;
 
             return {
                 playerName,
@@ -499,8 +509,8 @@ class LogEntryGenerator {
             const player = gameState.players[args.player_id];
             if (!player) return null;
 
-            const originalAmount = args.original_amount;
-            const actualAmount = args.actual_amount;
+            const originalAmount = args.original_amount || 0;
+            const actualAmount = args.actual_amount || 0;
             const playerName = player.name;
             
             // 発生源カードの特定を改善
@@ -558,8 +568,8 @@ class LogEntryGenerator {
             const player = gameState.players[args.player_id];
             if (!player) return null;
 
-            const originalAmount = args.original_amount;
-            const actualAmount = args.actual_amount;
+            const originalAmount = args.original_amount || 0;
+            const actualAmount = args.actual_amount || 0;
             const playerName = player.name;
             
             // 発生源カードの特定を改善
@@ -617,8 +627,8 @@ class LogEntryGenerator {
             const targetCard = gameState.all_card_instances[args.card_id];
             if (!targetCard) return null;
 
-            const originalAmount = args.original_amount;
-            const actualAmount = args.actual_amount;
+            const originalAmount = args.original_amount || 0;
+            const actualAmount = args.actual_amount || 0;
             const isHealing = actualAmount > 0;
             
             // 発生源カードの特定を改善

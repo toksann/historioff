@@ -249,6 +249,8 @@ const _selectCards = (gameState, player, available_cards, selection_method, coun
                 typeof card === 'object' && card.instance_id ? card.instance_id : card
             ));
             return available_cards.filter(card => selectedIds.has(card.instance_id));
+        case 'non_money':
+            return available_cards.filter(card => card.name !== 'マネー');
         default:
             return [];
     }
@@ -614,22 +616,50 @@ const effectHandlers = {
         }
     },
     [EffectType.SET_CONSCIOUSNESS]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        const { player_id, amount } = args;
-        if (gameState.players[player_id]) {
-            gameState.players[player_id].consciousness = Math.max(0, amount);
+        const { player_id, amount_percentage, round_down = false } = args;
+        const amount = Number(args.amount || 0);
+        const player = gameState.players[player_id];
+        if (player) {
+            const oldValue = player.consciousness || 0;
+            let finalValue = amount;
+            if (amount_percentage !== undefined) {
+                const calcValue = oldValue * (Number(amount_percentage) / 100);
+                finalValue = (round_down ? Math.floor(calcValue) : Math.round(calcValue)) + amount;
+            }
+            const newValue = Math.max(0, Math.round(finalValue) || 0);
+            player.consciousness = newValue;
+            
+            // ログ表示用の差分通知
+            const diff = newValue - oldValue;
+            const changeArgs = { player_id, original_amount: diff, actual_amount: diff, is_set: true, source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null) };
+            effectsQueue.unshift([{ effect_type: EffectType.CONSCIOUSNESS_CHANGED, args: changeArgs }, sourceCard]);
             effectsQueue.unshift([{ effect_type: EffectType.CHECK_GAME_OVER, args: {} }, sourceCard]);
         }
     },
-    [EffectType.SET_SCALE]: (gameState, args) => {
-        const { player_id, amount } = args;
-        if (gameState.players[player_id]) {
-            gameState.players[player_id].scale = Math.max(0, amount);
+    [EffectType.SET_SCALE]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
+        const { player_id, amount_percentage, round_down = false } = args;
+        const amount = Number(args.amount || 0);
+        const player = gameState.players[player_id];
+        if (player) {
+            const oldValue = player.scale || 0;
+            let finalValue = amount;
+            if (amount_percentage !== undefined) {
+                const calcValue = oldValue * (Number(amount_percentage) / 100);
+                finalValue = (round_down ? Math.floor(calcValue) : Math.round(calcValue)) + amount;
+            }
+            const newValue = Math.max(0, Math.round(finalValue) || 0);
+            player.scale = newValue;
+
+            // ログ表示用の差分通知
+            const diff = newValue - oldValue;
+            const changeArgs = { player_id, original_amount: diff, actual_amount: diff, is_set: true, source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null) };
+            effectsQueue.unshift([{ effect_type: EffectType.SCALE_CHANGED, args: changeArgs }, sourceCard]);
         }
     },
     [EffectType.MODIFY_CARD_DURABILITY]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
         let resolved_card_id = args.card_id;
         const playerContext = gameState.players[sourceCard ? sourceCard.owner : args.player_id]; // Determine player context
-        const originalAmount = args.amount; // Store original amount for triggers
+        const originalAmount = args.amount || 0; // Store original amount for triggers
 
         // --- ABSTRACT TARGET RESOLUTION LOGIC ---
         if (typeof args.card_id === 'string') {
@@ -683,28 +713,34 @@ const effectHandlers = {
             return;
         }
 
+        // --- Percentage calculation after target resolution ---
+        let baseAmount = originalAmount;
+        if (args.amount_percentage !== undefined) {
+            const currentDurability = targetCardRef.current_durability !== undefined ? targetCardRef.current_durability : targetCardRef.durability;
+            const calcAmount = currentDurability * (Math.abs(args.amount_percentage) / 100);
+            const roundedChange = args.round_down ? Math.floor(calcAmount) : Math.round(calcAmount);
+            baseAmount = (args.amount_percentage < 0 ? -roundedChange : roundedChange) + originalAmount;
+        }
+
         // --- Dispatch RESERVE owner triggers after target resolution ---
-        const triggerArgsForOwnerReserve = { ...args, card_id: resolved_card_id, target_card_id: resolved_card_id, target_player_id: targetCardRef.owner };
-        if (originalAmount > 0) {
+        const triggerArgsForOwnerReserve = { ...args, amount: baseAmount, card_id: resolved_card_id, target_card_id: resolved_card_id, target_player_id: targetCardRef.owner };
+        if (baseAmount > 0) {
             effectsQueue.unshift([{ effect_type: TriggerType.MODIFY_CARD_DURABILITY_INCREASE_RESERVE_OWNER, args: triggerArgsForOwnerReserve }, sourceCard]);
-        } else if (originalAmount < 0) {
+        } else if (baseAmount < 0) {
             effectsQueue.unshift([{ effect_type: TriggerType.MODIFY_CARD_DURABILITY_DECREASE_RESERVE_OWNER, args: triggerArgsForOwnerReserve }, sourceCard]);
         }
 
         // --- Actual Damage Application Logic ---
-        // "Mountain" card's passive damage immunity removed as per architectural guidance.
-        // The check for targetCard.current_durability <= 0 is explicitly NOT added here.
-
         if (targetCardRef && (targetCardRef.location === 'field' || targetCardRef.location === 'ideology')) {
-            const finalAmount = modifyParameterCorrectionCalculation(gameState, targetCardRef.owner, 'wealth', originalAmount > 0 ? 'increase' : 'decrease', originalAmount);
+            const finalAmount = modifyParameterCorrectionCalculation(gameState, targetCardRef.owner, 'wealth', baseAmount > 0 ? 'increase' : 'decrease', baseAmount);
             
             const currentDurability = targetCardRef.current_durability !== undefined ? targetCardRef.current_durability : targetCardRef.durability;
-            const newDurability = currentDurability + finalAmount;
+            const newDurability = Math.round(currentDurability + finalAmount); // Ensure integer
 
             syncCardDataInAllPiles(gameState, resolved_card_id, { current_durability: newDurability });
             
-            if (finalAmount !== 0 || originalAmount !== finalAmount) {
-                if (originalAmount !== 0 && finalAmount === 0) {
+            if (finalAmount !== 0 || baseAmount !== finalAmount) {
+                if (baseAmount !== 0 && finalAmount === 0) {
                     effectsQueue.push([{
                         effect_type: 'EFFECT_NULLIFIED',
                         args: { target_card_id: resolved_card_id, reason: 'correction_nullified', message: '財ダメージが軽減により無効化されました' }
@@ -713,7 +749,7 @@ const effectHandlers = {
                 
                 const changeArgs = {
                     card_id: resolved_card_id,
-                    original_amount: originalAmount,
+                    original_amount: baseAmount,
                     actual_amount: finalAmount,
                     source_card_id: args.source_card_id || (sourceCard ? sourceCard.instance_id : null),
                     new_durability: newDurability
@@ -924,7 +960,10 @@ const effectHandlers = {
         cardToMove.location = destination_pile;
         cardToMove.owner = args.target_player_id || player_id; // Update owner before pushing to destination
 
-        if (!maintain && destination_pile !== 'field') {
+        const isDraw = source_pile === 'deck' && destination_pile === 'hand';
+        const isPlay = destination_pile === 'field' || destination_pile === 'ideology';
+
+        if (!maintain && !isDraw && !isPlay) {
             const cardTemplate = gameState.cardDefs[cardToMove.name];
             if (cardTemplate) {
                 const updates = {};
@@ -1279,8 +1318,30 @@ const effectHandlers = {
     },
 
     [EffectType.PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH]: (gameState, args, cardDefs, sourceCard, effectsQueue) => {
-        const { player_ids, amount, next_effect } = args;
+        let { player_ids, amount, next_effect } = args;
         if (!player_ids || !amount) return;
+
+        // もし amount が 'lowest_durability_on_field' なら、場の財カードの最低耐久値を取得する
+        if (amount === 'lowest_durability_on_field') {
+            let minDurability = Infinity;
+            const targetIds = Array.isArray(player_ids) ? player_ids : [player_ids];
+            
+            targetIds.forEach(pId => {
+                const player = gameState.players[pId];
+                if (player && player.field) {
+                    player.field.forEach(card => {
+                        if (card.card_type === CardType.WEALTH) {
+                            if (card.current_durability < minDurability) {
+                                minDurability = card.current_durability;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // 最低耐久値が見つからなかった場合は 0 とする
+            amount = minDurability === Infinity ? 0 : minDurability;
+        }
 
         const operationArgs = {
             player_id: sourceCard ? sourceCard.owner : null,
@@ -2015,16 +2076,14 @@ const effectHandlers = {
 
         if (player && args.amount_percentage) {
             const originalAmount = player.consciousness;
-            let change = originalAmount * (Math.abs(args.amount_percentage) / 100);
-            if (args.round_down) {
-                change = Math.floor(change);
-            }
+            const calcValue = originalAmount * (Math.abs(args.amount_percentage) / 100);
+            const roundedChange = args.round_down ? Math.floor(calcValue) : Math.round(calcValue);
             
             if (args.store_original_value_for_temp) {
-                gameState.temp_effect_data[args.store_original_value_for_temp] = change;
+                gameState.temp_effect_data[args.store_original_value_for_temp] = roundedChange;
             }
 
-            resolvedArgs.amount = args.amount_percentage < 0 ? -change : change;
+            resolvedArgs.amount = (args.amount_percentage < 0 ? -roundedChange : roundedChange) + (args.amount || 0);
         } else if (args.amount_based_on_removed_discard_count) {
             resolvedArgs.amount = gameState.temp_effect_data.removed_discard_count || 0;
         } else if (args.amount_based_on_temp_value) {
@@ -2061,16 +2120,14 @@ const effectHandlers = {
 
         if (player && args.amount_percentage) {
             const originalAmount = player.scale;
-            let change = originalAmount * (Math.abs(args.amount_percentage) / 100);
-            if (args.round_down) {
-                change = Math.floor(change);
-            }
+            const calcValue = originalAmount * (Math.abs(args.amount_percentage) / 100);
+            const roundedChange = args.round_down ? Math.floor(calcValue) : Math.round(calcValue);
             
             if (args.store_original_value_for_temp) {
-                gameState.temp_effect_data[args.store_original_value_for_temp] = change;
+                gameState.temp_effect_data[args.store_original_value_for_temp] = roundedChange;
             }
 
-            resolvedArgs.amount = args.amount_percentage < 0 ? -change : change;
+            resolvedArgs.amount = (args.amount_percentage < 0 ? -roundedChange : roundedChange) + (args.amount || 0);
         }
 
         resolvedArgs.target_player_id = resolvedArgs.player_id;

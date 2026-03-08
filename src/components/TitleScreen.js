@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+import InfoModal from './overlays/InfoModal.js';
 
 const ASCII_ART_TITLE = `
                                               s                               ..
@@ -17,55 +19,92 @@ const ASCII_ART_TITLE = `
 `;
 
 const TitleScreen = ({ onScreenChange, onShowRules, onShowCredits, onShowChangelog, version }) => {
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+  const disclaimerMessage = `本作品は、歴史上の思想、政治、経済的出来事をテーマにしたフィクションであり、実在の人物、団体、国家、宗教、および現在進行中のいかなる政治的事象とも一切関係ありません。
+
+特定の政治的思想や宗教的信念を支持、推奨、または批判することを目的としたものではなく、またそれらへの勧誘や宣伝を目的としたものでもありません。
+
+ゲーム内の表現やデータは、あくまでゲーム体験の提供と歴史的テーマのエンターテインメントとしての側面を重視したものであり、学術的な正確性や客観性を保証するものではありません。`;
+
   return (
     <div className="title-screen">
+      <div className="title-bg-animation"></div>
+      <div className="title-scanline"></div>
+      
       <div className="title-content">
-        <div className="ascii-art">
+        <div className="ascii-art no-select">
           <pre>{ASCII_ART_TITLE}</pre>
         </div>
-        <div className="version-info">
-          <button className="version-button" onClick={onShowChangelog}>
-            Version: {version}
-          </button>
+        
+        <div className="title-sub-info">
+          <div className="version-info">
+            <button className="version-button" onClick={onShowChangelog}>
+              SYSTEM v{version}
+            </button>
+          </div>
         </div>
         
         <div className="menu-options">
           <button 
-            className="menu-button"
+            className="menu-button start-button"
             onClick={() => onScreenChange('deckSelection')}
           >
-            ゲーム開始
+            <span className="button-glitch"></span>
+            検証開始
           </button>
           
           <button 
             className="menu-button"
             onClick={() => onScreenChange('deckBuilder')}
           >
-            デッキ構築
+            運命構築
           </button>
           
           <button 
             className="menu-button"
             onClick={() => onScreenChange('cardLibrary')}
           >
-            ライブラリ
+            歴史の断片
           </button>
 
           <button 
             className="menu-button"
             onClick={onShowRules}
           >
-            ルール
+            世の理
           </button>
           
           <button 
-            className="menu-button"
+            className="menu-button credits-button"
             onClick={onShowCredits}
           >
-            開発ツール等
+            開発道具等
           </button>
         </div>
       </div>
+
+      <footer className="title-footer">
+        <div className="footer-content">
+          <div className="footer-top-row">
+            <button className="disclaimer-button" onClick={() => setShowDisclaimer(true)}>
+              免責事項
+            </button>
+          </div>
+          <div className="footer-bottom-row">
+            <div className="copyright">
+              &copy; 2025 - {new Date().getFullYear()} toksann HISTORIO. All Rights Reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <InfoModal 
+        isOpen={showDisclaimer} 
+        onClose={() => setShowDisclaimer(false)} 
+        title="【免責事項】"
+        message={disclaimerMessage}
+      />
     </div>
   );
 };

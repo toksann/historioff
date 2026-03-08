@@ -1,15 +1,22 @@
+/* ==========================================================================
+   DeckBuilderScreen.css
+   ========================================================================== */
+
+/* --- Base Layout (Desktop/PC) --- */
+
 .deck-builder-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100dvh;
-  background-color: rgba(0, 0, 0, 0.95);
-  color: white;
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-main);
   display: flex;
   z-index: 1000;
   padding: 20px;
   box-sizing: border-box;
+  font-family: 'Courier New', monospace;
 }
 
 .deck-builder-container {
@@ -17,98 +24,120 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
-  border: 1px solid #00ff00;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 20px;
   box-sizing: border-box;
   overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* New styles for header layout */
 .screen-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Vertically center items */
+  align-items: center;
   margin-bottom: 20px;
 }
 
 .screen-header h1 {
   margin: 0;
-  color: #00ff00; /* Assuming the main title is green */
+  color: var(--color-accent);
+  text-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between h1 and help button */
+  gap: 10px;
 }
 
 .help-button {
-  background-color: #4a4f5a; /* Secondary action background */
-  color: #fff; /* White text */
-  border: 1px solid #00ff00; /* Green border for theme */
-  border-radius: 50%; /* Make it round */
-  width: 28px; /* Fixed width for round button */
-  height: 28px; /* Fixed height for round button */
-  font-size: 0.9em; /* Smaller font size */
+  background-color: var(--color-bg-surface);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.9em;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 0; /* Remove default padding for tighter circle */
-  box-sizing: border-box; /* Include padding/border in width/height */
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .help-button:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
+  background-color: var(--color-accent);
+  color: #000;
+  box-shadow: 0 0 15px var(--color-accent-glow);
+}
+
+.back-button {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .deck-builder-layout {
   display: flex;
   flex-grow: 1;
   gap: 20px;
-  height: calc(100% - 350px);
+  height: calc(100% - 350px); /* Adjust based on your header/footer size */
 }
+
+/* --- Section Styling --- */
 
 .card-library-section,
 .deck-building-section {
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  background: #282c34;
+  background: var(--color-bg-container);
   padding: 15px;
   border-radius: 8px;
+  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
 .card-library-section {
-  flex: 2;
+  flex: 1; /* Left panel width ratio */
 }
 
 .deck-building-section {
-  flex: 1;
+  flex: 2; /* Right panel width ratio */
 }
 
-.library-header {
-  margin-bottom: 15px;
-}
-
-.library-header h2 {
+.library-header h2, .deck-building-section h2 {
   margin: 0 0 10px 0;
   text-align: center;
+  color: var(--color-text-main);
+  font-family: 'Courier New', monospace;
 }
+
+/* --- Library Controls --- */
 
 .library-controls {
   display: flex;
   justify-content: space-around;
   gap: 10px;
-  background: #333;
+  background: rgba(0, 0, 0, 0.3);
   padding: 10px;
   border-radius: 6px;
   font-size: 0.9em;
+  border: 1px solid var(--color-border);
 }
 
 .library-controls .sort-controls,
@@ -120,874 +149,271 @@
 
 .library-controls label {
   font-weight: bold;
+  color: var(--color-text-dim);
 }
 
 .library-controls select {
   padding: 5px;
   border-radius: 4px;
-  border: 1px solid #555;
-  background: #444;
-  color: white;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  color: var(--color-text-main);
+  font-family: 'Courier New', monospace;
 }
 
+/* --- Card Grids & Lists --- */
+
 .deck-builder-card-grid {
-  h2 {
-    text-align: center;
-    color: #00ff00;
-  }
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 10px;
+}
 
-  .deck-list {
-    flex-grow: 1;
-    background: #333;
-    border-radius: 6px;
-    padding: 10px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
+.deck-list {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  min-height: 0;
+  max-height: 400px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  margin-bottom: 10px;
+  align-content: flex-start;
+}
 
-  .deck-card {
-    background: #4a4f5a;
-    margin-bottom: 5px;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    display: flex;
-    justify-content: space-between;
-    color: #fff;
-  }
+.deck-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 60px;
+  text-align: center;
+  font-size: 0.8em;
+  color: var(--color-text-main);
+}
 
-  .deck-card:hover {
-    background-color: #5a5f6a;
-  }
+.deck-card:hover {
+  background-color: var(--color-bg-container);
+  border-color: var(--color-accent);
+}
 
-  .cost-curve-wrapper {
-    margin-bottom: 5px;
-  }
+.deck-card-count {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background-color: var(--color-accent);
+  color: #1a1a1a;
+  border-radius: 0 4px 0 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
 
-  .cost-curve-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-  }
+.empty-deck-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 2px dashed var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-dim);
+  text-align: center;
+  font-style: italic;
+  padding: 20px;
+  grid-column: 1 / -1;
+}
 
-  .cost-curve-header h3 {
-    margin: 0;
-    color: #00ff00;
-  }
+/* --- Library Card Styling --- */
 
-  .cost-curve-header button {
-    background: #4a4f5a;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    padding: 5px 5px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.deck-builder-library-card {
+  position: relative;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9em;
+  text-align: center;
+  color: var(--color-text-main);
+  user-select: none;
+}
 
-  .deck-actions {
-    display: flex;
+.deck-builder-library-card:hover {
+  transform: scale(1.05);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+.deck-builder-library-card.pressed {
+  transform: scale(0.97);
+  border-color: var(--color-accent);
+}
+
+/* Card type borders */
+.deck-builder-library-card.card-type-財 { border-color: #8bc34a; }
+.deck-builder-library-card.card-type-事象 { border-color: #ff9800; }
+.deck-builder-library-card.card-type-イデオロギー { border-color: #9c27b0; }
+
+.card-swipe-hint {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 5px;
+  z-index: 10;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* --- Deck Actions & Cost Curve --- */
+
+.cost-curve-wrapper {
+  margin-bottom: 5px;
+  flex-shrink: 0;
+  background: var(--color-bg-deep); /* 灰色の背景を排除 */
+  border-radius: 8px;
+}
+
+.cost-curve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 5px;
+}
+
+.cost-curve-header h3 {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cost-curve-header button {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent); /* ボタン文字もアクセントカラーに */
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+}
+
+.cost-curve-header button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.deck-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.deck-name-input {
+  flex-grow: 1;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  color: var(--color-text-main);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.deck-name-input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.deck-actions button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-main);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8em;
+  font-family: 'Courier New', monospace;
+}
+
+.deck-actions button:hover {
+  background-color: var(--color-bg-container);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.deck-actions button.primary-action {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #1a1a1a;
+}
+
+.deck-actions button.primary-action:hover {
+  background-color: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 15px var(--color-accent-glow);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+/* --- Medium Screens (Tablet/Large Mobile) --- */
+@media (max-width: 768px) {
+  .library-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .library-controls .sort-controls,
+  .library-controls .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
     gap: 5px;
-    margin-top: 5px;
   }
-
-  .deck-name-input {
-    flex-grow: 1;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background: #333;
-    color: white;
-  }
-
-  .deck-actions button {
-    padding: 0px 0px;
-    border-radius: 5px;
-    border: none;
-    background-color: #00ff00;
-    color: #1a1a1a;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .deck-actions .secondary-action {
-    background-color: #4a4f5a;
-    color: #fff;
-    border: 1px solid #00ff00;
-    font-size: 0.9em;
-  }
-
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.deck-builder-library-card {
-  background: #3a3f4a;
-  border: 1px solid #4a4f5a;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  font-size: 0.9em;
-  text-align: center;
-  color: #fff;
-}
-
-.deck-builder-library-card:hover {
-  transform: scale(1.05);
-  border-color: #8bc34a;
-}
-
-/* カードタイプ別ボEダーカラー */
-.deck-builder-library-card.card-type-財 {
-  border-color: #8bc34a;
-}
-
-.deck-builder-library-card.card-type-事象 {
-  border-color: #ff9800;
-}
-
-.deck-builder-library-card.card-type-イデオロギー {
-  border-color: #9c27b0;
-}
-
-
-
-/* Consistent Font & Theming on Main Container */
-.deck-builder-screen {
-  font-family: 'Courier New', monospace;
-}
-.deck-builder-container {
-  border: 1px solid #444;
-}
-
-/* Themed Panels */
-.card-library-section,
-.deck-building-section {
-  background: #2a2a2a;
-  border: 1px solid #444;
-}
-
-/* Themed Headers */
-.library-header h2, .deck-building-section h2, .cost-curve-header h3 {
-  color: #fff;
-}
-.deck-building-section h2, .library-header h2 {
-    font-family: 'Courier New', monospace;
-}
-
-
-/* General Action Button Styling */
-.deck-actions button {
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 2px solid #555;
-  background-color: #333;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-}
-
-.deck-actions button:hover {
-  background-color: #555;
-  border-color: #777;
-}
-
-/* Primary (Save) Button */
-.deck-actions button.primary-action {
-  background-color: #4caf50;
-  border-color: #66bb6a;
-  color: white;
-}
-.deck-actions button.primary-action:hover {
-  background-color: #66bb6a;
-}
-
-/* Secondary (Import/Export) Buttons */
-.deck-actions .secondary-action {
-  background-color: #4a4f5a;
-  border-color: #666;
-}
-.deck-actions .secondary-action:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
-}
-
-/* Unify Cost Curve Toggle Button */
-.cost-curve-header button {
-  background: #4a4f5a;
-  border: 1px solid #555;
-  color: #fff;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-}
-.cost-curve-header button:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
-}
-
-/* Unify text input */
-.deck-name-input {
-  border: 1px solid #555;
-  background: #333;
-  font-family: 'Courier New', monospace;
-}
-
-
-/* --- Layout and Font Size Adjustments --- */
-
-/* Reduce font size for action buttons */
-.deck-actions button {
-  font-size: 14px;
-}
-
-.empty-deck-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  border: 2px dashed #555;
-  border-radius: 6px;
-  color: #777;
-  text-align: center;
-  font-style: italic;
-  padding: 20px;
-}
-
-/* --- Deck Building Section Layout Refinements --- */
-
-/* デッキリストが利用可能なスペースを埋め、スクロールするようにする */
-.deck-list {
-  flex-grow: 1;    /* この要素が伸びてスペースを埋めるようにする */
-  overflow-y: auto; /* 内容がはみ出たらスクロールバーを表示 */
-  min-height: 0;     /* Flexboxが正しく伸縮するための重要な設定 */
-  max-height: 400px; /* 必要に応じて最大高さを設定 */
-}
-
-/* 下部の要素が押し出されたり縮んだりしないようにする */
-.cost-curve-wrapper,
- .deck-actions {
-  flex-shrink: 0;
-}
-
-/* 古いレイアウトのためのマージンをリセット */
-.deck-actions {
-  margin-top: 5px; /* 以前のautoから固定値に変更 */
-}
-
-/* --- Panel Width Ratio Adjustment --- */      
-
-/* 左パネル（カードプール）の幅を1に */
-.card-library-section {
-  flex: 1;
-}
-
-/* 右パネル（現在のデッキ）の幅を2に */
-.deck-building-section {
-  flex: 2;
-}
-
-/* --- Deck List Grid and Card Count Styles --- */
-
-.deck-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  align-content: flex-start; /* アイテムが縦に伸びるのを防ぐ */
-}
-
-.deck-card {
-  position: relative; /* 枚数カウンターの位置基準にする */     
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  min-height: 60px; /* カードの最小の高さを確保 */
-  text-align: center;
-  font-size: 0.8em;
-}
-
-.deck-card-count {
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  background-color: #00ff00;
-  color: #1a1a1a;
-  border-radius: 0 4px 0 4px;
-  padding: 2px 6px;
-  font-size: 0.9em;
-  font-weight: bold;
-}
-
-/* --- Adjust Deck Actions Section Vertical Size --- */
-
-/* デッキアクションコンテナのパディングと要素間の間隔を調整 */
-.deck-actions {
-  padding: 5px 0; /* 縦方向のパディングを調整 */
-  gap: 5px;       /* 要素間の間隔を狭める */
-}
-
-/* デッキアクション内のボタンのパディングと文字サイズを調整 */
-.deck-actions button {
-  padding: 8px 12px; /* パディングを小さく */
-  font-size: 0.8em;  /* 文字サイズを小さく */
-}
-
-/* デッキ名入力フィールドのパディングと文字サイズを調整 */
-.deck-name-input {
-  padding: 8px 10px; /* パディングを小さく */
-  font-size: 0.9em;  /* 文字サイズを小さく */
-}
-
-/* --- Responsive Adjustments for Deck Builder --- */
-
-@media (max-width: 768px) {
-
-  /* ライブラリのソート・フィルターコントロールを縦に並べる */
-  .library-controls {
-    flex-direction: column;
-    align-items: flex-start; /* 各グループを左揃えにする */   
-  }
-
- /* デッキアクションの要素（入力欄、ボタン）を縦に並べる */  
-  .deck-actions {
-    flex-direction: column;
-    align-items: stretch; /* 各要素の幅を親要素に合わせる */  
-  }
-}
-
-
-/* --- Enhanced Responsive Adjustments for Library Controls --- */        
-
-@media (max-width: 768px) {
-
-  /* ライブラリコントロールのグループを縦に並べ、幅をいっぱいにする */    
-  .library-controls {
-    flex-direction: column;
-    align-items: stretch; 
-  }
-
-  /* 各コントロールグループ内の要素も縦に並べる */
-  .library-controls .sort-controls,
-  .library-controls .filter-controls {
-    flex-direction: column;
-    align-items: stretch; /* ラベルとセレクトボックスを親の幅に合わせる */
-    gap: 5px;             /* 縦に並んだ要素間の隙間 */
-  }
-  
-  /* セレクトボックスが利用可能な幅全体に広がるようにする */
   .library-controls select {
     width: 100%;
   }
-
-  /* 「カードタイプ」と「必要規模」のフィルター間に少しスペースを追加 */  
   .library-controls .filter-controls > label:nth-of-type(2) {
     margin-top: 10px;
   }
-}
-
-.deck-builder-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100dvh;
-  background-color: rgba(0, 0, 0, 0.95);
-  color: white;
-  display: flex;
-  z-index: 1000;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.deck-builder-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #1a1a1a;
-  border: 1px solid #00ff00;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* New styles for header layout */
-.screen-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Vertically center items */
-  margin-bottom: 20px;
-}
-
-.screen-header h1 {
-  margin: 0;
-  color: #00ff00; /* Assuming the main title is green */
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Space between h1 and help button */
-}
-
-.help-button {
-  background-color: #4a4f5a; /* Secondary action background */
-  color: #fff; /* White text */
-  border: 1px solid #00ff00; /* Green border for theme */
-  border-radius: 50%; /* Make it round */
-  width: 28px; /* Fixed width for round button */
-  height: 28px; /* Fixed height for round button */
-  font-size: 0.9em; /* Smaller font size */
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0; /* Remove default padding for tighter circle */
-  box-sizing: border-box; /* Include padding/border in width/height */
-}
-
-.help-button:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
-}
-
-.deck-builder-layout {
-  display: flex;
-  flex-grow: 1;
-  gap: 20px;
-  height: calc(100% - 350px);
-}
-
-.card-library-section,
-.deck-building-section {
-  display: flex;
-  flex-direction: column;
-  background: #282c34;
-  padding: 15px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.card-library-section {
-  flex: 2;
-}
-
-.deck-building-section {
-  flex: 1;
-}
-
-.library-header {
-  margin-bottom: 15px;
-}
-
-.library-header h2 {
-  margin: 0 0 10px 0;
-  text-align: center;
-}
-
-.library-controls {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  background: #333;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 0.9em;
-}
-
-.library-controls .sort-controls,
-.library-controls .filter-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.library-controls label {
-  font-weight: bold;
-}
-
-.library-controls select {
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #444;
-  color: white;
-}
-
-.deck-builder-card-grid {
-  h2 {
-    text-align: center;
-    color: #00ff00;
-  }
-
-  .deck-list {
-    flex-grow: 1;
-    background: #333;
-    border-radius: 6px;
-    padding: 10px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
-
-  .deck-card {
-    background: #4a4f5a;
-    margin-bottom: 5px;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    display: flex;
-    justify-content: space-between;
-    color: #fff;
-  }
-
-  .deck-card:hover {
-    background-color: #5a5f6a;
-  }
-
-  .cost-curve-wrapper {
-    margin-bottom: 15px;
-  }
-
-  .cost-curve-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .cost-curve-header h3 {
-    margin: 0;
-    color: #00ff00;
-  }
-
-  .cost-curve-header button {
-    background: #4a4f5a;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .deck-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .deck-name-input {
-    flex-grow: 1;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background: #333;
-    color: white;
-  }
-
-  .deck-actions button {
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: none;
-    background-color: #00ff00;
-    color: #1a1a1a;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .deck-actions .secondary-action {
-    background-color: #4a4f5a;
-    color: #fff;
-    border: 1px solid #00ff00;
-    font-size: 0.9em;
-  }
-
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.deck-builder-library-card {
-  position: relative; /* Needed for hint positioning */
-  background: #3a3f4a;
-  border: 1px solid #4a4f5a;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  font-size: 0.9em;
-  text-align: center;
-  color: #fff;
-  user-select: none; /* Prevents text selection during drag attempts */
-}
-
-.deck-builder-library-card:hover {
-  transform: scale(1.05);
-  border-color: #8bc34a;
-}
-
-/* カードタイプ別ボEダーカラー */
-.deck-builder-library-card.card-type-財 {
-  border-color: #8bc34a;
-}
-
-.deck-builder-library-card.card-type-事象 {
-  border-color: #ff9800;
-}
-
-.deck-builder-library-card.card-type-イデオロギー {
-  border-color: #9c27b0;
-}
-
-
-
-/* Consistent Font & Theming on Main Container */
-.deck-builder-screen {
-  font-family: 'Courier New', monospace;
-}
-.deck-builder-container {
-  border: 1px solid #444;
-}
-
-/* Themed Panels */
-.card-library-section,
-.deck-building-section {
-  background: #2a2a2a;
-  border: 1px solid #444;
-}
-
-/* Themed Headers */
-.library-header h2, .deck-building-section h2, .cost-curve-header h3 {
-  color: #fff;
-}
-.deck-building-section h2, .library-header h2 {
-    font-family: 'Courier New', monospace;
-}
-
-
-/* General Action Button Styling */
-.deck-actions button {
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 2px solid #555;
-  background-color: #333;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-}
-
-.deck-actions button:hover {
-  background-color: #555;
-  border-color: #777;
-}
-
-/* Primary (Save) Button */
-.deck-actions button.primary-action {
-  background-color: #4caf50;
-  border-color: #66bb6a;
-  color: white;
-}
-.deck-actions button.primary-action:hover {
-  background-color: #66bb6a;
-}
-
-/* Secondary (Import/Export) Buttons */
-.deck-actions .secondary-action {
-  background-color: #4a4f5a;
-  border-color: #666;
-}
-.deck-actions .secondary-action:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
-}
-
-/* Unify Cost Curve Toggle Button */
-.cost-curve-header button {
-  background: #4a4f5a;
-  border: 1px solid #555;
-  color: #fff;
-  font-family: 'Courier New', monospace;
-  transition: all 0.3s ease;
-}
-.cost-curve-header button:hover {
-  background-color: #5a5f6a;
-  border-color: #777;
-}
-
-/* Unify text input */
-.deck-name-input {
-  border: 1px solid #555;
-  background: #333;
-  font-family: 'Courier New', monospace;
-}
-
-
-/* --- Layout and Font Size Adjustments --- */
-
-/* Reduce font size for action buttons */
-.deck-actions button {
-  font-size: 14px;
-}
-
-.empty-deck-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50%;
-  border: 2px dashed #555;
-  border-radius: 6px;
-  color: #777;
-  text-align: center;
-  font-style: italic;
-  padding: 20px;
-}
-
-/* --- Deck Building Section Layout Refinements --- */
-
-/* デッキリストが利用可能なスペースを埋め、スクロールするようにする */
-.deck-list {
-  flex-grow: 1;    /* この要素が伸びてスペースを埋めるようにする */
-  overflow-y: auto; /* 内容がはみ出たらスクロールバーを表示 */
-  min-height: 0;     /* Flexboxが正しく伸縮するための重要な設定 */
-  max-height: 400px; /* 必要に応じて最大高さを設定 */
-}
-
-/* 下部の要素が押し出されたり縮んだりしないようにする */
-.cost-curve-wrapper,
- .deck-actions {
-  flex-shrink: 0;
-}
-
-/* --- Panel Width Ratio Adjustment --- */      
-
-/* 左パネル（カードプール）の幅を1に */
-.card-library-section {
-  flex: 1;
-}
-
-/* 右パネル（現在のデッキ）の幅を2に */
-.deck-building-section {
-  flex: 2;
-}
-
-/* --- Deck List Grid and Card Count Styles --- */
-
-.deck-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  align-content: flex-start; /* アイテムが縦に伸びるのを防ぐ */
-}
-
-.deck-card {
-  position: relative; /* 枚数カウンターの位置基準にする */     
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  min-height: 60px; /* カードの最小の高さを確保 */
-  text-align: center;
-  font-size: 0.8em;
-}
-
-.deck-card-count {
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  background-color: #00ff00;
-  color: #1a1a1a;
-  border-radius: 0 4px 0 4px;
-  padding: 2px 6px;
-  font-size: 0.9em;
-  font-weight: bold;
-}
-
-/* --- Adjust Deck Actions Section Vertical Size --- */
-
-/* デッキアクションコンテナのパディングと要素間の間隔を調整 */
-.deck-actions {
-  padding: 5px 0; /* 縦方向のパディングを調整 */
-  gap: 5px;       /* 要素間の間隔を狭める */
-}
-
-/* デッキアクション内のボタンのパディングと文字サイズを調整 */
-.deck-actions button {
-  padding: 8px 12px; /* パディングを小さく */
-  font-size: 0.8em;  /* 文字サイズを小さく */
-}
-
-/* デッキ名入力フィールドのパディングと文字サイズを調整 */
-.deck-name-input {
-  padding: 8px 10px; /* パディングを小さく */
-  font-size: 0.9em;  /* 文字サイズを小さく */
-}
-
-/* --- Responsive Adjustments for Deck Builder --- */
-
-@media (max-width: 768px) {
-
-  /* ライブラリのソート・フィルターコントロールを縦に並べる */
-  .library-controls {
-    flex-direction: column;
-    align-items: flex-start; /* 各グループを左揃えにする */   
-  }
-
- /* デッキアクションの要素（入力欄、ボタン）を縦に並べる */  
   .deck-actions {
     flex-direction: column;
-    align-items: stretch; /* 各要素の幅を親要素に合わせる */  
+    align-items: stretch;
   }
 }
 
-
-/* --- Enhanced Responsive Adjustments for Library Controls --- */        
-
-@media (max-width: 768px) {
-
-  /* ライブラリコントロールのグループを縦に並べ、幅をいっぱいにする */    
-  .library-controls {
-    flex-direction: column;
-    align-items: stretch; 
-  }
-
-  /* 各コントロールグループ内の要素も縦に並べる */
-  .library-controls .sort-controls,
-  .library-controls .filter-controls {
-    flex-direction: column;
-    align-items: stretch; /* ラベルとセレクトボックスを親の幅に合わせる */
-    gap: 5px;             /* 縦に並んだ要素間の隙間 */
-  }
-  
-  /* セレクトボックスが利用可能な幅全体に広がるようにする */
-  .library-controls select {
-    width: 100%;
-  }
-
-  /* 「カードタイプ」と「必要規模」のフィルター間に少しスペースを追加 */  
-  .library-controls .filter-controls > label:nth-of-type(2) {
-    margin-top: 10px;
-  }
-}
-
+/* --- Small Screens (Smartphone) --- */
 @media (max-width: 599px) {
   .deck-builder-screen {
     padding: 5px;
-    height: 100dvh;
   }
 
   .deck-builder-container {
@@ -1014,7 +440,7 @@
   }
 
   .deck-builder-layout {
-    flex-direction: column-reverse; /* Changed to reverse order for mobile */
+    flex-direction: column-reverse; /* UI Reversed for Mobile */
     gap: 10px;
     height: calc(100dvh - 12vh);
     min-height: 0;
@@ -1029,105 +455,84 @@
     padding: 10px;
   }
 
-  /* Adjustments for deck-building-section to arrange cost curve and deck actions side-by-side */
+  /* Grid Layout for Building Section on Mobile */
   .deck-building-section {
     display: grid;
-    grid-template-rows: auto 1fr auto; /* h2, deck-list, then a row for controls */
-    grid-template-columns: 2fr 1fr; /* For the controls at the bottom */
-    gap: 5px; /* Adjusted overall gap for smaller screens */
-    /* Remove flex-direction: column; if explicitly set before, as grid will handle it */
-    /* ensure h2 is still font-size 1.1em as previously */
+    grid-template-rows: auto 1fr auto;
+    /* 2fr 1fr を minmax でラップする */
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 5px;
+    /* 親要素からはみ出さないよう念押し */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .deck-building-section h2 {
-    grid-column: 1 / -1; /* Span all columns */
+    grid-column: 1 / -1;
     grid-row: 1;
-    font-size: 0.9em; /* Ensure it retains its size */
-    margin-bottom: 5px; /* Adjusted margin */
+    font-size: 0.9em;
+    margin-bottom: 5px;
   }
   
   .deck-list {
-    grid-column: 1 / -1; /* Span all columns */
+    grid-column: 1 / -1;
     grid-row: 3;
     gap: 5px;
     padding: 5px;
     max-height: none;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 
   .cost-curve-wrapper {
-    grid-column: 1; /* Left side of the bottom row */
+    grid-column: 1;
     grid-row: 2;
-    margin-bottom: 0; /* Remove bottom margin if any */
-    padding: 5px; /* Reduced padding */
+    margin-bottom: 0;
+    padding: 5px;
   }
 
   .deck-actions {
-    grid-column: 2; /* Right side of the bottom row */
+    grid-column: 2;
     grid-row: 2;
-    gap: 3px; /* Smaller gap for buttons */
+    gap: 3px;
     padding: 0;
-    flex-direction: column; /* Keep buttons stacked within their grid cell */
+    flex-direction: column;
     align-items: stretch;
-  }
-
-  .library-header {
-    margin-bottom: 5px;
-  }
-
-  .library-header h2 {
-    font-size: 1em;
   }
 
   .library-controls {
     padding: 3px;
-    font-size: 0.6em; /* Further reduced font size */
+    font-size: 0.6em;
     gap: 3px;
     flex-direction: row;
-    flex-wrap: nowrap; /* Prevent wrapping for main groups */
-    justify-content: space-between; /* Distribute items across the main container */
-    align-items: center; /* Center vertically */
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .library-controls .sort-controls,
   .library-controls .filter-controls {
-    flex-direction: row; /* Changed to row */
-    flex-wrap: nowrap; /* Prevent wrapping for labels/selects */
-    justify-content: center; /* Center items within group */
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
     gap: 3px;
   }
 
   .library-controls select {
-    padding: 1px; /* Reduced padding */
-    width: auto; /* Allow natural width, or specify max-width */
-    max-width: 65px; /* More aggressive width constraint */
-    font-size: 0.8em; /* Explicitly smaller font for select */
-  }
-
-  .library-controls label {
-    font-size: 0.8em; /* Explicitly smaller font for label */
+    padding: 1px;
+    width: auto;
+    max-width: 65px;
+    font-size: 0.8em;
   }
 
   .deck-builder-card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Smaller cards */
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 5px;
-    padding-right: 5px; /* Adjust padding */
+    padding-right: 5px;
   }
 
   .deck-builder-library-card {
     padding: 5px;
     font-size: 0.7em;
-  }
-
-  /* Already handled above with .deck-building-section h2 */
-  /* .deck-building-section h2 {
-    font-size: 1.1em;
-  } */
-  
-  .deck-list {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Smaller deck cards */
-    gap: 5px;
-    padding: 5px;
-    max-height: none; /* Remove fixed max-height, let flex-grow handle it */
   }
 
   .deck-card {
@@ -1136,101 +541,37 @@
     font-size: 0.7em;
   }
 
-  .deck-card-count {
-    font-size: 0.7em;
-    padding: 1px 4px;
-  }
-
-  .cost-curve-header {
-    margin-bottom: 2px; /* Further reduced margin */
-  }
-
-  .cost-curve-header h3 {
-    font-size: 0.7em; /* Further reduced font size */
-  }
-
-  .cost-curve-header button {
-    padding: 1px 4px; /* Further reduced padding */
-    font-size: 0.5em; /* Further reduced font size */
-  }
-
-  /* Already handled above with .deck-actions */
-  /* .deck-actions {
-    gap: 5px;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0;
-  } */
-
-  .deck-actions button {
-    padding: 2px 4px; /* Further reduced padding for buttons */
-    font-size: 0.5em; /* Further reduced font size for buttons */
-    min-height: 20px; /* Explicitly set a smaller min-height */
-  }
-
+  .deck-actions button,
   .deck-name-input {
-    padding: 2px 4px; /* Further reduced padding for input */
-    font-size: 0.5em; /* Further reduced font size for input */
-    min-height: 20px; /* Explicitly set a smaller min-height */
+    padding: 2px 4px;
+    font-size: 0.5em;
+    min-height: 10px;
   }
+
+  .cost-curve-header h3 { font-size: 0.7em; }
+  .cost-curve-header button { font-size: 0.5em; padding: 1px 4px; }
 }
 
-/* Pressed state for visual feedback */
-.deck-builder-library-card.pressed {
-  transform: scale(0.97);
-  border-color: #ffeb3b; /* Highlight color when pressed */
-}
+/* --- Overlays & Modals --- */
 
-/* Hint for swiping */
-.deck-builder-library-card .card-swipe-hint {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9em;
-  font-weight: bold;
-  border-radius: 5px; /* Match the card's border-radius */
-  pointer-events: none; /* Make sure it doesn't interfere with mouse events */
-  z-index: 10;
-  opacity: 0;
-  animation: fadeIn 0.3s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-/* Base styles for generic overlays and modals used by DeckBuilderHelpOverlay */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* Ensure it's on top */
+  z-index: 10000;
 }
 
 .overlay-modal {
-  background: #282c34;
-  color: white;
+  background: var(--color-bg-surface);
+  color: var(--color-text-main);
   padding: 25px;
   border-radius: 10px;
   width: 90%;
   max-width: 600px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  border: 1px solid #00ff00;
+  border: 1px solid var(--color-accent);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
@@ -1241,64 +582,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 15px;
   margin-bottom: 20px;
 }
 
 .overlay-header h2 {
   margin: 0;
-  color: #00ff00;
+  color: var(--color-accent);
   font-size: 1.5em;
-}
-
-.overlay-content {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 20px;
 }
 
 .overlay-modal .close-button {
   background: none;
   border: none;
-  color: white;
+  color: #fff;
   font-size: 2em;
   cursor: pointer;
-  transition: color 0.2s;
 }
 
 .overlay-modal .close-button:hover {
-  color: #00ff00;
+  color: var(--color-accent);
 }
 
-/* Specific styles for rules-text inside help overlay */
 .rules-text {
-  white-space: pre-wrap; /* Preserve whitespace and wrap long lines */
-  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  font-family: inherit;
   font-size: 1em;
   line-height: 1.6;
-  color: #ccc;
-  text-align: left;
-  margin: 0;
-}
-
-@media (max-width: 599px) {
-  .overlay-modal {
-    padding: 15px;
-    width: 85%;
-    max-width: none; /* Allow full width on small screens if needed */
-  }
-
-  .overlay-header h2 {
-    font-size: 1.2em;
-  }
-
-  .overlay-modal .close-button {
-    font-size: 1.5em;
-  }
-
-  .rules-text {
-    font-size: 0.85em;
-    line-height: 1.4;
-  }
+  color: var(--color-text-main);
 }

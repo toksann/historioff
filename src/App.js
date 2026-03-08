@@ -430,7 +430,7 @@ function App() {
       case 'cardLibrary':
         return <CardLibraryScreen cardDefs={gameData.cardDefs} onBack={() => handleScreenChange('title')} />;
       case 'tutorialSelection':
-        return <TutorialSelectionScreen gameData={gameData} onStartTutorial={handleStartTutorial} onExit={() => handleScreenChange('title')} />;
+        return <TutorialSelectionScreen gameData={gameData} onStartTutorial={handleStartTutorial} onExit={() => handleScreenChange('deckSelection')} />;
       case 'deckBuilder':
         return <DeckBuilderScreen gameData={gameData} onExit={() => handleScreenChange('title')} deckToEdit={deckToEdit} />;
       case 'game':

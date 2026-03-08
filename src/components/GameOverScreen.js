@@ -23,12 +23,15 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
   }
 
   return (
-    <div className="game-over-screen">
-      <h1>闘争ここに完成せり</h1>
-      <h2>勝者: {winnerName}</h2>
+    <div className="game-over-screen game-over-container-dark">
+      <div className="title-bg-animation"></div>
+      <div className="title-scanline"></div>
       
-      <div className="chart-container">
-        <h3>綴られし"歴史"</h3>
+      <h1 style={{ position: 'relative', zIndex: 20 }}>闘争ここに完成せり</h1>
+      <h2 style={{ position: 'relative', zIndex: 20 }}>勝者: {winnerName}</h2>
+      
+      <div className="chart-container" style={{ position: 'relative', zIndex: 20, backgroundColor: 'rgba(0,0,0,0.5)', padding: '20px', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
+        <h3 style={{ color: 'var(--color-accent)', fontFamily: 'monospace' }}>綴られし"歴史"</h3>
         <ConsciousnessTrendChart 
           turnHistory={turnHistory} 
           gameState={gameState}
@@ -38,8 +41,8 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
         />
       </div>
 
-      <div className="game-over-buttons">
-        <button className="menu-button" onClick={onNewGame}>
+      <div className="game-over-buttons" style={{ position: 'relative', zIndex: 20 }}>
+        <button className="menu-button start-button" onClick={onNewGame}>
           新しいゲームを始める
         </button>
         <button className="menu-button" onClick={onMainMenu}>

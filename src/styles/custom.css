@@ -20,8 +20,8 @@
   color: #333;
   border: 2px solid #ffc107;
   border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 16px;
+  padding: 4px 8px;
+  font-size: 0.9em;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -35,23 +35,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* DeckSelectionScreen.js のヘッダーにあるボタン */
-.screen-header .tutorial-button {
-  background-color: #ffc107; /* チュートリアルらしい色 */
-  color: #333;
-  border: 2px solid #ffc107;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-right: 8px;
-}
-
-.screen-header .tutorial-button:hover {
-  background-color: #e0a800;
-  border-color: #e0a800;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+@media (max-width: 599px) {
+  .screen-header .tutorial-button {
+    font-size: 0.3em;
+  }
 }

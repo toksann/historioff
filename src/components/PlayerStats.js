@@ -132,7 +132,7 @@ const PlayerStats = ({ player, gameState, onEndTurn }) => {
                 <div className="player-name-line">
                     <span className="player-name-text">{player.name}</span>
                     <span className={`turn-order ${isFirstPlayer ? 'first-player' : 'second-player'}`}>
-                        ({turnOrderText})
+                        {turnOrderText}
                     </span>
                 </div>
                 <div className="deck-count-line">

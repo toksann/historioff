@@ -222,95 +222,93 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
     ];
 
     return createPortal(
-        <div className="game-log-portal-wrapper"> {/* 新しいラッパーdiv */}
+        <div className="game-log-overlay" onClick={handleOverlayClick}>
             {/* カード詳細オーバーレイ */}
             {selectedCard && (
                 <CardDetail 
                     card={selectedCard} 
+                    cardDefs={gameState.cardDefs}
                     onClose={() => setSelectedCard(null)} 
                 />
             )}
             
-            <div className="game-log-overlay" onClick={handleOverlayClick}>
-                <div className="game-log-modal">
-                    <div className="game-log-header">
-                        <h2>プレイログ</h2>
-                        <div className="log-controls">
-                            {userScrolledUp && (
-                                <button 
-                                    className="scroll-to-bottom-button"
-                                    onClick={() => {
-                                        if (logContentRef.current) {
-                                            logContentRef.current.scrollTop = logContentRef.current.scrollHeight;
-                                            setUserScrolledUp(false);
-                                        }
-                                    }}
-                                    title="最新のログまでスクロール"
-                                >
-                                    ↓ 最新
-                                </button>
-                            )}
-                            <button className="close-button" onClick={onClose}>×</button>
-                        </div>
-                    </div>
-                    
-                    <div className="log-filter-bar">
-                        {filterOptions.map(option => (
-                            <button
-                                key={option.value}
-                                className={`filter-button ${filterType === option.value ? 'active' : ''}`}
-                                onClick={() => setFilterType(option.value)}
+            <div className="game-log-modal" onClick={e => e.stopPropagation()}>
+                <div className="game-log-header">
+                    <h2>プレイログ</h2>
+                    <div className="log-controls">
+                        {userScrolledUp && (
+                            <button 
+                                className="scroll-to-bottom-button"
+                                onClick={() => {
+                                    if (logContentRef.current) {
+                                        logContentRef.current.scrollTop = logContentRef.current.scrollHeight;
+                                        setUserScrolledUp(false);
+                                    }
+                                }}
+                                title="最新のログまでスクロール"
                             >
-                                {option.label}
+                                ↓ 最新
                             </button>
-                        ))}
-                    </div>
-                    
-                    <div className="game-log-content" ref={logContentRef}>
-                        {filteredEntries.length === 0 ? (
-                            <div className="no-log">
-                                {filterType === 'all' ? 'まだログがありません' : 'フィルター条件に一致するログがありません'}
-                            </div>
-                        ) : (
-                            <div className="log-entries">
-                                {filteredEntries.map((entry, index) => {
-                                    const card = getCardFromLogEntry(entry);
-                                    const isClickable = !!card;
-                                    
-                                    return (
-                                        <div 
-                                            key={entry.id || index} 
-                                            className={`log-entry ${entry.type === 'effect' ? 'enhanced-entry' : 'original-entry'} ${isClickable ? 'clickable-log-entry' : ''}`}
-                                            onClick={isClickable ? (e) => handleLogEntryClick(entry, e) : undefined}
-                                            title={isClickable ? `カード詳細を表示` : undefined}
-                                        >
-                                            <div className="log-index">{index + 1}</div>
-                                            <div className="log-message">
-                                                {formatLogEntry(entry, index)}
-                                            </div>
-                                            {entry.type === 'effect' && entry.details && (
-                                                <div className="log-timestamp">
-                                                    {new Date(entry.timestamp).toLocaleTimeString()}
-                                                </div>
-                                            )}
-                                            {isClickable && <div className="log-click-hint">📋 クリックで詳細</div>}
-                                        </div>
-                                    );
-                                })}
-                            </div>
                         )}
+                        <button className="close-button" onClick={onClose}>×</button>
                     </div>
-                    
-                    <div className="game-log-footer">
-                        <div className="log-stats">
-                            総ログ数: {logStats.total}件 
-                            (効果: {logStats.effect}件, 進行: {logStats.progress}件)
+                </div>
+                
+                <div className="log-filter-bar">
+                    {filterOptions.map(option => (
+                        <button
+                            key={option.value}
+                            className={`filter-button ${filterType === option.value ? 'active' : ''}`}
+                            onClick={() => setFilterType(option.value)}
+                        >
+                            {option.label}
+                        </button>
+                    ))}
+                </div>
+                
+                <div className="game-log-content" ref={logContentRef}>
+                    {filteredEntries.length === 0 ? (
+                        <div className="no-log">
+                            {filterType === 'all' ? 'まだログがありません' : 'フィルター条件に一致するログがありません'}
                         </div>
+                    ) : (
+                        <div className="log-entries">
+                            {filteredEntries.map((entry, index) => {
+                                const card = getCardFromLogEntry(entry);
+                                const isClickable = !!card;
+                                const playerClass = entry.playerId ? `log-entry-${entry.playerId}` : '';
+                                
+                                return (
+                                    <div 
+                                        key={entry.id || index} 
+                                        className={`log-entry ${playerClass} ${isClickable ? 'clickable-log-entry' : ''}`}
+                                        onClick={isClickable ? (e) => handleLogEntryClick(entry, e) : undefined}
+                                    >
+                                        <div className="log-index">{index + 1}</div>
+                                        <div className="log-message">
+                                            {formatLogEntry(entry, index)}
+                                        </div>
+                                        {entry.type === 'effect' && entry.details && (
+                                            <div className="log-timestamp">
+                                                {new Date(entry.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}
+                                            </div>
+                                        )}
+                                        {isClickable && <div className="log-click-hint">📋 詳細</div>}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+                
+                <div className="game-log-footer">
+                    <div className="log-stats">
+                        総数: {logStats.total} / 効果: {logStats.effect} / 進行: {logStats.progress}
                     </div>
                 </div>
             </div>
         </div>,
-        document.body // bodyの直下にレンダリング
+        document.body
     );
 };
 

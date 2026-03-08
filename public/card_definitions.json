@@ -391,6 +391,7 @@
         "card_type": "事象",
         "required_scale": 0,
         "description": "相手の財カード1枚に2ダメージ。相手の規模-2、自分の規模+2。ダメージを与えたとき、その対象が「マネー」ならさらに自分の規模+3",
+        "related_card_templates": ["マネー"],
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -504,22 +505,22 @@
         "name": "多文化主義",
         "card_type": "イデオロギー",
         "required_scale": 8,
-        "description": "配置時自分の意識を-50%（切捨て）、規模を+100%。ターン終了ごとに手札を2枚引く。",
+        "description": "配置時自分の意識を現在値の50%（切上げ）、規模を200%にする。ターン終了ごとに手札を2枚引く。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
-                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "effect_type": "SET_CONSCIOUSNESS",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": -50,
-                        "round_down": true
+                        "amount_percentage": 50,
+                        "round_down": false
                     }
                 },
                 {
-                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "effect_type": "SET_SCALE",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": 100,
+                        "amount_percentage": 200,
                         "round_down": false
                     }
                 }
@@ -718,7 +719,7 @@
         "name": "一神教",
         "card_type": "イデオロギー",
         "required_scale": 15,
-        "description": "配置時、手札とデッキのすべてのイデオロギーカードを除外し、デッキの一番下に「終末」を加える。ターン終了時、場の財が上限未満なら「聖典」を1枚手札に加える。このカードが捨て札になったとき、自分の規模が-10されるがこのカードは即座に手札に戻り必要規模を0にする。",
+        "description": "配置時、手札とデッキのすべてのイデオロギーカードを除外し、デッキの一番下に「終末」を加える。ターン終了時、場の財が上限未満なら「聖典」を1枚手札に加える。このカードが捨て札になったとき、手札が上限に達していなければ、このカードは即座に手札に戻り必要規模を0にする。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -763,13 +764,6 @@
                 }
             ],
             "CARD_DISCARDED_THIS": [
-                {
-                    "effect_type": "MODIFY_SCALE_RESERVE",
-                    "args": {
-                        "player_id": "self",
-                        "amount": -10
-                    }
-                },
                 {
                     "effect_type": "MOVE_CARD",
                     "args": {
@@ -843,6 +837,7 @@
         "required_scale": 0,
         "durability": 1,
         "description": "ターン開始時、自分の意識+1し、自分のデッキが8以上なら「布教」を8未満なら「崇拝」を1枚手札に加える。",
+        "related_card_templates": ["崇拝", "布教"],
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -914,7 +909,7 @@
         "name": "受難",
         "card_type": "事象",
         "required_scale": 0,
-        "description": "自分と相手の財すべてに1ダメージ。自分の規模-5。",
+        "description": "自分と相手の財すべてに1ダメージ。自分の規模-3。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -928,7 +923,7 @@
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": -5
+                        "amount": -3
                     }
                 }
             ]
@@ -939,7 +934,7 @@
         "name": "崇拝",
         "card_type": "事象",
         "required_scale": 0,
-        "description": "自分の規模-2。自分の意識+3。自分の意識が60以上なら「救世」を手札に加える。",
+        "description": "自分の規模-2。自分の意識+1。自分の意識が60以上なら「救世」を手札に加える。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -953,7 +948,7 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 3
+                        "amount": 1
                     }
                 },
                 {
@@ -973,7 +968,7 @@
         "name": "救世",
         "card_type": "事象",
         "required_scale": 0,
-        "description": "自分の意識が100以上なら相手の意識を0にする。これが成功しないとき「救世」を1枚デッキの一番下に加え、自分の意識+3。",
+        "description": "自分の意識が100以上なら相手の意識を0にする。これが成功しないとき「救世」を1枚デッキの一番下に加え、自分の意識+3、規模-10。",
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -997,6 +992,13 @@
                     "args": {
                         "player_id": "self",
                         "amount": 3
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_SCALE_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount": -10
                     }
                 }
             ]
@@ -1094,6 +1096,7 @@
         "required_scale": 0,
         "durability": 1,
         "description": "自分のターン中は場のこのカードの耐久値を追加の規模とみなす。このカードが手札に戻るとき耐久値は維持される。ターン開始時、このカードの耐久値が30以上のとき、手札から必要規模の最も少ない(同じならランダム)カード2枚を捨て札にしてから、このカードを手札に戻し「資本主義」を1枚手札に加える。このカードが場に出るとき、既に他の「マネー」が配置されているなら、このカードを捨て札にしてこのカードの耐久値と同じ値を他の「マネー」の耐久値に加算する。",
+        "related_card_templates": ["資本主義"],
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -1122,6 +1125,7 @@
         "card_type": "イデオロギー",
         "required_scale": 10,
         "description": "配置時、耐久値3の「マネー」を1枚手札に加える。自分の規模をプラスするたびその効果を無効にし、増加規模と同じ耐久値を持つ「マネー」を手札に1枚加える。ターン開始時、自分の場の「マネー」の耐久値が10以上なら「重商主義」か「重農主義」を任意に1枚手札に加える。ターン終了時、自分の手札のイデオロギーカードすべてを捨て札にし、枚数と同じ耐久値の「マネー」を手札に加える。",
+        "related_card_templates": ["重商主義", "重農主義"],
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -1181,6 +1185,7 @@
         "card_type": "イデオロギー",
         "required_scale": 10,
         "description": "ターン終了時、自分の場の「マネー」の耐久値を任意に減らし、減らした値と同じだけ自分の規模をプラスする。ターン開始時、自分の場の「マネー」の耐久値をランダムに-30%か+70%する。",
+        "related_card_templates": ["マネー"],
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1209,6 +1214,7 @@
         "card_type": "イデオロギー",
         "required_scale": 10,
         "description": "ターン開始時、自分の場の「マネー」の耐久値を-1し、カードを1枚引く。ターン終了時、このターン中に手札から出したカードの枚数と同じ耐久値を持つ「マネー」を1枚手札に加える。",
+        "related_card_templates": ["マネー"],
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -1246,8 +1252,8 @@
     {
         "name": "資本主義",
         "card_type": "イデオロギー",
-        "required_scale": 35,
-        "description": "ターン終了時、場のマネーの耐久値をランダムに場の財の耐久値へ割り振ってプラスし、場のマネーを捨て札にする。ターン開始時、自分の場のすべての財に6ダメージを与え、その後の財の耐久値の合計と同じ耐久値のマネーを手札に加える。さらに自分の意識をこのときの場の財の数だけプラスする。",
+        "required_scale": 30,
+        "description": "ターン終了時、場の「マネー」の耐久値をランダムに場の財の耐久値へ割り振ってプラスし、その「マネー」を捨て札にする。ターン開始時、場の財の数の分だけ自分の意識をプラスすることを2回行い、自分の場のすべての財に「自分の財のうち最も低い耐久値」と同じ値のダメージを与え、残っている財の耐久値を+3する。その後の財の耐久値の合計と同じ耐久値の「マネー」を手札に加える。「マネー」を除く自分の手札、デッキのすべてのカードの必要規模+6。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1273,7 +1279,14 @@
                     "effect_type": "PROCESS_DEAL_DAMAGE_TO_ALL_WEALTH",
                     "args": {
                         "player_ids": "self",
-                        "amount": 6
+                        "amount": "lowest_durability_on_field"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_ALL_WEALTH_BOOST",
+                    "args": {
+                        "player_id": "self",
+                        "amount": 3
                     }
                 },
                 {
@@ -1290,6 +1303,26 @@
                     "args": {
                         "player_id": "self",
                         "amount_based_on_field_wealth_count": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "self",
+                        "amount_based_on_field_wealth_count": true
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_piles": [
+                            "hand",
+                            "deck"],
+                        "selection_method": "non_money",
+                        "amount": 6,
+                        "min_value": 0
                     }
                 }
             ]
@@ -1662,6 +1695,7 @@
         "card_type": "事象",
         "required_scale": 10,
         "description": "「汎民族主義」か「分離主義」を手札に加える。自分の意識+3。",
+        "related_card_templates": ["分離主義", "汎民族主義"],
         "triggers": {
             "PLAY_EVENT_THIS": [
                 {
@@ -2870,6 +2904,7 @@
         "card_type": "イデオロギー",
         "required_scale": 40,
         "description": "配置時、「内戦」か「隘路」を手札に加え、自分の場に「マネー」があればその耐久値と同じ値だけ自分の規模をプラスし、「マネー」を捨て札にする。ターン終了時、自分の規模が相手の規模を上回っているなら自分の意識+5。",
+        "related_card_templates": ["マネー", "内戦", "隘路"],
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -2914,8 +2949,8 @@
     {
         "name": "多極主義",
         "card_type": "イデオロギー",
-        "required_scale": 60,
-        "description": "配置時、自分の規模の50%の耐久値のマネーを手札に加え、自分の規模-50%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加えて自分の意識+2。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
+        "required_scale": 40,
+        "description": "配置時、自分の規模の75%の耐久値のマネーを手札に加え、自分の規模-75%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加えて自分の意識+2。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -2924,14 +2959,14 @@
                         "player_id": "self",
                         "card_template_name": "マネー",
                         "destination_pile": "hand",
-                        "initial_durability_based_on_scale_percentage": 50
+                        "initial_durability_based_on_scale_percentage": 75
                     }
                 },
                 {
                     "effect_type": "MODIFY_SCALE_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount_percentage": -50,
+                        "amount_percentage": -75,
                         "round_down": true
                     }
                 }
@@ -3061,6 +3096,7 @@
         "card_type": "イデオロギー",
         "required_scale": 9,
         "description": "ターン開始時意識-2し、カードを1枚引く。カードを引くたび規模+2。カードを出すたび意識+1。自分のターン中、自分の規模がプラスされたとき25を超えていたなら「ニューリベラリズム」「ネオリベラリズム」「リバタリアニズム」から1枚選んで手札に加える。",
+        "related_card_templates": ["ニューリベラリズム", "ネオリベラリズム", "リバタリアニズム"],
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -3445,6 +3481,7 @@
         "required_scale": 20,
         "durability": 3,
         "description": "このカードが場にある限り自分への意識減少効果を1軽減する。ターン開始時「愛国教育」か「嫌国教育」を1枚手札に加える。",
+        "related_card_templates": ["嫌国教育", "愛国教育"],
         "triggers": {
             "MODIFY_CONSCIOUSNESS_DECREASE_RESERVE_OWNER": [
                 {

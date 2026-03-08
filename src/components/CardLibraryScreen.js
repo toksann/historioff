@@ -37,34 +37,33 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
       if (sortBy === 'requiredScale') {
         return a.required_scale - b.required_scale;
       }
-      // デフォルトは実装順（card_definitions.jsonの順序）
       return (a.definitionOrder || 0) - (b.definitionOrder || 0);
     });
 
     return cards;
   }, [cardDefs, sortBy, filterType, filterScale]);
 
-  const handleCardClick = (card) => {
-    setSelectedCard(card);
-  };
-
   return (
     <div className="card-library-screen">
       <div className="screen-header">
-        <h1>カード一覧</h1>
-        <button className="back-button" onClick={onBack}>← タイトルに戻る</button>
+        <div className="header-left">
+          <h1>歴史アーカイブ</h1>
+        </div>
+        <button className="back-button" onClick={onBack}>
+          ← タイトルに戻る
+        </button>
       </div>
 
       <div className="library-controls">
-        <div className="sort-controls">
-          <label>ソート:</label>
+        <div className="control-group">
+          <label>ソート基準:</label>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
             <option value="implementation">実装順</option>
             <option value="requiredScale">必要規模順</option>
           </select>
         </div>
 
-        <div className="filter-controls">
+        <div className="control-group">
           <label>カードタイプ:</label>
           <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
             <option value="all">すべて</option>
@@ -72,7 +71,9 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
             <option value="事象">事象</option>
             <option value="イデオロギー">イデオロギー</option>
           </select>
+        </div>
 
+        <div className="control-group">
           <label>必要規模:</label>
           <select value={filterScale} onChange={(e) => setFilterScale(e.target.value)}>
             <option value="all">すべて</option>
@@ -81,26 +82,28 @@ const CardLibraryScreen = ({ cardDefs, onBack }) => {
             <option value="16+">16+</option>
           </select>
         </div>
+        
+        <div className="library-stats">
+          表示中: {filteredAndSortedCards.length} / {Object.keys(cardDefs).length}
+        </div>
       </div>
 
       <div className="card-grid">
         {filteredAndSortedCards.map((card) => (
-          <Card 
-            key={card.name} 
-            card={card}
-            mode="library"
-            onClick={() => handleCardClick(card)}
-          />
+          <div key={card.name} className="card-library-wrapper">
+            <Card 
+              card={card}
+              mode="library"
+              onClick={() => setSelectedCard(card)}
+            />
+          </div>
         ))}
-      </div>
-
-      <div className="library-stats">
-        表示中: {filteredAndSortedCards.length} / {Object.keys(cardDefs).length} カード
       </div>
 
       {selectedCard && (
         <CardDetail
           card={selectedCard}
+          cardDefs={cardDefs}
           onClose={() => setSelectedCard(null)}
         />
       )}

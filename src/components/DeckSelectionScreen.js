@@ -148,7 +148,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
         </div>
         
         <div className="deck-actions">
-          <button onClick={() => setShowDeckPreview(false)}>戻る</button>
+          <button className="back-button" onClick={() => setShowDeckPreview(false)}>戻る</button>
           <button onClick={handleConfirmDeck} className="confirm-button" disabled={!selectedDeck.isValid}>
             このデッキでゲーム開始
           </button>
@@ -160,14 +160,16 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
   return (
     <div className="deck-selection-screen">
       <div className="screen-header">
-        <h1>デッキ選択</h1>
-        <button className="tutorial-button" onClick={() => onScreenChange('tutorialSelection')}>チュートリアル</button>
+        <div className="header-left">
+          <h1>デッキ選択</h1>
+          <button className="tutorial-button" onClick={() => onScreenChange('tutorialSelection')}>チュートリアル</button>
+        </div>
         <button className="back-button" onClick={onBack}>← タイトルに戻る</button>
       </div>
 
       {!showDeckPreview ? (
         <div className="deck-selection-area">
-          <h2>デッキを選択</h2>
+          <h2>運命の筋書きを選択</h2>
           <div className="deck-grid">
             {allDecks.map((deck) => (
               <div 
@@ -199,6 +201,7 @@ const DeckSelectionScreen = ({ presetDecks, cardDefs, onDeckSelected, onBack, on
       {selectedCard && (
         <CardDetail
           card={selectedCard}
+          cardDefs={cardDefs}
           onClose={() => setSelectedCard(null)}
         />
       )}

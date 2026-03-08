@@ -432,6 +432,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             {selectedCard && (
                 <CardDetail 
                     card={selectedCard} 
+                    cardDefs={gameState.cardDefs}
                     onClose={() => setSelectedCard(null)} 
                 />
             )}

@@ -355,6 +355,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
       {selectedCard && (
         <CardDetail
           card={selectedCard}
+          cardDefs={cardDefs}
           onClose={() => setSelectedCard(null)}
         />
       )}

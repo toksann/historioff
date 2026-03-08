@@ -4,48 +4,35 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 10000;
 }
 
 .mulligan-modal {
-    background-color: #2c2c2c;
-    border: 2px solid #888;
-    border-radius: 10px;
+    background-color: var(--color-bg-container);
+    border: 1px solid var(--color-accent-glow);
+    border-radius: 8px;
     padding: 20px;
-    width: 80%;
+    width: 90%;
     max-width: 900px;
-    max-height: 80dvh;
+    max-height: 90dvh;
     overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    color: #fff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    color: var(--color-text-main);
     text-align: center;
-}
-
-/* モバイル用マリガンモーダル調整 */
-@media (max-width: 599px) {
-    .mulligan-modal {
-        width: 85vw;
-        max-width: none;
-        max-height: 85dvh;
-        padding: 15px;
-        border-radius: 8px;
-    }
-}
-
-@media (max-width: 479px) {
-    .mulligan-modal {
-        width: 98vw;
-        max-height: 90dvh;
-        padding: 10px;
-    }
+    font-family: 'Courier New', monospace;
 }
 
 .mulligan-modal h2 {
     margin-top: 0;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--color-accent-glow);
 }
 
 .mulligan-hand-container {
@@ -54,95 +41,44 @@
     justify-content: center;
     gap: 15px;
     margin: 20px 0;
-    padding: 10px;
-    background-color: #1a1a1a;
-    border-radius: 5px;
-    min-height: 150px;
-}
-
-/* モバイル用手札コンテナ調整 */
-@media (max-width: 599px) {
-    .mulligan-hand-container {
-        gap: 8px;
-        margin: 15px 0;
-        padding: 8px;
-        min-height: 120px;
-    }
-}
-
-@media (max-width: 479px) {
-    .mulligan-hand-container {
-        gap: 5px;
-        margin: 10px 0;
-        padding: 5px;
-        min-height: 100px;
-    }
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    min-height: 120px;
 }
 
 .mulligan-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
     padding: 10px;
-    width: 120px;
-    height: 140px;
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(110px, 25vh, 160px);
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    background-color: #3e3e3e;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.03);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 0.9em;
+    font-size: 0.85em;
     touch-action: manipulation;
 }
 
-/* モバイル用マリガンカード調整 */
-@media (max-width: 599px) {
-    .mulligan-card {
-        width: 90px;
-        height: 110px;
-        padding: 6px;
-        font-size: 0.75em;
-    }
-}
-
-@media (max-width: 479px) {
-    .mulligan-card {
-        width: 70px;
-        height: 90px;
-        padding: 4px;
-        font-size: 0.65em;
-    }
-}
-
-@media (max-width: 375px) {
-    .mulligan-card {
-        width: 60px;
-        height: 80px;
-        padding: 3px;
-        font-size: 0.6em;
-    }
-}
-
 .mulligan-card:hover {
+    border-color: var(--color-accent);
     transform: translateY(-5px);
-    border-color: #fff;
 }
 
 .mulligan-card.selected {
-    border-color: #ffc107;
-    background-color: #5a4a1d;
-    box-shadow: 0 0 10px #ffc107;
+    border-color: var(--color-accent);
+    background-color: rgba(173, 255, 47, 0.1);
+    box-shadow: 0 0 15px var(--color-accent-glow);
     transform: scale(1.05);
 }
 
 .mulligan-card-name {
     font-weight: bold;
-    font-size: 1.1em;
-}
-
-.mulligan-card-cost, .mulligan-card-type {
-    font-size: 0.9em;
-    color: #ddd;
+    color: var(--color-accent);
 }
 
 .mulligan-actions {
@@ -153,49 +89,49 @@
 }
 
 .mulligan-actions button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 1em;
-    border-radius: 5px;
-    border: none;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
     cursor: pointer;
-    background-color: #555;
-    color: white;
-    transition: background-color 0.2s;
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-main);
+    font-family: inherit;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.mulligan-actions button:hover {
-    background-color: #777;
+.mulligan-actions button:not(:disabled):hover {
+    background-color: var(--color-accent);
+    color: #000;
+    box-shadow: 0 0 15px var(--color-accent-glow);
 }
 
 .mulligan-actions button:disabled {
-    background-color: #333;
+    opacity: 0.4;
     cursor: not-allowed;
-    color: #888;
 }
 
-/* Mulligan Progress Bar Styles */
 .mulligan-progress-bar-container {
-    width: 80%;
-    height: 10px;
-    background-color: #1a1a1a;
-    border-radius: 5px;
-    margin: 20px auto 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 20px;
     overflow: hidden;
 }
 
 .mulligan-progress-bar {
     width: 0%;
     height: 100%;
-    background-color: #00ff00; /* User specified color */
-    border-radius: 5px;
+    background-color: var(--color-accent);
+    box-shadow: 0 0 10px var(--color-accent-glow);
     animation: fill-progress 3s linear forwards;
 }
 
 @keyframes fill-progress {
-    from {
-        width: 0%;
-    }
-    to {
-        width: 100%;
-    }
+    from { width: 0%; }
+    to { width: 100%; }
 }
+
