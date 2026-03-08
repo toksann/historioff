@@ -13,7 +13,7 @@ const ChangelogModal = ({ isOpen, onClose, version }) => {
         </div>
         <div className="info-modal-body">
           <p>現在のバージョン: {version}</p>
-          <h3>Version 0.2.0 (2026/03/xx)</h3>
+          <h3>Version 0.2.1 (2026/03/xx)</h3>
           <ul>
             <li><font color="yellow">画面調整</font>：新UIの適用により全体のグラフィックを調整</li>
             <li><font color="yellow">仕様変更</font>：一部カード効果の修正。</li>
