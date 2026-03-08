@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './MulliganModal.css';
+import CardDetail from './CardDetail.js';
 import { createParticleExplosion } from '../utils/animationUtils.js';
 import { NPC_PLAYER_ID } from '../gameLogic/constants.js';
 
 const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => {
     const [selectedCardIds, setSelectedCardIds] = useState([]);
     const [isConfirmed, setIsConfirmed] = useState(false);
+    const [selectedDetailCard, setSelectedDetailCard] = useState(null);
 
     useEffect(() => {
         if (isConfirmed) {
@@ -33,6 +35,11 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                 return [...prevSelected, cardId];
             }
         });
+    };
+
+    const handleDetailClick = (e, card) => {
+        e.stopPropagation(); // 親のonClick(マリガン選択)を阻止
+        setSelectedDetailCard(card);
     };
 
     const handleConfirm = () => {
@@ -65,6 +72,15 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                                 <div className="mulligan-card-name">{card.name}</div>
                                 <div className="mulligan-card-cost">必要規模: {card.required_scale}</div>
                                 <div className="mulligan-card-type">{cardDef.card_type}</div>
+                                
+                                {!isConfirmed && (
+                                    <button 
+                                        className="mulligan-card-detail-button"
+                                        onClick={(e) => handleDetailClick(e, cardDef)}
+                                    >
+                                        詳細
+                                    </button>
+                                )}
                             </div>
                         );
                     })}
@@ -82,6 +98,15 @@ const MulliganModal = ({ hand, onConfirmMulligan, cardDefs, mulliganState }) => 
                     </div>
                 )}
             </div>
+
+            {/* 詳細モーダル */}
+            {selectedDetailCard && (
+                <CardDetail 
+                    card={selectedDetailCard}
+                    cardDefs={cardDefs}
+                    onClose={() => setSelectedDetailCard(null)}
+                />
+            )}
         </div>
     );
 };

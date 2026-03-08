@@ -81,6 +81,26 @@
     color: var(--color-accent);
 }
 
+.mulligan-card-detail-button {
+    margin-top: 8px;
+    padding: 4px 8px;
+    font-size: 0.75em;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    z-index: 2;
+}
+
+.mulligan-card-detail-button:hover {
+    background-color: var(--color-accent);
+    color: #000;
+    border-color: var(--color-accent);
+}
+
 .mulligan-actions {
     margin-top: 20px;
     display: flex;
