@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import CardDetail from './CardDetail.js';
 import '../App.css';
 
-const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) => {
+const GameLogOverlay = ({ gameState, cardDefs, logEntries, getFilteredEntries, onClose }) => {
     console.log("DEBUG: GameLogOverlay コンポーネントがレンダリングされました。Props: gameState:", gameState, "logEntries:", logEntries);
     const [filterType, setFilterType] = useState('all');
     const [selectedCard, setSelectedCard] = useState(null);
@@ -116,7 +116,12 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
                 ? entry.sourceCard.split('>')[1] 
                 : entry.sourceCard;
             
-            // cardDefsから検索
+            // 渡されたcardDefs（プロップス）から優先して検索
+            if (cardDefs && cardDefs[cardName]) {
+                return cardDefs[cardName];
+            }
+
+            // 予備としてgameState.cardDefsから検索
             if (gameState.cardDefs && gameState.cardDefs[cardName]) {
                 const card = gameState.cardDefs[cardName];
                 return card;
@@ -227,7 +232,7 @@ const GameLogOverlay = ({ gameState, logEntries, getFilteredEntries, onClose }) 
             {selectedCard && (
                 <CardDetail 
                     card={selectedCard} 
-                    cardDefs={gameState.cardDefs}
+                    cardDefs={cardDefs || gameState.cardDefs}
                     onClose={() => setSelectedCard(null)} 
                 />
             )}

@@ -87,6 +87,12 @@ const TitleScreen = ({ onScreenChange, onShowRules, onShowCredits, onShowChangel
       <footer className="title-footer">
         <div className="footer-content">
           <div className="footer-top-row">
+            <a href="https://forms.gle/wgdM9K5XzjDMq8cX6" target="_blank" rel="noopener noreferrer" className="disclaimer-button">
+              お問い合わせ
+            </a>
+            <a href="https://forms.gle/8s3GpBh9gsQHwU3o9" target="_blank" rel="noopener noreferrer" className="disclaimer-button">
+              アンケート
+            </a>
             <button className="disclaimer-button" onClick={() => setShowDisclaimer(true)}>
               免責事項
             </button>

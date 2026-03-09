@@ -402,6 +402,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                     card={actionMenuCard}
                     player={humanPlayer}
                     gameState={gameState}
+                    cardDefs={cardDefs}
                     onPlay={handlePlayFromMenu}
                     onClose={() => setActionMenuCard(null)}
                 />
@@ -413,6 +414,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
                     {}
                     <GameLogOverlay
                         gameState={gameState}
+                        cardDefs={cardDefs}
                         logEntries={enhancedLog.combinedLog} 
                         getFilteredEntries={enhancedLog.getFilteredEntries} 
                         onClose={() => setShowGameLog(false)}
@@ -432,7 +434,7 @@ const Game = ({ gameState, cardDefs, onPlayCard, onEndTurn, onProvideInput, onSu
             {selectedCard && (
                 <CardDetail 
                     card={selectedCard} 
-                    cardDefs={gameState.cardDefs}
+                    cardDefs={cardDefs}
                     onClose={() => setSelectedCard(null)} 
                 />
             )}

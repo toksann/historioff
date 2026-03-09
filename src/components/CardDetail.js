@@ -5,11 +5,15 @@ const CardDetail = ({ card, cardDefs, onClose }) => {
     // 関連カード（トークンなど）の抽出
     const relatedCards = useMemo(() => {
         if (!card || !cardDefs) return [];
+        
+        // インスタンス（card）ではなく、定義（cardDefs[card.name]）から情報を取得する
+        // これにより、対局中のインスタンスでプロパティが欠落していても確実に表示できる
+        const baseDef = cardDefs[card.name] || card;
         const names = new Set();
 
         // 1. 手動指定された関連カードを追加
-        if (Array.isArray(card.related_card_templates)) {
-            card.related_card_templates.forEach(name => names.add(name));
+        if (Array.isArray(baseDef.related_card_templates)) {
+            baseDef.related_card_templates.forEach(name => names.add(name));
         }
 
         // 2. 効果（triggers）内を再帰的に走査して card_template_name を探す
@@ -31,8 +35,8 @@ const CardDetail = ({ card, cardDefs, onClose }) => {
             });
         };
 
-        if (card.triggers) {
-            findCardTemplates(card.triggers);
+        if (baseDef.triggers) {
+            findCardTemplates(baseDef.triggers);
         }
 
         return Array.from(names).map(name => cardDefs[name]).filter(Boolean);
