@@ -451,12 +451,14 @@ function App() {
         );
       case 'gameOver':
         if (!gameState) return null;
+        const isTutorial = !!gameState.tutorial;
         return (
           <GameOverScreen
             winnerName={gameState.players[gameState.winner]?.name || 'Unknown'}
             turnHistory={gameState.turnHistory}
             gameState={gameState}
-            onNewGame={() => handleScreenChange('deckSelection')}
+            isTutorial={isTutorial}
+            onNewGame={() => handleScreenChange(isTutorial ? 'tutorialSelection' : 'deckSelection')}
             onMainMenu={handleGameEnd}
           />
         );

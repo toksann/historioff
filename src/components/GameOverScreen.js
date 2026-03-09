@@ -3,7 +3,7 @@ import './GameOverScreen.css';
 import ConsciousnessTrendChart from './ConsciousnessTrendChart.js';
 import useWindowSize from '../hooks/useWindowSize.js'; // Import the new hook
 
-function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameState }) {
+function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameState, isTutorial }) {
   const { width } = useWindowSize();
 
   // Conditionally set chart dimensions and padding based on screen width
@@ -43,7 +43,7 @@ function GameOverScreen({ winnerName, onNewGame, onMainMenu, turnHistory, gameSt
 
       <div className="game-over-buttons" style={{ position: 'relative', zIndex: 20 }}>
         <button className="menu-button start-button" onClick={onNewGame}>
-          新しいゲームを始める
+          {isTutorial ? 'チュートリアル選択に戻る' : '新しいゲームを始める'}
         </button>
         <button className="menu-button" onClick={onMainMenu}>
           メインメニューに戻る
