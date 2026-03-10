@@ -39,7 +39,7 @@ const DeckBuilderScreen = ({ gameData, onExit, deckToEdit }) => { // deckToEdit 
       setDeckName(deckToEdit.name);
       setDeck(newDeckCards.sort((a, b) => a.required_scale - b.required_scale));
     }
-  }, []);
+  }, [deckToEdit, cardDefs]);
 
   const filteredAndSortedCards = useMemo(() => {
     if (!cardDefs) return [];

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { HUMAN_PLAYER_ID, NPC_PLAYER_ID } from '../gameLogic/constants.js';
+import { HUMAN_PLAYER_ID } from '../gameLogic/constants.js';
 
 const useTutorialController = (scenario, gameState, onPlayCard, onEndTurn, onProvideInput, onTriggerNPCAction) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);

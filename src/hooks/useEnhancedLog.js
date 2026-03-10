@@ -49,7 +49,7 @@ const useEnhancedLog = (gameState, effectMonitor) => {
         // 新しいゲームが開始された場合の検出 (gameState.game_logの内容に依存)
         // game_logはinitializeGameでリセットされるので、ここでは何もしない
         // 必要であれば、ここでフィルタリング状態などをリセットすることは可能
-    }, [gameState?.round_number]);
+    }, [gameState?.round_number, gameState]);
 
     return React.useMemo(() => {
         // game_logが直接真の情報源となる
@@ -139,7 +139,7 @@ const useEnhancedLog = (gameState, effectMonitor) => {
             // 演出システム用
             getEffectMonitor: () => effectMonitorRef.current
         };
-    }, [gameState?.game_log, isEnabled, gameState?.round_number, effectMonitor]); // gameState.game_logを依存配列に追加
+    }, [gameState?.game_log, isEnabled, gameState?.round_number, effectMonitor, clearLog, toggleEnabled, gameState]); // gameState.game_logを依存配列に追加
 };
 
 export default useEnhancedLog;

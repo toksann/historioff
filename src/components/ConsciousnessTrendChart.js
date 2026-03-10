@@ -14,15 +14,6 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height =
     const latestPointsVisibleIndexRef = useRef(pointsVisibleIndex); // Ref to track latest pointsVisibleIndex without triggering useEffect
     const [poppingPointIndex, setPoppingPointIndex] = useState(null); // State to trigger point pop animation
 
-
-    const getX = useCallback((turn) => padding + ((turn - 1) / (maxTurn > 1 ? maxTurn - 1 : 1)) * (width - padding * 2), [width, padding]);
-    const getY = useCallback((consciousness) => {
-        const span = maxConsciousness - minConsciousness;
-        if (span === 0) return height - padding;
-        return height - padding - ((consciousness - minConsciousness) / span) * (height - padding * 2);
-    }, [height, padding]);
-
-
     // Memoize the calculation for the display history
     const displayHistory = useMemo(() => {
         if (!turnHistory) return [];
@@ -50,6 +41,18 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height =
         return newHistory;
     }, [turnHistory, gameState]);
 
+    const maxTurn = useMemo(() => Math.max(...displayHistory.map(h => h.turnNumber), 1), [displayHistory]);
+    const allConsciousness = useMemo(() => displayHistory.flatMap(h => [h.playerConsciousness, h.npcConsciousness]), [displayHistory]);
+    const maxConsciousness = useMemo(() => (allConsciousness.length > 0 ? Math.max(...allConsciousness) : 0) + 5, [allConsciousness]);
+    const minConsciousness = 0;
+
+    const getX = useCallback((turn) => padding + ((turn - 1) / (maxTurn > 1 ? maxTurn - 1 : 1)) * (width - padding * 2), [width, padding, maxTurn]);
+    const getY = useCallback((consciousness) => {
+        const span = maxConsciousness - minConsciousness;
+        if (span === 0) return height - padding;
+        return height - padding - ((consciousness - minConsciousness) / span) * (height - padding * 2);
+    }, [height, padding, maxConsciousness]);
+
     // Callback ref for player line to calculate and store its length, and set initial DOM style
     const setPlayerLineRef = useCallback(node => { // Renamed for clarity, using local var playerLineRef as the actual React ref
         playerLineRef.current = node;
@@ -60,7 +63,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height =
             node.style.strokeDashoffset = length; // Ensure hidden from first render
             // console.log("[CTCDebug] Player Line DOM Initialized. Length:", length); // Removed debug log
         }
-    }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
+    }, []); // Removed displayHistory from dependencies - ESLint was correct, the node update handles it
 
     // Callback ref for NPC line to calculate and store its length, and set initial DOM style
     const setNpcLineRef = useCallback(node => { // Renamed for clarity, using local var npcLineRef as the actual React ref
@@ -72,7 +75,7 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height =
             node.style.strokeDashoffset = length; // Ensure hidden from first render
             // console.log("[CTCDebug] NPC Line DOM Initialized. Length:", length); // Removed debug log
         }
-    }, [displayHistory]); // Re-run if displayHistory changes, to re-calculate length
+    }, []); // Removed displayHistory from dependencies - ESLint was correct, the node update handles it
 
     // Keep latestPointsVisibleIndexRef up-to-date with pointsVisibleIndex state
     useEffect(() => {
@@ -169,13 +172,6 @@ const ConsciousnessTrendChart = ({ turnHistory, gameState, width = 800, height =
     if (displayHistory.length === 0) {
         return <div>チャートデータがありません。</div>;
     }
-
-    const maxTurn = Math.max(...displayHistory.map(h => h.turnNumber), 1);
-    const allConsciousness = displayHistory.flatMap(h => [h.playerConsciousness, h.npcConsciousness]);
-    const maxDataY = Math.max(...allConsciousness);
-    const minDataY = Math.min(...allConsciousness);
-    const maxConsciousness = maxDataY + 5;
-    const minConsciousness = 0;
 
     const playerLinePoints = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.playerConsciousness)}`).join(' ');
     const npcLinePoints = displayHistory.map(h => `${getX(h.turnNumber)},${getY(h.npcConsciousness)}`).join(' ');

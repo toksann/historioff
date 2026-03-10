@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { NPC_PLAYER_ID, GamePhase, HUMAN_PLAYER_ID } from '../gameLogic/constants.js';
+import { useEffect, useRef, useCallback } from 'react';
+import { NPC_PLAYER_ID, GamePhase } from '../gameLogic/constants.js';
 import NPCActions from './NPCActions.js';
 
 const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPerformMulligan }) => {
@@ -11,72 +11,7 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPer
         gameStateRef.current = gameState;
     }, [gameState]);
 
-    // Effect for handling regular turn actions and inputs
-    useEffect(() => {
-        const currentGameState = gameStateRef.current; // Access latest gameState via ref
-        if (!currentGameState || currentGameState.game_over || currentGameState.phase === GamePhase.MULLIGAN) return;
-
-        const { current_turn, awaiting_input } = currentGameState;
-        
-        // NPCのターンかどうかチェック
-        const isNPCTurn = current_turn === NPC_PLAYER_ID;
-        
-        // NPCが選択待ち状態かどうかチェック
-        const isNPCAwaitingInput = awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID;
-        
-        if (isNPCTurn || isNPCAwaitingInput) {
-            // 2秒後にNPCの行動を実行
-            const timer = setTimeout(() => {
-                handleNPCAction();
-            }, 2000);
-            
-            return () => clearTimeout(timer);
-        }
-    }, [onPlayCard, onEndTurn, onProvideInput, gameStateRef.current]);
-
-    // Effect for handling the mulligan phase
-    useEffect(() => {
-        // Use gameStateRef.current to get the latest gameState
-        const currentGameState = gameStateRef.current;
-        
-        // Condition to initiate mulligan action
-        const shouldInitiateMulligan = 
-            currentGameState?.phase === GamePhase.MULLIGAN && 
-            currentGameState.mulligan_state[NPC_PLAYER_ID].status === 'undecided'; // Access .status
-
-        if (shouldInitiateMulligan) {
-            // Execute immediately if condition is met
-            const npcPlayer = currentGameState.players[NPC_PLAYER_ID];
-            
-            // NPCActions.jsでカード選択ロジックを実装
-            const cardsToMulligan = NPCActions.decideMulligan(npcPlayer, currentGameState);
-            const selectedCardIds = cardsToMulligan.map(card => card.instance_id);
-
-            onPerformMulligan(selectedCardIds);
-        }
-    }, [onPerformMulligan, gameStateRef.current]); // Added gameStateRef.current to dependencies
-
-
-    const handleNPCAction = () => {
-        if (!gameStateRef.current || gameStateRef.current.game_over) return;
-
-        const { current_turn, awaiting_input, players } = gameStateRef.current;
-        const npcPlayer = players[NPC_PLAYER_ID];
-        
-        // 選択待ち状態の処理
-        if (awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID) {
-            handleNPCInput(awaiting_input);
-            return;
-        }
-        
-        // NPCのターン時の処理
-        if (current_turn === NPC_PLAYER_ID) {
-            handleNPCTurn(npcPlayer);
-            return;
-        }
-    };
-
-    const handleNPCInput = (awaitingInput) => {
+    const handleNPCInput = useCallback((awaitingInput) => {
         let choice = null;
         
         switch (awaitingInput.type) {
@@ -109,9 +44,9 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPer
         if (choice !== null) {
             onProvideInput(choice);
         }
-    };
+    }, [onProvideInput]);
 
-    const handleNPCTurn = (npcPlayer) => {
+    const handleNPCTurn = useCallback((npcPlayer) => {
         const currentGameState = gameStateRef.current;
         
         // チュートリアル用のスクリプトがあるかチェック
@@ -134,7 +69,68 @@ const NPCController = ({ gameState, onPlayCard, onEndTurn, onProvideInput, onPer
             NPCActions.executeEndTurn(onEndTurn);
         }
         // カードをプレイした場合は、次の行動判定は次のuseEffectサイクルで行われる
-    };
+    }, [onPlayCard, onEndTurn]);
+
+    const handleNPCAction = useCallback(() => {
+        if (!gameStateRef.current || gameStateRef.current.game_over) return;
+
+        const { current_turn, awaiting_input, players } = gameStateRef.current;
+        const npcPlayer = players[NPC_PLAYER_ID];
+        
+        // 選択待ち状態の処理
+        if (awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID) {
+            handleNPCInput(awaiting_input);
+            return;
+        }
+        
+        // NPCのターン時の処理
+        if (current_turn === NPC_PLAYER_ID) {
+            handleNPCTurn(npcPlayer);
+            return;
+        }
+    }, [handleNPCInput, handleNPCTurn]);
+
+    // Effect for handling regular turn actions and inputs
+    useEffect(() => {
+        if (!gameState || gameState.game_over || gameState.phase === GamePhase.MULLIGAN) return;
+
+        const { current_turn, awaiting_input } = gameState;
+        
+        // NPCのターンかどうかチェック
+        const isNPCTurn = current_turn === NPC_PLAYER_ID;
+        
+        // NPCが選択待ち状態かどうかチェック
+        const isNPCAwaitingInput = awaiting_input && awaiting_input.player_id === NPC_PLAYER_ID;
+        
+        if (isNPCTurn || isNPCAwaitingInput) {
+            // 2秒後にNPCの行動を実行
+            const timer = setTimeout(() => {
+                handleNPCAction();
+            }, 2000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [gameState, handleNPCAction]);
+
+    // Effect for handling the mulligan phase
+    useEffect(() => {
+        // Condition to initiate mulligan action
+        const shouldInitiateMulligan = 
+            gameState?.phase === GamePhase.MULLIGAN && 
+            gameState.mulligan_state[NPC_PLAYER_ID].status === 'undecided'; // Access .status
+
+        if (shouldInitiateMulligan) {
+            // Execute immediately if condition is met
+            const npcPlayer = gameState.players[NPC_PLAYER_ID];
+            
+            // NPCActions.jsでカード選択ロジックを実装
+            const cardsToMulligan = NPCActions.decideMulligan(npcPlayer, gameState);
+            const selectedCardIds = cardsToMulligan.map(card => card.instance_id);
+
+            onPerformMulligan(selectedCardIds);
+        }
+    }, [gameState, onPerformMulligan]);
+
 
     // このコンポーネントは表示要素を持たない
     return null;

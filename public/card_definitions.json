@@ -2950,7 +2950,7 @@
         "name": "多極主義",
         "card_type": "イデオロギー",
         "required_scale": 40,
-        "description": "配置時、自分の規模の75%の耐久値のマネーを手札に加え、自分の規模-75%。自分の手札にイデオロギーが加わるたびそれを捨て、「ディアスポラ」を1枚デッキに加えて自分の意識+2。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
+        "description": "配置時、自分の規模の75%の耐久値のマネーを手札に加え、自分の規模-75%。自分の手札にイデオロギーが加わるたびそれを捨て、デッキからカードを2枚引く。その後「ディアスポラ」を1枚デッキに加えて自分の意識+2。ターン終了時、自分の規模が相手の規模を下回っているなら、相手の意識-14%。",
         "triggers": {
             "CARD_PLACED_THIS": [
                 {
@@ -2981,6 +2981,16 @@
                         "destination_pile": "discard_pile",
                         "selection_method": "bottom",
                         "count": 1
+                    }
+                },
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self",
+                        "count": 2
                     }
                 },
                 {

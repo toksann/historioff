@@ -486,8 +486,9 @@ class AnimationManager {
             
             // 連続ドロー演出のための遅延（最初は即座、2枚目以降は100msずつ遅延）
             if (delayIndex > 0) {
-                console.log('🎬ANIM [Queue] Delaying draw animation by', delayIndex * 100, 'ms');
-                await new Promise(resolve => setTimeout(resolve, delayIndex * 100));
+                const currentDelay = delayIndex * 100;
+                console.log('🎬ANIM [Queue] Delaying draw animation by', currentDelay, 'ms');
+                await new Promise(res => setTimeout(res, currentDelay));
             }
             
             try {
@@ -1194,7 +1195,7 @@ class AnimationManager {
                 target.style.opacity = '0';
                 
                 // アニメーション状態をクリア
-                const cardId = target.dataset.cardId;
+                // cardId was unused here
 
                 // Removed: this.restoreAllCardVisibility(); // <-- THIS WAS THE BUG
                 

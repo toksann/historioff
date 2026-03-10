@@ -14,32 +14,31 @@ const PlayerStats = ({ player, gameState, onEndTurn }) => {
         scale: null
     });
     
+    const playerConsciousness = player?.consciousness;
+    const playerScale = getEffectiveScale(player);
+    const playerId = player?.id;
+
     // リソース変化の検知と演出トリガー
     useEffect(() => {
         if (!player || !triggerEffect) return;
         
-        const currentConsciousness = player.consciousness;
-        const currentScale = getEffectiveScale(player);
+        const currentConsciousness = playerConsciousness;
+        const currentScale = playerScale;
         const prevValues = prevValuesRef.current;
         
         // 意識の変化をチェック
         if (prevValues.consciousness !== null && prevValues.consciousness !== currentConsciousness) {
             const changeAmount = currentConsciousness - prevValues.consciousness;
-            //console.log('🎬ANIM [PlayerStats] *** CONSCIOUSNESS CHANGE DETECTED ***');
-            //console.log('🎬ANIM [PlayerStats] Previous:', prevValues.consciousness, '→ Current:', currentConsciousness);
-            //console.log('🎬ANIM [PlayerStats] Change amount:', changeAmount);
-            //console.log('🎬ANIM [PlayerStats] Is increase?', changeAmount > 0);
             
-            const consciousnessElement = document.querySelector(`[data-player-id="${player.id}"] .consciousness .stat-value`);
+            const consciousnessElement = document.querySelector(`[data-player-id="${playerId}"] .consciousness .stat-value`);
             if (consciousnessElement) {
                 // 変化量に基づいて正しいエフェクトタイプを決定
                 const effectType = 'CONSCIOUSNESS_CHANGE_RESULT';
-                //console.log('🎬ANIM [PlayerStats] Triggering consciousness animation with amount:', changeAmount);
                 triggerEffect(effectType, consciousnessElement, {
                     effect: {
                         args: {
                             amount: changeAmount,
-                            player_id: player.id
+                            player_id: playerId
                         }
                     }
                 });
@@ -49,21 +48,16 @@ const PlayerStats = ({ player, gameState, onEndTurn }) => {
         // 規模の変化をチェック
         if (prevValues.scale !== null && prevValues.scale !== currentScale) {
             const changeAmount = currentScale - prevValues.scale;
-            //console.log('🎬ANIM [PlayerStats] *** SCALE CHANGE DETECTED ***');
-            //console.log('🎬ANIM [PlayerStats] Previous:', prevValues.scale, '→ Current:', currentScale);
-            //console.log('🎬ANIM [PlayerStats] Change amount:', changeAmount);
-            //console.log('🎬ANIM [PlayerStats] Is increase?', changeAmount > 0);
             
-            const scaleElement = document.querySelector(`[data-player-id="${player.id}"] .scale .stat-value`);
+            const scaleElement = document.querySelector(`[data-player-id="${playerId}"] .scale .stat-value`);
             if (scaleElement) {
                 // 変化量に基づいて正しいエフェクトタイプを決定
                 const effectType = 'SCALE_CHANGE_RESULT';
-                //console.log('🎬ANIM [PlayerStats] Triggering scale animation with amount:', changeAmount);
                 triggerEffect(effectType, scaleElement, {
                     effect: {
                         args: {
                             amount: changeAmount,
-                            player_id: player.id
+                            player_id: playerId
                         }
                     }
                 });
@@ -75,7 +69,7 @@ const PlayerStats = ({ player, gameState, onEndTurn }) => {
             consciousness: currentConsciousness,
             scale: currentScale
         };
-    }, [player?.consciousness, getEffectiveScale(player), player?.id, triggerEffect]);
+    }, [playerConsciousness, playerScale, playerId, triggerEffect, player]);
 
     // プレイヤーが存在しない場合のearly return（Hooksの後に配置）
     if (!player) return <div className="player-stats">プレイヤー読み込み中...</div>;

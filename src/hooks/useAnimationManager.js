@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import usePresentationController from './usePresentationController.js';
-import animationStateManager from '../gameLogic/AnimationStateManager.js';
 
 /**
  * 新しい演出システムを管理するReact Hook

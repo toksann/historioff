@@ -156,7 +156,7 @@ class PresentationController {
      * カードダメージ演出を実行
      */
     async executeCardDamageAnimation(animation) {
-        const { cardId, amount } = animation.data;
+        const { cardId } = animation.data;
         const element = document.querySelector(`[data-card-id="${cardId}"]`);
         
         if (!element) {
@@ -205,10 +205,7 @@ class PresentationController {
     /**
      * カード移動演出を実行
      */
-    async executeCardMoveAnimation(animation) {
-        const { cardId, from, to } = animation.data;
-        
-        
+    async executeCardMoveAnimation() {
         // 移動演出の実装（必要に応じて）
         return new Promise((resolve) => {
             setTimeout(resolve, 300);
@@ -218,10 +215,7 @@ class PresentationController {
     /**
      * リソース変化演出を実行
      */
-    async executeResourceChangeAnimation(animation) {
-        const { playerId, resourceType, amount } = animation.data;
-        
-        
+    async executeResourceChangeAnimation() {
         // リソース変化演出の実装（必要に応じて）
         return new Promise((resolve) => {
             setTimeout(resolve, 800);
