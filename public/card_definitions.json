@@ -1253,7 +1253,7 @@
         "name": "資本主義",
         "card_type": "イデオロギー",
         "required_scale": 30,
-        "description": "ターン終了時、場の「マネー」の耐久値をランダムに場の財の耐久値へ割り振ってプラスし、その「マネー」を捨て札にする。ターン開始時、場の財の数の分だけ自分の意識をプラスすることを2回行い、自分の場のすべての財に「自分の財のうち最も低い耐久値」と同じ値のダメージを与え、残っている財の耐久値を+3する。その後の財の耐久値の合計と同じ耐久値の「マネー」を手札に加える。「マネー」を除く自分の手札、デッキのすべてのカードの必要規模+6。",
+        "description": "ターン終了時、場の「マネー」の耐久値をランダムに場の財の耐久値へ割り振ってプラスし、その「マネー」を捨て札にする。ターン開始時、場の財の数の分だけ自分の意識をプラスし、自分の場のすべての財に「自分の財のうち最も低い耐久値」と同じ値のダメージを与え、残っている財の耐久値を+2する。その後の財の耐久値の合計と同じ耐久値の「マネー」を手札に加える。「マネー」を除く自分の手札、デッキのすべてのカードの必要規模+6。",
         "triggers": {
             "END_TURN_OWNER": [
                 {
@@ -1286,7 +1286,7 @@
                     "effect_type": "PROCESS_ALL_WEALTH_BOOST",
                     "args": {
                         "player_id": "self",
-                        "amount": 3
+                        "amount": 2
                     }
                 },
                 {
@@ -1296,13 +1296,6 @@
                         "card_template_name": "マネー",
                         "destination_pile": "hand",
                         "initial_durability": "self_all_wealth_on_field"
-                    }
-                },
-                {
-                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
-                    "args": {
-                        "player_id": "self",
-                        "amount_based_on_field_wealth_count": true
                     }
                 },
                 {
@@ -2394,7 +2387,7 @@
         "name": "環境主義",
         "card_type": "イデオロギー",
         "required_scale": 30,
-        "description": "自分の規模が増えなくなるが、自分の場の財が受けるダメージ-2。ターン開始時、場の財が3以上あれば自分の意識+3。",
+        "description": "自分の規模が増えなくなるが、自分の場の財が受けるダメージ-2。ターン開始時、場の財が3以上あれば自分の意識+2、相手の意識-1。",
         "triggers": {
             "MODIFY_SCALE_INCREASE_RESERVE_OWNER": [
                 {
@@ -2425,7 +2418,15 @@
                     "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
                     "args": {
                         "player_id": "self",
-                        "amount": 3,
+                        "amount": 2,
+                        "condition_field_wealth_count_ge_3": true
+                    }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1,
                         "condition_field_wealth_count_ge_3": true
                     }
                 }
@@ -2478,7 +2479,7 @@
         "name": "社会主義",
         "card_type": "イデオロギー",
         "required_scale": 30,
-        "description": "ターン開始時、「解体」を手札に加える。マネーを出すたび、自分の場の財のうち最も耐久値の低い財（同じならより右の財）1枚の耐久値+2。",
+        "description": "ターン開始時、「解体」を手札に加え、自分の手札とデッキのすべてのカードの必要規模+3。マネーを出すたび、自分の場の財のうち最も耐久値の低い財カード1枚の耐久値+5。",
         "triggers": {
             "START_TURN_OWNER": [
                 {
@@ -2487,6 +2488,19 @@
                         "player_id": "self",
                         "card_template_name": "解体",
                         "destination_pile": "hand"
+                    }
+                },
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "modify_required_scale",
+                        "source_piles": [
+                            "hand",
+                            "deck"],
+                        "selection_method": "non_money",
+                        "amount": 3,
+                        "min_value": 0
                     }
                 }
             ],
@@ -2498,7 +2512,7 @@
                         "operation": "modify_durability",
                         "target_player_id": "self",
                         "selection_method": "lowest_durability",
-                        "amount": 2
+                        "amount": 5
                     }
                 }
             ]
@@ -2806,7 +2820,7 @@
         "name": "リバタリアニズム",
         "card_type": "イデオロギー",
         "required_scale": 25,
-        "description": "自分の意識も規模も増えなくなる。「マネー」以外のカードを出すたび「マネー」を手札に加える。ターン開始時、自分の場にある「マネー」の耐久値を-70%か+100%する。",
+        "description": "自分の意識も規模も増えなくなる。「マネー」以外のカードを出すたび「マネー」を手札に加え、相手の意識-1。ターン開始時デッキからカードを1枚引き、自分の場にある「マネー」の耐久値を-70%か+100%する。",
         "triggers": {
             "PLAYER_PLAY_CARD_ACTION_OWNER": [
                 {
@@ -2817,9 +2831,25 @@
                         "destination_pile": "hand",
                         "initial_durability": 1
                     }
+                },
+                {
+                    "effect_type": "MODIFY_CONSCIOUSNESS_RESERVE",
+                    "args": {
+                        "player_id": "opponent",
+                        "amount": -1
+                    }
                 }
             ],
             "START_TURN_OWNER": [
+                {
+                    "effect_type": "MOVE_CARD",
+                    "args": {
+                        "card_id": "draw_from_deck",
+                        "source_pile": "deck",
+                        "destination_pile": "hand",
+                        "player_id": "self"
+                    }
+                },
                 {
                     "effect_type": "PROCESS_MODIFY_MONEY_DURABILITY_RANDOM",
                     "args": {
@@ -2861,9 +2891,20 @@
         "name": "共産主義",
         "card_type": "イデオロギー",
         "required_scale": 40,
-        "description": "ターン開始時、自分の場の財をすべて手札に戻す。ターン終了時手札の財をすべてデッキに戻し、同じ枚数デッキからカードを引く。カードを引くたび、自分の場のすべての財の耐久値+1。",
+        "description": "ターン開始時、自分の手札の古いカードを1枚捨て札にし、自分の場の財をすべて手札に戻す。ターン終了時手札の財をすべてデッキに戻し、同じ枚数デッキからカードを引く。カードを引くたび、自分の場のすべての財の耐久値+1。",
         "triggers": {
             "START_TURN_OWNER": [
+                {
+                    "effect_type": "PROCESS_CARD_OPERATION",
+                    "args": {
+                        "player_id": "self",
+                        "operation": "move",
+                        "source_pile": "hand",
+                        "destination_pile": "discard_pile",
+                        "selection_method": "top",
+                        "count": 1
+                    }
+                },
                 {
                     "effect_type": "PROCESS_CARD_OPERATION",
                     "args": {
