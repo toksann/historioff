@@ -5,7 +5,10 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd, id }) => {
   // modeに応じてベースとなるクラスを決定
   const baseClassName = mode === 'game' ? 'card-game' : 'card-library';
 
-  const cardClassName = `${baseClassName} ${onClick ? 'clickable' : ''} card-type-${card.card_type} ${card.animation || ''}`;
+  // カード名の長さに応じてクラスを追加（CSSでの微調整用）
+  const nameLengthClass = card.name.length > 10 ? 'name-long' : card.name.length > 6 ? 'name-medium' : 'name-short';
+
+  const cardClassName = `${baseClassName} ${onClick ? 'clickable' : ''} card-type-${card.card_type} ${card.animation || ''} ${nameLengthClass}`;
 
   const handleClick = () => {
     if (onClick) {
@@ -34,9 +37,16 @@ const Card = ({ card, mode = 'library', onClick, onAnimationEnd, id }) => {
         id={id}
       >
         <div className="card-header">
-          <div className="card-name">{card.name}</div>
+          <div className="card-name-container">
+            <div className="card-name">{card.name}</div>
+          </div>
         </div>
         
+        <div className="card-center">
+          {/* 将来的にここにイラストが入る想定 */}
+          {card.image && <img src={card.image} alt={card.name} className="card-illustration" />}
+        </div>
+
         <div className="card-footer">
           <div className="card-cost">
             <span>⭐ {card.required_scale}</span>

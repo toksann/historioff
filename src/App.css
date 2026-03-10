@@ -907,36 +907,71 @@
 }
 
 /* カード内部要素の調整 */
+.card-name-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid var(--color-accent-glow);
+  z-index: 2;
+  position: relative;
+  box-sizing: border-box;
+  /* 固定高さを廃止し、以前のサイズ感に近いパディングに変更 */
+  padding: 2px 0;
+}
+
 .card-name {
   font-weight: bold;
   line-height: 1.1;
   text-align: center;
-  z-index: 2;
-  position: relative;
-  display: block;
+  color: var(--color-accent) !important;
+  text-shadow: 0 0 5px var(--color-accent-glow);
+  padding: 0 4px;
   width: 100%;
-  box-sizing: border-box;
+  /* レスポンシブなフォントサイズ設定 */
+  font-size: clamp(0.55rem, 2.1vw, 0.8rem);
+  
+  /* 基本は1行、入り切らない場合は省略 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
-.card-game .card-name {
-  font-size: calc(var(--font-base) * 0.85);
-  color: var(--color-accent) !important;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: calc(var(--padding-base) * 0.25);
-  border-bottom: 1px solid var(--color-accent-glow);
-  text-shadow: 0 0 5px var(--color-accent-glow);
+/* 文字数に応じた微調整クラス (Card.jsから付与) */
+.card-game.name-long .card-name {
+  font-size: clamp(0.45rem, 1.8vw, 0.65rem);
+}
+
+.card-game.name-medium .card-name {
+  font-size: clamp(0.5rem, 2vw, 0.75rem);
 }
 
 .card-center {
   position: absolute;
-  top: 30%;
+  /* 位置をパーセントに戻して、ヘッダーの厚みに依存しないように調整 */
+  top: 22%; 
   left: 0;
   right: 0;
-  bottom: 25%;
+  bottom: 20%; 
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.8;
+  overflow: hidden;
+  opacity: 0.9;
+}
+
+.card-illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.card-game:hover .card-illustration {
+  transform: scale(1.05);
 }
 
 .card-durability {
@@ -952,17 +987,22 @@
 .card-footer {
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: calc(var(--padding-base) * 0.125);
+  padding: 2px 4px;
   position: absolute;
-  bottom: calc(var(--padding-base) * 0.125);
+  bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  height: 1.8em;
+  background-color: rgba(0, 0, 0, 0.8);
   color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .card-game .card-cost {
-  font-size: calc(var(--font-base) * 0.75);
+  font-size: clamp(0.6rem, 1.8vw, 0.75rem);
   color: var(--color-accent);
   font-weight: bold;
 }
